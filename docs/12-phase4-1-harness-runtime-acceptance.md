@@ -1,6 +1,6 @@
 # Phase 4.1 — Harness Runtime + Typed Agent Contracts 验收记录
 
-日期：2026-09-21。唯一基线为 `59b9bdc`；首个实现提交为 `f7425be`。本文件记录 Phase 4.1 本地验收及尚未完成的 PostgreSQL CI 门禁，不代表后续阶段已交付。
+日期：2026-09-21。唯一基线为 `59b9bdc`；实现提交为 `f7425be`、`cb03bd7`。本文件记录 Phase 4.1 最终验收，不代表后续阶段已交付。
 
 ## 交付范围
 
@@ -14,7 +14,7 @@
 
 ## 验证
 
-| 检查 | 本地结果 |
+| 检查 | 结果 |
 | --- | --- |
 | Phase 4.1 定向测试 | 13 passed；另有 prepared acquisition 集成测试 1 passed |
 | 完整离线 pytest | 133 passed，1 skipped，5 deselected；skip 为 Windows 非特权 symlink 假设 |
@@ -22,15 +22,13 @@
 | strict mypy `src/marketpulse` | Success；81 source files |
 | `uv build` | wheel 与 sdist 成功；wheel 含 `20260921_03_harness_runtime.py` |
 | SQLite Alembic upgrade + `command.check` | No new upgrade operations detected |
-| PostgreSQL CI | **未运行**。已扩展现有 PostgreSQL job 的迁移、RunBudget、Step/checkpoint 断言，但向 `origin/feat/investigation-foundation` 推送被自动审批拒绝；本机无 PostgreSQL 命令/服务，也未配置 `MARKETPULSE_TEST_POSTGRES_URL`。不能宣称 PostgreSQL 通过。 |
+| PostgreSQL CI | **通过**。[`PostgreSQL integration` run 35622985542](https://github.com/haoyanghe89-hub/Search-Report/actions/runs/35622985542) 在 commit `cb03bd78dd19262babad29edf776619b74adf6fe` 上完成并成功；[`postgres-contract` job 106410353269](https://github.com/haoyanghe89-hub/Search-Report/actions/runs/35622985542/job/106410353269) 使用 PostgreSQL 17 service，`Verify PostgreSQL migration and repository contract` step 成功。 |
 
 关键测试覆盖：进程遗留 owner 的超时接管、显式重入、两 worker 竞争单 Step、输出/Step/checkpoint 事务回滚、外部工作开始前 Step 已提交、无效 Agent 引用失败、调用录制与 binding 之间崩溃后的复用、同 fingerprint 不同 call site 的精确 Replay、prompt/config 变更拒绝、token 只计一次、采集 prepare 不写库并在 Step 完成时原子提交。
 
 ## 已知限制
 
-- PostgreSQL CI 尚未实跑；这是当前未关闭的验证门禁。需要明确授权向已配置的 GitHub origin 分支推送后才能触发；不得绕过自动审批拒绝。
 - Phase 4.1 的 Agent 为类型契约与确定性测试替身，没有真实模型提示词、Claim-Type-Aware ValidationPolicy、语义蕴含门禁、正式报告生成/发布或 Reviewer 流程。
 - 采集 prepare 已提供可原子提交的产物，但完整 Live 调查主链尚未把真实 Researcher、SourceAcquisition、Analyst、Verifier 接成产品入口。Phase 3 原 `acquire` 调用仍沿用自己的持久化路径。
 - 完整 Harness Replay 案例与可携带 fixture 尚未验收。Phase 4.1 binding 要求新的 call-site 元数据；旧 Phase 3 录制缺少该元数据时会 fail closed。
 - 非正常进程死亡只保留最后一次 heartbeat 已计入的活跃时长；默认 heartbeat 间隔内的最后一小段执行时间可能未记账。没有自动 RecoveryScanner、公开 API 或前端。
-- 本机 SQLite 与构建验证不能替代 PostgreSQL 并发/迁移验证。
