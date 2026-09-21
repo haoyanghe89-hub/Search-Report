@@ -2,7 +2,7 @@
 
 本文件记录 2026-09-21 前已确认的设计。目标仓库为 `haoyanghe89-hub/Search-Report`，在现有 MarketPulse 工程中逐步演进。**设计合同不代表能力已经实现**。
 
-当前：保留 MarketPulse regression baseline；Phase 0 建立验证记录和 Git 基线，Phase 1a 交付通用 Blob Storage，Phase 2A–2D 已交付 Investigation typed domain、24 张 `inv_` 表、Alembic 首版 migration、typed locator 与 SourceSnapshot 纵向持久化。五角色调查流程、Replay runtime、验证/发布策略执行、审核认证、恢复与新前端仍需后续阶段实现。详见 [迁移边界](docs/07-investigation-migration.md)、[Phase 2 验收](docs/10-phase2-data-foundation-acceptance.md) 和 [实施计划](docs/superpowers/plans/2026-09-21-investigation-data-foundation.md)。
+当前：保留 MarketPulse regression baseline；Phase 0 建立验证记录和 Git 基线，Phase 1a 交付通用 Blob Storage，Phase 2A–2D 交付 Investigation typed domain、24 张 `inv_` 表、Alembic 首版 migration、typed locator 与 SourceSnapshot 持久化。Phase 3 已交付通用 Search/Fetch/Model Port、call-level Recording/Replay adapter、HTML/TXT/文本层 PDF 解析、Source Acquisition 纵向切片及真实 PostgreSQL CI。五角色调查流程、完整 Replay Harness、验证/发布策略执行、审核认证、恢复与新前端仍需后续阶段实现。详见 [迁移边界](docs/07-investigation-migration.md)、[Phase 2 验收](docs/10-phase2-data-foundation-acceptance.md)、[Phase 3 验收](docs/11-phase3-acquisition-recording-acceptance.md) 和 [Phase 3 设计](docs/superpowers/specs/2026-09-21-acquisition-recording-foundation-design.md)。
 
 ## 1. 产品与依赖方向
 
@@ -64,6 +64,12 @@ DEPLOYMENT_MODE=local；宿主机应用端口默认绑定 127.0.0.1，容器内 
 Outbound 仅经受控 Search/Fetch：SSRF/private IP、逐跳重定向、MIME、大小、timeout/retry 防护继续有效。未来网络化须给 Investigation/Run/Source/Snapshot/Evidence/Claim/Report/trace/audit 加应用级访问控制；不能只放开监听端口。
 
 ## 5. Blob 与解析
+
+Phase 3 的已实现组合边界：`SearchPort` / `FetchPort` / `ModelPort` 是 typed async contract；Live provider 由 `Recording*Adapter` 包裹，Replay 用 `Replay*Adapter` 替换 provider 而不更改调用方。`RepositoryRecordedCallStore` 把规范化请求及完整响应放入内容寻址 Blob，并持久化每次调用的 fingerprint、版本、时间、provider 元信息、状态和逻辑 BlobRef。失败记录不被当作可重放的结果；相同 fingerprint 的重复成功调用按顺序消费。暂时的旧搜索桥接位于 Investigation 包之外，不让新领域导入 market-specific 合同。
+
+`HttpxFetchAdapter` 对初始 URL 及每次重定向目标执行 HTTP(S)/公网主机校验，限制 MIME、总字节、超时、跳转次数和暂时性故障重试。`DocumentParserRegistry` 依据签名优先、声明 MIME 辅助的规则选择解析器；HTML/TXT 保存稳定归一化文本，PDF 保存每个可靠页面的独立 artifact。扫描 PDF 不产出可取证页面，部分 PDF 只产出可靠页面；raw Snapshot 始终保留。基本可疑指令检测和 `UNTRUSTED` provenance 在解析边界执行，官方来源亦不例外。
+
+`SourceAcquisitionService` 只负责搜索结果去重、Source 注册、Fetch、Snapshot/Artifact/Gap 持久化和分层来源统计；不负责 Claim 或 Report。`valid_for_statistics` 至少要求 Snapshot、可用解析内容、可取证 artifact 和 provenance。Phase 3 的 Replay 测试从新 Run 重走这个采集服务，重新注册 Source/Snapshot/Artifact 并解析录制的 Fetch body；它尚不声称完成后续状态机、Policy 或报告重放。
 
 PostgreSQL 保存结构化领域状态、调用元数据和 BlobRef/hash/MIME/size/encoding/版本/provenance。不可变 raw HTML/PDF/JSON、清洗正文、逐页文本、录制 request/response 存在本地内容寻址 Blob Store；逻辑引用 `blob://sha256/<hash>`，实际路径只归 adapter 所有。相同内容复用，不同内容新 hash。
 

@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from io import BytesIO
 from pathlib import Path
 
 import pytest
+from pypdf import PdfWriter
+from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 
 from marketpulse.infrastructure.storage.local import LocalContentAddressedBlobStorage
+from marketpulse.investigation.domain.claims import ResearchGap
 from marketpulse.investigation.domain.enums import (
     AgentRole,
     ExecutionStepStatus,
@@ -20,6 +24,7 @@ from marketpulse.investigation.domain.runtime import (
     InvestigationRun,
     InvestigationScope,
 )
+from marketpulse.investigation.domain.sources import SourceSnapshot
 from marketpulse.investigation.ingestion.locators import make_text_locator, resolve_locator
 from marketpulse.investigation.ingestion.registry import DocumentParserRegistry
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
@@ -125,6 +130,48 @@ class FetchFixture:
         )
 
 
+class PdfFetchFixture:
+    def __init__(self, body: bytes) -> None:
+        self.body = body
+
+    async def fetch(self, request: FetchRequest) -> FetchResult:
+        return FetchResult(
+            final_url=request.url,
+            status_code=200,
+            content_type="application/pdf",
+            body=self.body,
+            fetched_at=NOW,
+        )
+
+
+def _pdf(*pages: str | None) -> bytes:
+    writer = PdfWriter()
+    for page_text in pages:
+        page = writer.add_blank_page(width=612, height=792)
+        if page_text is None:
+            continue
+        font = DictionaryObject(
+            {
+                NameObject("/Type"): NameObject("/Font"),
+                NameObject("/Subtype"): NameObject("/Type1"),
+                NameObject("/BaseFont"): NameObject("/Helvetica"),
+            }
+        )
+        page[NameObject("/Resources")] = DictionaryObject(
+            {
+                NameObject("/Font"): DictionaryObject(
+                    {NameObject("/F1"): writer._add_object(font)}  # noqa: SLF001
+                )
+            }
+        )
+        stream = DecodedStreamObject()
+        stream.set_data(f"BT /F1 12 Tf 72 720 Td ({page_text}) Tj ET".encode())
+        page[NameObject("/Contents")] = writer._add_object(stream)  # noqa: SLF001
+    output = BytesIO()
+    writer.write(output)
+    return output.getvalue()
+
+
 def _ids(prefix: str):  # type: ignore[no-untyped-def]
     counters: dict[str, int] = {}
 
@@ -179,6 +226,8 @@ async def test_live_then_replay_acquisition_rebuilds_snapshot_and_exact_locator(
 
     assert live_source.valid_for_statistics is True
     assert resolve_locator(locator, artifact_content) == "train derailed"
+    persisted_live = repository.get(SourceSnapshot, live_source.snapshot_id)  # type: ignore[arg-type]
+    assert persisted_live.provenance["external_content_trust"] == "UNTRUSTED"
     assert (
         len(
             repository.list_replayable_tool_calls(
@@ -210,3 +259,58 @@ async def test_live_then_replay_acquisition_rebuilds_snapshot_and_exact_locator(
     assert replay_result.sources[0].snapshot_id != live_source.snapshot_id
     assert live_search.calls == 1
     assert live_fetch.calls == 1
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("pages", "expected_status", "expected_artifact_count", "expected_valid", "gap_reason"),
+    [
+        ((None, None), "UNSUPPORTED_SCANNED_PDF", 0, False, "SCANNED_PDF_REQUIRES_OCR"),
+        (
+            ("This page has sufficient text to serve as reliable evidence in the record.", None),
+            "PARTIALLY_PARSED",
+            1,
+            True,
+            "PDF_PAGES_WITHOUT_RELIABLE_TEXT",
+        ),
+    ],
+)
+async def test_pdf_acquisition_preserves_raw_snapshot_and_only_eligible_pages(
+    investigation_store: tuple[InvestigationRepository, object, str],
+    tmp_path: Path,
+    pages: tuple[str | None, ...],
+    expected_status: str,
+    expected_artifact_count: int,
+    expected_valid: bool,
+    gap_reason: str,
+) -> None:
+    repository, _, _ = investigation_store
+    _seed(repository, "PDF", RunMode.LIVE)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "blobs")
+    raw_pdf = _pdf(*pages)
+    result = await SourceAcquisitionService(
+        repository=repository,
+        blobs=blobs,
+        search=SearchFixture(),
+        fetch=PdfFetchFixture(raw_pdf),
+        parsers=DocumentParserRegistry.default(),
+        id_factory=_ids("PDF"),
+        clock=lambda: NOW,
+    ).acquire(
+        AcquisitionRequest(
+            investigation_id="I-PDF",
+            run_id="RUN-PDF",
+            query="East Palestine official report",
+            max_results=1,
+        )
+    )
+    source = result.sources[0]
+    assert source.snapshot_id is not None
+    snapshot = repository.get(SourceSnapshot, source.snapshot_id)
+    assert blobs.get_bytes(snapshot.raw_blob_ref) == raw_pdf
+    assert snapshot.parse_status.value == expected_status
+    assert source.valid_for_statistics is expected_valid
+    assert len(repository.list_artifacts(source.snapshot_id)) == expected_artifact_count
+    assert snapshot.provenance["external_content_trust"] == "UNTRUSTED"
+    gap = repository.get(ResearchGap, source.gap_ids[0])
+    assert gap.reason == gap_reason

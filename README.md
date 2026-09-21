@@ -1,6 +1,6 @@
 # MarketPulse Agent
 
-> 当前处于 Investigation Platform 原地迁移的 Phase 2。现有市场流程保留为回归基线；已增加通用 Blob Storage、Investigation Domain、Alembic schema migration 和 SourceSnapshot 持久化，尚未接入调查 Agent/Replay/审核流程。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
+> 当前处于 Investigation Platform 原地迁移的 Phase 3。旧市场流程暂作回归基线；新调查领域已具备通用外部调用 Port、逐调用录制/重放、HTML/TXT/文本层 PDF 解析及 Source Acquisition 纵向切片，但尚未接入完整调查 Harness、审核和新前端。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
 
 MarketPulse 是一个 Python 3.11+ 四智能体市场研究应用：主 Agent 规划与复核，搜索 Agent 检索取证，分析 Agent 形成结论，报告 Agent 撰写中文报告。四个角色通过持久化黑板协作，主 Agent 可要求有限轮次的补查。
 
@@ -151,4 +151,19 @@ uv run alembic upgrade head
 uv run pytest tests/unit/investigation tests/integration/investigation -q
 ```
 
-当前仍未实现文档 Parser、五 Agent Harness、ValidationPolicy 执行、Report Writer、Replay runtime、Reviewer 认证和新前端；Phase 2 数据层通过不代表完整调查系统已经达到 Legacy Removal Gate。
+## Phase 3 Acquisition / Recording Foundation
+
+调查代码通过 `SearchPort`、`FetchPort`、`ModelPort` 调用外部能力。Live 组合为具体 provider → Recording adapter → Port；Replay 组合为 Replay adapter → 同一 Port。逐次请求和成功响应以 BlobRef 保存，fingerprint 包含 operation、规范化输入及 schema/prompt/config 版本；失败也记录分类，但没有完整响应的调用不可重放。Replay 只查精确匹配的成功录制，缺失返回 `REPLAY_CACHE_MISS`，损坏 Blob 返回 `BLOB_INTEGRITY_ERROR`，不联网补齐。
+
+`SourceAcquisitionService` 将 Search → Source → Fetch → 原始 SourceSnapshot → 解析后的 DocumentArtifact 连通，不生成 Claim 或报告。解析器依据内容签名和 MIME 选择 HTML、纯文本或带文本层 PDF；扩展名只是提示。定位符引用持久化文本的精确字符区间，PDF 按可靠页面分别保存。扫描 PDF 保留 raw Snapshot、生成 `UNREADABLE_SOURCE` gap，不计入有效来源；部分 PDF 只让可靠页面参与取证。外部内容（包括官方来源）始终标记为不可信数据。
+
+本阶段的 Live/Replay 纵向测试使用确定性 fixture，不依赖模型或真实网络；这不是完整 Investigation Replay，也不是 East Palestine 案例验收。PostgreSQL 集成测试由 [临时数据库 CI](.github/workflows/postgres-integration.yml) 实际运行，详见 [Phase 3 验收记录](docs/11-phase3-acquisition-recording-acceptance.md)。
+
+```powershell
+uv sync --extra dev --extra server
+uv run pytest tests/unit/investigation tests/integration/investigation -m "not infrastructure" -q
+# 真实 PostgreSQL 测试需要 MARKETPULSE_TEST_POSTGRES_URL；CI 自动提供临时数据库。
+uv run pytest tests/integration/investigation/test_postgres_persistence.py -m infrastructure -q
+```
+
+当前仍未实现五 Agent Harness、Claim-Type-Aware ValidationPolicy 执行、Report Writer、完整 Replay runtime、Reviewer 认证及调查前端；Phase 3 的 acquisition/replayable-tooling 通过不代表完整系统达到 Legacy Removal Gate。上面的市场 CLI/前端仅为迁移期回归基线，不是新调查系统入口。

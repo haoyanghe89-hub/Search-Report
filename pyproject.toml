@@ -59,6 +59,7 @@ include = [
   "README.md",
   "pyproject.toml",
 ]
+exclude = ["/.uv-cache/**", "/.phase3-*/**", "/.pytest-work/**"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --basetemp=.pytest-work"

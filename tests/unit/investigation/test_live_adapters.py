@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
 from types import SimpleNamespace
 
 import httpx
@@ -87,6 +88,64 @@ async def test_http_fetch_blocks_private_redirect_before_second_request() -> Non
                 FetchRequest(url="https://public.test/start")
             )
     assert requests == ["https://public.test/start"]
+
+
+class CountingStream(httpx.AsyncByteStream):
+    def __init__(self) -> None:
+        self.read_chunks = 0
+
+    async def __aiter__(self) -> AsyncIterator[bytes]:
+        for chunk in (b"12345678", b"abcdefgh", b"ignored-"):
+            self.read_chunks += 1
+            yield chunk
+
+    async def aclose(self) -> None:
+        return None
+
+
+@pytest.mark.asyncio
+async def test_http_fetch_stops_streaming_when_size_limit_is_exceeded() -> None:
+    stream = CountingStream()
+
+    async def handler(_: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, headers={"content-type": "application/pdf"}, stream=stream)
+
+    async def public_host(_: str) -> bool:
+        return True
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(SecurityBlockedError):
+            await HttpxFetchAdapter(client, host_validator=public_host).fetch(
+                FetchRequest(url="https://public.test/file", max_bytes=10)
+            )
+    assert stream.read_chunks == 2
+
+
+@pytest.mark.asyncio
+async def test_http_fetch_retries_transient_503_once() -> None:
+    calls = 0
+    sleeps: list[float] = []
+
+    async def handler(_: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return httpx.Response(503)
+        return httpx.Response(200, headers={"content-type": "text/plain"}, content=b"ready")
+
+    async def public_host(_: str) -> bool:
+        return True
+
+    async def sleep(seconds: float) -> None:
+        sleeps.append(seconds)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        result = await HttpxFetchAdapter(
+            client, host_validator=public_host, max_retries=1, sleep=sleep
+        ).fetch(FetchRequest(url="https://public.test/file"))
+    assert result.body == b"ready"
+    assert calls == 2
+    assert sleeps == [0.25]
 
 
 class FakeCompletions:
