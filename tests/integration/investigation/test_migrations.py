@@ -12,6 +12,7 @@ EXPECTED_TABLES = {
     "inv_claims",
     "inv_call_bindings",
     "inv_conflict_claims",
+    "inv_conflict_evidence",
     "inv_conflict_sets",
     "inv_document_artifacts",
     "inv_evidence",
@@ -28,10 +29,14 @@ EXPECTED_TABLES = {
     "inv_review_decisions",
     "inv_runs",
     "inv_run_budgets",
+    "inv_semantic_judgments",
+    "inv_source_families",
+    "inv_source_family_members",
     "inv_source_snapshots",
     "inv_sources",
     "inv_timeline_events",
     "inv_timeline_evidence",
+    "inv_validation_conflicts",
     "inv_validation_results",
 }
 
@@ -65,6 +70,18 @@ def test_upgrade_and_downgrade_preserve_legacy_schema(tmp_path: Path) -> None:
     assert any(
         set(item["column_names"]) == {"claim_id", "evidence_id"} for item in relation_uniques
     )
+    assert "latest_validation_id" in {item["name"] for item in inspector.get_columns("inv_claims")}
+    validation_indexes = {item["name"] for item in inspector.get_indexes("inv_validation_results")}
+    assert {
+        "ix_inv_validation_input_fingerprint",
+        "ix_inv_validation_evidence_set_hash",
+        "ix_inv_validation_policy",
+    } <= validation_indexes
+    family_member_fks = inspector.get_foreign_keys("inv_source_family_members")
+    assert {item["referred_table"] for item in family_member_fks} == {
+        "inv_source_families",
+        "inv_sources",
+    }
     with engine.connect() as connection:
         assert connection.scalar(text("SELECT run_id FROM mp_runs")) == "legacy-run"
     engine.dispose()

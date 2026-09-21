@@ -58,3 +58,17 @@ def test_evidence_and_claim_are_declared_in_different_modules() -> None:
     assert "class Claim(" not in evidence
     assert "class Claim(" in claims
     assert "class Evidence(" not in claims
+
+
+def test_validation_core_does_not_depend_on_agents_or_harness() -> None:
+    violations: list[str] = []
+    for path in (INVESTIGATION / "validation").glob("*.py"):
+        for imported in _imports(path):
+            if imported.startswith(
+                (
+                    "marketpulse.investigation.agents",
+                    "marketpulse.investigation.harness",
+                )
+            ):
+                violations.append(f"{path.relative_to(ROOT)} -> {imported}")
+    assert not violations, "\n".join(violations)

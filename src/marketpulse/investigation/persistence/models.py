@@ -28,6 +28,7 @@ from marketpulse.investigation.domain.enums import (
     AuditActorType,
     ClaimImportance,
     ClaimType,
+    ConflictResolutionStatus,
     ConflictSeverity,
     ConflictStatus,
     ConflictType,
@@ -36,6 +37,8 @@ from marketpulse.investigation.domain.enums import (
     ExternalCallStatus,
     GapSeverity,
     GapStatus,
+    LineageOriginType,
+    LineageResolutionMethod,
     LocatorType,
     ParseStatus,
     RelationStance,
@@ -47,6 +50,7 @@ from marketpulse.investigation.domain.enums import (
     ReviewDecisionType,
     RunMode,
     RunStatus,
+    SemanticJudgmentStatus,
     SourceType,
     StepType,
     TimePrecision,
@@ -407,6 +411,7 @@ class ClaimRow(Base):
         Index("ix_inv_claims_investigation_run", "investigation_id", "run_id"),
         Index("ix_inv_claims_type_status", "claim_type", "validation_status"),
         Index("ix_inv_claims_critical_status", "is_critical", "validation_status"),
+        Index("ix_inv_claims_latest_validation", "latest_validation_id"),
     )
 
     claim_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -433,6 +438,7 @@ class ClaimRow(Base):
     )
     confidence: Mapped[float | None] = mapped_column(Float)
     confidence_basis: Mapped[str | None] = mapped_column(Text)
+    latest_validation_id: Mapped[str | None] = mapped_column(ID)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
@@ -472,6 +478,7 @@ class ConflictSetRow(Base):
     __table_args__ = (
         Index("ix_inv_conflicts_investigation_status", "investigation_id", "status"),
         Index("ix_inv_conflicts_run_severity", "run_id", "severity"),
+        Index("ix_inv_conflicts_resolution", "resolution_status"),
     )
 
     conflict_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -491,6 +498,14 @@ class ConflictSetRow(Base):
         enum_type(ConflictStatus, "inv_conflict_status"), nullable=False
     )
     possible_causes: Mapped[list[str]] = mapped_column(JSON_DOCUMENT, nullable=False, default=list)
+    competing_values: Mapped[list[object]] = mapped_column(
+        JSON_DOCUMENT, nullable=False, default=list
+    )
+    possible_explanations: Mapped[list[str]] = mapped_column(
+        JSON_DOCUMENT, nullable=False, default=list
+    )
+    resolution_status: Mapped[ConflictResolutionStatus] = mapped_column(String(40), nullable=False)
+    resolution_basis: Mapped[str | None] = mapped_column(Text)
     resolution_summary: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
@@ -507,6 +522,18 @@ class ConflictClaimRow(Base):
     )
 
 
+class ConflictEvidenceRow(Base):
+    __tablename__ = "inv_conflict_evidence"
+    __table_args__ = (Index("ix_inv_conflict_evidence_evidence", "evidence_id"),)
+
+    conflict_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_conflict_sets.conflict_id", ondelete="CASCADE"), primary_key=True
+    )
+    evidence_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_evidence.evidence_id", ondelete="RESTRICT"), primary_key=True
+    )
+
+
 class ValidationResultRow(Base):
     __tablename__ = "inv_validation_results"
     __table_args__ = (
@@ -514,6 +541,9 @@ class ValidationResultRow(Base):
         CheckConstraint("confidence >= 0 AND confidence <= 1", name="ck_inv_validation_confidence"),
         Index("ix_inv_validation_claim_created", "claim_id", "created_at"),
         Index("ix_inv_validation_run_status", "run_id", "status"),
+        Index("ix_inv_validation_input_fingerprint", "input_fingerprint"),
+        Index("ix_inv_validation_evidence_set_hash", "evidence_set_hash"),
+        Index("ix_inv_validation_policy", "policy_version", "profile_version"),
     )
 
     validation_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -527,6 +557,13 @@ class ValidationResultRow(Base):
         enum_type(ClaimType, "inv_validation_claim_type"), nullable=False
     )
     profile_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    policy_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    input_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
+    evidence_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    lineage_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    conflict_set_refs: Mapped[list[str]] = mapped_column(
+        JSON_DOCUMENT, nullable=False, default=list
+    )
     citation_valid: Mapped[bool] = mapped_column(Boolean, nullable=False)
     entailment_result: Mapped[EntailmentStatus] = mapped_column(
         enum_type(EntailmentStatus, "inv_validation_entailment"), nullable=False
@@ -542,6 +579,10 @@ class ValidationResultRow(Base):
     )
     confidence: Mapped[float] = mapped_column(Float, nullable=False)
     validation_basis: Mapped[str] = mapped_column(Text, nullable=False)
+    validation_basis_payload: Mapped[dict[str, Any]] = mapped_column(
+        JSON_DOCUMENT, nullable=False, default=dict
+    )
+    confidence_basis: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
@@ -550,6 +591,15 @@ class ResearchGapRow(Base):
     __table_args__ = (
         Index("ix_inv_gaps_run_status", "run_id", "status"),
         Index("ix_inv_gaps_investigation_severity", "investigation_id", "severity"),
+        Index("ix_inv_gaps_claim_type", "target_claim_id", "gap_type"),
+        CheckConstraint(
+            "gap_type IN ('EVIDENCE_GAP', 'UNREADABLE_SOURCE', 'SOURCE_CONFLICT', "
+            "'MISSING_PRIMARY_SOURCE', 'INSUFFICIENT_INDEPENDENCE', "
+            "'INSUFFICIENT_ENTAILMENT', 'MISSING_CAUSAL_SUPPORT', "
+            "'MISSING_MECHANISM', 'UNRESOLVED_QUANTITATIVE_CONFLICT', "
+            "'ATTRIBUTION_UNDER_SUPPORTED', 'ANALYSIS_ERROR', 'OTHER')",
+            name="ck_inv_gap_type_values",
+        ),
     )
 
     gap_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -559,9 +609,7 @@ class ResearchGapRow(Base):
     run_id: Mapped[str] = mapped_column(
         ForeignKey("inv_runs.run_id", ondelete="RESTRICT"), nullable=False
     )
-    gap_type: Mapped[ResearchGapType] = mapped_column(
-        enum_type(ResearchGapType, "inv_gap_type"), nullable=False
-    )
+    gap_type: Mapped[ResearchGapType] = mapped_column(String(64), nullable=False)
     target_question_id: Mapped[str | None] = mapped_column(
         ForeignKey("inv_investigation_questions.question_id", ondelete="SET NULL")
     )
@@ -572,6 +620,9 @@ class ResearchGapRow(Base):
         ForeignKey("inv_sources.source_id", ondelete="SET NULL")
     )
     reason: Mapped[str] = mapped_column(Text, nullable=False)
+    preferred_source_type: Mapped[str | None] = mapped_column(String(100))
+    missing_requirement: Mapped[str | None] = mapped_column(Text)
+    suggested_action: Mapped[str | None] = mapped_column(Text)
     severity: Mapped[GapSeverity] = mapped_column(
         enum_type(GapSeverity, "inv_gap_severity"), nullable=False
     )
@@ -583,6 +634,92 @@ class ResearchGapRow(Base):
     )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class SemanticJudgmentRow(Base):
+    __tablename__ = "inv_semantic_judgments"
+    __table_args__ = (
+        Index("ix_inv_semantic_claim_evidence", "claim_id", "evidence_id", "created_at"),
+        Index("ix_inv_semantic_run", "run_id"),
+        CheckConstraint(
+            "semantic_confidence >= 0 AND semantic_confidence <= 1",
+            name="ck_inv_semantic_confidence",
+        ),
+    )
+
+    judgment_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_runs.run_id", ondelete="RESTRICT"), nullable=False
+    )
+    claim_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_claims.claim_id", ondelete="RESTRICT"), nullable=False
+    )
+    evidence_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_evidence.evidence_id", ondelete="RESTRICT"), nullable=False
+    )
+    judgment: Mapped[SemanticJudgmentStatus] = mapped_column(
+        enum_type(SemanticJudgmentStatus, "inv_semantic_judgment_status"), nullable=False
+    )
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    semantic_confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    model_call_ref: Mapped[str | None] = mapped_column(String(255))
+    recorded_judgment_ref: Mapped[str | None] = mapped_column(String(255))
+    schema_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class SourceFamilyRow(Base):
+    __tablename__ = "inv_source_families"
+    __table_args__ = (
+        UniqueConstraint("validation_id", "family_id", name="uq_inv_family_validation"),
+        Index("ix_inv_families_run_family", "run_id", "family_id"),
+        Index("ix_inv_families_validation", "validation_id"),
+        CheckConstraint("confidence >= 0 AND confidence <= 1", name="ck_inv_family_confidence"),
+    )
+
+    family_record_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    validation_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_validation_results.validation_id", ondelete="CASCADE"), nullable=False
+    )
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_runs.run_id", ondelete="RESTRICT"), nullable=False
+    )
+    family_id: Mapped[str] = mapped_column(ID, nullable=False)
+    lineage_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    origin_type: Mapped[LineageOriginType] = mapped_column(
+        enum_type(LineageOriginType, "inv_lineage_origin_type"), nullable=False
+    )
+    independence_basis: Mapped[list[str]] = mapped_column(
+        JSON_DOCUMENT, nullable=False, default=list
+    )
+    confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    resolution_method: Mapped[LineageResolutionMethod] = mapped_column(
+        enum_type(LineageResolutionMethod, "inv_lineage_resolution_method"), nullable=False
+    )
+
+
+class SourceFamilyMemberRow(Base):
+    __tablename__ = "inv_source_family_members"
+    __table_args__ = (Index("ix_inv_family_members_source", "source_id"),)
+
+    family_record_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_source_families.family_record_id", ondelete="CASCADE"), primary_key=True
+    )
+    source_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_sources.source_id", ondelete="RESTRICT"), primary_key=True
+    )
+
+
+class ValidationConflictRow(Base):
+    __tablename__ = "inv_validation_conflicts"
+    __table_args__ = (Index("ix_inv_validation_conflicts_conflict", "conflict_id"),)
+
+    validation_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_validation_results.validation_id", ondelete="CASCADE"), primary_key=True
+    )
+    conflict_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_conflict_sets.conflict_id", ondelete="RESTRICT"), primary_key=True
+    )
 
 
 class TimelineEventRow(Base):

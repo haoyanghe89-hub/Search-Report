@@ -47,6 +47,7 @@ from marketpulse.investigation.persistence.models import (
     ClaimEvidenceRelationRow,
     ClaimRow,
     ConflictClaimRow,
+    ConflictEvidenceRow,
     ConflictSetRow,
     DocumentArtifactRow,
     EvidenceRow,
@@ -320,14 +321,24 @@ class InvestigationRepository:
         if isinstance(entity, ClaimEvidenceRelation):
             return ClaimEvidenceRelationRow(**_plain(entity)), []
         if isinstance(entity, ConflictSet):
-            conflict_row = ConflictSetRow(**_plain(entity, "claim_ids"))
+            payload = _plain(entity, "claim_ids", "evidence_ids")
+            payload["possible_causes"] = list(entity.possible_causes)
+            payload["competing_values"] = list(entity.competing_values)
+            payload["possible_explanations"] = list(entity.possible_explanations)
+            conflict_row = ConflictSetRow(**payload)
             conflict_claims: list[object] = [
                 ConflictClaimRow(conflict_id=entity.conflict_id, claim_id=claim_id)
                 for claim_id in entity.claim_ids
             ]
-            return conflict_row, conflict_claims
+            conflict_evidence: list[object] = [
+                ConflictEvidenceRow(conflict_id=entity.conflict_id, evidence_id=evidence_id)
+                for evidence_id in entity.evidence_ids
+            ]
+            return conflict_row, [*conflict_claims, *conflict_evidence]
         if isinstance(entity, ValidationResult):
-            return ValidationResultRow(**_plain(entity)), []
+            payload = _plain(entity)
+            payload["conflict_set_refs"] = list(entity.conflict_set_refs)
+            return ValidationResultRow(**payload), []
         if isinstance(entity, ResearchGap):
             payload = _plain(entity)
             payload["suggested_actions"] = list(entity.suggested_actions)
@@ -470,8 +481,14 @@ class InvestigationRepository:
                 .where(ConflictClaimRow.conflict_id == entity_id)
                 .order_by(ConflictClaimRow.claim_id)
             ).all()
+            evidence_ids = session.scalars(
+                select(ConflictEvidenceRow.evidence_id)
+                .where(ConflictEvidenceRow.conflict_id == entity_id)
+                .order_by(ConflictEvidenceRow.evidence_id)
+            ).all()
             payload = self._row_dict(row)
             payload["claim_ids"] = tuple(claim_ids)
+            payload["evidence_ids"] = tuple(evidence_ids)
             return ConflictSet.model_validate(payload)
         if entity_type is ValidationResult:
             return self._validation(self._required(session, ValidationResultRow, entity_id))

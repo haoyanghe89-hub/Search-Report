@@ -13,13 +13,29 @@ from sqlalchemy import inspect, text
 from sqlalchemy.exc import DatabaseError, IntegrityError
 
 from marketpulse.infrastructure.storage.models import BlobRef
+from marketpulse.investigation.domain.claims import (
+    Claim,
+    ClaimEvidenceRelation,
+    ConflictSet,
+)
 from marketpulse.investigation.domain.enums import (
     AgentRole,
+    ArtifactType,
+    ClaimImportance,
+    ClaimType,
+    ConflictResolutionStatus,
+    ConflictSeverity,
+    ConflictStatus,
+    ConflictType,
+    EntailmentStatus,
     ParseStatus,
+    RelationStance,
     RunMode,
     RunStatus,
+    SemanticJudgmentStatus,
     SourceType,
     StepType,
+    ValidationStatus,
     WorkflowPhase,
 )
 from marketpulse.investigation.domain.runtime import (
@@ -28,15 +44,49 @@ from marketpulse.investigation.domain.runtime import (
     InvestigationScope,
     RunBudget,
 )
-from marketpulse.investigation.domain.sources import Source, SourceSnapshot
+from marketpulse.investigation.domain.sources import (
+    DocumentArtifact,
+    Evidence,
+    Source,
+    SourceSnapshot,
+)
 from marketpulse.investigation.harness.persistence import HarnessStore
 from marketpulse.investigation.harness.state_machine import Route
+from marketpulse.investigation.ingestion.locators import make_text_locator
 from marketpulse.investigation.persistence.base import (
     create_investigation_engine,
     create_session_factory,
 )
-from marketpulse.investigation.persistence.models import SourceSnapshotRow
+from marketpulse.investigation.persistence.models import (
+    SourceFamilyMemberRow,
+    SourceSnapshotRow,
+)
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from marketpulse.investigation.validation import (
+    EvidenceIntegrityValidator,
+    RecognizedArtifactVersions,
+    SemanticJudgment,
+    ValidationPersistence,
+    ValidationPolicy,
+    ValidationRequest,
+)
+
+
+class _MemoryBlobs:
+    def __init__(self, ref: BlobRef, content: bytes) -> None:
+        self._ref = ref
+        self._content = content
+
+    def exists(self, ref: BlobRef) -> bool:
+        return ref == self._ref
+
+    def verify_hash(self, ref: BlobRef) -> bool:
+        return ref == self._ref and hashlib.sha256(self._content).hexdigest() == ref.sha256
+
+    def get_bytes(self, ref: BlobRef) -> bytes:
+        if not self.exists(ref):
+            raise KeyError(ref)
+        return self._content
 
 
 def _database_url() -> str:
@@ -172,6 +222,110 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
         )
         assert {"inv_run_budgets", "inv_call_bindings"} <= set(inspect(engine).get_table_names())
 
+        source = repository.get(Source, source_id)
+        snapshot = repository.get(SourceSnapshot, snapshot_id)
+        artifact = DocumentArtifact(
+            artifact_id=f"A-{suffix}",
+            snapshot_id=snapshot_id,
+            artifact_type=ArtifactType.PLAIN_TEXT,
+            blob_ref=BlobRef(digest),
+            sha256=digest,
+            processor_name="fixture",
+            processor_version="1",
+            created_at=now,
+        )
+        evidence = Evidence(
+            evidence_id=f"E-{suffix}",
+            run_id=run_id,
+            snapshot_id=snapshot_id,
+            artifact_id=artifact.artifact_id,
+            content=raw.decode(),
+            content_hash=digest,
+            locator=make_text_locator(raw.decode(), 0, len(raw.decode())),
+            extracted_at=now,
+            extractor_name="fixture",
+            extractor_version="1",
+        )
+        claim = Claim(
+            claim_id=f"C-{suffix}",
+            investigation_id=investigation_id,
+            run_id=run_id,
+            statement="Official source stated the PostgreSQL fixture value",
+            claim_type=ClaimType.STATEMENT,
+            importance=ClaimImportance.HIGH,
+            created_at=now,
+            updated_at=now,
+        )
+        relation = ClaimEvidenceRelation(
+            relation_id=f"REL-{suffix}",
+            claim_id=claim.claim_id,
+            evidence_id=evidence.evidence_id,
+            stance=RelationStance.SUPPORTS,
+            entailment_status=EntailmentStatus.PENDING,
+            created_at=now,
+        )
+        repository.add(artifact)
+        repository.add(evidence)
+        repository.add(claim)
+        repository.add(relation)
+        judgment = SemanticJudgment(
+            judgment_id=f"SJ-{suffix}",
+            run_id=run_id,
+            claim_id=claim.claim_id,
+            evidence_id=evidence.evidence_id,
+            judgment=SemanticJudgmentStatus.ENTAILS,
+            reason="exact PostgreSQL fixture statement",
+            semantic_confidence=0.95,
+            recorded_judgment_ref=f"REC-{suffix}",
+            created_at=now,
+        )
+        conflict = ConflictSet(
+            conflict_id=f"CF-{suffix}",
+            investigation_id=investigation_id,
+            run_id=run_id,
+            claim_ids=(claim.claim_id,),
+            evidence_ids=(evidence.evidence_id,),
+            conflict_type=ConflictType.SCOPE,
+            severity=ConflictSeverity.LOW,
+            status=ConflictStatus.RESOLVED,
+            resolution_status=ConflictResolutionStatus.RESOLVED_WITH_SCOPE,
+            resolution_basis="fixture scope is explicit",
+            created_at=now,
+            updated_at=now,
+        )
+        validation_request = ValidationRequest(
+            validation_id=f"V-{suffix}",
+            created_at=now,
+            claim=claim,
+            relations=(relation,),
+            evidence=(evidence,),
+            snapshots=(snapshot,),
+            artifacts=(artifact,),
+            sources=(source,),
+            semantic_judgments=(judgment,),
+            existing_conflicts=(conflict,),
+        )
+        validation_policy = ValidationPolicy(
+            integrity=EvidenceIntegrityValidator(
+                blobs=_MemoryBlobs(BlobRef(digest), raw),  # type: ignore[arg-type]
+                recognized_versions=RecognizedArtifactVersions(
+                    snapshot_parsers=frozenset({("fixture", "1", "1")}),
+                    artifact_processors=frozenset({("fixture", "1")}),
+                ),
+            )
+        )
+        validation_outcome = validation_policy.validate(validation_request)
+        assert validation_outcome.result.status is ValidationStatus.VERIFIED
+        validation_store = ValidationPersistence(sessions, repository)
+        validation_store.persist(
+            request=validation_request,
+            outcome=validation_outcome,
+        )
+        validation_store.assert_latest_projection_consistent(claim.claim_id)
+        assert repository.get(Claim, claim.claim_id).latest_validation_id == (
+            validation_request.validation_id
+        )
+
         loaded = repository.get(SourceSnapshot, snapshot_id)
         assert loaded.provenance["nested"] == {"jsonb": True}
         inspector = inspect(engine)
@@ -223,6 +377,38 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
                 connection.execute(
                     text("UPDATE inv_runs SET status='NOT_A_STATUS' WHERE run_id=:run_id"),
                     {"run_id": run_id},
+                )
+        validation_indexes = {
+            item["name"] for item in inspector.get_indexes("inv_validation_results")
+        }
+        assert {
+            "ix_inv_validation_input_fingerprint",
+            "ix_inv_validation_evidence_set_hash",
+            "ix_inv_validation_policy",
+        } <= validation_indexes
+        assert {
+            "inv_semantic_judgments",
+            "inv_source_families",
+            "inv_source_family_members",
+            "inv_conflict_evidence",
+            "inv_validation_conflicts",
+        } <= set(inspector.get_table_names())
+        with pytest.raises(DatabaseError, match="append-only"):
+            with engine.begin() as connection:
+                connection.execute(
+                    text(
+                        "UPDATE inv_validation_results SET policy_version='changed' "
+                        "WHERE validation_id=:validation_id"
+                    ),
+                    {"validation_id": validation_request.validation_id},
+                )
+        with pytest.raises(IntegrityError):
+            with engine.begin() as connection:
+                connection.execute(
+                    SourceFamilyMemberRow.__table__.insert().values(
+                        family_record_id="missing-family",
+                        source_id=source_id,
+                    )
                 )
     finally:
         engine.dispose()
