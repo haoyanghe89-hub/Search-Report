@@ -27,11 +27,11 @@
 
 **Interfaces:** RunBudget; ExecutionStep.logical_step_key; InvestigationRun checkpoint and owner fields; CallBinding; repository CRUD-in-session methods.
 
-- [ ] Add failing SQLite migration and roundtrip tests for Step uniqueness, budget fields, call-binding uniqueness, and checkpoint.
-- [ ] Run the focused tests and confirm the missing schema failure.
-- [ ] Add typed models, ORM rows, Alembic upgrade/downgrade, and repository mapping.
-- [ ] Run focused tests and inspect SQLite schema plus PostgreSQL integration assertions.
-- [ ] Commit independently if all gates pass.
+- [x] Add failing SQLite migration and roundtrip tests for Step uniqueness, budget fields, call-binding uniqueness, and checkpoint.
+- [x] Run the focused tests and confirm the missing schema failure.
+- [x] Add typed models, ORM rows, Alembic upgrade/downgrade, and repository mapping.
+- [x] Run focused tests and inspect SQLite schema; add PostgreSQL integration assertions (remote CI execution remains blocked).
+- [x] Review with the other Phase 4.1 units and commit the verified implementation as f7425be.
 
 ### Task 2: UnitOfWork and state machine
 
@@ -39,11 +39,11 @@
 
 **Interfaces:** UnitOfWork.begin_step(...), complete_step(...), fail_step(...), continue_run(...); repositories perform CRUD with a shared Session; Harness invokes handlers outside transactions.
 
-- [ ] Test legal and illegal transitions, rollback of outputs/Step/checkpoint, duplicate dispatch, and stale-owner takeover.
-- [ ] Confirm tests fail before implementation.
-- [ ] Implement short CAS transactions, durable logical keys, explicit Continue, and post-commit notification.
-- [ ] Verify failure/interruption and budget accounting with injected monotonic clock.
-- [ ] Commit independently if all gates pass.
+- [x] Test legal and illegal transitions, rollback of outputs/Step/checkpoint, duplicate dispatch, and stale-owner takeover.
+- [x] Confirm tests fail before implementation.
+- [x] Implement short CAS transactions, durable logical keys, explicit Continue, and post-commit notification.
+- [x] Verify failure/interruption and budget accounting with injected monotonic clock.
+- [x] Review with the other Phase 4.1 units and commit the verified implementation as f7425be.
 
 ### Task 3: Agent contracts and fake mainline
 
@@ -51,10 +51,10 @@
 
 **Interfaces:** Versioned frozen role inputs/proposals for Supervisor, Researcher, Analyst, Verifier, Writer; fake role Ports; route to READY_FOR_REPORT.
 
-- [ ] Write failing schema/reference/route tests and a fake-agent PLAN->COLLECT->ANALYZE->VERIFY test.
-- [ ] Implement bounded contexts and proposal validation; prohibit Agent status/release decisions.
-- [ ] Test Writer contract separately and assert no Report row is created.
-- [ ] Commit independently if all gates pass.
+- [x] Write failing schema/reference/route tests and a fake-agent PLAN->COLLECT->ANALYZE->VERIFY test.
+- [x] Implement bounded contexts and proposal validation; prohibit Agent status/release decisions.
+- [x] Test Writer contract separately and assert no Report row is created.
+- [x] Review with the other Phase 4.1 units and commit the verified implementation as f7425be.
 
 ### Task 4: Persistent call binding and budget
 
@@ -62,16 +62,16 @@
 
 **Interfaces:** Bound Search/Fetch/Model operations take call_site_key and ordinal; binding stores exact recorded call identity; budget reservations persist before a new external call.
 
-- [ ] Test reuse after crash, duplicate fingerprint at two sites, exact Replay hit, version mismatch, and missing/corrupt payload.
-- [ ] Extend recording context with site metadata; add binding lookup and strict compatibility checks.
-- [ ] Test monotonic Step time and persistent cumulative call/token counters.
-- [ ] Commit independently if all gates pass.
+- [x] Test reuse after crash, duplicate fingerprint at two sites, exact Replay hit, version mismatch, and missing/corrupt payload.
+- [x] Extend recording context with site metadata; add binding lookup and strict compatibility checks.
+- [x] Test monotonic Step time and persistent cumulative call/token counters.
+- [x] Review with the other Phase 4.1 units and commit the verified implementation as f7425be.
 
 ### Task 5: Acceptance and verification
 
 **Files:** Create docs/12-phase4-1-harness-runtime-acceptance.md; extend PostgreSQL CI tests if needed.
 
-- [ ] Run focused and full offline pytest, Ruff, strict mypy, build, SQLite migration smoke, and PostgreSQL CI or a local PostgreSQL service.
-- [ ] Record exact command results and known limitations in the independent acceptance document.
-- [ ] Recheck tracked/untracked status, review diff, and commit only Phase 4.1 files.
-- [ ] Report commit hash, changed files, contracts, state machine, UoW, bindings, budget, tests, CI, and limitations.
+- [x] Run focused and full offline pytest, Ruff, strict mypy, build, and SQLite migration smoke. PostgreSQL CI remains unrun because the remote push was rejected by auto-review and no local PostgreSQL service is available.
+- [x] Record exact local command results and the PostgreSQL CI blocker in the independent acceptance document.
+- [x] Recheck tracked/untracked status, review diff, and commit only Phase 4.1 files.
+- [x] Report commit hash, changed files, contracts, state machine, UoW, bindings, budget, tests, CI, and limitations.

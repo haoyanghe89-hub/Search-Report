@@ -40,7 +40,11 @@ from marketpulse.investigation.domain.runtime import (
     ResearchTask,
     RunBudget,
 )
-from marketpulse.investigation.harness.persistence import HarnessConflictError, HarnessStore
+from marketpulse.investigation.harness.persistence import (
+    HarnessConflictError,
+    HarnessStore,
+    ResumeVersionMismatchError,
+)
 from marketpulse.investigation.harness.runtime import InvestigationHarness, StepOutcome
 from marketpulse.investigation.harness.state_machine import Route
 from marketpulse.investigation.persistence.base import create_session_factory
@@ -189,7 +193,7 @@ def test_stale_owner_resume_excludes_downtime_and_reuses_completed_step(
     )
     assert store.read_budget(run_id).consumed_wall_time_ms == 1500
     assert store.begin_step(**kwargs, owner_instance_id="worker-c").step_id == second.step_id
-    with pytest.raises(Exception, match="logical Step input changed"):
+    with pytest.raises(ResumeVersionMismatchError, match="logical Step input changed"):
         store.begin_step(
             **{**kwargs, "input_fingerprint": hashlib.sha256(b"changed").hexdigest()},
             owner_instance_id="worker-c",

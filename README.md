@@ -166,4 +166,4 @@ uv run pytest tests/unit/investigation tests/integration/investigation -m "not i
 uv run pytest tests/integration/investigation/test_postgres_persistence.py -m infrastructure -q
 ```
 
-当前已实现 Phase 4.1 Harness 运行骨架和五角色类型契约；真实五 Agent、Claim-Type-Aware ValidationPolicy、Report Writer、完整调查 Replay、Reviewer 认证及调查前端尚未实现。Phase 4.1 的假 Agent 测试不代表完整系统达到 Legacy Removal Gate。上面的市场 CLI/前端仅为迁移期回归基线，不是新调查系统入口。
+当前已实现 Phase 4.1 Harness 运行骨架和五角色类型契约；真实五 Agent、Claim-Type-Aware ValidationPolicy、Report Writer、完整调查 Replay、Reviewer 认证及调查前端尚未实现。Phase 4.1 的假 Agent 测试不代表完整系统达到 Legacy Removal Gate。当前本地验证与 PostgreSQL CI 未运行的状态见 [Phase 4.1 独立验收记录](docs/12-phase4-1-harness-runtime-acceptance.md)。上面的市场 CLI/前端仅为迁移期回归基线，不是新调查系统入口。

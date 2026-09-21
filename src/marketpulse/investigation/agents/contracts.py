@@ -251,4 +251,6 @@ def route_for_verification(proposal: VerificationProposal) -> Route:
         return Route.COLLECT
     if ResearchGapType.ANALYSIS_ERROR in gap_types:
         return Route.ANALYZE
+    if proposal.gaps:
+        return Route.COLLECT
     return Route.READY_FOR_REPORT

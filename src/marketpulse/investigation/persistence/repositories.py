@@ -182,6 +182,16 @@ class InvestigationRepository:
                 session.add(row)
                 session.add_all(related)
 
+    def source_by_url(self, investigation_id: str, canonical_url: str) -> Source | None:
+        with self._sessions() as session:
+            row = session.scalar(
+                select(SourceRow).where(
+                    SourceRow.investigation_id == investigation_id,
+                    SourceRow.canonical_url == canonical_url,
+                )
+            )
+            return Source.model_validate(self._row_dict(row)) if row else None
+
     def list_artifacts(self, snapshot_id: str) -> list[DocumentArtifact]:
         with self._sessions() as session:
             rows = session.scalars(

@@ -14,6 +14,10 @@ No transaction spans Search, Fetch, or Model calls. Recorded calls may commit in
 
 logical_step_key identifies workflow work (for example planning:initial or verify:claim:C-021). input_fingerprint hashes the canonical semantic input for a particular execution. Enforce UNIQUE(run_id, logical_step_key, attempt); index input_fingerprint without uniqueness. Persist current and last completed Step, dependencies, output contract version, workflow version, owner, and heartbeat. Explicit Continue reconstructs work from durable Step/artifact state. No automatic restart scanner.
 
+## Acquisition preparation seam
+
+SourceAcquisitionService.prepare performs Search/Fetch, parses and publishes immutable Blobs, and returns stable Source/Snapshot/Artifact/Gap identities plus ordered business outputs without writing the database. A Harness Step can commit these outputs through UnitOfWork alongside Step completion and checkpoint. The existing acquire entry remains available for the Phase 3 acquisition regression path.
+
 ## Persistent call binding
 
 A binding includes run_id, logical_step_key, call_site_key, call_ordinal, request_fingerprint, recorded_call_id, operation, and schema/prompt/config versions. Resume or retry reuses a durable successful binding. Replay matches exact call-site identity and fingerprint/version fields; missing or incompatible entries fail closed. Never consume a different call merely because its ordinal matches.

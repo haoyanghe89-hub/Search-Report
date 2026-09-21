@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import uuid
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
@@ -18,7 +21,10 @@ from marketpulse.investigation.domain.enums import (
 from marketpulse.investigation.domain.sources import DocumentArtifact, Source, SourceSnapshot
 from marketpulse.investigation.ingestion.models import DocumentParseRequest
 from marketpulse.investigation.ingestion.registry import DocumentParserRegistry
-from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from marketpulse.investigation.persistence.repositories import (
+    InvestigationRepository,
+    PersistedEntity,
+)
 from marketpulse.investigation.ports.external import (
     FetchPort,
     FetchRequest,
@@ -81,6 +87,28 @@ _SOURCE_TYPES = {
 }
 
 
+@dataclass(frozen=True, slots=True)
+class PreparedAcquisition:
+    result: AcquisitionResult
+    business_outputs: tuple[PersistedEntity, ...]
+
+
+def _stable_id(kind: str, *parts: str) -> str:
+    canonical = json.dumps(parts, ensure_ascii=False, separators=(",", ":"))
+    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:32]
+    return f"{kind.upper()}-{digest}"
+
+
+def _stable_factory(run_id: str, logical_step_key: str, canonical_url: str) -> IdFactory:
+    counters: dict[str, int] = {}
+
+    def factory(kind: str) -> str:
+        counters[kind] = counters.get(kind, 0) + 1
+        return _stable_id(kind, run_id, logical_step_key, canonical_url, str(counters[kind]))
+
+    return factory
+
+
 class SourceAcquisitionService:
     """Deterministic Search-to-artifact pipeline with no Claim or report semantics."""
 
@@ -131,23 +159,78 @@ class SourceAcquisitionService:
                 discovered_at=search_result.retrieved_at,
             )
             self._repository.add(source)
-            outcome = await self._fetch_parse_persist(
+            outcome, snapshot, artifacts, gaps = await self._fetch_parse(
                 request=request,
                 source=source,
                 url=canonical_url,
                 search_provider=search_result.provider,
+                id_factory=self._id_factory,
             )
+            self._repository.add_snapshot_bundle(snapshot, artifacts, gaps)
             outcomes.append(outcome)
         return AcquisitionResult(query=request.query, sources=tuple(outcomes))
 
-    async def _fetch_parse_persist(
+    async def prepare(
+        self, request: AcquisitionRequest, *, logical_step_key: str
+    ) -> PreparedAcquisition:
+        """Fetch and parse without DB writes; Harness commits returned outputs atomically."""
+        search_result = await self._search.search(
+            SearchRequest(
+                query=request.query,
+                max_results=request.max_results,
+                schema_version=request.search_schema_version,
+                config_version=request.config_version,
+            )
+        )
+        outcomes: list[AcquiredSource] = []
+        outputs: list[PersistedEntity] = []
+        seen_urls: set[str] = set()
+        for item in search_result.items:
+            canonical_url = str(item.url)
+            if canonical_url in seen_urls:
+                continue
+            seen_urls.add(canonical_url)
+            existing = self._repository.source_by_url(request.investigation_id, canonical_url)
+            source = existing or Source(
+                source_id=_stable_id("S", request.investigation_id, canonical_url),
+                investigation_id=request.investigation_id,
+                canonical_url=item.url,
+                title=item.title,
+                source_type=_SOURCE_TYPES.get(item.source_type_hint or "", SourceType.WEB_PAGE),
+                is_official=item.source_type_hint == "official",
+                is_first_hand=item.source_type_hint == "official",
+                discovered_at=search_result.retrieved_at,
+            )
+            if existing is None:
+                outputs.append(source)
+            outcome, snapshot, artifacts, gaps = await self._fetch_parse(
+                request=request,
+                source=source,
+                url=canonical_url,
+                search_provider=search_result.provider,
+                id_factory=_stable_factory(request.run_id, logical_step_key, canonical_url),
+            )
+            outcomes.append(outcome)
+            outputs.extend((snapshot, *artifacts, *gaps))
+        return PreparedAcquisition(
+            result=AcquisitionResult(query=request.query, sources=tuple(outcomes)),
+            business_outputs=tuple(outputs),
+        )
+
+    async def _fetch_parse(
         self,
         *,
         request: AcquisitionRequest,
         source: Source,
         url: str,
         search_provider: str,
-    ) -> AcquiredSource:
+        id_factory: IdFactory,
+    ) -> tuple[
+        AcquiredSource,
+        SourceSnapshot,
+        tuple[DocumentArtifact, ...],
+        tuple[ResearchGap, ...],
+    ]:
         fetch_result = await self._fetch.fetch(
             FetchRequest.model_validate(
                 {
@@ -157,7 +240,7 @@ class SourceAcquisitionService:
                 }
             )
         )
-        snapshot_id = self._id_factory("SS")
+        snapshot_id = id_factory("SS")
         raw = self._blobs.put_bytes(fetch_result.body)
         parsed = self._parsers.parse(
             DocumentParseRequest(
@@ -178,7 +261,7 @@ class SourceAcquisitionService:
             stored = self._blobs.put_bytes(parsed_artifact.content)
             artifacts.append(
                 DocumentArtifact(
-                    artifact_id=self._id_factory("A"),
+                    artifact_id=id_factory("A"),
                     snapshot_id=snapshot_id,
                     artifact_type=parsed_artifact.artifact_type,
                     blob_ref=stored.ref,
@@ -191,7 +274,7 @@ class SourceAcquisitionService:
             )
         gaps = tuple(
             ResearchGap(
-                gap_id=self._id_factory("G"),
+                gap_id=id_factory("G"),
                 investigation_id=request.investigation_id,
                 run_id=request.run_id,
                 gap_type=ResearchGapType.UNREADABLE_SOURCE,
@@ -241,7 +324,6 @@ class SourceAcquisitionService:
             evidence_eligible=parsed.evidence_eligible,
             provenance=provenance,
         )
-        self._repository.add_snapshot_bundle(snapshot, tuple(artifacts), gaps)
         parsed_ok = parsed.parse_status in {ParseStatus.PARSED, ParseStatus.PARTIALLY_PARSED}
         valid = bool(
             parsed_ok
@@ -249,7 +331,7 @@ class SourceAcquisitionService:
             and artifacts
             and provenance["external_content_trust"] == "UNTRUSTED"
         )
-        return AcquiredSource(
+        outcome = AcquiredSource(
             source_id=source.source_id,
             snapshot_id=snapshot_id,
             discovered=True,
@@ -261,3 +343,4 @@ class SourceAcquisitionService:
             artifact_ids=tuple(artifact.artifact_id for artifact in artifacts),
             gap_ids=tuple(gap.gap_id for gap in gaps),
         )
+        return outcome, snapshot, tuple(artifacts), gaps
