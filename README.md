@@ -1,5 +1,7 @@
 # MarketPulse Agent
 
+> 当前处于 Investigation Platform 原地迁移的 Phase 0/1。现有市场流程保留为回归基线；已增加通用 Blob Storage，尚未接入调查 Agent/Replay/审核流程。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
+
 MarketPulse 是一个 Python 3.11+ 四智能体市场研究应用：主 Agent 规划与复核，搜索 Agent 检索取证，分析 Agent 形成结论，报告 Agent 撰写中文报告。四个角色通过持久化黑板协作，主 Agent 可要求有限轮次的补查。
 
 完整协作设计、接口和部署说明见 [四智能体架构](docs/05-multiagent-architecture.md)。
@@ -105,3 +107,26 @@ uv run pytest tests/live -m live -v -s
 - 状态及事件用于审计，不会在进程崩溃后自动恢复执行。四个逻辑 Agent 当前由单进程调度，不是四个独立 worker。
 - 日志、报告和终端均不会输出 API Key 或模型隐藏推理。
 - 若可信本地代理把公网 DNS 映射到 `198.18.0.0/15`，可显式设置 `MARKETPULSE_ALLOW_PROXY_DNS=true`；其他私网和 localhost 仍会被拒绝。
+
+## Phase 1 通用 Blob Storage
+
+本地内容寻址存储无额外依赖，接收二进制输入、返回可持久化的逻辑引用。实际文件路径仅在 adapter 内使用。读取会重新校验 SHA-256；缺失/损坏分别抛出 `BLOB_NOT_FOUND` / `BLOB_INTEGRITY_ERROR`，不会重新联网补齐。
+
+```python
+from pathlib import Path
+from marketpulse.infrastructure.storage import BlobRef, BlobStoragePort
+from marketpulse.infrastructure.storage import LocalContentAddressedBlobStorage
+
+storage: BlobStoragePort = LocalContentAddressedBlobStorage(Path("data/blobs"))
+saved = storage.put_bytes(b"immutable source snapshot")
+portable_ref = saved.ref.uri  # blob://sha256/<hash>; can be stored as DB metadata
+assert storage.get_bytes(BlobRef.from_uri(portable_ref)) == b"immutable source snapshot"
+```
+
+Blob 先完整落盘，再由未来 repository 提交数据库引用。相同内容去重；适配器不提供覆盖和删除操作。需要支持同卷硬链接的本地文件系统（Windows NTFS / Linux 本地 Docker volume）。崩溃可能留下未引用完整 Blob 或 staging 临时文件，当前无自动 GC。该同步 Port 应由异步应用在线程执行器中调用，避免阻塞 API event loop。
+
+```powershell
+uv run pytest tests/unit/test_blob_storage.py tests/unit/test_infrastructure_boundary.py -q
+```
+
+Snapshot 数据库集成、逐调用录制、解析器、Replay 和审核/恢复功能均属于后续迁移阶段，不能因存储测试通过而视为整体调查系统已完成。
