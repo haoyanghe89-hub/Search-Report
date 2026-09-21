@@ -1,0 +1,94 @@
+# MarketPulse 市场可行性报告：{{ plan.normalized_topic }}
+
+{% if quality.issues -%}
+> **覆盖提示：** {% for issue in quality.issues %}{{ issue.message }}{% if not loop.last %}；{% endif %}{% endfor %}
+{% endif %}
+
+## 1. 执行摘要
+
+{{ analysis.executive_summary }}
+
+**建议：{{ analysis.recommendation.value }}**  
+**置信度：{{ "%.0f%%" | format(analysis.confidence * 100) }}**
+
+## 2. 研究范围与方法
+
+- 研究日期：{{ research_date }}
+- 市场范围：全球市场，英文公开网页为主
+- 搜索查询：{{ executed_query_count if executed_query_count is not none else plan.queries | length }} 个
+- 成功来源：{{ coverage.unique_sources }} 个，其中官方来源 {{ coverage.official_sources }} 个
+- 方法：主 Agent 规划与复核、搜索 Agent 检索取证、分析 Agent 研判、报告 Agent 撰写；共享黑板保留协作记录
+
+## 3. 市场信号与需求证据
+
+{% for signal in analysis.market_signals -%}
+- **事实：** {{ signal.statement }} {% for source_id in signal.source_ids %}[{{ source_id }}](#{{ source_id | lower }}){% endfor %}
+  - **分析推断：** {{ signal.interpretation }}
+{% endfor %}
+
+## 4. 核心竞品对比
+
+| 竞品 | 定位 | 目标客户 | 核心功能 | 来源 |
+|---|---|---|---|---|
+{% for competitor in analysis.competitors -%}
+| {{ competitor.name }} | {{ competitor.positioning }} | {{ competitor.target_customers }} | {{ competitor.key_features | join('；') }} | {% for source_id in competitor.source_ids %}[{{ source_id }}](#{{ source_id | lower }}){% if not loop.last %}、{% endif %}{% endfor %} |
+{% endfor %}
+
+## 5. 定价与商业模式
+
+| 竞品 | 公开定价 | 验证状态 | 来源 |
+|---|---|---|---|
+{% for competitor in analysis.competitors -%}
+| {{ competitor.name }} | {{ competitor.pricing.summary }} | {{ "已验证" if competitor.pricing.verified else "未公开/未验证" }} | {% for source_id in competitor.pricing.source_ids %}[{{ source_id }}](#{{ source_id | lower }}){% if not loop.last %}、{% endif %}{% endfor %} |
+{% endfor %}
+
+## 6. 市场空白、差异化机会与进入壁垒
+
+### 机会
+{% for item in analysis.opportunities -%}
+- {{ item }}
+{% endfor %}
+
+### 进入壁垒
+{% for item in analysis.barriers -%}
+- {{ item }}
+{% endfor %}
+
+## 7. Go / Conditional Go / No-Go 建议与置信度
+
+**{{ analysis.recommendation.value }}（{{ "%.0f%%" | format(analysis.confidence * 100) }}）**
+
+{% for item in analysis.rationale -%}
+- {{ item }}
+{% endfor %}
+
+## 8. 关键风险与下一步验证动作
+
+### 风险
+{% for item in analysis.risks -%}
+- {{ item }}
+{% endfor %}
+
+### 下一步
+{% for item in analysis.next_steps -%}
+- {{ item }}
+{% endfor %}
+
+## 9. 来源清单
+
+{% for source in evidence.sources -%}
+<a id="{{ source.id | lower }}"></a>
+- **{{ source.id }}** [{{ source.title }}]({{ source.url }}) — {{ source.domain }}；{{ source.source_type.value }}；访问日期 {{ source.accessed_at.date().isoformat() }}
+{% endfor %}
+
+## 10. 局限性与未验证信息
+
+{% for item in analysis.limitations -%}
+- {{ item }}
+{% endfor %}
+{% for issue in quality.issues -%}
+- {{ issue.message }}
+{% endfor %}
+{% for warning in evidence.warnings -%}
+- {{ warning }}
+{% endfor %}
