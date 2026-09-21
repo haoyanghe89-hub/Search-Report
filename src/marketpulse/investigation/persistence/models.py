@@ -33,6 +33,7 @@ from marketpulse.investigation.domain.enums import (
     ConflictType,
     EntailmentStatus,
     ExecutionStepStatus,
+    ExternalCallStatus,
     GapSeverity,
     GapStatus,
     LocatorType,
@@ -690,15 +691,33 @@ class RecordedToolCallRow(Base):
     __table_args__ = (
         CheckConstraint("request_blob_ref LIKE 'blob://sha256/%'", name="ck_inv_tool_request_blob"),
         CheckConstraint(
-            "response_blob_ref LIKE 'blob://sha256/%'", name="ck_inv_tool_response_blob"
+            "response_blob_ref IS NULL OR response_blob_ref LIKE 'blob://sha256/%'",
+            name="ck_inv_tool_response_blob",
         ),
         CheckConstraint("length(request_hash) = 64", name="ck_inv_tool_request_hash"),
-        CheckConstraint("length(response_hash) = 64", name="ck_inv_tool_response_hash"),
-        UniqueConstraint(
-            "run_id", "operation", "request_fingerprint", name="uq_inv_tool_call_fingerprint"
+        CheckConstraint(
+            "response_hash IS NULL OR length(response_hash) = 64",
+            name="ck_inv_tool_response_hash",
+        ),
+        CheckConstraint(
+            "(response_blob_ref IS NULL) = (response_hash IS NULL)",
+            name="ck_inv_tool_response_pair",
+        ),
+        CheckConstraint("attempt >= 1", name="ck_inv_tool_attempt_positive"),
+        CheckConstraint(
+            "replayable = false OR (status = 'SUCCESS' AND response_blob_ref IS NOT NULL)",
+            name="ck_inv_tool_replayable_success",
         ),
         Index("ix_inv_tool_calls_step", "step_id"),
         Index("ix_inv_tool_calls_fingerprint", "request_fingerprint"),
+        Index(
+            "ix_inv_tool_calls_replay_lookup",
+            "run_id",
+            "operation",
+            "request_fingerprint",
+            "status",
+            "replayable",
+        ),
         Index("ix_inv_tool_calls_request_blob", "request_blob_ref"),
         Index("ix_inv_tool_calls_request_hash", "request_hash"),
         Index("ix_inv_tool_calls_response_blob", "response_blob_ref"),
@@ -716,16 +735,25 @@ class RecordedToolCallRow(Base):
     request_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
     request_blob_ref: Mapped[str] = mapped_column(BLOB_REF, nullable=False)
     request_hash: Mapped[str] = mapped_column(HASH, nullable=False)
-    response_blob_ref: Mapped[str] = mapped_column(BLOB_REF, nullable=False)
-    response_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    response_blob_ref: Mapped[str | None] = mapped_column(BLOB_REF)
+    response_hash: Mapped[str | None] = mapped_column(HASH)
     tool_name: Mapped[str] = mapped_column(String(200), nullable=False)
     provider: Mapped[str] = mapped_column(String(200), nullable=False)
     schema_version: Mapped[str] = mapped_column(String(100), nullable=False)
     prompt_version: Mapped[str | None] = mapped_column(String(100))
+    config_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    attempt: Mapped[int] = mapped_column(Integer, nullable=False)
+    status: Mapped[ExternalCallStatus] = mapped_column(
+        enum_type(ExternalCallStatus, "inv_external_call_status"), nullable=False
+    )
+    replayable: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    error_code: Mapped[str | None] = mapped_column(String(100))
+    error_message: Mapped[str | None] = mapped_column(Text)
     metadata_payload: Mapped[dict[str, Any]] = mapped_column(
         "metadata", JSON_DOCUMENT, nullable=False, default=dict
     )
     recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
 class RecordedModelCallRow(Base):
@@ -735,15 +763,33 @@ class RecordedModelCallRow(Base):
             "request_blob_ref LIKE 'blob://sha256/%'", name="ck_inv_model_request_blob"
         ),
         CheckConstraint(
-            "response_blob_ref LIKE 'blob://sha256/%'", name="ck_inv_model_response_blob"
+            "response_blob_ref IS NULL OR response_blob_ref LIKE 'blob://sha256/%'",
+            name="ck_inv_model_response_blob",
         ),
         CheckConstraint("length(request_hash) = 64", name="ck_inv_model_request_hash"),
-        CheckConstraint("length(response_hash) = 64", name="ck_inv_model_response_hash"),
-        UniqueConstraint(
-            "run_id", "operation", "request_fingerprint", name="uq_inv_model_call_fingerprint"
+        CheckConstraint(
+            "response_hash IS NULL OR length(response_hash) = 64",
+            name="ck_inv_model_response_hash",
+        ),
+        CheckConstraint(
+            "(response_blob_ref IS NULL) = (response_hash IS NULL)",
+            name="ck_inv_model_response_pair",
+        ),
+        CheckConstraint("attempt >= 1", name="ck_inv_model_attempt_positive"),
+        CheckConstraint(
+            "replayable = false OR (status = 'SUCCESS' AND response_blob_ref IS NOT NULL)",
+            name="ck_inv_model_replayable_success",
         ),
         Index("ix_inv_model_calls_step", "step_id"),
         Index("ix_inv_model_calls_fingerprint", "request_fingerprint"),
+        Index(
+            "ix_inv_model_calls_replay_lookup",
+            "run_id",
+            "operation",
+            "request_fingerprint",
+            "status",
+            "replayable",
+        ),
         Index("ix_inv_model_calls_request_blob", "request_blob_ref"),
         Index("ix_inv_model_calls_request_hash", "request_hash"),
         Index("ix_inv_model_calls_response_blob", "response_blob_ref"),
@@ -761,13 +807,22 @@ class RecordedModelCallRow(Base):
     request_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
     request_blob_ref: Mapped[str] = mapped_column(BLOB_REF, nullable=False)
     request_hash: Mapped[str] = mapped_column(HASH, nullable=False)
-    response_blob_ref: Mapped[str] = mapped_column(BLOB_REF, nullable=False)
-    response_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    response_blob_ref: Mapped[str | None] = mapped_column(BLOB_REF)
+    response_hash: Mapped[str | None] = mapped_column(HASH)
     provider: Mapped[str] = mapped_column(String(200), nullable=False)
     model: Mapped[str] = mapped_column(String(200), nullable=False)
     schema_version: Mapped[str] = mapped_column(String(100), nullable=False)
     prompt_version: Mapped[str | None] = mapped_column(String(100))
+    config_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    attempt: Mapped[int] = mapped_column(Integer, nullable=False)
+    status: Mapped[ExternalCallStatus] = mapped_column(
+        enum_type(ExternalCallStatus, "inv_external_call_status"), nullable=False
+    )
+    replayable: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    error_code: Mapped[str | None] = mapped_column(String(100))
+    error_message: Mapped[str | None] = mapped_column(Text)
     metadata_payload: Mapped[dict[str, Any]] = mapped_column(
         "metadata", JSON_DOCUMENT, nullable=False, default=dict
     )
     recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

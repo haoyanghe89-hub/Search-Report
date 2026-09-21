@@ -26,6 +26,7 @@ from marketpulse.investigation.domain.enums import (
     ConflictType,
     EntailmentStatus,
     ExecutionStepStatus,
+    ExternalCallStatus,
     GapSeverity,
     GapStatus,
     ParseStatus,
@@ -320,7 +321,12 @@ def test_report_review_audit_and_recording_contracts() -> None:
         tool_name="search-port",
         provider="fixture",
         schema_version="1",
+        config_version="runtime-v1",
+        attempt=1,
+        status=ExternalCallStatus.SUCCESS,
+        replayable=True,
         recorded_at=NOW,
+        completed_at=NOW,
     )
     model_call = RecordedModelCall(
         call_id="MC-001",
@@ -336,7 +342,12 @@ def test_report_review_audit_and_recording_contracts() -> None:
         model="fixture-model",
         schema_version="1",
         prompt_version="extract-v1",
+        config_version="runtime-v1",
+        attempt=1,
+        status=ExternalCallStatus.SUCCESS,
+        replayable=True,
         recorded_at=NOW,
+        completed_at=NOW,
     )
 
     assert section.claim_ids == ("C-001",)

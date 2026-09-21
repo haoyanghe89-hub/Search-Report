@@ -16,7 +16,7 @@ from marketpulse.investigation.domain.claims import (
     TimelineEvent,
     ValidationResult,
 )
-from marketpulse.investigation.domain.enums import LocatorType
+from marketpulse.investigation.domain.enums import ExternalCallStatus, LocatorType
 from marketpulse.investigation.domain.locators import deserialize_locator
 from marketpulse.investigation.domain.recordings import RecordedModelCall, RecordedToolCall
 from marketpulse.investigation.domain.reports import (
@@ -109,6 +109,33 @@ class InvestigationRepository:
             session.flush()
             session.add_all(related)
 
+    def add_snapshot_bundle(
+        self,
+        snapshot: SourceSnapshot,
+        artifacts: tuple[DocumentArtifact, ...],
+        gaps: tuple[ResearchGap, ...] = (),
+    ) -> None:
+        """Commit one immutable parse outcome without an intermediate Snapshot state."""
+        with self._sessions.begin() as session:
+            snapshot_row, snapshot_related = self._to_rows(snapshot)
+            session.add(snapshot_row)
+            session.add_all(snapshot_related)
+            session.flush()
+            entities: tuple[PersistedEntity, ...] = (*artifacts, *gaps)
+            for entity in entities:
+                row, related = self._to_rows(entity)
+                session.add(row)
+                session.add_all(related)
+
+    def list_artifacts(self, snapshot_id: str) -> list[DocumentArtifact]:
+        with self._sessions() as session:
+            rows = session.scalars(
+                select(DocumentArtifactRow)
+                .where(DocumentArtifactRow.snapshot_id == snapshot_id)
+                .order_by(DocumentArtifactRow.page_number, DocumentArtifactRow.artifact_id)
+            ).all()
+            return [self._document_artifact(row) for row in rows]
+
     def get(self, entity_type: type[T], entity_id: str) -> T:
         with self._sessions() as session:
             entity = self._get(session, entity_type, entity_id)
@@ -131,6 +158,40 @@ class InvestigationRepository:
                 .order_by(AuditEventRow.created_at, AuditEventRow.audit_event_id)
             ).all()
             return [self._audit(row) for row in rows]
+
+    def list_replayable_tool_calls(
+        self, *, run_id: str, operation: str, request_fingerprint: str
+    ) -> list[RecordedToolCall]:
+        with self._sessions() as session:
+            rows = session.scalars(
+                select(RecordedToolCallRow)
+                .where(
+                    RecordedToolCallRow.run_id == run_id,
+                    RecordedToolCallRow.operation == operation,
+                    RecordedToolCallRow.request_fingerprint == request_fingerprint,
+                    RecordedToolCallRow.status == ExternalCallStatus.SUCCESS,
+                    RecordedToolCallRow.replayable.is_(True),
+                )
+                .order_by(RecordedToolCallRow.recorded_at, RecordedToolCallRow.call_id)
+            ).all()
+            return [self._recorded_tool_call(row) for row in rows]
+
+    def list_replayable_model_calls(
+        self, *, run_id: str, operation: str, request_fingerprint: str
+    ) -> list[RecordedModelCall]:
+        with self._sessions() as session:
+            rows = session.scalars(
+                select(RecordedModelCallRow)
+                .where(
+                    RecordedModelCallRow.run_id == run_id,
+                    RecordedModelCallRow.operation == operation,
+                    RecordedModelCallRow.request_fingerprint == request_fingerprint,
+                    RecordedModelCallRow.status == ExternalCallStatus.SUCCESS,
+                    RecordedModelCallRow.replayable.is_(True),
+                )
+                .order_by(RecordedModelCallRow.recorded_at, RecordedModelCallRow.call_id)
+            ).all()
+            return [self._recorded_model_call(row) for row in rows]
 
     def _to_rows(self, entity: PersistedEntity) -> tuple[object, list[object]]:
         if isinstance(entity, Investigation):
@@ -234,7 +295,9 @@ class InvestigationRepository:
             payload = _plain(entity, "request_blob_ref", "response_blob_ref", "metadata")
             payload.update(
                 request_blob_ref=entity.request_blob_ref.uri,
-                response_blob_ref=entity.response_blob_ref.uri,
+                response_blob_ref=(
+                    entity.response_blob_ref.uri if entity.response_blob_ref else None
+                ),
                 metadata_payload=entity.metadata,
             )
             return RecordedToolCallRow(**payload), []
@@ -242,7 +305,9 @@ class InvestigationRepository:
             payload = _plain(entity, "request_blob_ref", "response_blob_ref", "metadata")
             payload.update(
                 request_blob_ref=entity.request_blob_ref.uri,
-                response_blob_ref=entity.response_blob_ref.uri,
+                response_blob_ref=(
+                    entity.response_blob_ref.uri if entity.response_blob_ref else None
+                ),
                 metadata_payload=entity.metadata,
             )
             return RecordedModelCallRow(**payload), []
@@ -303,10 +368,7 @@ class InvestigationRepository:
             )
             return SourceSnapshot.model_validate(payload)
         if entity_type is DocumentArtifact:
-            row = self._required(session, DocumentArtifactRow, entity_id)
-            payload = self._row_dict(row)
-            payload["blob_ref"] = BlobRef.from_uri(row.blob_ref)
-            return DocumentArtifact.model_validate(payload)
+            return self._document_artifact(self._required(session, DocumentArtifactRow, entity_id))
         if entity_type is Evidence:
             row = self._required(session, EvidenceRow, entity_id)
             payload = self._row_dict(row, "locator_type", "locator_payload")
@@ -372,23 +434,11 @@ class InvestigationRepository:
         if entity_type is AuditEvent:
             return self._audit(self._required(session, AuditEventRow, entity_id))
         if entity_type is RecordedToolCall:
-            row = self._required(session, RecordedToolCallRow, entity_id)
-            payload = self._row_dict(row, "metadata_payload")
-            payload.update(
-                request_blob_ref=BlobRef.from_uri(row.request_blob_ref),
-                response_blob_ref=BlobRef.from_uri(row.response_blob_ref),
-                metadata=row.metadata_payload,
-            )
-            return RecordedToolCall.model_validate(payload)
+            return self._recorded_tool_call(self._required(session, RecordedToolCallRow, entity_id))
         if entity_type is RecordedModelCall:
-            row = self._required(session, RecordedModelCallRow, entity_id)
-            payload = self._row_dict(row, "metadata_payload")
-            payload.update(
-                request_blob_ref=BlobRef.from_uri(row.request_blob_ref),
-                response_blob_ref=BlobRef.from_uri(row.response_blob_ref),
-                metadata=row.metadata_payload,
+            return self._recorded_model_call(
+                self._required(session, RecordedModelCallRow, entity_id)
             )
-            return RecordedModelCall.model_validate(payload)
         raise TypeError(f"unsupported investigation entity type: {entity_type.__name__}")
 
     @staticmethod
@@ -407,6 +457,36 @@ class InvestigationRepository:
             for column in table.columns
             if column.key not in excluded
         }
+
+    @classmethod
+    def _recorded_tool_call(cls, row: RecordedToolCallRow) -> RecordedToolCall:
+        payload = cls._row_dict(row, "metadata_payload")
+        payload.update(
+            request_blob_ref=BlobRef.from_uri(row.request_blob_ref),
+            response_blob_ref=(
+                BlobRef.from_uri(row.response_blob_ref) if row.response_blob_ref else None
+            ),
+            metadata=row.metadata_payload,
+        )
+        return RecordedToolCall.model_validate(payload)
+
+    @classmethod
+    def _document_artifact(cls, row: DocumentArtifactRow) -> DocumentArtifact:
+        payload = cls._row_dict(row)
+        payload["blob_ref"] = BlobRef.from_uri(row.blob_ref)
+        return DocumentArtifact.model_validate(payload)
+
+    @classmethod
+    def _recorded_model_call(cls, row: RecordedModelCallRow) -> RecordedModelCall:
+        payload = cls._row_dict(row, "metadata_payload")
+        payload.update(
+            request_blob_ref=BlobRef.from_uri(row.request_blob_ref),
+            response_blob_ref=(
+                BlobRef.from_uri(row.response_blob_ref) if row.response_blob_ref else None
+            ),
+            metadata=row.metadata_payload,
+        )
+        return RecordedModelCall.model_validate(payload)
 
     def _validation(self, row: ValidationResultRow) -> ValidationResult:
         return ValidationResult.model_validate(self._row_dict(row))

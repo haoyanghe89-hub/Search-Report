@@ -27,6 +27,7 @@ from marketpulse.investigation.domain.enums import (
     ConflictType,
     EntailmentStatus,
     ExecutionStepStatus,
+    ExternalCallStatus,
     GapSeverity,
     GapStatus,
     ParseStatus,
@@ -350,7 +351,12 @@ def _foundation() -> list[object]:
         tool_name="fetch-port",
         provider="fixture",
         schema_version="1",
+        config_version="runtime-v1",
+        attempt=1,
+        status=ExternalCallStatus.SUCCESS,
+        replayable=True,
         recorded_at=NOW,
+        completed_at=NOW,
     )
     model_call = RecordedModelCall(
         call_id="MC-001",
@@ -366,7 +372,12 @@ def _foundation() -> list[object]:
         model="fixture-model",
         schema_version="1",
         prompt_version="extract-v1",
+        config_version="runtime-v1",
+        attempt=1,
+        status=ExternalCallStatus.SUCCESS,
+        replayable=True,
         recorded_at=NOW,
+        completed_at=NOW,
     )
     return [
         investigation,
