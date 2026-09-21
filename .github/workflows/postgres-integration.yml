@@ -1,0 +1,41 @@
+name: PostgreSQL integration
+
+on:
+  push:
+    branches: [main, feat/investigation-foundation]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  postgres-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: investigation
+          POSTGRES_PASSWORD: investigation-ci
+          POSTGRES_DB: investigation_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U investigation -d investigation_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      MARKETPULSE_TEST_POSTGRES_URL: postgresql+psycopg://investigation:investigation-ci@localhost:5432/investigation_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install project
+        run: uv sync --extra dev --extra server
+      - name: Verify PostgreSQL migration and repository contract
+        run: uv run pytest tests/integration/investigation/test_postgres_persistence.py -m infrastructure -v

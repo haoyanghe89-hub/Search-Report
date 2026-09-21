@@ -26,7 +26,10 @@ from marketpulse.investigation.recording.adapters import (
     ReplayModelAdapter,
     ReplaySearchAdapter,
 )
-from marketpulse.investigation.recording.errors import ReplayCacheMissError
+from marketpulse.investigation.recording.errors import (
+    InvalidProviderResponseError,
+    ReplayCacheMissError,
+)
 
 NOW = datetime(2026, 9, 21, 12, tzinfo=UTC)
 
@@ -104,6 +107,11 @@ class SearchFixture:
 class FailingSearch:
     async def search(self, request: SearchRequest) -> SearchResult:
         raise TimeoutError(request.query)
+
+
+class InvalidSearch:
+    async def search(self, request: SearchRequest) -> SearchResult:
+        raise InvalidProviderResponseError(f"invalid result for {request.query}")
 
 
 class ModelFixture:
@@ -190,3 +198,34 @@ async def test_replay_miss_and_corrupt_blob_fail_closed(tmp_path: Path) -> None:
     store.corrupt_reads = True
     with pytest.raises(BlobIntegrityError, match="BLOB_INTEGRITY_ERROR"):
         await ReplaySearchAdapter(store, source_run_id="RUN-LIVE").search(request)
+
+
+@pytest.mark.asyncio
+async def test_repeated_identical_calls_are_distinct_recordings_and_consumed_in_order(
+    tmp_path: Path,
+) -> None:
+    store = MemoryStore(tmp_path / "blobs")
+    request = SearchRequest(query="same request")
+    adapter = RecordingSearchAdapter(
+        SearchFixture(), store, _context("RUN-LIVE"), clock=lambda: NOW
+    )
+    await adapter.search(request)
+    await adapter.search(request)
+
+    assert [call.attempt for call in store.tool_calls] == [1, 2]
+    replay = ReplaySearchAdapter(store, source_run_id="RUN-LIVE")
+    assert (await replay.search(request)).items[0].title == "Official report"
+    assert (await replay.search(request)).items[0].title == "Official report"
+    with pytest.raises(ReplayCacheMissError):
+        await replay.search(request)
+
+
+@pytest.mark.asyncio
+async def test_invalid_provider_response_is_a_non_replayable_failure(tmp_path: Path) -> None:
+    store = MemoryStore(tmp_path / "blobs")
+    with pytest.raises(InvalidProviderResponseError):
+        await RecordingSearchAdapter(
+            InvalidSearch(), store, _context("RUN-LIVE"), clock=lambda: NOW
+        ).search(SearchRequest(query="invalid"))
+    assert store.tool_calls[0].status is ExternalCallStatus.INVALID_RESPONSE
+    assert store.tool_calls[0].replayable is False

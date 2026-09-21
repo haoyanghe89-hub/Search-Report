@@ -1,0 +1,37 @@
+{
+  "case_id": "east_palestine_2023",
+  "case_version": "0.1.0-acquisition-prep",
+  "status": "fixture_layout_only",
+  "workflow_version": "acquisition-v1",
+  "schema_version": "phase3",
+  "recorded_source_run_id": null,
+  "recorded_counts": {
+    "sources": 0,
+    "snapshots": 0,
+    "tool_calls": 0,
+    "model_calls": 0,
+    "pdf_page_artifacts": 0
+  },
+  "official_text_layer_pdf_candidates": [
+    {
+      "publisher": "National Transportation Safety Board",
+      "title": "Norfolk Southern Railway Derailment and Hazardous Materials Release, East Palestine, Ohio, February 3, 2023",
+      "report_id": "RIR-24-05",
+      "url": "https://www.ntsb.gov/investigations/AccidentReports/Reports/RIR2405%20CORRECTED.pdf",
+      "expected_mime_type": "application/pdf",
+      "text_layer_probe": {
+        "checked_on": "2026-09-21",
+        "http_status": 200,
+        "mime_type": "application/pdf",
+        "bytes": 6559547,
+        "pages": 216,
+        "first_page_extracted_characters": 2458,
+        "parser_status": "PARSED",
+        "reliable_page_artifacts": 216
+      },
+      "selection_basis": "Official NTSB final report; direct read-only probe verified a reliable text layer. A future Live fixture recording must still hash and persist the acquired PDF before promotion into immutable case inputs."
+    }
+  ],
+  "expected": null,
+  "notes": "No final report, claim status, validation result, or expected conclusion is an execution input."
+}
