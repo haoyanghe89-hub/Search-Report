@@ -14,18 +14,23 @@ from sqlalchemy.exc import DatabaseError, IntegrityError
 
 from marketpulse.infrastructure.storage.models import BlobRef
 from marketpulse.investigation.domain.enums import (
+    AgentRole,
     ParseStatus,
     RunMode,
     RunStatus,
     SourceType,
+    StepType,
     WorkflowPhase,
 )
 from marketpulse.investigation.domain.runtime import (
     Investigation,
     InvestigationRun,
     InvestigationScope,
+    RunBudget,
 )
 from marketpulse.investigation.domain.sources import Source, SourceSnapshot
+from marketpulse.investigation.harness.persistence import HarnessStore
+from marketpulse.investigation.harness.state_machine import Route
 from marketpulse.investigation.persistence.base import (
     create_investigation_engine,
     create_session_factory,
@@ -126,6 +131,46 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
                 provenance={"test": "postgresql", "nested": {"jsonb": True}},
             )
         )
+
+        sessions = create_session_factory(engine)
+        store = HarnessStore(sessions, repository)
+        store.install_budget(
+            RunBudget(
+                run_id=run_id,
+                max_research_rounds=2,
+                max_search_calls=3,
+                max_fetch_calls=3,
+                max_model_calls=3,
+                max_tokens=100,
+                max_wall_time_ms=10_000,
+                updated_at=now,
+            )
+        )
+        step = store.begin_step(
+            run_id=run_id,
+            logical_step_key="research:postgres:round-1",
+            input_fingerprint=digest,
+            workflow_version="postgres-v1",
+            phase=WorkflowPhase.COLLECT,
+            step_type=StepType.RESEARCH,
+            agent_role=AgentRole.RESEARCHER,
+            owner_instance_id="postgres-ci",
+            research_round=1,
+        )
+        store.complete_step(
+            step_id=step.step_id,
+            owner_instance_id="postgres-ci",
+            elapsed_ms=20,
+            output_refs=(),
+            output_schema_version="ResearchProposal",
+            business_outputs=(),
+            route=Route.ANALYZE,
+        )
+        assert repository.get(RunBudget, run_id).consumed_wall_time_ms == 20
+        assert repository.get(InvestigationRun, run_id).last_completed_step_key == (
+            "research:postgres:round-1"
+        )
+        assert {"inv_run_budgets", "inv_call_bindings"} <= set(inspect(engine).get_table_names())
 
         loaded = repository.get(SourceSnapshot, snapshot_id)
         assert loaded.provenance["nested"] == {"jsonb": True}

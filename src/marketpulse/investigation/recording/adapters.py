@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any, TypeVar
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, JsonValue, ValidationError
 
 from marketpulse.investigation.domain.enums import ExternalCallStatus
 from marketpulse.investigation.domain.recordings import RecordedModelCall, RecordedToolCall
@@ -56,6 +56,19 @@ class CallContext:
     run_id: str
     step_id: str
     provider: str = "unknown"
+    logical_step_key: str | None = None
+    call_site_key: str | None = None
+    call_ordinal: int | None = None
+    record_attempt: int | None = None
+
+    def binding_metadata(self) -> dict[str, JsonValue]:
+        if self.logical_step_key is None or self.call_site_key is None or self.call_ordinal is None:
+            return {}
+        return {
+            "logical_step_key": self.logical_step_key,
+            "call_site_key": self.call_site_key,
+            "call_ordinal": self.call_ordinal,
+        }
 
 
 def _failure_status(error: BaseException) -> ExternalCallStatus:
@@ -105,7 +118,7 @@ class RecordingSearchAdapter:
         fingerprint = request_fingerprint(self.operation, request)
         request_ref = self._store.put_payload(canonical_request(self.operation, request))
         started = self._clock()
-        attempt = self._attempts.next(fingerprint)
+        attempt = self._context.record_attempt or self._attempts.next(fingerprint)
         try:
             result = SearchResult.model_validate(await self._live.search(request))
         except BaseException as error:
@@ -130,6 +143,7 @@ class RecordingSearchAdapter:
                 attempt=attempt,
                 status=ExternalCallStatus.SUCCESS,
                 replayable=True,
+                metadata=self._context.binding_metadata(),
                 recorded_at=started,
                 completed_at=self._clock(),
             )
@@ -163,7 +177,10 @@ class RecordingSearchAdapter:
                 status=status,
                 replayable=False,
                 error_code=getattr(error, "code", status.value),
-                metadata={"exception_type": type(error).__name__},
+                metadata={
+                    **self._context.binding_metadata(),
+                    "exception_type": type(error).__name__,
+                },
                 recorded_at=started,
                 completed_at=self._clock(),
             )
@@ -193,7 +210,7 @@ class RecordingFetchAdapter:
         fingerprint = request_fingerprint(self.operation, request)
         request_ref = self._store.put_payload(canonical_request(self.operation, request))
         started = self._clock()
-        attempt = self._attempts.next(fingerprint)
+        attempt = self._context.record_attempt or self._attempts.next(fingerprint)
         try:
             result = FetchResult.model_validate(await self._live.fetch(request))
         except BaseException as error:
@@ -215,7 +232,10 @@ class RecordingFetchAdapter:
                     status=status,
                     replayable=False,
                     error_code=getattr(error, "code", status.value),
-                    metadata={"exception_type": type(error).__name__},
+                    metadata={
+                        **self._context.binding_metadata(),
+                        "exception_type": type(error).__name__,
+                    },
                     recorded_at=started,
                     completed_at=self._clock(),
                 )
@@ -240,6 +260,7 @@ class RecordingFetchAdapter:
                 attempt=attempt,
                 status=ExternalCallStatus.SUCCESS,
                 replayable=True,
+                metadata=self._context.binding_metadata(),
                 recorded_at=started,
                 completed_at=self._clock(),
             )
@@ -270,7 +291,7 @@ class RecordingModelAdapter:
         fingerprint = request_fingerprint(self.operation, request)
         request_ref = self._store.put_payload(canonical_request(self.operation, request))
         started = self._clock()
-        attempt = self._attempts.next(fingerprint)
+        attempt = self._context.record_attempt or self._attempts.next(fingerprint)
         try:
             result = await self._live.generate(request)
             request.response_model.model_validate(result.output)
@@ -294,7 +315,10 @@ class RecordingModelAdapter:
                     status=status,
                     replayable=False,
                     error_code=getattr(error, "code", status.value),
-                    metadata={"exception_type": type(error).__name__},
+                    metadata={
+                        **self._context.binding_metadata(),
+                        "exception_type": type(error).__name__,
+                    },
                     recorded_at=started,
                     completed_at=self._clock(),
                 )
@@ -320,6 +344,7 @@ class RecordingModelAdapter:
                 attempt=attempt,
                 status=ExternalCallStatus.SUCCESS,
                 replayable=True,
+                metadata=self._context.binding_metadata(),
                 recorded_at=started,
                 completed_at=self._clock(),
             )

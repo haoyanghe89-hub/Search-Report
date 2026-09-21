@@ -2,7 +2,7 @@
 
 本文件记录 2026-09-21 前已确认的设计。目标仓库为 `haoyanghe89-hub/Search-Report`，在现有 MarketPulse 工程中逐步演进。**设计合同不代表能力已经实现**。
 
-当前：保留 MarketPulse regression baseline；Phase 0 建立验证记录和 Git 基线，Phase 1a 交付通用 Blob Storage，Phase 2A–2D 交付 Investigation typed domain、24 张 `inv_` 表、Alembic 首版 migration、typed locator 与 SourceSnapshot 持久化。Phase 3 已交付通用 Search/Fetch/Model Port、call-level Recording/Replay adapter、HTML/TXT/文本层 PDF 解析、Source Acquisition 纵向切片及真实 PostgreSQL CI。五角色调查流程、完整 Replay Harness、验证/发布策略执行、审核认证、恢复与新前端仍需后续阶段实现。详见 [迁移边界](docs/07-investigation-migration.md)、[Phase 2 验收](docs/10-phase2-data-foundation-acceptance.md)、[Phase 3 验收](docs/11-phase3-acquisition-recording-acceptance.md) 和 [Phase 3 设计](docs/superpowers/specs/2026-09-21-acquisition-recording-foundation-design.md)。
+当前：保留 MarketPulse regression baseline；Phase 0 建立验证记录和 Git 基线，Phase 1a 交付通用 Blob Storage，Phase 2A–2D 交付 Investigation typed domain、24 张 `inv_` 表、Alembic 首版 migration、typed locator 与 SourceSnapshot 持久化。Phase 3 已交付通用 Search/Fetch/Model Port、call-level Recording/Replay adapter、HTML/TXT/文本层 PDF 解析、Source Acquisition 纵向切片及真实 PostgreSQL CI。Phase 4.1 增加独立 Harness 的持久化 Step/checkpoint、Unit of Work、精确调用绑定、RunBudget 与五角色类型契约；假 Agent 主链止于 READY_FOR_REPORT。真实 Agent 调查、完整 Replay Harness、验证/发布策略执行、审核认证、自动恢复与新前端仍需后续阶段实现。详见 [迁移边界](docs/07-investigation-migration.md)、[Phase 2 验收](docs/10-phase2-data-foundation-acceptance.md)、[Phase 3 验收](docs/11-phase3-acquisition-recording-acceptance.md) 和 [Phase 3 设计](docs/superpowers/specs/2026-09-21-acquisition-recording-foundation-design.md)。
 
 ## 1. 产品与依赖方向
 

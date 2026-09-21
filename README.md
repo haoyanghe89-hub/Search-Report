@@ -1,6 +1,6 @@
 # MarketPulse Agent
 
-> 当前处于 Investigation Platform 原地迁移的 Phase 3。旧市场流程暂作回归基线；新调查领域已具备通用外部调用 Port、逐调用录制/重放、HTML/TXT/文本层 PDF 解析及 Source Acquisition 纵向切片，但尚未接入完整调查 Harness、审核和新前端。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
+> 当前处于 Investigation Platform 原地迁移的 Phase 4.1。旧市场流程暂作回归基线；新调查领域已有外部调用录制/重放、Source Acquisition，以及独立 Harness 的持久化 Step、Unit of Work、调用绑定、预算和五角色类型契约。假 Agent 主链止于 READY_FOR_REPORT；真实调查 Agent、ValidationPolicy、报告生成/发布、审核和新前端尚未接入。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
 
 MarketPulse 是一个 Python 3.11+ 四智能体市场研究应用：主 Agent 规划与复核，搜索 Agent 检索取证，分析 Agent 形成结论，报告 Agent 撰写中文报告。四个角色通过持久化黑板协作，主 Agent 可要求有限轮次的补查。
 
@@ -166,4 +166,4 @@ uv run pytest tests/unit/investigation tests/integration/investigation -m "not i
 uv run pytest tests/integration/investigation/test_postgres_persistence.py -m infrastructure -q
 ```
 
-当前仍未实现五 Agent Harness、Claim-Type-Aware ValidationPolicy 执行、Report Writer、完整 Replay runtime、Reviewer 认证及调查前端；Phase 3 的 acquisition/replayable-tooling 通过不代表完整系统达到 Legacy Removal Gate。上面的市场 CLI/前端仅为迁移期回归基线，不是新调查系统入口。
+当前已实现 Phase 4.1 Harness 运行骨架和五角色类型契约；真实五 Agent、Claim-Type-Aware ValidationPolicy、Report Writer、完整调查 Replay、Reviewer 认证及调查前端尚未实现。Phase 4.1 的假 Agent 测试不代表完整系统达到 Legacy Removal Gate。上面的市场 CLI/前端仅为迁移期回归基线，不是新调查系统入口。

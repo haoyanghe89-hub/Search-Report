@@ -126,13 +126,17 @@ class InvestigationRunRow(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     interruption_reason: Mapped[str | None] = mapped_column(Text)
+    current_step_key: Mapped[str | None] = mapped_column(String(256))
+    last_completed_step_key: Mapped[str | None] = mapped_column(String(256))
+    owner_instance_id: Mapped[str | None] = mapped_column(String(128))
+    owner_heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class ExecutionStepRow(Base):
     __tablename__ = "inv_execution_steps"
     __table_args__ = (
         CheckConstraint("attempt >= 1", name="ck_inv_steps_attempt_positive"),
-        UniqueConstraint("run_id", "input_fingerprint", "attempt", name="uq_inv_step_attempt"),
+        UniqueConstraint("run_id", "logical_step_key", "attempt", name="uq_inv_step_attempt"),
         Index("ix_inv_steps_run_status", "run_id", "status"),
         Index("ix_inv_steps_executor_heartbeat", "executor_instance_id", "heartbeat_at"),
     )
@@ -159,6 +163,66 @@ class ExecutionStepRow(Base):
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     error_code: Mapped[str | None] = mapped_column(String(100))
     retryable: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    logical_step_key: Mapped[str] = mapped_column(String(256), nullable=False)
+    dependency_keys: Mapped[list[str]] = mapped_column(JSON_DOCUMENT, nullable=False, default=list)
+    output_schema_version: Mapped[str | None] = mapped_column(String(100))
+    active_elapsed_ms: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+
+
+class RunBudgetRow(Base):
+    __tablename__ = "inv_run_budgets"
+    __table_args__ = (
+        CheckConstraint("consumed_wall_time_ms >= 0", name="ck_inv_budget_wall_nonnegative"),
+    )
+
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_runs.run_id", ondelete="CASCADE"), primary_key=True
+    )
+    max_research_rounds: Mapped[int] = mapped_column(Integer, nullable=False)
+    max_search_calls: Mapped[int] = mapped_column(Integer, nullable=False)
+    max_fetch_calls: Mapped[int] = mapped_column(Integer, nullable=False)
+    max_model_calls: Mapped[int] = mapped_column(Integer, nullable=False)
+    max_tokens: Mapped[int] = mapped_column(Integer, nullable=False)
+    max_wall_time_ms: Mapped[int] = mapped_column(Integer, nullable=False)
+    research_rounds_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    search_calls_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    fetch_calls_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    model_calls_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    tokens_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    consumed_wall_time_ms: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class CallBindingRow(Base):
+    __tablename__ = "inv_call_bindings"
+    __table_args__ = (
+        CheckConstraint("call_ordinal >= 0", name="ck_inv_call_binding_ordinal"),
+        UniqueConstraint(
+            "run_id",
+            "logical_step_key",
+            "call_site_key",
+            "call_ordinal",
+            name="uq_inv_call_binding_site",
+        ),
+        Index("ix_inv_call_bindings_fingerprint", "request_fingerprint"),
+        Index("ix_inv_call_bindings_recorded_call", "recorded_call_id"),
+    )
+
+    binding_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_runs.run_id", ondelete="CASCADE"), nullable=False
+    )
+    logical_step_key: Mapped[str] = mapped_column(String(256), nullable=False)
+    call_site_key: Mapped[str] = mapped_column(String(256), nullable=False)
+    call_ordinal: Mapped[int] = mapped_column(Integer, nullable=False)
+    request_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
+    recorded_call_id: Mapped[str] = mapped_column(ID, nullable=False)
+    call_kind: Mapped[str] = mapped_column(String(16), nullable=False)
+    operation: Mapped[str] = mapped_column(String(200), nullable=False)
+    schema_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    prompt_version: Mapped[str | None] = mapped_column(String(100))
+    config_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
 class ResearchTaskRow(Base):

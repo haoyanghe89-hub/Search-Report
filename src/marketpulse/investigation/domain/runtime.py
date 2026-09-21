@@ -76,6 +76,10 @@ class InvestigationRun(DomainModel):
     updated_at: datetime
     completed_at: datetime | None = None
     interruption_reason: str | None = None
+    current_step_key: str | None = None
+    last_completed_step_key: str | None = None
+    owner_instance_id: str | None = None
+    owner_heartbeat_at: datetime | None = None
 
 
 class ExecutionStep(DomainModel):
@@ -93,6 +97,43 @@ class ExecutionStep(DomainModel):
     completed_at: datetime | None = None
     error_code: str | None = None
     retryable: bool = False
+    logical_step_key: str | None = None
+    dependency_keys: tuple[str, ...] = ()
+    output_schema_version: str | None = None
+    active_elapsed_ms: int = Field(default=0, ge=0)
+
+
+class RunBudget(DomainModel):
+    run_id: EntityId
+    max_research_rounds: int = Field(ge=0)
+    max_search_calls: int = Field(ge=0)
+    max_fetch_calls: int = Field(ge=0)
+    max_model_calls: int = Field(ge=0)
+    max_tokens: int = Field(ge=0)
+    max_wall_time_ms: int = Field(ge=0)
+    research_rounds_used: int = Field(default=0, ge=0)
+    search_calls_used: int = Field(default=0, ge=0)
+    fetch_calls_used: int = Field(default=0, ge=0)
+    model_calls_used: int = Field(default=0, ge=0)
+    tokens_used: int = Field(default=0, ge=0)
+    consumed_wall_time_ms: int = Field(default=0, ge=0)
+    updated_at: datetime
+
+
+class CallBinding(DomainModel):
+    binding_id: EntityId
+    run_id: EntityId
+    logical_step_key: NonEmptyText
+    call_site_key: NonEmptyText
+    call_ordinal: int = Field(ge=0)
+    request_fingerprint: Sha256
+    recorded_call_id: EntityId
+    call_kind: NonEmptyText
+    operation: NonEmptyText
+    schema_version: NonEmptyText
+    prompt_version: str | None = None
+    config_version: NonEmptyText
+    created_at: datetime
 
 
 class ResearchTask(DomainModel):

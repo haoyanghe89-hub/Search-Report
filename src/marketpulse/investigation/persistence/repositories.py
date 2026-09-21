@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any, TypeVar, cast
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from marketpulse.infrastructure.storage.models import BlobRef
@@ -26,12 +26,14 @@ from marketpulse.investigation.domain.reports import (
     ReviewDecision,
 )
 from marketpulse.investigation.domain.runtime import (
+    CallBinding,
     ExecutionStep,
     Investigation,
     InvestigationQuestion,
     InvestigationRun,
     InvestigationScope,
     ResearchTask,
+    RunBudget,
 )
 from marketpulse.investigation.domain.sources import (
     DocumentArtifact,
@@ -41,6 +43,7 @@ from marketpulse.investigation.domain.sources import (
 )
 from marketpulse.investigation.persistence.models import (
     AuditEventRow,
+    CallBindingRow,
     ClaimEvidenceRelationRow,
     ClaimRow,
     ConflictClaimRow,
@@ -59,6 +62,7 @@ from marketpulse.investigation.persistence.models import (
     ResearchGapRow,
     ResearchTaskRow,
     ReviewDecisionRow,
+    RunBudgetRow,
     SourceRow,
     SourceSnapshotRow,
     TimelineEventRow,
@@ -70,6 +74,8 @@ PersistedEntity = (
     Investigation
     | InvestigationRun
     | ExecutionStep
+    | RunBudget
+    | CallBinding
     | ResearchTask
     | Source
     | SourceSnapshot
@@ -104,10 +110,59 @@ class InvestigationRepository:
 
     def add(self, entity: PersistedEntity) -> None:
         with self._sessions.begin() as session:
-            row, related = self._to_rows(entity)
-            session.add(row)
-            session.flush()
-            session.add_all(related)
+            self.add_in_session(session, entity)
+
+    def add_in_session(self, session: Session, entity: PersistedEntity) -> None:
+        """CRUD only; the caller owns the transaction and commit."""
+        row, related = self._to_rows(entity)
+        session.add(row)
+        session.flush()
+        session.add_all(related)
+
+    def get_in_session(self, session: Session, entity_type: type[T], entity_id: str) -> T:
+        return cast(T, self._get(session, entity_type, entity_id))
+
+    def binding_for_site(
+        self,
+        session: Session,
+        run_id: str,
+        logical_step_key: str,
+        call_site_key: str,
+        call_ordinal: int,
+    ) -> CallBinding | None:
+        row = session.scalar(
+            select(CallBindingRow).where(
+                CallBindingRow.run_id == run_id,
+                CallBindingRow.logical_step_key == logical_step_key,
+                CallBindingRow.call_site_key == call_site_key,
+                CallBindingRow.call_ordinal == call_ordinal,
+            )
+        )
+        return CallBinding.model_validate(self._row_dict(row)) if row else None
+
+    def recorded_call_count(
+        self, *, run_id: str, operation: str, fingerprint: str, kind: str
+    ) -> int:
+        row_type = RecordedModelCallRow if kind == "MODEL" else RecordedToolCallRow
+        with self._sessions() as session:
+            count = session.scalar(
+                select(func.count())
+                .select_from(row_type)
+                .where(
+                    row_type.run_id == run_id,
+                    row_type.operation == operation,
+                    row_type.request_fingerprint == fingerprint,
+                )
+            )
+        return int(count or 0)
+
+    def steps_for_run(self, session: Session, run_id: str) -> list[ExecutionStep]:
+        rows = session.scalars(
+            select(ExecutionStepRow)
+            .where(ExecutionStepRow.run_id == run_id)
+            .order_by(ExecutionStepRow.started_at, ExecutionStepRow.step_id)
+        ).all()
+        return [ExecutionStep.model_validate(self._row_dict(row)) for row in rows]
 
     def add_snapshot_bundle(
         self,
@@ -219,7 +274,13 @@ class InvestigationRepository:
         if isinstance(entity, ExecutionStep):
             payload = _plain(entity)
             payload["output_refs"] = list(entity.output_refs)
+            payload["dependency_keys"] = list(entity.dependency_keys)
+            payload["logical_step_key"] = entity.logical_step_key or entity.step_id
             return ExecutionStepRow(**payload), []
+        if isinstance(entity, RunBudget):
+            return RunBudgetRow(**_plain(entity)), []
+        if isinstance(entity, CallBinding):
+            return CallBindingRow(**_plain(entity)), []
         if isinstance(entity, ResearchTask):
             payload = _plain(entity)
             payload["query_hints"] = list(entity.query_hints)
@@ -350,6 +411,14 @@ class InvestigationRepository:
         if entity_type is ExecutionStep:
             return ExecutionStep.model_validate(
                 self._row_dict(self._required(session, ExecutionStepRow, entity_id))
+            )
+        if entity_type is RunBudget:
+            return RunBudget.model_validate(
+                self._row_dict(self._required(session, RunBudgetRow, entity_id))
+            )
+        if entity_type is CallBinding:
+            return CallBinding.model_validate(
+                self._row_dict(self._required(session, CallBindingRow, entity_id))
             )
         if entity_type is ResearchTask:
             return ResearchTask.model_validate(
