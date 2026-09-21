@@ -9,6 +9,7 @@ description = "CLI market research agent powered by DeepSeek and public web sear
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 dependencies = [
+  "alembic>=1.15,<2",
   "beautifulsoup4>=4.13,<5",
   "ddgs>=9,<10",
   "httpx>=0.28,<1",
@@ -44,8 +45,19 @@ marketpulse-api = "marketpulse.web_api:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/marketpulse"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"alembic.ini" = "marketpulse/investigation/persistence/alembic.ini"
+"migrations" = "marketpulse/investigation/persistence/migrations"
+
 [tool.hatch.build.targets.sdist]
-include = ["src/marketpulse", "tests", "README.md", "pyproject.toml"]
+include = [
+  "src/marketpulse",
+  "tests",
+  "migrations",
+  "alembic.ini",
+  "README.md",
+  "pyproject.toml",
+]
 
 [tool.pytest.ini_options]
 addopts = "-ra --basetemp=.pytest-work"

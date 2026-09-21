@@ -26,7 +26,7 @@
 | 0 | 旧工程 Git baseline、离线/静态/前端/打包验证、架构合同 | 可回溯到未重构代码，准确记录跳过项 |
 | 1a（本轮） | BlobRef、BlobStoragePort、LocalContentAddressedBlobStorage | 去重、并发、损坏/缺失、异常写入、重开持久化、无市场依赖测试 |
 | 1b | 通用 model/search/fetch/recording/context/trace ports 与 provider 装配 | legacy 可依赖 generic，反向 import 被测试禁止 |
-| 2 | PostgreSQL schema migrations、调查实体与 repositories、Snapshot/parser/locator | round-trip、版本化 artifacts、事务与引用约束 |
+| 2A–2D（已完成） | PostgreSQL schema migrations、调查实体/repository、Snapshot persistence、locator foundation | 24 张 `inv_` 表、round-trip、版本化 artifacts、事务与引用约束；Parser 按批准范围留后续 |
 | 3 | 五 Agent + Harness + Step/Checkpoint + typed ValidationPolicy | 可运行主链、定向返工、状态/置信度分离 |
 | 4 | ReportValidator/ReleasePolicy、Reviewer auth/audit、InProcessExecutor/SSE/recovery | 硬门禁、版本绑定审批、人工补查、手动恢复 |
 | 5 | Investigation Console、Live/Replay 便携 fixture 纵向切片 | Legacy Removal Gate A–J 全通过 |

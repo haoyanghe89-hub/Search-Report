@@ -1,6 +1,6 @@
 # MarketPulse Agent
 
-> 当前处于 Investigation Platform 原地迁移的 Phase 0/1。现有市场流程保留为回归基线；已增加通用 Blob Storage，尚未接入调查 Agent/Replay/审核流程。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
+> 当前处于 Investigation Platform 原地迁移的 Phase 2。现有市场流程保留为回归基线；已增加通用 Blob Storage、Investigation Domain、Alembic schema migration 和 SourceSnapshot 持久化，尚未接入调查 Agent/Replay/审核流程。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
 
 MarketPulse 是一个 Python 3.11+ 四智能体市场研究应用：主 Agent 规划与复核，搜索 Agent 检索取证，分析 Agent 形成结论，报告 Agent 撰写中文报告。四个角色通过持久化黑板协作，主 Agent 可要求有限轮次的补查。
 
@@ -129,4 +129,26 @@ Blob 先完整落盘，再由未来 repository 提交数据库引用。相同内
 uv run pytest tests/unit/test_blob_storage.py tests/unit/test_infrastructure_boundary.py -q
 ```
 
-Snapshot 数据库集成、逐调用录制、解析器、Replay 和审核/恢复功能均属于后续迁移阶段，不能因存储测试通过而视为整体调查系统已完成。
+## Phase 2 Investigation Data Foundation
+
+新调查领域位于 `src/marketpulse/investigation/`，与旧市场领域单向隔离。它包含 Investigation/Run/Step、Source/Snapshot/Artifact/Evidence、Claim/Relation/Conflict/Validation、Gap/Timeline、Report/Review/Audit 以及逐调用录制的数据合同。Evidence 与 Claim 是不同类型和不同表。
+
+Investigation schema 使用 `inv_` 表前缀并由 Alembic 管理；旧 `mp_runs` / `mp_events` 不会被首个 migration 删除：
+
+```powershell
+# SQLite local development
+$env:MARKETPULSE_DATABASE_URL = "sqlite:///data/blackboard.db"
+uv run alembic upgrade head
+
+# PostgreSQL Compose target (password must be URL encoded)
+$env:MARKETPULSE_DATABASE_URL = "postgresql+psycopg://marketpulse:<password>@127.0.0.1:55432/marketpulse"
+uv run alembic upgrade head
+```
+
+`SourceSnapshotPersistence` 先把 raw/cleaned 内容写入 `BlobStoragePort` 并验证 hash，再提交数据库 metadata。数据库回滚最多留下完整 orphan blob，不会提交指向 partial/missing blob 的行。读取从 Source ID/Snapshot metadata 解析逻辑 BlobRef，重新校验内容，不返回 OS 路径。
+
+```powershell
+uv run pytest tests/unit/investigation tests/integration/investigation -q
+```
+
+当前仍未实现文档 Parser、五 Agent Harness、ValidationPolicy 执行、Report Writer、Replay runtime、Reviewer 认证和新前端；Phase 2 数据层通过不代表完整调查系统已经达到 Legacy Removal Gate。

@@ -2,7 +2,7 @@
 
 本文件记录 2026-09-21 前已确认的设计。目标仓库为 `haoyanghe89-hub/Search-Report`，在现有 MarketPulse 工程中逐步演进。**设计合同不代表能力已经实现**。
 
-当前：保留 MarketPulse regression baseline；Phase 0 建立验证记录和 Git 基线，Phase 1 首个交付单元为通用 Blob Storage。五角色调查流程、数据库领域迁移、Replay、审核、恢复与新前端仍需后续阶段实现。详见 [迁移边界](docs/07-investigation-migration.md)、[基线](docs/08-phase0-baseline.md)、[基础设施计划](docs/superpowers/plans/2026-09-21-investigation-foundation.md)。
+当前：保留 MarketPulse regression baseline；Phase 0 建立验证记录和 Git 基线，Phase 1a 交付通用 Blob Storage，Phase 2A–2D 已交付 Investigation typed domain、24 张 `inv_` 表、Alembic 首版 migration、typed locator 与 SourceSnapshot 纵向持久化。五角色调查流程、Replay runtime、验证/发布策略执行、审核认证、恢复与新前端仍需后续阶段实现。详见 [迁移边界](docs/07-investigation-migration.md)、[Phase 2 验收](docs/10-phase2-data-foundation-acceptance.md) 和 [实施计划](docs/superpowers/plans/2026-09-21-investigation-data-foundation.md)。
 
 ## 1. 产品与依赖方向
 
