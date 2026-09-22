@@ -147,7 +147,9 @@ def _report_path(topic: str) -> Path:
     return root / f"{_slug(topic)}-{stamp}.md"
 
 
-async def _run_topic(payload: ReportRequest, run_id: str | None = None) -> MarketPulseResult:
+async def _run_topic(
+    payload: ReportRequest, run_id: str | None = None, investigation_id: str | None = None
+) -> MarketPulseResult:
     settings = Settings.from_env()
     stats = RunStats(run_id=run_id) if run_id else RunStats()
     logger = RunLogger(stats.run_id)
@@ -168,6 +170,7 @@ async def _run_topic(payload: ReportRequest, run_id: str | None = None) -> Marke
                     topic=payload.topic,
                     competitor_limit=payload.competitor_limit,
                     output_path=_report_path(payload.topic),
+                    investigation_id=investigation_id,
                 ),
                 dependencies,
                 settings,
@@ -275,7 +278,11 @@ async def start_live_research(investigation_id: str, request: Request) -> LiveRe
 
     async def _job() -> None:
         try:
-            await _run_topic(ReportRequest(topic=topic[:200]), run_id=run_id)
+            await _run_topic(
+                ReportRequest(topic=topic[:200]),
+                run_id=run_id,
+                investigation_id=investigation_id,
+            )
         except Exception:
             logging.getLogger("marketpulse").exception("live research failed: %s", run_id)
 
@@ -294,6 +301,44 @@ def read_live_run(run_id: str) -> dict:
     finally:
         board.close()
     return state.model_dump(mode="json")
+
+
+@app.get("/api/investigations/{investigation_id}/live-runs")
+def list_live_runs(investigation_id: str) -> list[dict]:
+    import json as _json
+
+    from sqlalchemy import text
+
+    settings = Settings.from_env(require_api_key=False)
+    board = BlackboardStore(settings.database_url.get_secret_value())
+    try:
+        with board.engine.connect() as conn:
+            rows = conn.execute(text("SELECT run_id, snapshot FROM mp_runs")).all()
+    finally:
+        board.close()
+    results = []
+    for run_id, snapshot in rows:
+        # Raw SQL over a JSON column may return a string depending on driver.
+        if isinstance(snapshot, str):
+            try:
+                snapshot = _json.loads(snapshot)
+            except (TypeError, ValueError):
+                continue
+        if not isinstance(snapshot, dict):
+            continue
+        if snapshot.get("investigation_id") != investigation_id:
+            continue
+        results.append(
+            {
+                "run_id": run_id,
+                "status": snapshot.get("status"),
+                "phase": snapshot.get("phase"),
+                "topic": snapshot.get("topic"),
+                "updated_at": snapshot.get("updated_at"),
+            }
+        )
+    results.sort(key=lambda item: str(item.get("updated_at") or ""), reverse=True)
+    return results
 
 
 class InvestigationUpdateIn(BaseModel):

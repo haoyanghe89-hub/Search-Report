@@ -27,6 +27,7 @@ class MarketPulseRequest(BaseModel):
     topic: str = Field(min_length=2, max_length=200)
     competitor_limit: int = Field(default=5, ge=3, le=8)
     output_path: Path
+    investigation_id: str | None = None
 
 
 @dataclass
@@ -71,6 +72,7 @@ async def run_marketpulse(
         run_id=deps.logger.run_id,
         topic=topic,
         competitor_limit=request.competitor_limit,
+        investigation_id=request.investigation_id,
     )
     created = False
     try:

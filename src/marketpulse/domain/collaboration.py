@@ -47,6 +47,7 @@ class BlackboardState(BaseModel):
     version: int = 0
     topic: str
     competitor_limit: int
+    investigation_id: str | None = None
     status: Literal["running", "completed", "failed", "cancelled"] = "running"
     active_agent: AgentRole = "master"
     phase: str = "plan"

@@ -16,7 +16,7 @@ from typing import Any, Literal, Protocol, cast
 
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from marketpulse.investigation.domain.enums import (
@@ -694,6 +694,21 @@ def list_investigations(request: Request) -> list[InvestigationSummaryOut]:
         )
         for investigation_id, count in count_rows:
             run_counts[investigation_id] = int(count)
+        # Include live-research blackboard runs so the sidebar reflects real research.
+        try:
+            dialect = session.bind.dialect.name if session.bind is not None else ""
+            live_sql = (
+                "SELECT json_extract(snapshot, '$.investigation_id') AS iid, COUNT(*) "
+                "FROM mp_runs GROUP BY iid"
+                if dialect == "sqlite"
+                else "SELECT snapshot->>'investigation_id' AS iid, COUNT(*) "
+                "FROM mp_runs GROUP BY iid"
+            )
+            for iid, live_count in session.execute(text(live_sql)).all():
+                if iid:
+                    run_counts[str(iid)] = run_counts.get(str(iid), 0) + int(live_count)
+        except Exception:
+            pass
         return [
             InvestigationSummaryOut(
                 investigation_id=row.investigation_id,

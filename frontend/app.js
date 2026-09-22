@@ -122,7 +122,22 @@ async function openInvestigation(investigationId, preferredRunId = null) {
       ? runs.find((run) => run.run_id === preferredRunId)
       : (cachedLive ? null : runs[0]);
     state.run = selected ? (await fetchJson(`/api/runs/${encodeURIComponent(selected.run_id)}`)).run : null;
-    if (cachedLive && !state.run) _applyLiveState(cachedLive);
+    if (!state.run) {
+      let restored = cachedLive;
+      if (!restored) {
+        try {
+          const liveRuns = await fetchJson(
+            `/api/investigations/${encodeURIComponent(investigationId)}/live-runs`
+          );
+          const completed = liveRuns.find((r) => r.status === "completed");
+          if (completed) {
+            restored = await fetchJson(`/api/live-runs/${encodeURIComponent(completed.run_id)}`);
+            liveRunCache[investigationId] = restored;
+          }
+        } catch { /* no live runs */ }
+      }
+      if (restored) _applyLiveState(restored);
+    }
     $("#case-hero").classList.add("is-hidden");
     $("#empty-guidance").classList.add("is-hidden");
     $("#active-investigation").classList.remove("is-hidden");
@@ -158,6 +173,17 @@ async function renderOverview() {
       <div class="record"><h3>执行摘要</h3><p>${escapeHtml(a.executive_summary || "无")}</p></div>
       <div class="record"><h3>结论建议</h3><div class="record-meta"><span>${escapeHtml(a.recommendation || "—")}</span><span>置信度 ${(a.confidence ?? 0).toFixed(2)}</span></div></div>
       <div class="record"><h3>下一步</h3><ul>${(a.next_steps || []).map((s) => `<li>${escapeHtml(s)}</li>`).join("") || "<li>无</li>"}</ul></div>`;
+    return;
+  }
+  if (!state.run) {
+    panel.innerHTML = `${panelHeading("调查概览", "尚未开始调查")}
+      <div class="record">
+        <p>该调查尚无运行记录。点击下方按钮启动真实大模型调查：</p>
+        <button class="primary-button" id="start-run">开始调查</button>
+        <p class="record-meta" style="margin-top:12px;">将调用搜索、抓取与大模型 API（需配置 DEEPSEEK_API_KEY），结果整理到来源/证据/声明视图。</p>
+      </div>
+      ${(item.questions || []).length ? `<ul class="question-list">${item.questions.map((question) => `<li class="record"><div class="record-top"><h3>${escapeHtml(question.text)}</h3>${question.is_critical ? statusChip("CRITICAL") : ""}</div></li>`).join("")}</ul>` : ""}`;
+    $("#start-run")?.addEventListener("click", startRun);
     return;
   }
   const counts = item.counts;
