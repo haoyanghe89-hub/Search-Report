@@ -1,0 +1,2613 @@
+Identifying the known and unknown health hazard information for chemical disasters: a phased scoping review of the East Palestine, Ohio train derailment - PMC
+
+Skip to main content
+
+An official website of the United States government
+
+Here's how you know
+
+Here's how you know
+
+Official websites use .gov
+
+A
+
+.gov
+website belongs to an official
+government organization in the United States.
+
+Secure .gov websites use HTTPS
+
+A
+lock
+(
+
+) or
+https://
+means you've safely
+connected to the .gov website. Share sensitive
+information only on official, secure websites.
+
+Search
+
+Log in
+
+Dashboard
+
+Publications
+
+Account settings
+
+Log out
+
+Search...
+
+Search NCBI
+
+Primary site navigation
+
+Search
+
+Logged in as:
+
+Dashboard
+
+Publications
+
+Account settings
+
+Log in
+
+Search PMC Full-Text Archive
+
+Search in PMC
+
+Journal List
+
+User Guide
+
+PERMALINK
+
+Copy
+
+As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+the contents by NLM or the National Institutes of Health.
+
+Learn more:
+
+PMC Disclaimer
+
+|
+
+PMC Copyright Notice
+
+J Expo Sci Environ Epidemiol
+. 2025 Sep 12;35(6):888–906. doi:
+10.1038/s41370-025-00803-0
+
+Search in PMC
+
+Search in PubMed
+
+View in NLM Catalog
+
+Add to search
+
+Identifying the known and unknown health hazard information for chemical disasters: a phased scoping review of the East Palestine, Ohio train derailment
+
+Ruth M Lunn
+
+Ruth M Lunn
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+Find articles by
+Ruth M Lunn
+
+1,
+✉,
+#
+,
+Meredith Clemons
+
+Meredith Clemons
+
+2
+ICF, Reston, VA USA
+
+Find articles by
+Meredith Clemons
+
+2,
+#
+,
+Robyn Blain
+
+Robyn Blain
+
+2
+ICF, Reston, VA USA
+
+Find articles by
+Robyn Blain
+
+2
+,
+Somdat Mahabir
+
+Somdat Mahabir
+
+3
+Epidemiology and Genomics Research Program, Division of Cancer Control and Population Sciences National Cancer Institute, Rockville, MA USA
+
+Find articles by
+Somdat Mahabir
+
+3
+,
+Suril S Mehta
+
+Suril S Mehta
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+Find articles by
+Suril S Mehta
+
+1
+,
+Andrew A Rooney
+
+Andrew A Rooney
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+Find articles by
+Andrew A Rooney
+
+1
+,
+Anisha Singh
+
+Anisha Singh
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+Find articles by
+Anisha Singh
+
+1
+,
+Stephanie Smith-Roe
+
+Stephanie Smith-Roe
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+Find articles by
+Stephanie Smith-Roe
+
+1
+,
+Kyla W Taylor
+
+Kyla W Taylor
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+Find articles by
+Kyla W Taylor
+
+1
+,
+Wren Tracy
+
+Wren Tracy
+
+2
+ICF, Reston, VA USA
+
+Find articles by
+Wren Tracy
+
+2
+,
+Maricruz Zarco
+
+Maricruz Zarco
+
+2
+ICF, Reston, VA USA
+
+4
+Present Address: Institute of Epidemiology and Medical Biometry, Ulm University, Ulm, Germany
+
+Find articles by
+Maricruz Zarco
+
+2,
+4
+,
+Suzanne E Fenton
+
+Suzanne E Fenton
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+5
+Present Address: Center for Human Health and the Environment, NC State University, Raleigh, NC USA
+
+Find articles by
+Suzanne E Fenton
+
+1,
+5
+
+Author information
+
+Article notes
+
+Copyright and License information
+
+1
+Division of Translational Toxicology, National Institute of Environmental Health Sciences, Research Triangle Park, Triangle Park, NC USA
+
+2
+ICF, Reston, VA USA
+
+3
+Epidemiology and Genomics Research Program, Division of Cancer Control and Population Sciences National Cancer Institute, Rockville, MA USA
+
+4
+Present Address: Institute of Epidemiology and Medical Biometry, Ulm University, Ulm, Germany
+
+5
+Present Address: Center for Human Health and the Environment, NC State University, Raleigh, NC USA
+
+✉
+Corresponding author.
+
+#
+Contributed equally.
+
+Received 2025 May 12; Revised 2025 Jul 24; Accepted 2025 Aug 13; Issue date 2025.
+
+© This is a U.S. Government work and not under copyright protection in the US; foreign copyright protection may apply 2025
+
+Open Access
+This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit
+http://creativecommons.org/licenses/by/4.0/
+.
+
+PMC Copyright notice
+
+PMCID: PMC12583197 PMID:
+40940434
+
+Abstract
+
+Introduction
+
+In February 2023, people residing in the village of East Palestine (EP, Ohio, USA) and surrounding areas were exposed to toxic chemicals from a Norfolk Southern Railway train derailment and subsequent vent and burn.
+Objective
+
+To identify known health hazards and evidence gaps from these chemicals to inform disaster-response research.
+Methods
+
+We conducted a rapid phased literature scoping review. In Phase 1, we summarized major conclusions from eight authoritative sources across ~15 health hazard categories for 22 chemicals potentially related to the train derailment and response. In Phase 2, we conducted targeted literature searches in PubMed for higher-priority chemicals and outcomes with research gaps, considering the recency of authoritative reviews. Finally, we summarized findings from the retrieved studies and those from authoritative reviews to further characterize evidence gaps and the next steps.
+Results
+
+Eight higher-priority chemicals were skin and eye irritants, seven of which were also respiratory irritants, consistent with symptoms reported by East Palestine residents and workers. Five chemicals were human or animal carcinogens; two may cause adverse immunological or neurological effects, and one may cause damage to reproductive organs or the developing fetus. Vinyl chloride had the most comprehensive data. After Phase 2 literature searches, we suggested the need for primary studies for 12 chemical outcome pairs and a systematic review for two pairs.
+Significance
+
+Our rapid literature scoping approach can provide knowledge for researchers conducting community studies and public health officials who communicate with the affected community on the known and unknown health hazards of chemicals related to the East Palestine train derailment. It also informs global disaster-response-related research, as these chemicals are commercially important and have been detected in other chemical release incidents. Moreover, our rapid literature scoping phased approach can be leveraged for environmental emergencies when the need for health hazard information is urgent.
+Impact
+
+Our rapid literature scoping approach can provide knowledge for researchers conducting community studies and public health officials who communicate with the affected community on the known and unknown health hazards of chemicals related to the East Palestine train derailment. It also informs global disaster-response-related research, as these chemicals are commercially important and have been detected in other chemical release incidents. Moreover, the phased approach used for our rapid literature scoping review can be leveraged for environmental emergencies when the need for health hazard information is urgent.
+
+Keywords:
+Environmental contamination, chemical emergencies, East Palestine derailment, human health hazards, scoping literature review, rapid review methods
+Introduction
+
+At least every two days in the United States, a serious chemical hazard incident occurs—including fires, explosions, and toxic releases—according to a database of 875 incidents reported in the media since January 1, 2021, compiled by the Coalition to Prevent Chemical Disasters [
+1
+]. Of the 323 incidents reported in the Media in 2023, 14 involved railway accidents releasing hazardous chemicals. One such incident occurred on February 3, 2023, when a Norfolk Southern Railway general merchandise freight train derailed, releasing vinyl chloride and other dangerous substances into the environment (e.g., air, water, soil) in East Palestine, Ohio, and the surrounding area. Three days later, first responders conducted a vent and burn of five cars containing vinyl chloride to prevent an explosion, releasing volatile organic compounds (e.g., acrolein, benzene) into the air and potentially releasing other residual chemicals in the soil and water. To aid site clean-up, Unified Command—which includes the U.S. Environmental Protection Agency (EPA) and local/state governments—has monitored, and continues to monitor, the air, soil, and water for known chemicals of interest. Available monitoring data are published for public access on EPA’s East Palestine, Ohio Train Derailment web page [
+2
+]. A few academic researchers, such as those participating in the National Institute of Environmental Health Sciences Disaster Research Response (DR2) Program Network of environmental health researchers, have also conducted environmental monitoring, such as mobile monitoring, and published [
+3
+] and shared this data with the DR2 network and others.
+
+Following the derailment, additional efforts aimed to collect information on symptoms experienced by the community. The Agency for Toxic Substances and Disease Registry (ATSDR) collaborated with the Pennsylvania and Ohio Departments of Health to conduct an Assessment of Chemical Exposures (ACE) Survey on community health [
+4
+] and a First Responder Survey [
+5
+], both of which queried symptoms reported through March 31, 2023. First responders arrived on site the night of the derailment, and many contributed to the management of the vent and burn [
+6
+], and residents within a mile radius had been evacuated from the site between the derailment and vent and burn [
+6
+]. Community members, Centers for Disease Control and Prevention (CDC) survey workers [
+7
+], and first responders reported short-term adverse symptoms (e.g., headaches, respiratory effects) consistent with acute chemical irritant exposure, as well as adverse mental health symptoms (residents). Headaches, anxiety, and coughing were more common among residents [
+8
+], and nasal and lung effects [
+9
+] were more common among first responders.
+
+Disasters releasing hazardous materials occur unexpectedly yet regularly, and decision-makers depend on timely access to high-quality, actionable information to protect public health. Rapid reviews and timely access to high-quality information [
+10
+]—to identify what we know and what we do not know about potential health effects—can aid in decision making, communication, and research planning.
+
+Objective
+
+We conducted a rapid, phased literature scoping review to identify and summarize known health hazards and research needs. Information gleaned early can be used to inform communications with affected communities as well as early steps taken to prevent or minimize adverse health consequences while more comprehensive literature reviews are underway. The information can also identify the need for, or to support the development of, short or long-term research studies or health monitoring strategies.
+
+The review was developed to inform a forthcoming National Academy of Science, Engineering, and Medicine workshop [
+11
+] sponsored by the National Institute of Health and Centers for Disease Control and Prevention – Agency for Toxic Substances and Disease Registry. The date of the workshop was unknown when the review was initiated. Our phased approach allowed us to create products of varying complexity for potential delivery at different time points (e.g., depending on the timing of the workshop) (see Fig.
+1
+). Collated findings from authoritative sources were expected to be the first potential product. Over time, additional chemicals and supplemental information expected to aid researchers were incorporated into the review. Ultimately, the workshop, “Public Health Research and Surveillance Priorities from the East Palestine, Ohio Train Derailment: A Workshop,” was held on November 6 and 7, 2023. This rapid literature scoping review is an adaptation of the publicly available NIEHS report and contributes to broader NIEHS research [
+10
+] efforts in response to the derailment.
+
+Fig. 1. East Palestine rapid review project timeline.
+
+Open in a new tab
+
+Overview of the timeline for the rapid review and phased approach, with information on potential points for early data release.
+Materials and Methods
+
+We developed a phased approach to conduct a rapid review of the literature on human health hazards of the chemicals released during and after the derailment. While this work was done for the aforementioned workshop and the timeline was not intended to guide immediate response to the East Palestine disaster, the process can be adapted for more timely real-time use in future disasters.
+
+The literature scoping review process began in late May 2023 and included the following phases, which were iterative: (1) Literature scoping and evidence map: Identification of chemicals of interest (Phase 1a); (2) Literature scoping, evidence map, and summary: Identification and summary of authoritative review conclusions on selected health outcomes for chemicals of interest (Phase 1b); and (3) Targeted literature searching, screening, and summary: Summary of literature reviews and primary studies regarding key research gaps contributing to uncertainty on potential health effects for higher-priority (i.e., highest- and high-priority) chemicals (Phase 2). Fig.
+S1
+provides an overview of the steps undertaken for Phase 1a and Phase 1b.
+
+Phase 1a: Identification and prioritization of chemicals of interest
+
+Because of the emergent nature of the chemical releases, it was difficult to obtain definitive information on the range of chemicals of concern following the train derailment. For this first phase, chemicals of interest were those that were released or suspected to be released during the train derailment and vent and burn response, with the potential for human exposure. We identified 16 primary chemicals of interest to review for available health effects data. The list of chemicals (see Table
+S1
+) came from publicly available media sources [
+12
+] reporting on the train car contents that Norfolk Southern Railway reported to EPA [
+13
+] (consistent with the Texas A&M University [TAMU] DR2 unit list) and internal communications. Several chemicals were reported to have been carried on the derailed train (e.g., benzene residue, butyl acrylate, ethylene glycol monobutyl ether, ethylhexyl acrylate, several glycol chemicals, isobutylene, polyethylene, polyvinyl, petroleum lube oil, vinyl chloride) [
+14
+–
+16
+]. Other chemicals were suspected to be of concern because of their potential release during the vent and burn (e.g., acrolein, hydrogen chloride, phosgene gas) [
+15
+,
+16
+].
+
+Next, we conducted an initial prioritization (i.e., higher vs. lower) of the 16 primary chemicals to identify those with a higher likelihood of potential human exposure following the train derailment and/or subsequent fire. Monitoring data from the EPA Sample Monitoring Dashboards [
+2
+] or academic researchers [
+3
+] were available on select chemicals (acrolein, benzene, butyl acrylate, diethylene glycol, ethylene glycol monobutyl ether (“2-butoxyethanol”), 2-ethylhexyl acrylate, 1,2 propylene glycol, vinyl chloride). Although some chemicals present in the derailed cars or suspected to have been released in the subsequent vent and burn were not reported in the dashboard (e.g., dipropylene glycol, hydrogen chloride, isobutylene, petroleum lube oil, phosgene gas, polyethylene, polypropylene glycol, polyvinyl alcohol), these chemicals were included to gather information on the range of potential exposures experienced by residents; additionally, some were discussed in media reports after the accident [
+17
+]. Based on informal correspondence with experts involved in the derailment response, the eight higher-priority chemicals were acrolein, benzene, butyl acrylate, 2-butoxyethanol, 2-ethylhexyl acrylate, hydrogen chloride, phosgene gas, and vinyl chloride. However, all chemicals were reviewed for available health-related evidence.
+
+During the initial literature scoping and review efforts, we identified additional chemicals—dioxins and per- and polyfluoroalkyl substances (PFAS)—that were potentially released during the vent and burn or its response. These are collectively referred to as “potentially related chemicals” because of greater uncertainty about the potential for exposure. Dioxins may have been formed as a chemical byproduct of the vent and burn, and firefighting foams used to retard the burn were suspected to contain PFAS. We included dioxins in our review because community members raised concerns [
+18
+] about the potential for exposures following media reports of elevated levels of dioxins in the soil near the derailment site (compared with towns in Ohio with industries somewhat similar to those in East Palestine) [
+18
+,
+19
+]. EPA, in collaboration with Norfolk Southern, also conducted soil sampling for dioxins one to two months after the derailment and, in general, did not find that dioxin levels were higher than background levels [
+20
+]. Additionally, blood sampling of 18 East Palestine residents found that serum dioxin levels were consistent with those expected in the broader U.S. population based on comparisons with data from NHANES 2011-2012 by sex, age, and ethnicity [
+21
+].
+
+The burn was extinguished using water containing approximately 40 gallons of T-STORM F-787A alcohol-resistant aqueous film-forming foam (AR-AFFF) known to contain PFAS [
+22
+]. Common, smaller chain breakdown products of these PFAS have been reported [
+23
+], and some terminal PFAS are estimated to persist in the environment for up to a century without remediation [
+23
+]. While much of the product’s formulation is confidential, this mixture is believed to contain PFAS typical of other ANSUL® products [
+24
+–
+26
+], among other substances such as 2-butoxyethanol and polyethylene glycol—two chemicals included in this review. The five PFAS suspected in the AR-AFFF based on the formulation of other ANSUL® products were 6:2 fluorotelomer sulfonamido amine oxide (6:2 FTNO), 6:2 fluorotelomer thiohydroxyammonium (6:2 FTSHA), 6:2 fluorotelomermercap-toalkylamido sulfonate (6:2 FTSAS), 6:2 fluorotelomer sulfonic acid (6:2 FTSA), and 6:2 fluorotelomer sulfonamide alkylbetaine (6:2 FTSA-PrB). Firefighters who applied the AR-AFFF would be expected to have a high potential of exposure to these PFAS [
+27
+,
+28
+].
+
+Because many of the chemicals of interest are commercially important and regularly used or transported throughout the United States [
+29
+] (see Table
+S1
+), we also searched EPA’s Chemical Data Reporting (CDR) database [
+29
+] under the Toxic Substances Control Act (TSCA) to identify recent nationally aggregated production volumes for the 22 chemicals of interest. All chemicals except 6:2 FTSAS, 6:2 FTNO, and dioxins were identified in EPA’s 2020 CDR files for industrial processing and use, consumer and commercial use, and manufacture-import.
+Phase 1b: Summary of authoritative review conclusions
+
+To inform our understanding of potential health effects and key data gaps for the 22 chemicals, including the 16 primary chemicals of interest and six potentially related chemicals, we searched for and extracted data on human health hazards available from selected authoritative sources (see Fig.
+2
+). All these authoritative sources were searched using the CASRN (Chemical Abstracts Service Registry Number) available for each chemical. If no results were returned by searching for the CASRN, the chemical name was used. Searches were initially completed in the EPA’s CompTox Dashboard [
+30
+], which provides an extensive list of available risk assessment, hazard, and toxicity values from a variety of sources, followed by searches in the seven authoritative sources listed in Fig.
+2
+.
+
+Fig. 2. Phase 1a Chemical identification and Phase 1b authoritative sources and health outcome categories.
+
+Open in a new tab
+
+Summary of Phases 1a and 1b to identify chemicals, search authoritative sources, and identify health hazard information. A list of the chemicals and their final priority structure is provided, along with a list of authoritative sources searched and categories of health hazards extracted in Phase 1b.
+Data from authoritative sources were extracted for the 15 health outcome categories listed in Fig.
+2
+, starting with EPA’s CompTox Dashboard, which was supplemented by the other sources. Human health hazard conclusions were prioritized for extraction, along with human-relevant risk estimates (e.g., cancer slope factors [CSFs], minimal risk levels [MRLs], reference doses [RfDs], reference concentrations [RfCs], recommended exposure limits [RELs], do-not-exceed limits [DNELs]). If human health hazard conclusions or risk estimate values were not available, we made note of available toxicity values (e.g., points of departure [POD], lethal dose or concentration at which 50% of the study population does not survive [LD50 or LC50]) and critical effects. If none of the above information was available, we noted whether human and/or animal data were available for the health outcome category. Although our extractions did not specifically capture data from mechanistic studies, authoritative sources often integrate mechanistic information with other data types to develop hazard conclusions. If data gaps were identified for a chemical, additional sources were searched for information, including National Academies’ Acute Exposure Guideline Level (AEGL) Reports [
+31
+,
+32
+] for select chemicals (phosgene gas and hydrogen chloride) and reports from the World Health Organization (WHO) and Organisation for Economic Co-operation and Development (OECD).
+
+We completed data extraction in Microsoft Excel from May to August 2023. During report development, we learned of an updated draft Toxicological Profile for Benzene published by ATSDR for public comment in 2024 [
+33
+]. We reviewed the report and updated our findings accordingly; however, we did not conduct comprehensive searches to identify updated authoritative sources across the chemicals. In addition to publication information (e.g., source name, access link, date of publication), we extracted the following information for each health outcome category (when applicable): hazard conclusion or risk estimate and critical effect, evidence type (i.e., human or animal; extractions did not aim to capture mechanistic data), duration and route of exposure, and additional relevant information (as necessary). A primary extractor reviewed and extracted the health effects data from all sources for each chemical, and the extraction was checked for completeness and accuracy by a secondary extractor.
+
+Following initial extraction, we compiled results into a chemical-outcome summary file (see Supplemental Excel Table
+S1
+) to better understand data gaps across the chemicals and health outcome categories. For each chemical, the health hazard conclusions, relevant risk estimates, and data were extracted, organized, and summarized (Fig.
+2
+and
+S1
+). A list of authoritative sources (with links to web pages and access dates) with available data for each chemical was also included (see Supplemental Excel Table
+S2
+and
+S4
+).
+
+As a first step to quickly determine if additional research had been conducted since the authoritative reviews, we conducted additional targeted searches in the Causaly platform [
+34
+] for all primary chemicals using the term “diseases affected” by chemical name. Causaly uses artificial intelligence to rapidly search the body of available biomedical literature for a given chemical. The output provides a list of health outcome categories identified in the published literature for the chemical, the projected relationship between the chemical and the health outcome (e.g., upregulated, downregulated, bidirectional), and the citation for the published literature. If the Causaly results indicated that available literature addressed an identified gap, we reviewed the citations to better understand the available evidence. Applying this information, we prioritized additional health outcome categories with suggestive data from Causaly.
+
+Using expert judgment, we harmonized data and conclusions for all health outcomes for each chemical from different authoritative sources using the guidance provided in Figure
+S2
+(see extraction results in the chemical-outcome summary file in the Supplemental Excel Table
+S1
+) into categories (conclusions: higher, moderate, or lower confidence/severity, limited animal evidence, inadequate evidence, not likely a risk). If no conclusions were available in authoritative reviews (i.e., a research gap was identified), categories were “no or few studies” or “evidence suggestive” based on the available data. Figure
+S2
+provides additional information on each category.
+Identification of key research gaps
+
+Research gaps (identified above) for specific chemical and health outcome (“chemical × health outcome”) pairs were considered for additional targeted searches in PubMed.
+
+Chemical × health outcome research gaps were further prioritized (highest, high, moderate, and low) and selected according to the following criteria: 1) higher priority of the chemical based on potential for human exposure following release (see Phase 1a: Identification of Chemicals of Interest), (2) no definitive hazard conclusions available, (3) lack of a recent hazard conclusion, and (4) a lack of data or conclusions for humans.
+Phase 2: Targeted literature searches and screenings
+
+Searching the literature
+
+In Phase 2, we conducted literature searches to identify primary and review articles relevant to the chemical × health outcome pairings identified in Phase 1 reviews. We structured searches to capture the available human and animal studies on these pairings; however, some review articles may have also included mechanistic data. In two instances, we did not conduct the search for primary articles because of the large volume of reviews returned from the initial search (see results for acrolein × nervous and dioxins other than TCDD × any health outcome).
+
+Given the goal of conducting a rapid review, we conducted a more streamlined but relatively comprehensive search using one bibliographic database. We used search terms to identify the appropriate chemical, health outcome, evidence type (e.g., human or animal), and study type to search for relevant primary and review articles. We developed separate chemical search strings for each chemical of interest. We identified chemical search terms using EPA’s CompTox Dashboard list of “valid” and “good” chemical synonyms. We also searched the chemical in PubMed’s Medical Subject Headings (MeSH) thesaurus to identify and retrieve indexing terms. We identified search terms for each health outcome, evidence type, and epidemiological study design using SWIFT-Review’s publicly available Search Strategies Word documents [
+35
+] and the National Toxicology Program’s (NTP’s) Report on Carcinogens literature search approach [
+36
+]. We then translated terms into the appropriate syntax for use in PubMed (see Supplemental Materials, Search Strings).
+
+We compiled search strings for the chemical and health outcome pairings identified after Phase 1 (see Table
+S2
+). Additionally, we specified which searches should return human versus animal evidence.
+
+We conducted searches in PubMed June–August 2023. For chemical × health outcome pairs involving cancer, if the Phase 1 results included a recent review from the International Agency for Research on Cancer (IARC) (i.e., those published in the five years prior to June–August 2023), we added a date restriction to the search to identify studies published after the IARC publication date and up to June or July 2023, when searches were conducted. The Population, Exposure, Comparator, and Outcome (PECO) criteria used to guide the Phase 2 screening and additional details on relevant outcome categories are available in Tables
+S2
+and
+S3
+.
+
+Following Phase 1 extractions, for the five PFAS of interest, we explored EPA systematic evidence mapping (SEMs) [
+37
+–
+39
+] reviews for a variety of PFAS to inform our PubMed literature search strategy. Research on emerging PFAS has been rapidly increasing in recent years. These SEMs returned one study for 6:2 FTSHA, no literature for 6:2 FTSAS or 6:2 FTSA-PrB and did not include 6:2 FTNO. As a result, we did not pursue these chemicals further. However, studies were available for 6:2 FTSA [
+37
+]. To identify additional information about these chemicals, we conducted a nonrestricted literature search for 6:2 FTNO and a literature search to identify publications post-dating EPA’s most recent search for 6:2 FTSA. Searches were conducted in PubMed in August 2023. We developed chemical search strings using the approach outlined above; however, to identify as much available literature as possible, searches were not otherwise restricted by health outcome category, evidence type, or study type. Literature search details for relevant PFAS are included in Table
+S2
+.
+
+For dioxins, most of the authoritative sources extracted in Phase 1 reported hazard information for TCDD, a dioxin often used as a proxy for the broader class. Phase 2 searches and screenings aimed to identify reviews of other dioxins (i.e., not TCDD only). We conducted searches in PubMed to identify reviews published in the five years prior to August 2023 and were not restricted by health outcome category or evidence type. Literature search details and search strings are in the Supplemental Materials, and Table
+S2
+.
+Selecting the studies
+
+For title-abstract screening, we uploaded results from literature searches to DistillerSR [
+40
+], a platform for literature screening and management. For each reference, one screener reviewed the title and abstract and indicated PECO relevance. For the purposes of this review, we considered case reports/series and worker surveillance studies as PECO relevant. References without an abstract were screened based on the title only. A senior-level screener reviewed ten percent of all excluded references as a quality control and assurance measure. We then reviewed relevant references identified during title-abstract screening at the full-text level in DistillerSR.
+Summarizing the studies
+
+Relevant references underwent tagging and data extraction in DistillerSR. For relevant review articles and primary studies, we extracted information on the publication type, study design, evidence type, population characteristics (human), exposure conditions (animal), health outcomes, and findings. A primary screener conducted data extraction, and a senior-level screener reviewed the extraction for quality control and assurance purposes.
+
+For each chemical × health outcome pairing with PECO-relevant studies, we summarized studies identified in the literature searches along with the results from studies reported in the authoritative reviews (Phase 1b).
+Results
+
+Phase 1
+
+We reviewed and extracted a total of 134 resources (e.g., reviews, reports, databases) from authoritative sources across the 22 chemicals in Phase 1 (see Supplemental Excel File Table
+S1
+). Phase 1 results summarize and collate existing conclusions from authoritative sources on health outcomes associated with each chemical. We created an overview/map of the evidence (see Fig.
+3
+) using the collated health outcome data from each authoritative source for the 22 chemicals (see Tables
+S4
+,
+S5
+, and
+S6
+for supporting information; Table
+S5
+[priority chemicals] and Table
+S6
+[potentially related chemicals] summarize the health hazard conclusions and information across the authoritative sources). The maps provide information on whether, for each chemical, there was a health hazard conclusion and, if so, the confidence of the evidence or severity of the outcome (e.g., higher, moderate, lower) stratified by chemical priority (see Methods). If authoritative conclusions were not available, the maps indicate whether the studies in the reviewed sources suggested an association or if no/few studies were available. For some health outcomes (e.g., endocrine, immune, gastrointestinal, renal) there were few authoritative sources identified for chemicals. These health categories were combined as “Other Organs” for reporting purposes. We integrated determinations based on additional data from the targeted Causaly reviews with information from the authoritative reviews for select chemicals (acrolein; 2-butoxyethanol; diethylene glycol; dipropylene glycol; hydrogen chloride; and 1,2 propylene glycol).
+
+Fig. 3. Summary of findings from authoritative sources
+a
+for 16 Primary East Palestine chemicals of interest and potentially related East Palestine Chemicals.
+
+Open in a new tab
+
+Summary of conclusions and other information from authoritative sources for 16 primary chemicals of interest and five PFAS chemicals and TCDD. See Fig.
+2
+and Tables
+S5
+and
+S6
+for more details. A list of authoritative sources is available in Fig.
+2
+. For vinyl chloride and skin sensitization, one source reported Category 1 sensitization and another source reported that classification was not possible. “Conclusions available” relate to language used by authoritative sources as follows (see Fig.
+S2
+) : inadequate evidence (IE) = nonclassifiable (cancer); limited animal evidence (LA) = nonclassifiable (cancer); lower confidence or severity (LC) = possibly (cancer), suspected (noncancer), irritant category with other conflicting data, conflicting sensitizing data; moderate confidence or severity (MC) = probably (cancer), presumed (noncancer), animal data-derived risk estimate value, Category 3 (irritant), Category 1B (sensitizer); higher confidence or severity (HC) = known (cancer, noncancer), human data-derived risk estimate value, Category 1 and 2 (irritant), Category 1 A (sensitizer). 6:2 FTNO = 6:2 fluorotelomer sulfonamido amine oxide; 6:2 FTSHA = 6:2 fluorotelomer thiohydroxyammonium; 6:2 FTSAS = 6:2 fluorotelomermercap-toalkylamido sulfonate; 6:2 FTSA = 6:2 fluorotelomer sulfonic acid; 6:2 FTSA-PrB = 6:2 fluorotelomer sulfonamide alkylbetaine; PFAS = per- and polyfluoroalkyl substances; TCDD = 2,3,7,8-tetrachlorodibenzo-p-dioxin.
+Irritation and sensitization
+
+Primary chemicals
+
+Testing or health characterization of chemicals was the most complete for acute effects such as irritation or sensitization (see Fig.
+4
+). Most chemicals were classified as causing skin (10 of 16 chemicals) or eye (11 of 16 chemicals) irritation, including all the higher-priority (i.e., highest and high-priority) chemicals, two moderate-priority chemicals (dipropylene glycol for both outcomes and polypropylene glycol for eye), and one low-priority chemical (petroleum lube oil for both outcomes). Among the higher-priority chemicals, risk assessment values were not found for skin irritation, and available values for eye irritation ranged from 0.0025 mg/m
+3
+for acrolein to 180 mg/m
+3
+for vinyl chloride (see Table
+S5
+). The reviews concluded that diethylene glycol was not associated with skin or eye irritation, and 1,2 propylene glycol was not associated with eye irritation. No other conclusions were identified for the other moderate- and low-priority chemicals. Half of the chemicals caused respiratory irritation, seven of which were higher-priority chemicals. Polypropylene glycol was not considered a respiratory irritant. Risk assessment values for high-priority chemicals and respiratory irritation ranged from 2 × 10
+−5
+mg/m
+3
+for acrolein to 180 mg/m
+3
+for vinyl chloride (see Table
+S5
+). No definitive authoritative conclusions were found for benzene, three of the five moderate-priority chemicals, and all three low-priority chemicals. However, the reviews reported individual study findings for benzene, diethylene glycol, and 1,2-propylene glycol. Adverse respiratory effects or irritation from multiple chemicals are consistent with reported symptoms (e.g., running nose; congestion; coughing; burning nose, throat, or eyes; irritation) from the affected community and first responders in CDC’s ACE Survey [
+4
+].
+
+Fig. 4. Authoritative conclusions for 16 primary chemicals: A. irritation and sensitization, B. Noncancer outcomes, and C. Cancer outcomes.
+
+Open in a new tab
+
+Summary of irritant and sensitizer information, non-cancer and cancer outcomes from authoritative sources for 16 primary chemicals of interest. Detailed findings for each chemical × health outcome category are reported in Table
+S5
+and Supplemental Excel Table
+S1
+. The “Other Organ” category includes double counts for two chemicals (acrolein and 2-butoxyethanol), wherein different conclusions were available for different organ systems NS = no or few studies, ES evidence suggestive, NL not likely to be irritating or sensitizing or risk for health outocme, LC lower confidence, MC moderate confidence or severity, HC higher confidence or severity. See Fig.
+S2
+for more details.
+While some authoritative sources discussed skin sensitization in the context of immune effects, skin sensitization was characterized as a separate outcome category in this review. Three higher-priority chemicals were categorized for skin sensitizing effects (butyl acrylate, 2-ethylhexyl acrylate, and vinyl chloride). The European Chemicals Bureau (ECB) [
+41
+] discussed sensitizing data for acrolein, another higher-priority chemical, but did not categorize it for sensitization. Little or no indication of skin sensitization was reported for seven chemicals (2-butoxyethanol, benzene, hydrogen chloride, diethylene glycol, dipropylene glycol, polypropylene glycol, and 1,2-propylene glycol). No conclusions were available for the remaining chemicals.
+Potentially related chemicals
+
+For PFAS, one chemical (6:2 FTSA) was classified for corrosive effects to the skin, whereas three chemicals (6:2 FTSHA, 6:2 FTSA-PrB, and 6:2 FTNO) did not have irritating effects to the skin in studies reported in Phase 1 sources. Conclusions for eye irritation were available for two chemicals (6:2 FTSHA and 6:2 FTSA); some irritation was reported following exposure to 6:2 FTSA-PrB in rabbits, and no eye irritation was predicted for 6:2 FTNO. Data were not available for categorizing irritating effects to the respiratory system following PFAS exposures. Authoritative sources reported little or no concern for skin sensitization following exposure to three chemicals (6:2 FTSA, 6:2 FTSA-PrB, and 6:2 FTNO). Mixed results were reported from animal and in vitro studies for one chemical (6:2 FTSHA). Skin sensitization data were not available for the remaining PFAS (6:2 FTSAS). TCDD was classified as causing irritation to both the skin and eyes. Additionally, reviews emphasized that high-level exposures to TCDD can cause moderate to severe chloracne, an acne-like eruption of the skin, and other skin rashes and discoloration. There were no conclusions for TCDD and respiratory irritation, although one review reported upper respiratory irritation in humans following inhalation. Skin sensitization was not classified for TCDD because few data were available. No chemicals were forwarded to Phase 2 for these outcomes because there were no gaps for the highest priority chemicals.
+Other noncancer outcomes
+
+Primary chemicals
+
+Authoritative conclusions for reproductive and developmental toxicities were available for approximately half of all chemicals (see Fig.
+4
+for noncancer outcome findings). Of the eight higher-priority chemicals (see Fig.
+3
+for chemical-specific determinations and priority categories), two chemicals (benzene and vinyl chloride) may be linked to developmental effects based on determinations. California Environmental Protection Agency (CalEPA) Proposition 65 [
+42
+] lists benzene as a chemical that can cause developmental and reproductive effects; other reviews agreed with the developmental effects conclusions (particularly for developmental hematotoxicity) but stated that the evidence for reproductive effects was limited. Available risk assessment values for developmental effects from inhalation exposure (mg/m
+3
+) are 0.027 for benzene (CalEPA Office of Environmental Health Hazard Assessment [OEHHA] REL for acute exposure) and 1.30 for vinyl chloride (ATSDR MRL) (see Table
+S5
+). Although positive associations have been observed for adverse reproductive (e.g., effects to reproductive organs or in pregnant animals) or developmental outcomes and exposure to several higher-priority—acrolein, 2-butoxyethanol, butyl acrylate (developmental only)—and moderate-priority chemicals—diethylene glycol—these effects occurred at high doses or at doses causing maternal toxicity. As a result, several authoritative sources (primairly ECHA) concluded that the chemicals are not significantly toxic to reproduction or the developing fetus. There was low concern for reproductive toxicity following exposure to butyl acrylate based on studies showing no adverse effects. There was also low concern for developmental and reproductive toxicity for 2-ethylhexyl acrylate and two moderate-priority chemicals, isobutylene and 1,2 propylene glycol. Unclear or no conclusions were available for both reproductive and developmental effects for the remaining higher-priority chemicals: hydrogen chloride and phosgene gas.
+
+Health outcome conclusions were typically not available for neurotoxicity (14 of 16 chemicals) and immunotoxicity (14 of 16 chemicals). Vinyl chloride was deemed a presumed neurotoxicant and a suspected immunotoxicant, and benzene was associated with both neurotoxicity in workers exposed to high doses and adverse immune effects. Some authoritative sources noted that some immunotoxicity outcomes associated with benzene exposure may result from hematotoxicity or may occur at levels like those inducing hematotoxicity.
+
+Exposures to higher-priority chemicals were also associated (higher or moderate confidence) with other adverse health outcomes. The most sensitive available risk estimates for these higher-priority chemicals (see Tables
+S5
+and
+S6
+) are reported in Box
+1
+.
+
+Given identified research gaps for the higher-priority chemicals, we selected the following chemical × outcome pairs for Phase 2 activities (see Methods): neurotoxicity for acrolein, 2-ethylhexyl acrylate, butyl acrylate, and 2-butoxyethanol; immunotoxicity for butyl acrylate and 2-butoxyethanol; and hepatotoxicity for butyl acrylate. Although vinyl chloride is most likely the chemical of most concern, we did not select it for Phase 2 because a recent ATSDR review was available with conclusions about the selected health outcomes.
+Potentially related chemicals
+
+ECHA classified 6:2 FTSHA as a presumed toxicant to fertility and development. Two PFAS (6:2 FTSA and 6:2 FTNO) were not associated with reproductive or developmental toxicity, and no conclusions were available for the remaining PFAS (6:2 FTSAS and 6:2 FTSA-PrB). Several agencies (e.g., OEHHA, EPA, ATSDR) have concluded that TCDD can cause adverse reproductive and/or developmental effects and have developed risk estimates based on these effects (EPA Integrated Risk Information System [IRIS] RfD: 7 × 10 − 10 mg/kg/day for oral exposure) (see Table
+S6
+). TCDD was also associated with both neurological and immune effects based on available human and animal evidence.
+Cancer outcomes
+
+Primary chemicals
+
+Cancer conclusions were available for approximately two-thirds (12 of 16) of the chemicals (see Fig.
+4
+). Of the eight higher-priority chemicals, five can cause cancer in humans or experimental animals: Benzene and vinyl chloride are IARC and NTP “known human carcinogens” [
+43
+–
+46
+], acrolein is “probably carcinogenic to humans” based on mechanistic and animal cancer data (IARC 2A), 2-ethylhexyl acrylate is “possibly carcinogenic to humans” (IARC 2B) based on sufficient evidence from studies in experimental animals, and 2-butoxyethanol induces tumors (hemangiosarcoma of the liver in male mice). IARC considered the evidence limited in experimental animals for 2-butoxyethanol and, thus, not classifiable as a carcinogen (Group 3). Butyl acrylate and hydrogen chloride are also classified as Group 3 by IARC based on inadequate evidence from experimental animal and human studies. No conclusions were available for phosgene gas. Among the moderate- and low-priority chemicals, exposure to isobutylene caused tumors in experimental animals. The others were either not likely to cause cancer or had no identifiable conclusions. Cancer types were available for the known human carcinogens: Benzene causes acute myeloid leukemia and other acute nonlymphocytic leukemia and may cause other lymphohematopoietic cancers (chronic myeloid leukemia, chronic lymphocytic leukemia, childhood leukemia, non-Hodgkin lymphoma, and multiple myeloma) and lung cancer; vinyl chloride causes angiosarcomas in the liver.
+
+Taking into account these research gaps, we identified the following chemicals for Phase 2 searches for cancer outcomes: human cancer studies for acrolein, 2-ethylhexyl acrylate, and 2-butoxyethnanol; and human and animal cancer studies for butyl acrylate.
+Potentially related chemicals
+
+For dioxins, most available cancer outcome data were for TCDD. Both IARC [
+47
+] and NTP’s Report on Carcinogens [
+48
+] classified TCDD as “carcinogenic to humans” based on sufficient evidence in humans (Group 1). OEHHA [
+49
+] provided slope factors for TCDD and a variety of individual chemicals in the class. Inhalation slope factors ranged from 3.9 × 10
+1
+mg/kg/day (for 1,2,3,4,6,7,8,9-Octachlorodibenzo-p-dioxin) to 1.3 × 10
+5
+mg/kg/day (for TCDD and 1,2,3,7,8-Pentachlorodibenzo-p-dioxin) [
+49
+]. Data on cancer effects were not available from authoritative sources for the five PFAS or other dioxins.
+
+To increase the utility of our review and because of the limited health information on PFAS and dioxins other than TCDD, we selected 6:2 FTSA, 6:2 FTNO, and dioxins other than TCDD for unrestricted searches (i.e., searches for any health outcome data).
+Box 1 Most sensitive available risk assessment values for higher priority chemicals and other noncancer outcomes.
+
+Chemical
+
+Value
+
+Source
+
+Additional information
+
+Hematotoxicity
+
+Benzene
+
+REL = 0.003 mg/m
+3
+
+OEHHA
+
+Inhalation exposure
+
+MRL = 0.0003 mg/kg/day
+
+ATSDR
+
+Oral exposure; Based on hematotoxicity/immune effects
+
+2-butoxyethanol
+
+MRL = 0.97 mg/m
+3
+
+ATSDR
+
+Inhalation exposure
+
+RfD = 0.1 mg/kg/day
+
+EPA IRIS
+
+Oral exposure
+
+Hepatotoxicity
+
+2-butoxyethanol
+
+MRL = 0.07 mg/kg/day
+
+ATSDR
+
+Oral exposure
+
+Vinyl chloride
+
+RfD = 0.003 mg/kg/day
+
+EPA IRIS
+
+Oral exposure
+
+Respiratory (non-irritating effects)
+
+Phosgene gas
+
+RfC = 0.0003 mg/m
+3
+
+EPA
+
+Inhalation exposure
+
+Open in a new tab
+Phase 2
+
+Overview
+
+Results from the targeted searches and screenings conducted during Phase 2 are available in Table
+1
+.
+
+Table 1.
+
+Overview of literature search results for selected chemical-outcome pairs for primary chemicals.
+
+Chemical-outcome category
+
+Phase 1 authoritative source conclusions
+
+Search limit, date completed
+
+Results (
+N
+)
+
+PECO-relevant studies (N)
+
+Phase 2 new studies (
+N
+)
+
+Evidence gap
+
+16 Priority Chemicals
+
+Acrolein-Cancer
+
+Probably carcinogenic to humans (Group 2 A); Inadequate human evidence
+
+Studies published 2020–present,
+
+June 22, 2023
+
+183
+
+0
+
+0
+
+Research gap remains (human cancer studies)
+
+Acrolein-Nervous^
+
+No conclusions: Suggestive evidence from Causaly
+
+No date limit,
+
+June 20, 2023
+
+228
+
+8 reviews
+
+7 reviews
+
+Systematic review may be warranted
+
+2-butoxyethanol-Cancer^
+
+Not classifiable (Group 3); Limited evidence in experimental animals
+
+No date limit,
+
+July 6, 2023
+
+35
+
+1 human
+
+1 human
+
+Research gap remains
+
+2-butoxyethanol-Immune^
+
+No conclusions: Suggestive evidence
+
+No date limit,
+
+July 5, 2023
+
+151
+
+1 human
+
+9 animal
+
+1 human
+
+1 animal
+
+Additional studies with focus on functional immunotoxicity are needed
+
+2-butoxyethanol-Nervous^
+
+No conclusions: Suggestive evidence
+
+No date limit,
+
+July 5, 2023
+
+112
+
+1 animal
+
+3 human
+
+1 animal
+
+Additional studies designed to assess neurological effects are needed
+
+Butyl acrylate-Cancer
+
+Not classifiable (Group 3); Inadequate human and animal evidence
+
+No date limit,
+
+July 6, 2023
+
+65
+
+1 animal
+
+0
+
+Research gap remains
+
+Butyl acrylate-Hepatic
+
+No conclusion: Suggestive evidence
+
+No date limit,
+
+July 7, 2023
+
+19
+
+0
+
+0
+
+Research gap remains
+
+Butyl acrylate-Immune
+
+No conclusions: Few studies;
+
+Skin sensitization: Category 1
+
+No date limit,
+
+July 5, 2023
+
+92
+
+2 animal
+a
+
+3 human
+a
+
+0
+
+Research gap remains (immune endpoints other than skin sensitization)
+
+Butyl acrylate-Nervous
+
+No conclusions: Few studies
+
+No date limit,
+
+July 5, 2023
+
+97
+
+0
+
+0
+
+Research gap remains
+
+2-ethylhexyl acrylate-Cancer
+
+Possibly carcinogenic (Group 2B); Inadequate human evidence
+
+Studies published 2019–present,
+
+June 20, 2023
+
+6
+
+0
+
+0
+
+Research gap remains (human cancer studies)
+
+2-ethylhexyl acrylate-Nervous
+
+No conclusions: Few studies
+
+No date limit,
+
+June 23, 2023
+
+9
+
+0
+
+0
+
+Research gap remains
+
+Potentially Related Chemicals
+
+6:2 FTSA-Any^
+
+Skin irritation: Category 1B;
+
+Eye irritation: Category 1;
+
+No effects for developmental, reproductive, or skin sensitization in animal studies
+
+No other conclusions based on limited evidence in experimental animals
+
+Studies published 2020–present,
+
+August 10, 2023
+
+45
+
+1 animal
+
+1 human
+
+1 animal
+
+1 human
+
+Research gaps remain
+
+6:2 FTNO-Any
+
+No effects observed on nervous, reproductive, developmental, hematologic, dermal, or ocular outcomes in animal studies
+
+No date limit,
+
+August 10, 2023
+
+0
+
+0
+
+0
+
+Research gaps remain
+
+Dioxins other than TCDD-Any^
+
+Conclusions available for TCDD:
+
+Known carcinogen (Group 1)
+
+Skin and eye irritation: Category 2
+
+May cause adverse effects in nervous, immune, reproductive, developmental, and hepatic systems
+
+Studies published 2018–present,
+
+August 22, 2023
+
+61
+
+11
+
+11
+
+Systematic review of dioxin mixtures may be warranted for endometriosis; other research gaps remain
+
+6:2 FTSA-Any^
+
+Skin irritation: Category 1B;
+
+Eye irritation: Category 1;
+
+No effects for developmental, reproductive, or skin sensitization in animal studies
+
+No other conclusions based on limited evidence in experimental animals
+
+Studies published 2020–present,
+
+August 10, 2023
+
+45
+
+1 animal
+
+1 human
+
+1 animal
+
+1 human
+
+Research gaps remain
+
+Open in a new tab
+
+PECO
+Population, Exposure, Comparator, and Outcome.
+
+^Indicates chemical × outcome pairings that are discussed in detail.
+
+a
+All studies on skin sensitization.
+
+Primary chemicals
+
+For five searches (acrolein × cancer, 2-ethylhexyl acrylate × cancer, 2-ethylhexyl acrylate × nervous, butyl acrylate × hepatic, butyl acrylate × nervous), no relevant results were identified during title-abstract and/or full-text screening. At least one PECO-relevant reference was identified for each of the remaining six searches (acrolein × nervous [
+n
+= 8], 2-butoxyethanol × cancer [
+n
+= 1], 2-butoxyethanol × immune [
+n
+= 10], 2-butoxyethanol × nervous [
+n
+= 4], butyl acrylate × cancer [
+n
+= 1], butyl acrylate × immune [
+n
+= 5]). Although five PECO-relevant studies were identified for butyl acrylate × immune, all five reported on skin sensitization findings only. As skin sensitization data were considered separately from immune data during Phase 1, the five studies were not considered for further analysis during Phase 2.
+
+For chemical × health outcome pairs with at least one new study that had not been included in authoritative reviews (acrolein × nervous, 2-butoxyethanol × cancer, 2-butoxyethanol × immune, and 2-butoxyethanol × nervous), we examined and summarized all studies identified during Phase 2, alongside some findings from authoritative source reports in Phase 1. Findings for each chemical × health outcome pair are summarized by endpoint in the text (acrolein × nervous and 2-butoxyethanol × cancer) and Table
+S7
+(2-butoxyethanol × immune) and Table
+S8
+(2-butoxyethanol × nervous) below. Figure
+S3
+captures the literature identified and included at each step for these searches. An interactive version of this flow diagram is available on Tableau (see figure caption).
+Potentially related chemicals
+
+No relevant results were identified during title-abstract and/or full-text screening for 6:2 FTNO × any health outcome. At least one PECO-relevant reference was identified for 6:2 FTSA × any health outcome (
+n
+= 2) and dioxins other than TCDD × any health outcome (
+n
+= 11). All studies identified during Phase 2 were summarized, alongside some findings from authoritative source reports in Phase 1. Information on the literature identified and included during these searches is also included in Fig.
+S1
+.
+Selected chemical-outcome: Acrolein-nervous system
+
+Four authoritative reviews—ATSDR [
+50
+] (12 studies), ECB [
+41
+] (1 study), EPA [
+51
+] (1 study), and OEHHA [
+52
+] (4 studies)—discussed findings from studies examining acrolein exposures and neurological effects, although none made hazard conclusions. Additionally, outputs from Causaly identified reviews and primary articles that discussed potential associations between acrolein levels and various neurological outcomes, including Alzheimer’s disease, Parkinson’s disease, and strokes.
+
+Our literature scoping search to find published reviews on neurological outcomes identified eight reviews discussing effects and mechanisms associated with acrolein exposure in humans [
+53
+–
+59
+] and animals [
+53
+–
+56
+,
+58
+–
+60
+], which are summarized below. One review was discussed in ATSDR, 2007 [
+60
+], but the remaining seven were not included in any authoritative sources. The four authoritative reports also included 14 primary studies in experimental animals—reporting effects related to neurotransmitter (neuropeptide) depletion, increased brain weight, inflammatory responses, loss of nerve tissue, and nonspecific histopathological effects (in inhalation studies)—and one primary study in humans that reported increased acrolein levels in the brains of Alzheimer’s patients compared to control subjects at autopsy. Most studies discussed in the ATSDR Toxicological Profile examined general toxicity in experimental animals and were not designed to measure neurotoxicity. Detailed results from the eight reviews identified in our literature scoping search are provided in the text below. As our search identified reviews only, a summary table is not provided. Importantly, exposure to acrolein can occur both exogenously and endogenously, as the chemical is a byproduct of lipid peroxidation initiated by oxidative stress [
+56
+]. In the eight identified reviews, acrolein is often used as a biomarker for oxidative stress and lipid peroxidation. Therefore, it was often unclear whether neurological effects are related specifically to acrolein or as a biomarker for oxidative stress. The review findings should be considered in this context.
+
+Three other reviews identified during Phase 2 reported on the mechanistic effects of acrolein in nervous tissues [
+61
+–
+63
+], although mechanistic evidence was not the primary focus of our literature scoping activities. Acrolein was discussed as a highly toxic product of lipid peroxidation that can cross the blood-brain barrier [
+61
+]. In vitro and in vivo studies of neuroinflammation and neurodegeneration and acrolein’s role in the development of Alzheimer’s disease, Parkinson’s disease, and spinal cord injury were cited as evidence of its neurotoxic potential. Other reported mechanistic evidence suggests that acrolein induces demyelination of nerves—which impacts nerve conduction—neuronal apoptosis, neurotransmitter alterations, and protein adduct formation. Other reviews reported inhibition of glutamate and glucose uptake in acrolein-exposed neuronal cell cultures [
+62
+] and disruption of nerve terminals and subsequent potential for synaptic damage in in vitro studies [
+63
+]. These reviews suggest that acrolein, whether endogenous or exogenous, has the potential for neurotoxic effects.
+
+Reviews of human and animal studies discussed the association between acrolein and strokes of varying severity [
+53
+,
+55
+–
+57
+]; however, the discussion of acrolein’s role differed across reviews. Some reviews assessed acrolein’s role in the development of stroke or brain infarction, whereas others examined acrolein as a byproduct of the oxidative stress induced by stroke or brain infarction and its potential to cause additional neurological damage. Acrolein may be produced endogenously during ischemic stroke [
+53
+], and increased endogenous acrolein production has been reported in connection with both severe strokes and silent brain infarctions [
+57
+]. A mechanistic study summarized by Muguruma et al. [
+57
+] suggested that acrolein elicited a cycling of oxidative stress, resulting in stroke-related neuronal damage, and is a suspected driver of neuronal damage in stroke patients. Plasma levels of protein-conjugated acrolein (along with acrolein-producing enzymes) were shown to be appropriate biomarkers for human stroke [
+54
+–
+56
+,
+58
+] and silent brain infarctions [
+55
+]. Multiple human studies have found dysregulated acrolein metabolism in stroke patients [
+53
+].
+
+Findings from reviews of animal studies further support an association between acrolein and stroke, although it was unclear whether animals were dosed in studies cited in the reviews or whether effects were associated with endogenous acrolein. A review of animal studies reported an association between decreasing levels of acrolein and decreased infarction size [
+53
+]. A study in mice indicated that, during brain infarction, acrolein is “more strongly involved” in cell damage than reactive oxygen species [
+55
+]. Other reviews reported increased levels of acrolein at the site of brain infarction in mouse models [
+54
+,
+58
+]. Neuronal damage was also reported in a review of animal studies, including acrolein-induced neuronal damage in pigs and rats, although some studies reported effects of endogenous acrolein only and should be considered accordingly [
+56
+]. In an in vitro study, acrolein induced mitochondrial dysfunction leading to neuronal death in HT22 mouse hippocampal cells [
+56
+].
+
+Other neurological outcomes have also been considered for their association with acrolein exposure. In humans, significantly increased levels of acrolein were reported in the brains of patients with mild cognitive impairment [
+55
+,
+57
+,
+59
+] and cognitive impairment that had progressed to Alzheimer’s disease compared to control subjects [
+53
+,
+55
+,
+57
+,
+59
+]. For cases of Parkinson’s disease, both human and animal studies reported that acrolein exposure leads to damage of the substantia nigra [
+53
+]. In a mouse model of multiple sclerosis, acrolein was found to be a critical pathological factor in the development of autoimmune encephalomyelitis [
+53
+]. Finally, in a review of animals exposed to acrolein via inhalation, alterations in reflex reactions and sensory irritation were reported in guinea pigs [
+60
+]. Alterations were a result of pulmonary nerve ending stimulation from the chemical. Decreased respiratory rates were also reported in exposed guinea pigs and in rabbits [
+60
+].
+
+Evidence gap summary
+
+A
+systematic review
+critically assessing the body of evidence of acrolein on the nervous system may be warranted for human, animal, and mechanistic studies, with a particular focus on effects from exogenous acrolein exposures.
+Selected chemical-outcome: 2-Butoxyethanol-Cancer
+
+IARC [
+64
+] concluded that 2-butoxyethanol was not classifiable based on its carcinogenicity to humans because of limited evidence from studies in experimental animals and inadequate evidence from studies in humans. One human study with limited information on 2-butoxyethanol exposure was identified. The limited evidence of carcinogenicity in experimental animals was from a study of 2-butoxyethanol inhalation in rats and mice published in NTP Technical Report 484 (NTP TR-484) [
+65
+]. Additional studies published after the IARC Monograph were not identified for the other two authoritative reviews (EPA IRIS [
+66
+] and OEHHA [
+67
+]). In mice, NTP [
+65
+] concluded there was some evidence of carcinogenicity in males based on liver hemangiosarcoma and in females based on forestomach squamous cell papilloma or carcinoma (mainly papilloma). For rats, there was equivocal evidence of carcinogenicity in females based on benign and malignant pheochromocytoma (mostly benign) of the adrenal medulla and no evidence of carcinogenicity in males.
+
+Our literature scoping activities to find cancer studies in the literature identified one primary article published after the authoritative reviews that described cancer effects associated with 2-butoxyethanol exposure in humans [
+68
+]. Rodrigues et al. [
+68
+], an occupational nested case-control study of workers at three semiconductor and storage device manufacturing facilities, evaluated the association between exposure to 31 known or possible carcinogens, including 2-butoxyethanol, and central nervous system (CNS) cancers. The study reported significant exposure-response associations (p
+trend
+< 0.01) with increased odds ratios (ORs) for CNS cancer incidence in all quartiles (vs. Quartile 1) at two of the three module manufacturing work sites assessed; ORs were <1 at the third site [
+68
+]. Statistically significant positive trends were reported for several chemicals that were present in the module manufacturing work sites in addition to 2-butoxyethanol.
+
+Evidence gap summary
+
+A
+research gap remains
+for additional primary studies of the carcinogenicity of 2-butoxyethanol, particularly for studies of effects in human populations.
+Selected chemical-outcome: 2-Butoxyethanol-Immune
+
+Three authoritative reviews—ATSDR [
+69
+] (24 studies), EPA [
+66
+] (5 studies), and OEHHA [
+67
+] (5 studies)—discussed findings from studies examining 2-butoxyethanol exposures and immune effects, although none made hazard conclusions. Despite the lack of hazard conclusions, each review provided summaries of immunological findings from several studies in animals and humans. Our literature scoping activities to find immunological studies in the published literature identified 10 discussing immune-related outcomes associated with 2-butoxyethanol exposure, including one primary article in a human population [
+70
+] and nine primary articles in experimental rodents (rats and mice) [
+71
+–
+79
+]. Two of these studies were not included in the collective authoritative source reports [
+70
+,
+79
+]. Animal toxicology studies summarized in ATSDR [
+69
+] identified immunological effects in studies designed to assess general toxicity (and thus, not all were identified by our immune-targeted literature searches). These studies largely reported effects in lymphoreticular organs (e.g., thymus weight changes, thymus histopathology), whereas reviews from EPA IRIS [
+66
+] and OEHHA [
+80
+] were primarily of studies designed to evaluate immunotoxicity and found evidence of immunomodulatory effects (see study summaries in Table
+S7
+).
+
+We reviewed studies identified in our literature scoping activities and the summaries of studies from authoritative reviews (that were not identified in our literature searches). In its discussion of immunotoxic effects, ATSDR [
+69
+] discussed immune and lymphoreticular effects separately and noted that some impacts to lymphoreticular organs can be attributed to hematotoxicity rather than to immunotoxicity (noting that there is overlap between the two, as leukocytes can be classified as part of both systems). These studies were not considered in this report’s summary of immune effects. Additionally, we did not include four studies from the reports that examined skin sensitization in humans [
+81
+,
+82
+], guinea pigs [
+83
+], and mice [
+84
+] because our review of authoritative sources discussed skin sensitization as a separate health outcome category (see Fig.
+3
+). Detailed summaries from 16 studies reporting immunotoxicity effects (functional and observational findings) are available in Table
+S7
+. Primarily based on findings from one study [
+77
+], OEHHA concluded that immunomodulation effects were observed in animals for autoimmune response, certain types of T-cell-mediated effects, and natural killer (NK) cell activities, but not for B-cells. Few other studies examining lymphocyte responses were available, limiting the ability to draw broader conclusions about these findings.
+
+Evidence gap summary
+
+Additional studies focusing on functional immunotoxicity
+are needed to provide more specific information on the direct effects of 2-butoxyethanol on the immune system. Available studies may not be adequate for a systematic review of potential immunotoxicity.
+Selected chemical-outcome: 2-Butoxyethanol-nervous system
+
+Three authoritative reviews—ATSDR [
+69
+] (24 studies), EPA [
+66
+] (9 studies), and OEHHA [
+67
+] (5 studies)—discussed studies of neurological effects following exposure to 2-butoxyethanol. ATSDR’s review of the association between exposure to 2-butoxyethanol and neurological effects included many general toxicology studies of animals exposed by oral, dermal, and inhalation routes and several case reports. Reviews from the EPA and OEHHA were limited to case reports. Our literature scoping activities to find neurological studies in the published literature identified one primary article in rats that was not included in any authoritative reviews [
+85
+] and three human case reports included in the reviews [
+86
+–
+88
+].
+
+Below, we review the combined body of relevant literature (human and animal studies), which consists of animal evidence reported by ATSDR, an additional animal study identified in our literature scoping review, and the collective case reports/series identified in our literature search and discussed in authoritative reviews.
+
+ATSDR [
+69
+] concluded that exposure to high doses in experimental animals can cause nervous system effects (e.g., physical weakness, unsteadiness, drowsiness, prostration, abnormal eye movement, convulsions). Studies also reported clinical observations prior to death (e.g., convulsions, nystagmus, moderate to marked inactivity, ataxia). While ATSDR classifies many of these as clinical signs of neurotoxicity, these could also be attributed to other causes. Thus, we did not include 14 animal studies reporting on these symptoms and clinical observations. Brain weight findings were also not included in this review, as ATSDR reported results from only two studies, and it was unclear whether this endpoint was measured in other general toxicity studies. Other observed effects in case reports and animal studies that may be more reflective of impacts to neurological function are included, such as cases of coma following exposure, severe CNS depression, and effects related to the motor and vestibular systems (e.g., impacts to coordination, loss of equilibrium), sensory systems (e.g., disturbed taste), and neurological histopathology (e.g., histopathological changes to the brain and nerves).
+
+Detailed summaries of neurotoxicity findings from 17 studies (8 case reports/series, 9 primary studies) are available in Table
+S8
+.
+
+Evidence gap summary
+
+Additional studies are needed
+, including human epidemiological and additional animal studies specifically designed to assess neurological effects following exposure. Inadequate database for a systematic review of potential nervous system effects.
+Selected chemical-outcome: 6:2 FTSA any health outcome
+
+No reports from authoritative sources that discussed health effects associated with 6:2 FTSA exposure were identified during Phase 1. Two primary studies (one human study [
+89
+] and one animal study [
+90
+]) were identified during Phase 2 that examined the health effects associated with 6:2 FTSA. Studies assessed reproductive and developmental effects and immune effects.
+
+Reproductive and developmental effects
+
+Both studies assessed reproductive and developmental effects associated with 6:2 FTSA exposure [
+89
+,
+90
+]. In humans, a case-control study in Hangzhou, China of 82 preeclamptic pregnant women and 169 healthy control subjects measured 6:2 FTSA in maternal serum prior to delivery [
+89
+]. The study observed no significant associations between maternal serum 6:2 FTSA levels and odds of preeclampsia or odds of low birth weight in infants. A study of male and female white-footed field mice exposed to 6:2 FTSA by oral gavage for 112 days (from 4 weeks premating to ≥4 weeks postmating) observed no associations between 6:2 FTSA exposure and reproductive and fertility endpoints in the exposed mice or developmental endpoints in their offspring [
+90
+]. Reproductive and developmental measures included the number of mating pairs, the number of pregnant animals, total litter loss, proportion of stillbirths, live litter size, total litter size, male sperm parameters, male and female sex hormone levels, and pup weights.
+Immune effects
+
+One primary study in an ecological model assessed the association between 6:2 FTSA exposure and immune endpoints [
+90
+]. Male and female white-footed field mice were exposed to 6:2 FTSA by oral gavage for 112 days (from 4 weeks premating to ≥4 weeks postmating). Researchers observed significantly decreased plaque-forming cell counts in both males and females, significantly increased spleen weights in males only, and no changes in thymus organ weight or histopathology of the thymus or spleen in either sex [
+90
+]. A benchmark dose (BMD) was derived using data for decreased plaque-forming cell counts (BMD for males = 4.06 mg/kg/day; for females = 3.72 mg/kg/day). The lower 95% confidence limits (BMDLs) were 2.63 mg/kg/day (males) and 2.26 mg/kg/day (females).
+Evidence gap summary
+
+A
+research gap remains
+for primary studies of health hazards associated with 6:2 FTSA exposure in humans and animals. Few studies were identified.
+Selected chemical-outcome: Dioxin mixtures-any health outcome
+
+Authoritative reviews identified in Phase 1 mostly discussed findings and drew conclusions based on studies of TCDD exposures, as little information was available for other chemicals in the class. During Phase 2, we identified 11 systematic reviews and meta-analyses reporting health effects associated with exposures to dioxin mixtures (including TCDD in some cases) or dioxins other than TCDD, including polychlorinated dibenzo-p-dioxins and dibenzofurans (PCDDs/Fs) [
+91
+–
+101
+]. One review by Wallace et al. [
+100
+] reported lower sleep quality associated with exposure to dioxin mixtures.
+
+Reproductive and developmental effects
+
+Five systematic reviews examined associations between dioxins and reproductive or developmental outcomes in humans and animals, including endometriosis [
+93
+,
+97
+,
+99
+], time to pregnancy [
+96
+], and in utero anogenital distance in humans [
+98
+].
+
+A meta-analysis of 10 case-control studies in humans found significantly increased odds of endometriosis associated with exposure to dioxin mixtures and TCDD (OR = 1.65, 95% confidence interval [CI]: 1.14, 2.39) [
+93
+], with supporting suggestive epidemiological evidence reported in another systematic review of dioxins and dioxin-like chemical (DLC) exposures [
+99
+]. Findings from animal studies of TCDD and DLCs were largely consistent with those from human studies, reporting associations with endometriosis and endometriotic lesions following exposures [
+97
+]. Results from the review of animal studies are consistent with endometriosis findings in the animal studies included in authoritative reviews.
+
+Results were mixed across eight studies reviewed by Kahn et al. [
+96
+] and two additional studies reviewed by Nelson et al. [
+98
+] examining changes in time to pregnancy and in utero anogenital distance in humans [
+96
+,
+98
+]. Exposure assessment was heterogeneous across the eight studies, with some studies assessing TCDD or PCDDs/Fs and others assessing dioxin-like polychlorinated biphenyl (PCB) congeners.
+Cancer effects
+
+Three systematic reviews examined associations between dioxins and cancer outcomes (soft tissue sarcoma and breast cancer) in humans [
+92
+,
+95
+,
+101
+]. A meta-analysis of four cohorts reported a significant association between occupational exposure to dioxin mixtures, including exposure to TCDD in three cohorts, and soft tissue sarcoma mortality (pooled standardized mortality ratio (SMR) (95% CI) = 2.56 (1.60, 4.10)) [
+95
+]. This finding was supported by a case-control study from another systematic review, which observed increased risk of soft tissue sarcoma with increased TCDD and PCDD/F exposure levels [
+92
+]. These findings are consistent with the IARC conclusion that there is limited evidence from studies in humans of an association between TCDD and soft tissue sarcoma [
+47
+]. Across the two reviews, two studies reported on exposures to dioxins other than TCDD, and both studies reported positive associations with soft tissue sarcoma.
+
+A systematic review of environmental exposures and breast cancer identified only one study on dioxin exposure: a case-control nested in a French cohort study, which found increased odds of early onset breast cancer for the second quintile of dioxin exposure. ORs were imprecise for higher dioxin exposure, and no exposure-response trends were observed [
+101
+].
+Neurological effects
+
+Two systematic reviews of studies reporting on attention deficit hyperactivity disorder (ADHD) in children and air pollution exposure [
+91
+], as well as autism in children and adolescents and exposure to endocrine disrupting chemicals [
+94
+], included studies of exposure to dioxins. Results for ADHD were mixed across two cohort studies, with both positive and negative associations observed [
+91
+]. One study was found that examined child autism following prenatal exposures to DLCs and reported decreased social responsiveness, particularly in girls [
+94
+]. No associations were reported for other autistic traits.
+Evidence gap summary
+
+Systematic reviews
+critically assessing the bodies of available human, animal, and mechanistic evidence on exposures to dioxin mixtures may be warranted for endometriosis. Additional studies examining soft tissue sarcoma and neurological effects are needed, as findings were mixed (soft tissue sarcoma) or few studies were identified (neurological effects). A research gap remains for health outcome categories other than reproductive/developmental, neurological, and cancer.
+Discussion
+
+This review applied a rapid, phased approach to scope available health hazard information for chemicals released or suspected to be released during the East Palestine, Ohio train derailment. We considered eight chemicals (acrolein, butyl acrylate, 2-butoxyethanol, 2-ethylhexyl acrylate, benzene, hydrogen chloride, phosgene gas, and vinyl chloride) in higher-priority categories (i.e., highest or high) for identification of key health effect data gaps based on the potential for exposure.
+
+Our review found that irritant was the most established health outcome; all eight higher-priority chemicals were identified as skin and eye irritants and seven as respiratory irritants. These findings are consistent with some acute symptoms reported by those affected following the train derailment in East Palestine. Five of the eight higher-priority chemicals were human (benzene and vinyl chloride) or animal carcinogens (butyl acrylate, 2-butoxyethanol, and 2-ethylhexyl acrylate). Studies in humans remained a research gap, as few additional human studies were identified in Phase 2 searches. Reproductive and developmental outcomes were the most studied noncancer outcomes. Few conclusions were available from authoritative sources for other noncancer outcomes, including neurological and immunological effects. Benzene and vinyl chloride were deemed harmful to reproductive and/or developmental systems and are associated with neurological and immunological effects. Four (acrolein, 2-butoxyethanol, butyl acrylate, and 2-ethylhexyl acrylate) were of low or no concern for reproductive or developmental effects. Our review reveals key health hazard evidence gaps for neurological effects following exposures to acrolein, butyl acrylate, 2-butoxyethanol, and 2-ethylhexyl acrylate. We also recommend conducting a systematic review to identify primary studies for neurological effects associated with acrolein exposure, as our report focused on reviews only. Finally, studies assessing immunotoxicity following 2-butoxyethanol and butyl acrylate exposure should be pursued, as many identified studies reported observational immune findings from studies of general toxicity. Additional research may be needed before a systematic review is pursued.
+
+Among the potentially related chemicals, conclusions were not available for most health outcome categories for the five PFAS or dioxins other than TCDD. Additional studies examining the health effects associated with 6:2 FTSA and dioxin mixtures are needed. A systematic review may also be warranted to identify primary literature on dioxin mixtures and the potential association with endometriosis.
+
+While we aimed to conduct a robust and transparent assessment of the available literature on health effects following exposure to the chemicals of interest, this literature scoping review has some limitations.
+
+First, this review did not incorporate measures to determine the true exposure or risk experienced by East Palestine residents. As stated above, the focus of our review was on chemical human hazard identification, a necessary first step in environmental risk assessment, and vital for informing decision-making in scenarios such as the East Palestine train derailment. However, we want to emphasize that the process for identifying human health hazards should not be conflated with an automatic risk to human health. Determining that a chemical poses a potential hazard to human health does not establish that it will cause those hazards for individuals. Many factors that vary by the individual, including exposure-related factors (e.g., characteristics of exposure, co-exposures, and evacuation activities) and individual susceptibilities, influence an individual’s risk of adverse health effects. Public health decision makers should take into account that health hazard conclusions for single chemicals may underestimate the risk from a disaster to a specific community due to insufficient information on exposure and population susceptibility. The complete exposure scenario of relevant exposure pathways is unknown, and, in some cases, definitive information on the chemicals released was difficult to obtain. A study published after the completion of our literature scoping found that people may have been exposed via multiple sources or pathways, including indoor air, ambient air, surface water, and clean-up activities for months following the derailment [
+102
+]. Risk assessment, considering evidence-based hazard and exposure information, would then guide response activities. As such, caution should be given when interpreting and communicating results from hazard assessments. Certain subgroups–such as those living below the poverty level (~10%) [
+103
+], children, with underlying health conditions, or those exposed to higher exposure based on where they work or live–in East Palestine may have a higher risk for adverse health effects from the disaster. According to the EPA EJScreen [
+104
+], East Palestine, OH, ranks high in the percentile (80 to 90%) for low life expectancy, heart disease, and, to a lesser degree, asthma (50 to 80%). Lower socioeconomic status (low income, unemployment rate, and less than a high school education) is a concern in some of the surrounding communities. Additionally, community members were likely exposed to mixtures of chemicals that may present a greater risk than that reflected by hazard conclusions for single chemicals. Although EPA did not report PM
+2.5
+levels in their monitoring dashboards [
+105
+], they were likely increased from the fire. Elevated PM
+2.5
+is associated with increased risk for adverse health outcomes such as respiratory effects, cardiovascular disease [
+106
+], and lung cancer. In addition to the derailment chemicals, East Palestine ranks high for several environmental burden indicators, including toxic releases to the air, ozone, lead paint, underground storage tanks, wastewater discharges, and drinking water non-compliance, which may all play a role in adverse health effects.
+
+Second, the heterogeneity of reviews from authoritative sources in Phase 1 should be acknowledged. Reports from authoritative sources did not always provide clear interpretations of the available data, and, in some cases, different reports provided conflicting interpretations of largely similar databases. These variations made it difficult to synthesize across some authoritative conclusions. Some reviews emphasized animal studies designed to assess toxicities to a specific organ system, such as neurotoxicity or immunotoxicity studies, whereas other authoritative reviews also integrated relevant endpoints from animal studies of general toxicity. Additionally, some reports (e.g., reports from ECHA) presented hazard data but drew risk-based conclusions, whereas others made hazard conclusions only. Not all authoritative sources incorporate mechanistic data, such as biological effects and key characteristics of carcinogens [
+107
+], cardiovascular toxicants [
+108
+], immune toxicants [
+109
+], reproductive toxicants [
+110
+,
+111
+], or endocrine-disrupting chemicals [
+112
+], into their hazard conclusions. Finally, the language used to describe hazards and risks is not harmonized across sources. While some provide clear hazard conclusions with specific codified language, others summarize health effects data without obvious conclusive statements. In some cases, the variable language across sources made it difficult to discern hazard conclusions. Future reviews that follow this approach should consider the authoritative sources most informative for their topic and how findings across sources can be synthesized accurately and consistently.
+
+Third, industrial chemicals, including those in this review, often have publicly available toxicological data that are not accessible in research journal articles or databases such as PubMed. Our search and synthesis of the information in the gray literature relied upon interpretations from authoritative sources (i.e., conclusions in reviews and reports from entities such as ATSDR, ECHA, EPA IRIS, and CalEPA). While ECHA reports and classification and labeling documents were reviewed to identify as much data as possible, some information in the gray literature may not have been identified.
+
+Fourth, there may have been some published literature that was not identified during our searches. For example, some measures common in most animal studies (e.g., brain weight) may not be reported in the title and abstract of a study. If relevant endpoints were not discussed in the title and abstract, these studies were not identified in our review process. Additionally, two searches identified review articles only (acrolein and neurological effects, and dioxins other than TCDD and any health effects). As such, the available primary literature is not summarized but may provide useful information on these effects.
+
+Fifth, because our review was associated with the NASEM workshop, the assessment was initiated several weeks after the train derailment, and the data were not released in phases. Figure
+1
+provides a timeline estimate of data were released in phases, which would have informed shorter-term research responses. For example, in a phased scoping review, comprehensive information on known and unknown health effects of multiple chemicals could be reported within weeks of a disaster or less for subsets of higher-priority chemicals. Nevertheless, because many non-cancer and cancer outcomes may have longer latency periods, our report provides meaningful and comprehensive knowledge to inform the affected community, health providers, and researchers.
+
+Finally, our assessment of the available literature did not include an evaluation of study quality and risk of bias, which are traditionally conducted during systematic reviews, especially those of single chemicals, and without time restrictions. In addition to the potential for bias, studies finding no effects may not be sensitive to detect a true effect. While efforts were made to consider the available data in a standardized way, our results should be interpreted with appropriate caution.
+
+Our review also had several strengths. This fit-for-purpose rapid review method can be used to search and review the literature on many chemicals simultaneously, allows for a broad understanding of hazard, and enables decision-makers to expedite the gathering of hazard information for a variety of chemicals on a compressed timeline. Additionally, a phased approach facilitates the delivery of different review products based on project needs and timelines. While we aimed to provide information responsive to the health concerns expressed by the affected community and, thus, focused on this specific incident, these chemicals are used in a variety of contexts and enter the environment regularly. Moreover, we believe this rapid, phased approach can be leveraged broadly for environmental emergencies, when the need for health hazard information is urgent, and time may be limited. According to the chemical incident database compiled by the Coalition to Prevent Chemical Disasters, there were 52 unique incidents across 20 states between 2021 and 2023 that involved at least one of the chemicals of interest in this review [
+1
+]. Therefore, the summarized hazard information in this review can also be used beyond the context of the East Palestine train derailment, including at facilities using these chemicals as part of EPA’s Risk Management Program.
+
+This rapid review summarizes the available health hazard data for 22 chemicals released or potentially released during the East Palestine, Ohio train derailment and subsequent controlled burn and identifies known and suspected hazards and research gaps.
+
+Our evaluation serves to inform health officials who communicate with the affected individuals and organizations in the East Palestine community, to foster further efforts to better characterize health hazards following environmental exposures, and to protect the general population from such hazardous health effects in the future. An infographic was developed with the aim to communicate our approach and review findings to affected community members (Supplemental Fig.
+S4
+). Still, findings from rapid reviews should be interpreted with caution. Importantly, this review solely summarized evidence for hazard identification and, thus, does not integrate data on the likelihood of exposure to the chemicals of interest or provide conclusions related to risk. These hazard-related findings should not be used to contextualize the potential for exposure following the derailment. In addition, the absence of health effect data on chemicals should not be construed as implying that they are not associated with specific adverse outcomes or are safe. Public health decision-makers often need to take action to protect people in the absence of knowledge. The review also helps to inform investigators conducting ongoing studies of the health of the community and surrounding areas. Despite limitations, this rapid review approach can be adapted to expedite the identification of available hazard evidence to inform environmental emergency decision-making and research prioritization.
+Supplementary information
+
+Supplementary information
+(809.4KB, docx)
+
+Supplementary information
+(504KB, pdf)
+
+Supplementary information
+(86.1KB, xlsx)
+
+Acknowledgements
+
+The authors would like to thank S.A. Masten and M.S. Wolfe for internal review and K.A. Shipkowski for her role as contact officer representative. The authors would also like to thank the following ICF staff members (current and former) for their technical support in executing this literature scoping review: R. Beilinson, G.M. Christensen, J. Finver, S. Folger, J. Frye, S.E. Gillera, S. Goodman, R. Gray, K. Lenae, A. Maresca, R. McGill, M.A. Mendez, D. Moore, K. O’Donovan, A. Peppriell, J. Robertson, C. Sibrizzi, J. Sprowles, S. Sriram, O. Ware, K. Weinberger.
+Author contributions
+
+RML developed the research concept, and SM, SSM, AR, AS, SSR, KT, and SEF reviewed. RML, MC, RB, MZ, and SEF contributed to the design of the study. RML, MC, AR, and SEF contributed to drafting the manuscript. WT contributed to data visualization. RML, MC, RB, SM, SSM, AR, AS, SSR, KT, and SEF contributed to detailed technical review. The authors read and approved the final manuscript.
+Funding
+
+This work was supported in part by the Intramural Research Program of the National Institutes of Health and ICF [Contract GS00Q14OADU417 Order HHSN273201600015U]. Open access funding provided by the National Institutes of Health.
+Data availability
+
+All data generated or analyzed during this study are included in this published article and its supplementary information files.
+Competing interests
+
+The authors declare no competing interests.
+Ethical approval
+
+This study relied upon secondary data and did not require ethical approval.
+Footnotes
+
+Publisher’s note
+Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.
+
+These authors contributed equally: Ruth M. Lunn, Meredith Clemons.
+
+Supplementary information
+
+The online version contains supplementary material available at 10.1038/s41370-025-00803-0.
+References
+
+1.
+Coalition to Prevent Chemical Disasters. (2023).
+https://www.preventchemicaldisasters.org/
+. Accessed 1 Dec 2023.
+
+2.
+U.S. Environmental Protection Agency (USEPA). East Palestine, Ohio train derailment. Washington, DC: U.S. Environmental Protection Agency; (2023).
+https://www.epa.gov/east-palestine-oh-train-derailment
+. Accessed 1 Dec 2023.
+
+3.
+Oladeji O, Saitas M, Mustapha T, Johnson NM, Chiu WA, Rusyn I, et al. Air pollutant patterns and human health risk following the East Palestine, Ohio, train derailment. Environ Sci Technol Lett. 2023;10:680–685. 10.1021/acs.estlett.3c00324.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+4.
+Elverd S. East Palestine today: ACE surveys show similar symptoms. Parkersburg News and Sentinel; (2023) Apr.
+https://www.newsandsentinel.com/news/business/2023/04/east-palestine-today-ace-surveys-show-similar-symptoms/
+.
+
+5.
+Ohio Emergency Management Agency. East Palestine update - 4/03/23. Columbus, OH: Ohio Emergency Management Agency; (2023).
+https://ema.ohio.gov/media-publications/news/040323-east-palestine-update
+.
+
+6.
+Ohio Emergency Management Agency. East Palestine urgent evacuation notice. Columbus, OH: Ohio Emergency Management Agency; (2023) Feb.
+https://ema.ohio.gov/media-publications/news/dewine-020523
+.
+
+7.
+CNN/KDKA. CDC team studying health impacts of East Palestine train derailment fell ill during investigation. CBS News Pittsburgh/KDKA News; (2023) Mar.
+https://www.cbsnews.com/pittsburgh/news/cdc-team-sick-east-palestine-ohio-train-derailment/
+.
+
+8.
+Ohio Department of Health (ODH), Agency for Toxic Substances and Disease Registry (ATSDR). Assessment of chemical exposure investigation results. Lisbon, OH: Columbiana County Health District; (2023).
+https://www.columbiana-health.org/wp-content/uploads/ACE-Community-Fact-Sheet-OH-Final.pdf
+.
+
+9.
+Ohio Department of Health (ODH), Agency for Toxic Substances and Disease Registry (ATSDR). Ohio first responder assessment of chemical exposures (ACE) investigation results: Information about the February 3, 2023, train derailment in East Palestine, Ohio. Lisbon, OH: Columbiana County Health District; (2023).
+https://www.columbiana-health.org/wp-content/uploads/RES-OH-ACE-fact-sheet-print-version_FINAL.pdf
+.
+
+10.
+National Institute of Environmental Health Sciences (NIEHS). Emerging Contaminants and Issues of Concern Program. Research Triangle Park, NC: U.S. Department of Health and Human Services, National Institutes of Health, National Institute of Environmental Health Sciences; (2023).
+https://www.niehs.nih.gov/research/atniehs/dtt/strategic-plan/responsive/emerging
+. Accessed 4 Nov 2024.
+
+11.
+National Academies of Sciences, Engineering, and Medicine. Public health research and surveillance priorities from the East Palestine train derailment: Proceedings of a workshop–In brief. Washington, DC: The National Academies Press; (2024). 10.17226/27441.
+[
+PubMed
+]
+
+12.
+Gauntner M. EPA lists rail car contents in birds eye view of East Palestine derailment. 21-WFMJ; (2023) Mar.
+https://www.wfmj.com/story/48499415/epa-lists-rail-car-contents-in-birds-eye-view-of-east-palestine-derailment
+.
+
+13.
+Norfolk Southern. [Train 32N - East Palestine - derail list Norfolk Southern document]. Washington, DC: U.S. Environmental Protection Agency; (2023).
+https://www.epa.gov/system/files/documents/2023-02/TRAIN%2032N%20-%20EAST%20PALESTINE%20-%20derail%20list%20Norfolk%20Southern%20document.pdf
+. Accessed 21 Oct 2024.
+
+14.
+Biden JR Jr. Executive Order 14108. Ensuring the people of East Palestine are protected now and in the future. 88 FR 66265. 2023 Sep 20.
+https://www.federalregister.gov/documents/2023/09/26/2023-21174/ensuring-the-people-of-east-palestine-are-protected-now-and-in-the-future
+.
+
+15.
+Pennsylvania Department of Health, Pennsylvania Department of Environmental Protection. East Palestine train derailment, East Palestine, Ohio: Frequently asked questions. Updated: November 6, 2023. Harrisburg, PA: Pennsylvania Department of Health; (2023).
+https://www.pa.gov/content/dam/copapwp-pagov/en/health/documents/topics/documents/environmental-health/FAQ%20NS%20Train%20Derailment_East%20Palestine%20OH.pdf
+.
+
+16.
+U.S. Environmental Protection Agency (USEPA). Enforcement action memorandum – Determination of threat to public health and the environment at the East Palestine train derailment site, East Palestine, Columbiana County, Ohio (Site ID: C5XR). Westlake, OH: U.S. Environmental Protection Agency, Region 5; (2023).
+https://www.epa.gov/system/files/documents/2023-03/Action%20Memo%20%28REDACTED%29%20-%20East%20Palestine%20Derailment%20ER%20-%2020230221.pdf
+.
+
+17.
+Chow D, Abou-Sabe K. Ohio derailment: What chemicals spilled and how could they affect residents? New York: NBC News; (2023) Feb.
+https://www.nbcnews.com/science/science-news/ohio-derailment-chemicals-spilled-impact-residents-rcna71561
+.
+
+18.
+NewsNation. East Palestine dioxins thousands of times higher than control. Nexstar Media Inc.; (2023) Jul.
+https://www.newsnationnow.com/us-news/midwest/ohio-train-derailment/extreme-levels-cancer-chemicals-east-palestine-soil/
+.
+
+19.
+Borrasso J. Testing finds toxic chemical levels near derailment site substantially higher than samples in neighboring towns. CBS News Pittsburgh/KDKA News; (2023) Jul.
+https://www.cbsnews.com/pittsburgh/news/independent-testing-results-east-palestine-ohio-train-derailment/
+.
+
+20.
+U.S. Environmental Protection Agency (USEPA). Memorandum from Mike Devito, Keith Fusinski, Michelle Kerr, Mark Durno on behalf of the Environmental Unit for the East Palestine Train Derailment to Ralph Dollhopf, Incident Commander: Summary of phase 1 dioxin results for the East Palestine derailment incident. Chicago, IL: U.S. Environmental Protection Agency, Region 5; (2023).
+https://www.epa.gov/system/files/documents/2023-10/phase-1-soil-sampling-technical-memo-20230914pdf.pdf
+.
+
+21.
+Haynes EN, Eskenazi B, Hilbert TJ, Brancato C, Holland N, Kim C, et al. Serum dioxin levels in a subset of participants of the East Palestine, Ohio Train Derailment Health Tracking Study. Environ Sci Technol Lett. 2024;11:673–8. 10.1021/acs.estlett.4c00263.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+22.
+Arcadis. East Palestine, OH derailment waste management plan. Revision 6. Washington, DC: U.S. Environmental Protection Agency; (2023).
+https://www.epa.gov/system/files/documents/2023-06/NS_East%20Palestine%20IRR_WMP_4.18.2023_Vol%201-508.pdf
+. Accessed 4 Nov 2024.
+
+23.
+Ruyle BJ, Thackray CP, Butt CM, LeBlanc DR, Tokranov AK, Vecitis CD, et al. Centurial persistence of forever chemicals at military fire training sites. Environ Sci Technol. 2023;57:8096–106. 10.1021/acs.est.3c00675.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+24.
+Houtz EF, Higgins CP, Field JA, Sedlak DL. Persistence of perfluoroalkyl acid precursors in AFFF-impacted groundwater and soil. Environ Sci Technol. 2013;47:8187–95. 10.1021/es4018877.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+25.
+Place BJ, Field JA. Identification of novel fluorochemicals in aqueous film-forming foams used by the US military. Environ Sci Technol. 2012;46:7120–7. 10.1021/es301465n.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+26.
+Ruyle BJ, Thackray CP, McCord JP, Strynar MJ, Mauge-Lewis KA, Fenton SE, et al. Reconstructing the composition of per- and polyfluoroalkyl substances in contemporary aqueous film-forming foams. Environ Sci Technol Lett. 2021;8:59–65. 10.1021/acs.estlett.0c00798.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+27.
+Rosenfeld PE, Spaeth KR, Remy LL, Byers V, Muerth SA, Hallman RC, et al. Perfluoroalkyl substances exposure in firefighters: Sources and implications. Environ Res. 2023;220:115164. 10.1016/j.envres.2022.115164.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+28.
+Trowbridge J, Gerona RR, Lin T, Rudel RA, Bessonneau V, Buren H, et al. Exposure to perfluoroalkyl substances in a cohort of women firefighters and office workers in San Francisco. Environ Sci Technol. 2020;54:3363–74. 10.1021/acs.est.9b05490.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+29.
+U.S. Environmental Protection Agency (USEPA). Access Chemical Data Reporting data: 2020 CDR data. Washington, DC: U.S. Environmental Protection Agency; (2020).
+https://www.epa.gov/chemical-data-reporting/access-chemical-data-reporting-data#2020
+. Accessed 7 Nov 2023.
+
+30.
+U.S. Environmental Protection Agency (USEPA). CompTox Chemicals Dashboard. Washington, DC: U.S. Environmental Protection Agency; (2023).
+https://comptox.epa.gov/dashboard/
+. Accessed 1 Jun 2023.
+
+31.
+National Research Council Subcommittee on Acute Exposure Guideline Levels (NRC). Acute exposure guideline levels for selected airborne chemicals: Volume 2. Phosgene: Acute exposure guideline levels. Washington, DC: The National Academies Press; (2002).
+https://www.ncbi.nlm.nih.gov/books/NBK207602/
+.
+
+32.
+National Research Council Subcommittee on Acute Exposure Guideline Levels (NRC). Acute exposure guideline levels for selected airborne chemicals: Volume 4. Hydrogen chloride: Acute exposure guideline levels. Washington, DC: The National Academies Press; (2004).
+https://www.ncbi.nlm.nih.gov/books/NBK207738/
+.
+
+33.
+Agency for Toxic Substances and Disease Registry (ATSDR). Toxicological profile for benzene: Draft for public comment, October 2024. Atlanta, GA: U.S. Department of Health and Human Services, Public Health Service, Agency for Toxic Substances and Disease Registry; (2024).
+https://www.atsdr.cdc.gov/toxprofiles/tp3.pdf
+.
+
+34.
+Causaly. Generative AI for life sciences. London, UK: Causaly; (2023).
+https://www.causaly.com/
+. Accessed 1 Jun 2023.
+
+35.
+Sciome. SWIFT-Review search strategies. Research Triangle Park, NC: Sciome; (2023).
+https://www.sciome.com/swift-review/searchstrategies/
+. Accessed 1 Jun 2023.
+
+36.
+National Toxicology Program (NTP). Handbook for preparing report on carcinogens monographs. Research Triangle Park, NC: U.S. Department of Health and Human Services, National Institute of Environmental Health Sciences, Division of the National Toxicology Program, Office of the Report on Carcinogens; (2015).
+https://ntp.niehs.nih.gov/go/rochandbook
+. Accessed 15 Oct 2023.
+
+37.
+Carlson LM, Angrish M, Shirke AV, Radke EG, Schulz B, Kraft A, et al. Systematic evidence map for over one hundred and fifty per- and polyfluoroalkyl substances (PFAS). Environ Health Perspect. 2022;130:56001. 10.1289/ehp10343.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+38.
+Shirke AV, Radke EG, Lin C, Blain R, Vetter N, Lemeris C, et al. Expanded systematic evidence map for hundreds of per- and polyfluoroalkyl substances (PFAS) and comprehensive PFAS human health dashboard. Environ Health Perspect. 2024;132:26001. 10.1289/ehp13423.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+39.
+U.S. Environmental Protection Agency (USEPA). Health Assessment Workspace Collaborative (HAWC): Comprehensive PFAS Dashboard. Washington, DC: U.S. Environmental Protection Agency; (2024).
+https://hawc.epa.gov/summary/visual/assessment/100500256/Comprehensive-PFAS-Dashboard/
+. Accessed 4 Nov 2024.
+
+40.
+DistillerSR Inc. DistillerSR: Literature review software. Ottawa, Ontario, Canada: DistillerSR Inc.; (2023).
+https://www.distillersr.com/products/distillersr-systematic-review-software
+. Accessed 1 Aug 2023.
+
+41.
+European Chemicals Bureau (ECB). European Union risk assessment report: Acrylaldehyde, CAS No.: 107-02-8, EINECS No.: 203-453-4. Ispra, Italy: European Commission - Joint Research Centre, Institute for Health and Consumer Protection, European Chemicals Bureau; (2001). EUR 19728 EN.
+https://echa.europa.eu/documents/10162/5cc7a672-4883-4bef-9d81-df93a25e07e5
+.
+
+42.
+Office of Environmental Health Hazard Assessment (OEHHA). The Proposition 65 List. Sacramento, CA: California Environmental Protection Agency, Office of Environmental Health Hazard Assessment; (2023).
+https://oehha.ca.gov/proposition-65/proposition-65-list
+. Accessed 15 Jun 2023.
+
+43.
+International Agency for Research on Cancer (IARC). Vinyl chloride. In: IARC Monographs on the Evaluation of Carcinogenic Risks to Humans, Volume 100F: Chemical Agents and Related Occupations. Lyon, France: International Agency for Research on Cancer; p. 451-78. (2012)
+https://publications.iarc.fr/_publications/media/download/5298/99cdb189e76ab4cc02a2995ae888f652ae82aff6.pdf
+.
+
+44.
+International Agency for Research on Cancer (IARC). IARC monographs on the evaluation of carcinogenic risks to humans, 120: Benzene. Lyon, France: International Agency for Research on Cancer; (2018).
+https://publications.iarc.fr/576
+.
+[
+PMC free article
+] [
+PubMed
+]
+
+45.
+National Toxicology Program (NTP). 15th Report on carcinogens: Vinyl halides (selected). Research Triangle Park, NC: U.S. Department of Health and Human Services, Public Health Service, National Toxicology Program; (2021).
+https://ntp.niehs.nih.gov/sites/default/files/ntp/roc/content/profiles/vinylhalides.pdf
+.
+
+46.
+National Toxicology Program (NTP). 15th Report on carcinogens: Benzene, CAS No. 71-43-2. Research Triangle Park, NC: U.S. Department of Health and Human Services, Public Health Service, National Toxicology Program; (2021).
+https://ntp.niehs.nih.gov/sites/default/files/ntp/roc/content/profiles/benzene.pdf
+.
+
+47.
+International Agency for Research on Cancer (IARC). 2,3,7,8-Tetrachlorodibenzo-para-dioxin, 2,3,4,7,8-pentachlorodibenzofuran, and 3,3′,4,4′,5-pentachlorobiphenyl. In: IARC Monographs on the Evaluation of Carcinogenic Risks to Humans, Volume 100F: Chemical Agents and Related Occupations. Lyon, France: International Agency for Research on Cancer; p. 339-78. (2012)
+https://publications.iarc.fr/_publications/media/download/5294/54fa5d8636ffa820655319ed30187a23c866f4c6.pdf
+.
+
+48.
+National Toxicology Program (NTP). 15th Report on carcinogens: 2,3,7,8-Tetrachlorodibenzo-p-dioxin, CAS No. 1746-01-6. Research Triangle Park, NC: U.S. Department of Health and Human Services, Public Health Service, National Toxicology Program; (2021).
+https://ntp.niehs.nih.gov/sites/default/files/ntp/roc/content/profiles/tetrachlorodibenzodioxin.pdf
+.
+
+49.
+Office of Environmental Health Hazard Assessment (OEHHA). Appendix A: Hot spots unit risk and cancer potency values: Updated April 2023. Sacramento, CA: California Environmental Protection Agency, Office of Environmental Health Hazard Assessment; (2023).
+https://oehha.ca.gov/media/downloads/crnr/appendixa.pdf
+.
+
+50.
+Agency for Toxic Substances and Disease Registry (ATSDR). Toxicological profile for acrolein. Atlanta, GA: U.S. Department of Health and Human Services, Public Health Service, Agency for Toxic Substances and Disease Registry; (2007).
+https://www.atsdr.cdc.gov/ToxProfiles/tp124.pdf
+.
+
+51.
+U.S. Environmental Protection Agency (USEPA). Toxicological review of acrolein (CAS No. 107-02-8). Washington, DC: U.S. Environmental Protection Agency; (2003). EPA Report No. EPA/635/R-03/003.
+https://iris.epa.gov/static/pdfs/0364tr.pdf
+.
+
+52.
+Office of Environmental Health Hazard Assessment (OEHHA). TSD for noncancer RELS: Appendix D. Individual acute, 8-hour, and chronic reference exposure level summaries. Sacramento, CA: California Environmental Protection Agency, Office of Environmental Health Hazard Assessment; (2014).
+https://oehha.ca.gov/media/downloads/crnr/appendixd1final.pdf
+.
+
+53.
+Chang X, Wang Y, Zheng B, Chen Y, Xie J, Song Y, et al. The role of acrolein in neurodegenerative diseases and its protective strategy. Foods. 2022;11:3203 10.3390/foods11203203.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+54.
+Igarashi K, Uemura T, Kashiwagi K. Acrolein toxicity at advanced age: Present and future. Amino Acids. 2018;50:217–28. 10.1007/s00726-017-2527-x.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+55.
+Igarashi K, Uemura T, Kashiwagi K. Assessing acrolein for determination of the severity of brain stroke, dementia, renal failure, and Sjögren’s syndrome. Amino Acids. 2020;52:119–27. 10.1007/s00726-019-02700-x.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+56.
+Moghe A, Ghare S, Lamoreau B, Mohammad M, Barve S, McClain C, et al. Molecular mechanisms of acrolein toxicity: Relevance to human disease. Toxicol Sci. 2015;143:242–55. 10.1093/toxsci/kfu233.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+57.
+Muguruma K, Pradipta AR, Ode Y, Terashima K, Michiba H, Fujii M, et al. Disease-associated acrolein: A possible diagnostic and therapeutic substrate for in vivo synthetic chemistry. Bioorg Med Chem. 2020;28:115831. 10.1016/j.bmc.2020.115831.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+58.
+Park MH, Igarashi K. Polyamines and their metabolites as diagnostic markers of human diseases. Biomol Ther (Seoul). 2013;21:1–9. 10.4062/biomolther.2012.097.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+59.
+Singh M, Nam DT, Arseneault M, Ramassamy C. Role of by-products of lipid oxidation in Alzheimer’s disease brain: A focus on acrolein. J Alzheimers Dis. 2010;21:741–56. 10.3233/jad-2010-100405.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+60.
+Alarie Y. Sensory irritation by airborne chemicals. CRC Crit Rev Toxicol. 1973;2:299–363. 10.3109/10408447309082020.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+61.
+Iqubal A, Ahmed M, Ahmad S, Sahoo CR, Iqubal MK, Haque SE. Environmental neurotoxic pollutants: Review. Environ Sci Pollut Res. 2020;27:41175–98. 10.1007/s11356-020-10539-z.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+62.
+Arlt S, Beisiegel U, Kontush A. Lipid peroxidation in neurodegeneration: New insights into Alzheimer’s disease. Curr Opin Lipido. 2002;13:289–94. 10.1097/00041433-200206000-00009.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+63.
+LoPachin RM, Gavin T, Barber DS. Type-2 alkenes mediate synaptotoxicity in neurodegenerative diseases. Neurotoxicology. 2008;29:871–82. 10.1016/j.neuro.2008.04.016.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+64.
+International Agency for Research on Cancer (IARC). IARC monographs on the evaluation of carcinogenic risks to humans, volume 88: Formaldehyde, 2-butoxyethanol and 1-tert-butoxypropan-2-ol. Lyon, France: International Agency for Research on Cancer; (2006).
+https://publications.iarc.fr/106
+.
+[
+PMC free article
+] [
+PubMed
+]
+
+65.
+National Toxicology Program (NTP). NTP technical report on the toxicology and carcinogenesis studies of 2-butoxyethanol (CAS No. 111-76-2) in F344/N rats and B6C3F1 mice (inhalation studies). Research Triangle Park, NC: U.S. Department of Health and Human Services, Public Health Service, National Institutes of Health, National Toxicology Program; (2000). NTP Technical Report No. 484. NIH Publication No. 00-3974.
+https://ntp.niehs.nih.gov/sites/default/files/ntp/htdocs/lt_rpts/tr484.pdf
+.
+[
+PubMed
+]
+
+66.
+U.S. Environmental Protection Agency (USEPA). Toxicological review of ethylene glycol monobutyl ether (EGBE) (CAS No. 111-76-2). Washington, DC: U.S. Environmental Protection Agency; (2010) EPA Report No. EPA/635/R-08/006F.
+https://iris.epa.gov/static/pdfs/0500tr.pdf
+.
+
+67.
+Office of Environmental Health Hazard Assessment (OEHHA). Ethylene glycol mono-n-butyl ether reference exposure levels: Technical support document for the derivation of noncancer reference exposure levels: Appendix D1. Sacramento, CA: California Environmental Protection Agency, Office of Environmental Health Hazard Assessment; (2018).
+https://oehha.ca.gov/media/downloads/crnr/finalegberel050418.pdf
+.
+
+68.
+Rodrigues EG, Herrick RF, Stewart J, Palacios H, Laden F, Clark W, et al. Case-control study of brain and other central nervous system cancer among workers at semiconductor and storage device manufacturing facilities. Occup Environ Med. 2020;77:238–48. 10.1136/oemed-2019-106120.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+69.
+Agency for Toxic Substances and Disease Registry (ATSDR). Toxicological profile for 2-butoxyethanol and 2-butoxyethanol acetate. Atlanta, GA: U.S. Department of Health and Human Services, Public Health Service, Agency for Toxic Substances and Disease Registry; (1998).
+https://www.atsdr.cdc.gov/ToxProfiles/tp118.pdf
+.
+[
+PubMed
+]
+
+70.
+Song SH, Kang SK, Choi WJ, Kwak KM, Lee DH, Kang DY, et al. Reticulocytosis in screen-printing workers exposed to 2-butoxyethanol and 2-ethoxyethanol. Ann Occup Environ Med. 2017;29:54. 10.1186/s40557-017-0210-z.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+71.
+Chereshnev VA, Kosareva PV, Samodelkin EI, Sivakova LV. A new experimental model of hemolytic anemia after butoxyethanol and the study of its immunology. Hell J Nucl Med. 2014;17:7–10.
+[
+PubMed
+] [
+Google Scholar
+]
+
+72.
+Dodd DE, Snellings WM, Maronpot RR, Ballantyne B. Ethylene glycol monobutyl ether: Acute, 9-day, and 90-day vapor inhalation studies in Fischer 344 rats. Toxicol Appl Pharm. 1983;68:405–14. 10.1016/0041-008x(83)90285-5.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+73.
+Mather ExonJH, Bussiere GG, Olson JL, Talcott DP. PA. Effects of subchronic exposure of rats to 2-methoxyethanol or 2-butoxyethanol: Thymic atrophy and immunotoxicity. Fundam Appl Toxicol. 1991;16:830–40. 10.1016/0272-590(91)90168-4.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+74.
+Ghanayem BI, Blair PC, Thompson MB, Maronpot RR, Matthews HB. Effect of age on the toxicity and metabolism of ethylene glycol monobutyl ether (2-butoxyethanol) in rats. Toxicol Appl Pharm. 1987;91:222–34. 10.1016/0041-008x(87)90103-7.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+75.
+Grant D, Sulsh S, Jones HB, Gangolli SD, Butler WH. Acute toxicity and recovery in the hemopoietic system of rats after treatment with ethylene glycol monomethyl and monobutyl ethers. Toxicol Appl Pharm. 1985;77:187–200. 10.1016/0041-008x(85)90318-7.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+76.
+Krasavage WJ. Subchronic oral toxicity of ethylene glycol monobutyl ether in male rats. Fundam Appl Toxicol. 1986;6:349–55. 10.1016/0272-590(86)90250-2.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+77.
+Singh P, Zhao S, Blaylock BL. Topical exposure to 2-butoxyethanol alters immune responses in female BALB/c mice. Int J Toxicol. 2001;20:383–90. 10.1080/109158101753333668.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+78.
+Smialowicz RJ, Williams WC, Riddle MM, Andrews DL, Luebke RW, Copeland CB. Comparative immunosuppression of various glycol ethers orally administered to Fischer 344 rats. Fundam Appl Toxicol. 1992;18:621–7. 10.1016/0272-590(92)90123-y.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+79.
+Starek A, Szymczak W, Zapor L. Hematological effects of four ethylene glycol monoalkyl ethers in short-term repeated exposure in rats. Arch Toxicol. 2008;82:125–36. 10.1007/s00204-007-0236-z.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+80.
+Office of Environmental Health Hazard Assessment (OEHHA). Ethylene glycol monobutyl ether. Sacramento, CA: California Environmental Protection Agency, Office of Environmental Health Hazard Assessment; (2023).
+https://oehha.ca.gov/air/chemicals/ethylene-glycol-monobutyl-ether
+. Accessed 15 Jun 2023.
+
+81.
+Chemical Manufacturers Association (CMA). Repeated insult patch test to evaluate sensitization potential of ethylene glycol monobutyl ether with cover letter dated 052693. Washington, DC: TKL Research, Inc. for the Chemical Manufacturers Association; (1993). NTIS Document No. OTS0538187. EPA/OTS Document No. 86-930000207. TKL Study No. 921031.
+https://ntrl.ntis.gov/NTRL/dashboard/searchResults/titleDetail/OTS0538187.xhtml
+.
+
+82.
+Greenspan AH, Reardon RC, Gingell R, Rosica KA. Human repeated insult patch test of 2-butoxyethanol. Contact Dermat. 1995;33:59–60. 10.1111/j.1600-0536.1995.tb00458.x.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+83.
+Zissu D. Experimental study of cutaneous tolerance to glycol ethers. Contact Dermat. 1995;32:74–77. 10.1111/j.1600-0536.1995.tb00749.x.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+84.
+Singh P, Morris B, Zhao S, Blaylock BL. Suppression of the contact hypersensitivity response following topical exposure to 2-butoxyethanol in female BALB/c mice. Int J Toxicol. 2002;21:107–14. 10.1080/10915810252866088.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+85.
+Nyska A, Maronpot RR, Ghanayem BI. Ocular thrombosis and retinal degeneration induced in female F344 rats by 2-butoxyethanol. Hum Exp Toxicol. 1999;18:577–82. 10.1191/096032799678845070.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+86.
+Burkhart KK, Donovan JW. Hemodialysis following butoxyethanol ingestion. J Toxicol Clin Toxicol. 1998;36:723–5. 10.3109/15563659809162622.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+87.
+Dean BS, Krenzelok EP. Clinical evaluation of pediatric ethylene glycol monobutyl ether poisonings. J Toxicol Clin Toxicol. 1992;30:557–63. 10.3109/15563659209017941.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+88.
+Osterhoudt KC. Fomepizole therapy for pediatric butoxyethanol intoxication. J Toxicol Clin Toxicol. 2002;40:929–30. 10.1081/clt-120016967.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+89.
+Tian Y, Zhou Q, Zhang L, Li W, Yin S, Li F, et al. In utero exposure to per-/polyfluoroalkyl substances (PFASs): Preeclampsia in pregnancy and low birth weight for neonates. Chemosphere. 2023;313:137490. 10.1016/j.chemosphere.2022.137490.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+90.
+Bohannon ME, Narizzano AM, Guigni BA, East AG, Quinn MJ Jr. Next-generation PFAS 6:2 fluorotelomer sulfonate reduces plaque formation in exposed white-footed mice. Toxicol Sci. 2023;192:97–105. 10.1093/toxsci/kfad006.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+91.
+Aghaei M, Janjani H, Yousefian F, Jamal A, Yunesian M. Association between ambient gaseous and particulate air pollutants and attention deficit hyperactivity disorder (ADHD) in children; a systematic review. Environ Res. 2019;173:135–56. 10.1016/j.envres.2019.03.030.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+92.
+Baek K, Park JT, Kwak K. Systematic review and meta-analysis of cancer risks in relation to environmental waste incinerator emissions: A meta-analysis of case-control and cohort studies. Epidemiol Health. 2022;44:e2022070. 10.4178/epih.e2022070.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+93.
+Cano-Sancho G, Ploteau S, Matta K, Adoamnei E, Louis GB, Mendiola J, et al. Human epidemiological evidence about the associations between exposure to organochlorine chemicals and endometriosis: Systematic review and meta-analysis. Environ Int. 2019;123:209–23. 10.1016/j.envint.2018.11.065.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+94.
+Cunha YGO, do, Amaral GCB, Felix AA, Blumberg B, Amato AA. Early-life exposure to endocrine-disrupting chemicals and autistic traits in childhood and adolescence: A systematic review of epidemiological studies. Front Endocrinol (Lausanne). 2023;14:1184546. 10.3389/fendo.2023.1184546.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+95.
+Edwards D, Voronina A, Attwood K, Grand’Maison A. Association between occupational exposures and sarcoma incidence and mortality: Systematic review and meta-analysis. Syst Rev. 2021;10:231. 10.1186/s13643-021-01769-4.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+96.
+Kahn LG, Harley KG, Siegel EL, Zhu Y, Factor-Litvak P, Porucznik CA, et al. Persistent organic pollutants and couple fecundability: A systematic review. Hum Reprod Update. 2021;27:339–66. 10.1093/humupd/dmaa037.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+97.
+Matta K, Koual M, Ploteau S, Coumoul X, Audouze K, Le Bizec B, et al. Associations between exposure to organochlorine chemicals and endometriosis: A systematic review of experimental studies and integration of epidemiological evidence. Environ Health Perspect. 2021;129:76003. 10.1289/ehp8421.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+98.
+Nelson W, Liu DY, Yang Y, Zhong ZH, Wang YX, Ding YB. In utero exposure to persistent and nonpersistent endocrine-disrupting chemicals and anogenital distance. A systematic review of epidemiological studies. Biol Reprod. 2020;102:276–91. 10.1093/biolre/ioz200.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+99.
+Sirohi D, Al Ramadhani R, Knibbs LD. Environmental exposures to endocrine disrupting chemicals (EDCs) and their role in endometriosis: A systematic literature review. Rev Environ Health. 2021;36:101–15. 10.1515/reveh-2020-0046.
+
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+100.
+Wallace DA, Gallagher JP, Peterson SR, Ndiaye-Gueye S, Fox K, Redline S, et al. Is exposure to chemical pollutants associated with sleep outcomes? A systematic review. Sleep Med Rev. 2023;70:101805. 10.1016/j.smrv.2023.101805.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+101.
+Zeinomar N, Oskar S, Kehm RD, Sahebzeda S, Terry MB. Environmental exposures and breast cancer risk in the context of underlying susceptibility: A systematic review of the epidemiological literature. Environ Res. 2020;187:109346. 10.1016/j.envres.2020.109346.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+102.
+Coelho PB, Fitzgerald G, Isaacson K, Diop R, Prabhakar G, Heffner S, et al. Environmental and private property contamination following the Norfolk Southern chemical spill and chemical fires in Ohio. Environ Sci Water Res Technol. 2024;10:3007–23. 10.1039/D4EW00456F.
+[
+Google Scholar
+]
+
+103.
+U.S. Census Bureau. East Palestine village, Ohio: Income and poverty. Suitland, MD: U.S. Department of Commerce, U.S. Census Bureau; (2022).
+https://data.census.gov/profile/East_Palestine_village,_Ohio?g=160XX00US3923940#income-and-poverty
+. Accessed 4 Nov 2024.
+
+104.
+U.S. Environmental Protection Agency (USEPA). EJScreen: Environmental Justice Screening and Mapping Tool (version 2.3): East Palestine. Washington, DC: U.S. Environmental Protection Agency; (2024).
+https://ejscreen.epa.gov/mapper/index.html?wherestr=east+Palestine
+. Accessed 4 Nov 2024.
+
+105.
+U.S. Environmental Protection Agency (USEPA). East Palestine, Ohio train derailment: Air sampling data. Washington, DC: U.S. Environmental Protection Agency; (2024).
+https://www.epa.gov/east-palestine-oh-train-derailment/air-sampling-data
+. Accessed 4 Nov 2024.
+
+106.
+U.S. Environmental Protection Agency (USEPA). Health and environmental effects of particulate matter (PM). Washington, DC: U.S. Environmental Protection Agency; (2024).
+https://www.epa.gov/pm-pollution/health-and-environmental-effects-particulate-matter-pm
+. Accessed 4 Nov 2024.
+
+107.
+Smith MT. Key characteristics of carcinogens. In: Baan RA, Stewart BW, Straif K, editors. Tumour Site Concordance and Mechanisms of Carcinogenesis. Lyon, France: International Agency for Research on Cancer; p. 85-91. (2019).
+https://publications.iarc.who.int/Book-And-Report-Series/Iarc-Scientific-Publications/Tumour-Site-Concordance-And-Mechanisms-Of-Carcinogenesis-2019
+.
+[
+PubMed
+]
+
+108.
+Lind L, Araujo JA, Barchowsky A, Belcher S, Berridge BR, Chiamvimonvat N, et al. Key characteristics of cardiovascular toxicants. Environ Health Perspect. 2021;129:95001. 10.1289/ehp9321.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+109.
+Germolec DR, Lebrec H, Anderson SE, Burleson GR, Cardenas A, Corsini E, et al. Consensus on the key characteristics of immunotoxic agents as a basis for hazard identification. Environ Health Perspect. 2022;130:105001. 10.1289/ehp10800.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+110.
+Arzuaga X, Smith MT, Gibbons CF, Skakkebæk NE, Yost EE, Beverly BEJ, et al. Proposed key characteristics of male reproductive toxicants as an approach for organizing and evaluating mechanistic evidence in human health hazard assessments. Environ Health Perspect. 2019;127:65001. 10.1289/ehp5045.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+111.
+Luderer U, Eskenazi B, Hauser R, Korach KS, McHale CM, Moran F, et al. Proposed key characteristics of female reproductive toxicants as an approach for organizing and evaluating mechanistic data in hazard assessment. Environ Health Perspect. 2019;127:75001. 10.1289/ehp4971.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+112.
+La Merrill MA, Vandenberg LN, Smith MT, Goodson W, Browne P, Patisaul HB, et al. Consensus on the key characteristics of endocrine-disrupting chemicals as a basis for hazard identification. Nat Rev Endocrinol. 2020;16:45–57. 10.1038/s41574-019-0273-8.
+
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Associated Data
+
+This section collects any data citations, data availability statements, or supplementary materials included in this article.
+
+Supplementary Materials
+
+Supplementary information
+(809.4KB, docx)
+
+Supplementary information
+(504KB, pdf)
+
+Supplementary information
+(86.1KB, xlsx)
+
+Data Availability Statement
+
+All data generated or analyzed during this study are included in this published article and its supplementary information files.
+
+Articles from Journal of Exposure Science & Environmental Epidemiology are provided here courtesy of
+Nature Publishing Group
+
+ACTIONS
+
+View on publisher site
+
+PDF (1.0 MB)
+
+Cite
+
+Collections
+
+Permalink
+
+PERMALINK
+
+Copy
+
+RESOURCES
+
+Similar articles
+
+Cited by other articles
+
+Links to NCBI Databases
+
+Cite
+
+Copy
+
+Download .nbib
+
+.nbib
+
+Format:
+
+AMA
+
+APA
+
+MLA
+
+NLM
+
+Add to Collections
+
+Create a new collection
+
+Add to an existing collection
+
+Name your collection
+
+*
+
+Choose a collection
+
+Unable to load your collection due to an error
+
+Please try again
+
+Add
+
+Cancel
+
+Follow NCBI
+
+NCBI on X (formerly known as Twitter)
+
+NCBI on Facebook
+
+NCBI on LinkedIn
+
+NCBI on GitHub
+
+NCBI RSS feed
+
+Connect with NLM
+
+NLM on X (formerly known as Twitter)
+
+NLM on Facebook
+
+NLM on YouTube
+
+National Library of Medicine
+
+8600 Rockville Pike
+Bethesda, MD 20894
+
+Web Policies
+
+FOIA
+
+HHS Vulnerability Disclosure
+
+Help
+
+Accessibility
+
+Careers
+
+NLM
+
+NIH
+
+HHS
+
+USA.gov
+
+Back to Top

@@ -8,6 +8,7 @@ from sqlalchemy import create_engine, inspect, text
 
 EXPECTED_TABLES = {
     "inv_audit_events",
+    "inv_citations",
     "inv_claim_evidence_relations",
     "inv_claims",
     "inv_call_bindings",
@@ -19,14 +20,25 @@ EXPECTED_TABLES = {
     "inv_execution_steps",
     "inv_investigation_questions",
     "inv_investigations",
+    "inv_recorded_human_review_decisions",
     "inv_recorded_model_calls",
     "inv_recorded_tool_calls",
+    "inv_release_policy_evaluations",
+    "inv_report_input_snapshots",
+    "inv_report_projections",
     "inv_report_section_claims",
     "inv_report_sections",
+    "inv_report_validation_findings",
     "inv_reports",
     "inv_research_gaps",
     "inv_research_tasks",
     "inv_review_decisions",
+    "inv_review_idempotency",
+    "inv_review_requests",
+    "inv_review_research_requests",
+    "inv_reviewer_auth_state",
+    "inv_reviewer_rate_buckets",
+    "inv_reviewer_sessions",
     "inv_runs",
     "inv_run_budgets",
     "inv_semantic_judgments",
@@ -110,6 +122,26 @@ def test_upgrade_and_downgrade_preserve_legacy_schema(tmp_path: Path) -> None:
         "ix_inv_tasks_origin_gap",
         "ix_inv_tasks_target_claim",
     } <= {item["name"] for item in inspector.get_indexes("inv_research_tasks")}
+    report_columns = {item["name"] for item in inspector.get_columns("inv_reports")}
+    assert {
+        "report_input_snapshot_hash",
+        "citation_set_hash",
+        "schema_version",
+    } <= report_columns
+    assert not {"review_status", "release_status", "updated_at"} & report_columns
+    assert {"origin_run_id", "origin_review_request_id"} <= {
+        item["name"] for item in inspector.get_columns("inv_runs")
+    }
+    assert {
+        "review_request_id",
+        "reviewer_session_public_id",
+        "reviewer_config_fingerprint",
+        "decision_origin",
+    } <= {item["name"] for item in inspector.get_columns("inv_review_decisions")}
+    snapshot_uniques = inspector.get_unique_constraints("inv_report_input_snapshots")
+    assert any(item["column_names"] == ["snapshot_hash"] for item in snapshot_uniques)
+    citation_fks = {item["referred_table"] for item in inspector.get_foreign_keys("inv_citations")}
+    assert {"inv_reports", "inv_claims", "inv_evidence"} <= citation_fks
     family_member_fks = inspector.get_foreign_keys("inv_source_family_members")
     assert {item["referred_table"] for item in family_member_fks} == {
         "inv_source_families",

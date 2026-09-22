@@ -456,6 +456,71 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
             "inv_conflict_evidence",
             "inv_validation_conflicts",
         } <= set(inspector.get_table_names())
+        assert {
+            "inv_report_input_snapshots",
+            "inv_report_projections",
+            "inv_citations",
+            "inv_report_validation_findings",
+            "inv_release_policy_evaluations",
+            "inv_review_requests",
+            "inv_reviewer_sessions",
+            "inv_reviewer_auth_state",
+            "inv_reviewer_rate_buckets",
+            "inv_review_research_requests",
+            "inv_review_idempotency",
+            "inv_recorded_human_review_decisions",
+        } <= set(inspector.get_table_names())
+        report_columns = {item["name"] for item in inspector.get_columns("inv_reports")}
+        assert {
+            "report_input_snapshot_hash",
+            "citation_set_hash",
+            "schema_version",
+        } <= report_columns
+        assert not {"review_status", "release_status", "updated_at"} & report_columns
+        assert {"origin_run_id", "origin_review_request_id"} <= {
+            item["name"] for item in inspector.get_columns("inv_runs")
+        }
+        assert {
+            "review_request_id",
+            "reviewer_session_public_id",
+            "reviewer_config_fingerprint",
+            "decision_origin",
+        } <= {item["name"] for item in inspector.get_columns("inv_review_decisions")}
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    "INSERT INTO inv_report_input_snapshots ("
+                    "snapshot_id, investigation_id, run_id, run_mode, snapshot_hash, "
+                    "claim_set_hash, source_state_fingerprint, semantic_payload, "
+                    "runtime_references, assembled_at) VALUES ("
+                    ":snapshot_id, :investigation_id, :run_id, 'LIVE', :snapshot_hash, "
+                    ":claim_set_hash, :fingerprint, '{}'::jsonb, '{}'::jsonb, :assembled_at)"
+                ),
+                {
+                    "snapshot_id": f"SNAP-{suffix}",
+                    "investigation_id": investigation_id,
+                    "run_id": run_id,
+                    "snapshot_hash": hashlib.sha256(f"snap-{suffix}".encode()).hexdigest(),
+                    "claim_set_hash": hashlib.sha256(f"claims-{suffix}".encode()).hexdigest(),
+                    "fingerprint": hashlib.sha256(f"sources-{suffix}".encode()).hexdigest(),
+                    "assembled_at": now,
+                },
+            )
+        with pytest.raises(DatabaseError, match="append-only"):
+            with engine.begin() as connection:
+                connection.execute(
+                    text(
+                        "UPDATE inv_report_input_snapshots SET claim_set_hash='x' "
+                        "WHERE snapshot_id=:snapshot_id"
+                    ),
+                    {"snapshot_id": f"SNAP-{suffix}"},
+                )
+        with pytest.raises(DatabaseError, match="append-only"):
+            with engine.begin() as connection:
+                connection.execute(
+                    text("DELETE FROM inv_report_input_snapshots WHERE snapshot_id=:snapshot_id"),
+                    {"snapshot_id": f"SNAP-{suffix}"},
+                )
         with pytest.raises(DatabaseError, match="append-only"):
             with engine.begin() as connection:
                 connection.execute(

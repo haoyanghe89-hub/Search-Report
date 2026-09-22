@@ -33,6 +33,15 @@ class Settings(BaseModel):
     database_url: SecretStr = SecretStr("sqlite:///data/blackboard.db")
     redis_url: SecretStr | None = None
     max_research_rounds: int = Field(default=2, ge=1, le=3)
+    reviewer_id: str | None = None
+    reviewer_display_name: str | None = None
+    reviewer_password_hash: SecretStr | None = None
+    review_rate_limit_fingerprint_secret: SecretStr | None = None
+    review_session_ttl_hours: float = Field(default=8, gt=0, le=168)
+    review_rate_limit_max_failures: int = Field(default=5, ge=1, le=20)
+    review_rate_limit_window_minutes: int = Field(default=15, ge=1, le=240)
+    review_allowed_origins: tuple[str, ...] = ()
+    review_allow_insecure_loopback: bool = False
 
     @field_validator("deepseek_base_url")
     @classmethod
@@ -68,4 +77,28 @@ class Settings(BaseModel):
             if values.get("MARKETPULSE_REDIS_URL")
             else None,
             max_research_rounds=int(values.get("MARKETPULSE_MAX_RESEARCH_ROUNDS") or "2"),
+            reviewer_id=values.get("REVIEWER_ID") or None,
+            reviewer_display_name=values.get("REVIEWER_DISPLAY_NAME") or None,
+            reviewer_password_hash=SecretStr(str(values["REVIEWER_PASSWORD_HASH"]))
+            if values.get("REVIEWER_PASSWORD_HASH")
+            else None,
+            review_rate_limit_fingerprint_secret=SecretStr(
+                str(values["REVIEW_RATE_LIMIT_FINGERPRINT_SECRET"])
+            )
+            if values.get("REVIEW_RATE_LIMIT_FINGERPRINT_SECRET")
+            else None,
+            review_session_ttl_hours=float(values.get("REVIEW_SESSION_TTL_HOURS") or "8"),
+            review_rate_limit_max_failures=int(values.get("REVIEW_RATE_LIMIT_MAX_FAILURES") or "5"),
+            review_rate_limit_window_minutes=int(
+                values.get("REVIEW_RATE_LIMIT_WINDOW_MINUTES") or "15"
+            ),
+            review_allowed_origins=tuple(
+                origin.strip()
+                for origin in (values.get("REVIEW_ALLOWED_ORIGINS") or "").split(",")
+                if origin.strip()
+            ),
+            review_allow_insecure_loopback=(
+                values.get("REVIEW_ALLOW_INSECURE_LOOPBACK") or "false"
+            ).lower()
+            in {"1", "true", "yes"},
         )

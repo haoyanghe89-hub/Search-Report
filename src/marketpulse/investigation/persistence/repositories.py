@@ -22,6 +22,7 @@ from marketpulse.investigation.domain.recordings import RecordedModelCall, Recor
 from marketpulse.investigation.domain.reports import (
     AuditEvent,
     Report,
+    ReportProjection,
     ReportSection,
     ReviewDecision,
 )
@@ -44,6 +45,7 @@ from marketpulse.investigation.domain.sources import (
 from marketpulse.investigation.persistence.models import (
     AuditEventRow,
     CallBindingRow,
+    CitationRow,
     ClaimEvidenceRelationRow,
     ClaimRow,
     ConflictClaimRow,
@@ -55,20 +57,46 @@ from marketpulse.investigation.persistence.models import (
     InvestigationQuestionRow,
     InvestigationRow,
     InvestigationRunRow,
+    RecordedHumanReviewDecisionRow,
     RecordedModelCallRow,
     RecordedToolCallRow,
+    ReleasePolicyEvaluationRow,
+    ReportInputSnapshotRow,
+    ReportProjectionRow,
     ReportRow,
     ReportSectionClaimRow,
     ReportSectionRow,
+    ReportValidationFindingRow,
     ResearchGapRow,
     ResearchTaskRow,
     ReviewDecisionRow,
+    ReviewerAuthStateRow,
+    ReviewerSessionRow,
+    ReviewIdempotencyRow,
+    ReviewRateBucketRow,
+    ReviewRequestRow,
+    ReviewResearchRequestRow,
     RunBudgetRow,
     SourceRow,
     SourceSnapshotRow,
     TimelineEventRow,
     TimelineEvidenceRow,
     ValidationResultRow,
+)
+from marketpulse.investigation.reporting.models import (
+    Citation,
+    ReleasePolicyEvaluation,
+    ReportInputSnapshot,
+    ReportValidationFinding,
+)
+from marketpulse.investigation.review.models import (
+    RecordedHumanReviewDecision,
+    ReviewerAuthState,
+    ReviewerSession,
+    ReviewIdempotencyRecord,
+    ReviewRateBucket,
+    ReviewRequest,
+    ReviewResearchRequest,
 )
 
 PersistedEntity = (
@@ -92,6 +120,18 @@ PersistedEntity = (
     | ReportSection
     | ReviewDecision
     | AuditEvent
+    | ReportInputSnapshot
+    | ReportProjection
+    | Citation
+    | ReportValidationFinding
+    | ReleasePolicyEvaluation
+    | ReviewRequest
+    | ReviewerSession
+    | ReviewerAuthState
+    | ReviewRateBucket
+    | ReviewResearchRequest
+    | ReviewIdempotencyRecord
+    | RecordedHumanReviewDecision
     | RecordedToolCall
     | RecordedModelCall
 )
@@ -373,6 +413,33 @@ class InvestigationRepository:
             return section_row, section_claims
         if isinstance(entity, ReviewDecision):
             return ReviewDecisionRow(**_plain(entity)), []
+        if isinstance(entity, ReportInputSnapshot):
+            payload = _plain(entity, "semantic_payload", "runtime_references")
+            payload["semantic_payload"] = entity.semantic_payload.model_dump(mode="json")
+            payload["runtime_references"] = entity.runtime_references.model_dump(mode="json")
+            return ReportInputSnapshotRow(**payload), []
+        if isinstance(entity, ReportProjection):
+            return ReportProjectionRow(**_plain(entity)), []
+        if isinstance(entity, Citation):
+            return CitationRow(**_plain(entity)), []
+        if isinstance(entity, ReportValidationFinding):
+            return ReportValidationFindingRow(**_plain(entity)), []
+        if isinstance(entity, ReleasePolicyEvaluation):
+            return ReleasePolicyEvaluationRow(**_plain(entity)), []
+        if isinstance(entity, ReviewRequest):
+            return ReviewRequestRow(**_plain(entity)), []
+        if isinstance(entity, ReviewerSession):
+            return ReviewerSessionRow(**_plain(entity)), []
+        if isinstance(entity, ReviewerAuthState):
+            return ReviewerAuthStateRow(**_plain(entity)), []
+        if isinstance(entity, ReviewRateBucket):
+            return ReviewRateBucketRow(**_plain(entity)), []
+        if isinstance(entity, ReviewResearchRequest):
+            return ReviewResearchRequestRow(**_plain(entity)), []
+        if isinstance(entity, ReviewIdempotencyRecord):
+            return ReviewIdempotencyRow(**_plain(entity)), []
+        if isinstance(entity, RecordedHumanReviewDecision):
+            return RecordedHumanReviewDecisionRow(**_plain(entity)), []
         if isinstance(entity, AuditEvent):
             payload = _plain(entity, "metadata")
             payload["metadata_payload"] = entity.metadata
@@ -530,6 +597,54 @@ class InvestigationRepository:
         if entity_type is ReviewDecision:
             return ReviewDecision.model_validate(
                 self._row_dict(self._required(session, ReviewDecisionRow, entity_id))
+            )
+        if entity_type is ReportInputSnapshot:
+            return ReportInputSnapshot.model_validate(
+                self._row_dict(self._required(session, ReportInputSnapshotRow, entity_id))
+            )
+        if entity_type is ReportProjection:
+            return ReportProjection.model_validate(
+                self._row_dict(self._required(session, ReportProjectionRow, entity_id))
+            )
+        if entity_type is Citation:
+            return Citation.model_validate(
+                self._row_dict(self._required(session, CitationRow, entity_id))
+            )
+        if entity_type is ReportValidationFinding:
+            return ReportValidationFinding.model_validate(
+                self._row_dict(self._required(session, ReportValidationFindingRow, entity_id))
+            )
+        if entity_type is ReleasePolicyEvaluation:
+            return ReleasePolicyEvaluation.model_validate(
+                self._row_dict(self._required(session, ReleasePolicyEvaluationRow, entity_id))
+            )
+        if entity_type is ReviewRequest:
+            return ReviewRequest.model_validate(
+                self._row_dict(self._required(session, ReviewRequestRow, entity_id))
+            )
+        if entity_type is ReviewerSession:
+            return ReviewerSession.model_validate(
+                self._row_dict(self._required(session, ReviewerSessionRow, entity_id))
+            )
+        if entity_type is ReviewerAuthState:
+            return ReviewerAuthState.model_validate(
+                self._row_dict(self._required(session, ReviewerAuthStateRow, entity_id))
+            )
+        if entity_type is ReviewRateBucket:
+            return ReviewRateBucket.model_validate(
+                self._row_dict(self._required(session, ReviewRateBucketRow, entity_id))
+            )
+        if entity_type is ReviewResearchRequest:
+            return ReviewResearchRequest.model_validate(
+                self._row_dict(self._required(session, ReviewResearchRequestRow, entity_id))
+            )
+        if entity_type is ReviewIdempotencyRecord:
+            return ReviewIdempotencyRecord.model_validate(
+                self._row_dict(self._required(session, ReviewIdempotencyRow, entity_id))
+            )
+        if entity_type is RecordedHumanReviewDecision:
+            return RecordedHumanReviewDecision.model_validate(
+                self._row_dict(self._required(session, RecordedHumanReviewDecisionRow, entity_id))
             )
         if entity_type is AuditEvent:
             return self._audit(self._required(session, AuditEventRow, entity_id))

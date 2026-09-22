@@ -676,12 +676,29 @@ class ValidationPolicy:
         return EntailmentStatus.NOT_ENTAILED
 
     def _input_fingerprint(self, request: ValidationRequest) -> str:
+        """Content-addressed fingerprint: runtime row IDs never participate.
+
+        Replay re-materializes claims/evidence/snapshots under fresh runtime
+        IDs, so every reference is rewritten to stable semantic content
+        (claim statement, evidence content hash, snapshot/artifact/source
+        content identity).
+        """
+        evidence_hash_by_id = {item.evidence_id: item.content_hash for item in request.evidence}
+        source_url_by_id = {
+            item.source_id: str(item.canonical_url) for item in request.sources
+        }
+        claim_ref = request.claim.statement
         return _canonical_hash(
             {
                 "policy_version": self.VERSION,
                 "claim": request.claim.model_dump(
                     mode="json",
                     exclude={
+                        "claim_id",
+                        "investigation_id",
+                        "run_id",
+                        "created_by_step_id",
+                        "research_task_id",
                         "validation_status",
                         "confidence",
                         "confidence_basis",
@@ -690,23 +707,113 @@ class ValidationPolicy:
                         "updated_at",
                     },
                 ),
-                "relations": [item.model_dump(mode="json") for item in request.relations],
-                "evidence": [item.model_dump(mode="json") for item in request.evidence],
-                "snapshots": [item.model_dump(mode="json") for item in request.snapshots],
-                "artifacts": [item.model_dump(mode="json") for item in request.artifacts],
-                "sources": [item.model_dump(mode="json") for item in request.sources],
+                "relations": [
+                    {
+                        **item.model_dump(
+                            mode="json",
+                            exclude={
+                                "relation_id",
+                                "claim_id",
+                                "evidence_id",
+                                "semantic_judgment_ref",
+                                "created_at",
+                            },
+                        ),
+                        "claim": claim_ref,
+                        "evidence": evidence_hash_by_id.get(item.evidence_id),
+                    }
+                    for item in request.relations
+                ],
+                "evidence": [
+                    item.model_dump(
+                        mode="json",
+                        exclude={
+                            "evidence_id",
+                            "run_id",
+                            "snapshot_id",
+                            "artifact_id",
+                            "created_by_step_id",
+                            "research_task_id",
+                            "extracted_at",
+                        },
+                    )
+                    for item in request.evidence
+                ],
+                "snapshots": [
+                    item.model_dump(
+                        mode="json",
+                        exclude={"snapshot_id", "source_id", "run_id", "retrieved_at"},
+                    )
+                    for item in request.snapshots
+                ],
+                "artifacts": [
+                    item.model_dump(
+                        mode="json", exclude={"artifact_id", "snapshot_id", "created_at"}
+                    )
+                    for item in request.artifacts
+                ],
+                "sources": [
+                    item.model_dump(
+                        mode="json",
+                        exclude={
+                            "source_id",
+                            "investigation_id",
+                            "origin_source_id",
+                            "discovered_at",
+                        },
+                    )
+                    for item in request.sources
+                ],
                 "semantic_judgments": [
-                    item.model_dump(mode="json", exclude={"judgment_id", "created_at"})
+                    {
+                        **item.model_dump(
+                            mode="json",
+                            exclude={
+                                "judgment_id",
+                                "created_at",
+                                "run_id",
+                                "claim_id",
+                                "evidence_id",
+                                "model_call_ref",
+                                "recorded_judgment_ref",
+                            },
+                        ),
+                        "claim": claim_ref,
+                        "evidence": evidence_hash_by_id.get(item.evidence_id),
+                    }
                     for item in request.semantic_judgments
                 ],
                 "attributions": [
-                    item.model_dump(mode="json") for item in request.explicit_attributions
+                    {
+                        "source": source_url_by_id.get(item.source_id),
+                        "attributed_source": source_url_by_id.get(item.attributed_source_id),
+                        "basis": item.basis,
+                    }
+                    for item in request.explicit_attributions
                 ],
                 "conflict_observations": [
-                    item.model_dump(mode="json") for item in request.conflict_observations
+                    {
+                        **item.model_dump(
+                            mode="json", exclude={"claim_id", "evidence_id"}
+                        ),
+                        "claim": claim_ref,
+                        "evidence": evidence_hash_by_id.get(item.evidence_id),
+                    }
+                    for item in request.conflict_observations
                 ],
                 "existing_conflicts": [
-                    item.model_dump(mode="json", exclude={"created_at", "updated_at"})
+                    item.model_dump(
+                        mode="json",
+                        exclude={
+                            "conflict_id",
+                            "investigation_id",
+                            "run_id",
+                            "claim_ids",
+                            "evidence_ids",
+                            "created_at",
+                            "updated_at",
+                        },
+                    )
                     for item in request.existing_conflicts
                 ],
             }
@@ -719,11 +826,11 @@ class ValidationPolicy:
     ) -> str:
         referenced = set(referenced_ids)
         return _canonical_hash(
-            [
-                {"evidence_id": item.evidence_id, "content_hash": item.content_hash}
-                for item in sorted(evidence, key=lambda value: value.evidence_id)
+            sorted(
+                item.content_hash
+                for item in evidence
                 if item.evidence_id in referenced
-            ]
+            )
         )
 
 

@@ -1,0 +1,2401 @@
+Soil contamination by environmentally persistent free radicals and dioxins following train derailment in East Palestine, OH - PMC
+
+Skip to main content
+
+An official website of the United States government
+
+Here's how you know
+
+Here's how you know
+
+Official websites use .gov
+
+A
+
+.gov
+website belongs to an official
+government organization in the United States.
+
+Secure .gov websites use HTTPS
+
+A
+lock
+(
+
+) or
+https://
+means you've safely
+connected to the .gov website. Share sensitive
+information only on official, secure websites.
+
+Search
+
+Log in
+
+Dashboard
+
+Publications
+
+Account settings
+
+Log out
+
+Search...
+
+Search NCBI
+
+Primary site navigation
+
+Search
+
+Logged in as:
+
+Dashboard
+
+Publications
+
+Account settings
+
+Log in
+
+Search PMC Full-Text Archive
+
+Search in PMC
+
+Journal List
+
+User Guide
+
+PERMALINK
+
+Copy
+
+As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+the contents by NLM or the National Institutes of Health.
+
+Learn more:
+
+PMC Disclaimer
+
+|
+
+PMC Copyright Notice
+
+Environ Sci Process Impacts
+. 2025 Feb 18;27(3):729–740. doi:
+10.1039/d4em00609g
+
+Search in PMC
+
+Search in PubMed
+
+View in NLM Catalog
+
+Add to search
+
+Soil contamination by environmentally persistent free radicals and dioxins following train derailment in East Palestine, OH
+†
+
+Myron L Lard
+
+Myron L Lard
+
+a
+Department of Chemistry, Louisiana State University, Baton Rouge, LA 70803, USA
+
+Find articles by
+Myron L Lard
+
+a
+,
+Sarah E Eichler
+
+Sarah E Eichler
+
+b
+Department of Life Sciences, Kent State University, Kent, OH 44243, USA
+
+Find articles by
+Sarah E Eichler
+
+b
+,
+Peng Gao
+
+Peng Gao
+
+c
+Department of Environmental and Occupational Health, University of Pittsburgh, Pittsburgh, PA 15261, USA
+
+Find articles by
+Peng Gao
+
+c
+,
+Kuldeep Singh
+
+Kuldeep Singh
+
+d
+Department of Earth Sciences, Kent State University, Kent, OH, 44243, USA
+
+Find articles by
+Kuldeep Singh
+
+d
+,
+Joseph D Ortiz
+
+Joseph D Ortiz
+
+d
+Department of Earth Sciences, Kent State University, Kent, OH, 44243, USA
+
+Find articles by
+Joseph D Ortiz
+
+d
+,
+Robert L Cook
+
+Robert L Cook
+
+a
+Department of Chemistry, Louisiana State University, Baton Rouge, LA 70803, USA
+
+Find articles by
+Robert L Cook
+
+a
+,
+Slawomir Lomnicki
+
+Slawomir Lomnicki
+
+a
+Department of Chemistry, Louisiana State University, Baton Rouge, LA 70803, USA
+
+Find articles by
+Slawomir Lomnicki
+
+a
+,
+Stephania A Cormier
+
+Stephania A Cormier
+
+e
+Department of Comparative Biomedical Sciences, Louisiana State University, Baton Rouge, LA 70803, USA
+
+Find articles by
+Stephania A Cormier
+
+e
+,
+Jennifer Richmond-Bryant
+
+Jennifer Richmond-Bryant
+
+f
+Department of Forestry and Environmental Resources, North Carolina State University, Raleigh, NC 27695, USA, Email: jrbryan3@ncsu.edu
+
+Find articles by
+Jennifer Richmond-Bryant
+
+f,
+✉
+
+Author information
+
+Article notes
+
+Copyright and License information
+
+a
+Department of Chemistry, Louisiana State University, Baton Rouge, LA 70803, USA
+
+b
+Department of Life Sciences, Kent State University, Kent, OH 44243, USA
+
+c
+Department of Environmental and Occupational Health, University of Pittsburgh, Pittsburgh, PA 15261, USA
+
+d
+Department of Earth Sciences, Kent State University, Kent, OH, 44243, USA
+
+e
+Department of Comparative Biomedical Sciences, Louisiana State University, Baton Rouge, LA 70803, USA
+
+f
+Department of Forestry and Environmental Resources, North Carolina State University, Raleigh, NC 27695, USA, Email: jrbryan3@ncsu.edu
+
+✉
+Corresponding author.
+
+Received 2024 Oct 10; Accepted 2025 Feb 17; Revised 2025 Mar 3; Collection date 2025 Mar 19.
+
+This journal is © The Royal Society of Chemistry
+
+This article is licensed under a
+Creative Commons Attribution-Non Commercial 3.0 Unported Licence
+. You can use material from this article in other publications without requesting further permissions from the RSC, provided that the correct acknowledgement is given and it is not used for commercial purposes.
+
+PMC Copyright notice
+
+PMCID: PMC11843876 PMID:
+39981852
+
+This article has been corrected.
+See
+Environ Sci Process Impacts. 2025 Mar 3;27(3):804
+.
+
+Abstract
+
+The Norfolk Southern train derailment on February 3, 2023, in East Palestine, Ohio, prompted concerns about the health impacts from the chemical spills and open-air combustion. We hypothesize that the combustion of chemicals, including vinyl chloride, in the presence of transition-metal oxides from the train, tracks, and soil minerals were conducive to the formation of hazardous byproducts including environmentally persistent free radicals (EPFRs), dioxins, and furans. We also hypothesize that these harmful byproducts of combustion have a shared origin and thus will have elevated concentrations in soil samples collected close to the derailment site when compared to concentrations in background soils. This study examined the co-occurrence of these soil contaminants from samples collected August 14–17, 2023, within a two-mile radius of the incident site to assess the concentration of EPFRs, dioxins, and furans. We measured elevated levels of EPFRs (average: 3.00 × 10
+17
+spins per g) and dioxin/furan toxic equivalence (TEQ) (average: 32.8 pg g
+−1
+) near the derailment area compared to background levels (EPFRs: 1.33 × 10
+17
+spins per g; TEQ: 10.7 pg g
+−1
+). Significant positive correlations (
+p
+< 0.002) between EPFRs and specific dioxin/furan congener concentrations (0.63–0.74) indicated robust associations between EPFRs and dioxin/furan congeners, the first such observations in field-collected soil samples. These results highlight the environmental health impact of the derailment and associated combustion, underscoring the need for comprehensive longitudinal monitoring and remediation efforts in the affected area and similar industrial accident sites. This study also offers insights into the formation mechanisms and persistence of EPFRs, dioxins, and furans.
+
+The Norfolk Southern train derailment on February 3, 2023, in East Palestine, Ohio, prompted concerns about the health impacts from the chemical spills and open-air combustion.
+
+Environmental significance
+
+Combustion and spillage of vinyl chloride in East Palestine, Ohio in the aftermath of the February 3, 2023, train derailment may have led to the production of environmentally persistent free radicals (EPFRs), dioxins, and furans. Dioxins are known to be carcinogenic, while furans are classified as likely carcinogens. EPFRs have been shown to produce cardiovascular and respiratory effects in laboratory studies. This work detected elevated levels of EPFRs and dioxins/furans in soil samples collected near the site of the derailment and subsequent burn. This work represents the first study of these compounds together in soil samples, observing a significant positive correlation between EPFR concentration and numerous dioxin/furan congeners.
+Introduction
+
+On February 3, 2023, in East Palestine, Ohio, a Norfolk Southern train derailment resulted in a significant spill of hazardous materials including vinyl chloride, ethylene glycol, butyl acrylate, and isobutylene,
+1,2
+initially resulting in fires at the derailment site and chemical spills into nearby soils and streams. On February 6th, 2023, a decision was made to begin a vented burn which led to the two-day release and burn of vinyl chloride from derailed cars on site.
+3
+The spill and subsequent vented burn of chemicals were conducive to the formation of hazardous combustion byproducts including environmentally persistent free radicals (EPFRs) and dioxins/furans. In this study, soil samples were collected and analyzed for the presence of these contaminants in relation to their proximity to the derailment site.
+
+The term EPFR refers to a resonance-stabilized organic radical complex commonly associated with combustion processes.
+4–7
+The persistent nature and toxicological effects of EPFRs on human health and ecosystems underscore the urgency of investigating their presence following environmental disasters. In recent years, EPFRs have become of increased interest in air pollution and toxicology research. EPFRs form primarily through combustion processes that result in the interaction of chemical compounds and transition metals.
+5,8–10
+The structure of these radicals allows for resonance stabilization, thereby substantially increasing the observed lifetime, resulting in radicals that are stable in soils for up to years.
+7,11
+The presence of these radicals in soils provides a vehicle for human interaction, as soil is a primary component of both indoor and outdoor dust,
+12
+which is commonly inhaled.
+13,14
+Additionally, EPFRs and dioxins/furans present in soils were once airborne particles that deposited onto the soil, indicating the risk of inhalation prior to deposition was also present. Upon inhalation, EPFRs are commonly associated with several adverse health conditions, including pulmonary
+15–18
+and cardiovascular
+16,19–21
+ailments. It has also been found that EPFRs play a role in the radical cascade that results in the formation of reactive oxygen species (ROS), a class of highly reactive free radicals directly associated with oxidative stress.
+22–25
+Because our understanding of exposures and health effects related to EPFRs is still emerging, there are currently no reference or baseline concentration levels for EPFR toxicity. Previous studies of contaminated soil provide EPFR concentration levels for comparison.
+26–32
+
+Dioxins and furans belong to a class of chemical compounds known to be very toxic to biological systems.
+33,34
+Dioxin and furan exposures have been linked directly to reproductive and developmental issues,
+35–38
+thyroid disease,
+36,39
+and cancers.
+40–42
+With high chemical stability, these compounds can enter the body and be stored in fat tissue over many years (half-life: 7–11 years
+43–45
+). Dioxins and furans are typically generated during incomplete combustion associated with industrial processes like waste incineration,
+46–49
+smelting
+50,51
+and herbicide production,
+52,53
+but can also be produced through natural processes such as wildfires
+54,55
+and volcanic eruptions.
+34,56–58
+Previous studies have also identified high concentrations of dioxin/furans generated as byproducts of vinyl chloride monomer production.
+59
+These observations provide further justification for the hypotheses proposed here.
+
+Previous research on combustion-related byproducts has suggested a connection between EPFRs and common congeners of dioxins and furans.
+4,60,61
+During combustion processes, products of incomplete combustion are formed either from oxygen-starved pockets or poor heat transfer and unbalanced flame conditions. The presence of halogens in the combustion feed gives rise to halogenated organic compounds (including halogenated aromatics) at the interface of the post-flame zone. When passing to the cool zone of the combustion system and in the presence of transition-metal oxides, surface-mediated reactions produce EPFRs.
+62
+It has been reported that stable free radicals like EPFRs are intermediates in the formation of highly toxic dioxins in thermal systems.
+62–65
+Laboratory studies have demonstrated the simultaneous production of EPFRs, dioxins, and furans with precursors of 2-monochlorophenol
+60,66
+and 1,2,3-trichlorobenzene.
+67
+Vinyl chloride, the primary chemical treated through the vented burn process in East Palestine, is a known chlorine donator in the formation of dioxin/furans under combustion conditions.
+68
+However, the direct correlation between EPFRs and dioxin/furan concentrations in the environment, especially post-industrial accidents, remains underexplored. This study aims to bridge this knowledge gap by investigating soil samples from the vicinity of the East Palestine derailment site.
+
+We hypothesized that concentrations of EPFRs, dioxins, and furans have a shared origin and thus will be elevated close to the derailment site when compared to background levels given the combustion of vinyl chloride in the presence of transition-metal oxides from the train, train tracks, and soil minerals. We further hypothesize that a positive correlation between the concentrations of EPFRs and dioxins/furans in soil samples collected near the East Palestine derailment site will be observed, based on this shared origin. This work will test these hypotheses by investigating correlations between measured EPFR content and dioxin/furan concentrations to further elucidate chemical connections between the two classes of pollutants. We analyzed soil samples collected in August 2023, after the February 3, 2023, derailment, and associated vented burn for their EPFR and dioxin/furan content. A preliminary analysis of EPFR and dioxin/furan distribution in soils near the derailment provides valuable insights into the spatial extent of contamination and potential hazards to the affected community. Additionally, by testing the correlation between EPFRs and dioxins/furans, we aim to improve our understanding of potential relationships between these pollutants. This work provides a snapshot of the spatial distribution of EPFR and dioxin/furan concentrations in soils near the derailment site to identify areas with the potential for elevated health risks associated with exposure to these compounds for further study.
+Materials and methods
+
+Sample collection
+
+Soil sample collection was completed August 14–17, 2023. Whole soil samples were collected from 27 locations (public and private properties) throughout East Palestine, OH, and within a two-mile radius surrounding the train derailment site. Private property samples were collected after receiving consent from landowners. At the time of sample collection, EPA implemented restricted access to an area containing the derailment location as they conducted remediation efforts. Six of the 27 soil samples in this work were collected from within this area and thus are designated as “restricted zone” samples (EP-019–EP-024). Of the six “restricted zone” samples, one site (EP-024) had been excavated and replaced with imported fill dirt prior to sample collection. All sample locations were anonymized, and residents were given assurance that no identifying information would be reported. Locations were selected based on proximity to the derailment site, prevailing wind directions post-incident, and areas identified by preliminary assessments as potentially high-risk for chemical deposition. Some sites were located on commercial property or along a roadside and were not on residential property. Sample locations used in this work are illustrated in
+Fig. 1
+.
+
+Fig. 1. Sampling locations used in this work. Location markers were intentionally shifted and enlarged to maintain privacy. Asterisk denotes the derailment site.
+
+Open in a new tab
+In addition to the 27 sampling locations in and around East Palestine, 10 soil samples were obtained for use as a location-specific background level determination. These background samples were collected before the derailment (December, 2022) as part of a separate study at an agricultural field approximately 10 miles from the derailment site. Given their distance from East Palestine and the fact that they were obtained prior to the derailment, these pre-incident samples are considered background for this study and are not included in the presented East Palestine dataset averages.
+
+Samples were collected using a drill-powered auger in combination with a bucket modified with a hole in the bottom allowing the auger to pass through and into the ground, so that the soil was simultaneously collected inside the bucket. After a site was selected, the auger was used to collect approximately 750 g of soil at a depth of 0–15 cm (0–6 inches). This sampling was designed to match sampling protocols used in East Palestine by the U.S. EPA and Norfolk-Southern.
+69–71
+Samples were placed into individual collection bags, labeled by a sample identification number, and latitude/longitude coordinates. Collection tools were emptied and wiped between samples. After collection, sealed sample bags were placed into a cooler and shipped to Louisiana State University (Baton Rouge, LA) for analysis. All soil samples used in this study were stored in a −20 °C freezer prior to preparation for analysis.
+Sample analysis
+
+Aliquots taken from the collected samples were air-dried to account for any variability in moisture levels. Dry samples were then homogenized using a mortar and pestle. Ground soil was passed through a 425 micrometer sieve to ensure uniform size for analysis. The grinding tools and sieve were wiped free of visible particles and cleaned using compressed air between samples to avoid cross-contamination.
+
+Soil characterization was done using total organic carbon analysis (TOC) and inductively-coupled-plasma ionization paired with optical emission spectroscopy (ICP-OES) for detection. TOC analysis was completed using a Shimadzu TOC-L total carbon analyzer with parameters modified from previous soil studies.
+72,73
+For this work, the furnace temperature was set to 900 °C to ensure complete sample combustion using sucrose standard as a calibration reference.
+74
+The carrier gas used in TOC analysis was pure O
+2.
+ICP-OES analysis was carried out using methodology modified from previous work
+75
+on a Varian Vista MPX simultaneous analyzer. Soil samples were dissolved using 5 ml concentrated trace metal-grade nitric acid (approx. 70%) diluted to 50 ml with double deionized water (18.3 MΩ) and 1 ml trace metal-grade H
+2
+O
+2
+, before aerosolization and introduction to the plasma ionization source. For ICP analysis, the use of internal metal standards was employed.
+
+Electron paramagnetic resonance (EPR) spectroscopy was used to identify EPFR presence, location of the radical, and concentration. A brief description of EPR is presented in ESI Text S1.
+†
+EPR analyses were performed using a Bruker EMX-20/2.7 EPR spectrometer (X-band) with dual cavities using the following parameters modified from previous studies involving contaminated soils:
+26–32
+microwave frequency of 9.735 GHz, power of 0.641 mW, 3 scans, modulation amplitude of 4.000 G, modulation frequency of 100.000 kHz, center field of 3479.060 G, sweep width of 100.000 G, time constant of 0.640 ms, conversion time of 20.480 ms, sweep time of 41.943 s, resolution of 2048 points, and receiver gain of 6.32 × 10
+3
+. Measurements were performed at room temperature. A Levenberg–Marquardt
+76
+curve fitting macro inside IGOR PRO 9.0.2 data processing software was used to obtain spectral information. EPR calibration standard ≥95% pure 2,2-diphenyl-1-picrylhydrazyl (DPPH) was purchased from Thermo Scientific and used as a quantification and calibration standard. The EPR analysis, as carried out, yielded two important pieces of information: (i) the concentration of EPFR in the sample, reported (mass normalized) as spins per gram,
+via
+the area of the EPR signal and (ii) the atoms within the molecule that harbor the paramagnetic center as indicated by the spectra position of EPFR signal, reported as the
+g
+-value.
+
+For dioxin and furan analysis, sample aliquots from the 27 East Palestine sampling locations were sent to Eurofins Test America (Knoxville, TN). Analysis was carried out using a Thermo Scientific DSF Magnetic Sector gas chromatograph coupled with high-resolution mass spectrometry. The U.S. EPA standard Method SW846 8290A
+77
+was used for this analysis to ensure that our results were comparable to those collected by U.S. EPA and Norfolk Southern in their assessment efforts.
+78
+The 17 congeners measured in this analysis are as follows: 1,2,3,4,6,7,8-heptachlorodibenzo-
+P
+-dioxin (HpCDD); 1,2,3,4,6,7,8-heptachlorodibenzo-
+P
+-furan (HpCDF); 1,2,3,4,7,8,9-HpCDF; 1,2,3,4,7,8-hexachlorodibenzo-
+P
+-dioxin (HxCDD); 1,2,3,4,7,8-hexachlorodibenzo-
+P
+-furan (HxCDF); 1,2,3,6,7,8-HxCDD; 1,2,3,6,7,8-HxCDF; 1,2,3,7,8,9-HxCDD; 1,2,3,7,8,9-HxCDF; 2,3,4,6,7,8-HxCDF; 1,2,3,7,8-pentachlorodibenzo-
+P
+-dioxin (PeCDD); 1,2,3,7,8-pentachlorodibenzo-
+P
+-furan (PeCDF); 2,3,4,7,8-PeCDF; 2,3,7,8-tetrachlorodibenzo-
+P
+-dioxin (TCDD); 2,3,7,8-tetrachlorodibenzo-
+P
+-furan (TCDF); octachlorodibenzodioxin (OCDD); octachlorodibenzofuran (OCDF).
+
+Since the term “dioxin/furan” commonly refers to a class of compounds, analysis of multiple congeners is possible. The concentrations of each measured dioxin/furan congener are assigned a representative toxic equivalency factor (TEF) that relates each congener to the most toxic species, 2,3,7,8-tetrachlorodibenzodioxin (TCDD) by applying a weighting factor.
+79
+The products of the weighting factors and concentrations (
+C
+) for each congener (i) are summed over the measured congeners to generate the toxic equivalency (TEQ), a value to describe the total toxicity of the sample regarding all measured dioxins and furans (
+eqn (1)
+):
+
+TEQ = ∑(TEF
+i
+×
+C
+i
+)
+
+1
+
+The U.S. Environmental Protection Agency (U.S. EPA) compares the dioxin/furan TEQ to make informed decisions about remediation at an incident site.
+80
+The Regional Screening Level (RSL) corresponds to a risk of 1-in-1 000 000 for a given health outcome with 30 years of exposure, and values have been set for cancer and noncancer effects.
+81
+For evaluating risks of cancers associated with dioxin and furan exposures in soils, the RSL is 4.8 pg g
+−1
+. For noncancer effects, the RSL is 51.0 pg g
+−1
+.
+80
+We calculated TEQ values based on the dioxin and furan congeners and their TEFs
+79
+and compared them with the cancer and noncancer RSLs.
+Meteorological data
+
+Data were obtained from the National Oceanographic and Atmospheric Administration Integrated Surface Database for the Youngstown Municipal Airport in Youngstown, OH (USAF-WBAN code 725250-14852) for February 6–7, 2023, coinciding with the vented burn. Data retrieval and wind rose production was performed for each day of the vented burn using the R (v.4.4.2) statistical software with the openair, worldmet, and tidyverse packages.
+Statistical analysis
+
+Relationships between EPFR concentration (spins per g) and dioxins/furans were tested to identify potential associations of EPFRs with dioxin and furan congeners among the compounds for the 27 soil samples. First, Grubb's test
+82
+was used to test if the most extreme value for any given parameter was an outlier. Only one data point was considered for removal to maintain
+n
+= 26 or
+n
+= 27. To establish a balance between over-culling the dataset and avoiding the regressions being controlled by one point, we selected
+p
+< 0.0001. Hence, for a given parameter, one data point was removed if it skewed the data distribution substantially enough that it would change the regression. If the data point did not meet this stringent significance requirement for removal, then it was retained. For most parameters, one outlier was removed. We also performed the regressions without the removal of any outliers. Next, linear regression tested the relationships between each dioxin congener and EPFR concentration. We accounted for 17 congeners of dioxins/furans as well as seven aggregate concentrations, TOC, and 11 metals (36 total comparison groups) by applying a significance level of
+p
+< 0.00139 (
+α
+= 0.05/36) in accordance with Bernoulli's multiple comparisons testing.
+83
+For regressions meeting the significance criterion, the associations were visualized and presented in figures below. Analyses were performed using the R statistical programming software (v.4.4.2) using the tidyverse and dplyr packages for data organization and the stats and ggplot2 packages for statistical analysis.
+Sample quality assurance
+
+During the sampling conducted in this work, all materials used for soil collection were wiped clean of any previous soils before a new sample was collected. All sample sites were identified with precise GPS locations at the time of sampling and given unique identification numbers to maintain resident's privacy. All soil characterization (ICP-OES and TOC) analyses were performed using triplicate measurements with average values reported. ICP analysis employed the use of internal target metal standards for sample calibration. Concentrations measured in the ICP analysis were well above method detection limits calculated using EPA-defined procedures.
+84
+EPR measurements were conducted using calibration standard DPPH, tested initially and after every 5th sample, to ensure center-field accuracy for
+g
+-value reporting. All measurements of soil-bound EPFRs including background samples returned radical signals well above the EPR detection limits. Values observed outside of two standard deviations from the statistical mean concentration were re-analyzed (
+n
+= 2). Dioxin and furan analysis was completed by a certified testing laboratory. Samples were analyzed using U.S. EPA Method SW846 8290A for sampling dioxins and furans by high-resolution gas chromatography/high-resolution mass spectrometry.
+77
+Dioxin/furan analyses employed the use of standard addition detection as well as the use of method blank and lab control samples.
+Results and discussion
+
+EPFR analysis
+
+EPR analysis of the collected soils generated complex radical signals, suggesting a multi-radical system (ESI Fig. S2
+†
+). These complex signals were deconvoluted for both quantitative and qualitative analysis: to determine the radical concentration (spins per g), and the radical identity (
+g
+-value). Quantitative analysis of the post-incident East Palestine soil samples exhibited EPFR presence at varying concentration levels (approximately 0.4 × 10
+17
+–6 × 10
+17
+spins per g, complete results are reported in
+Table 1
+).
+
+Table 1. Sample ID, distance from derailment site, radical concentration, organic radical
+g
+-values, and TEQ values for each soil sample collected in the East Palestine sampling effort.
+
+Sample ID
+
+Distance from derailment site (miles)
+
+Radical concentration (spins per g)
+
+Organic radical
+g
+-value
+
+TEQ (pg g
+−1
+)
+
+EP-001
+
+0.42
+
+1.73 × 10
+17
+
+2.0026
+
+1.2
+
+EP-002
+
+0.44
+
+7.46 × 10
+16
+
+2.0029
+
+0.6
+
+EP-003
+
+0.52
+
+5.27 × 10
+16
+
+2.0032
+
+4.5
+
+EP-004
+
+0.53
+
+1.01 × 10
+17
+
+2.0033
+
+1.5
+
+EP-005
+
+1.11
+
+1.08 × 10
+17
+
+2.0034
+
+0.8
+
+EP-006
+
+1.17
+
+1.25 × 10
+17
+
+2.0030
+
+0.8
+
+EP-007
+
+0.98
+
+9.82 × 10
+16
+
+2.0030
+
+3.1
+
+EP-008
+
+0.91
+
+8.37 × 10
+16
+
+2.0033
+
+1.8
+
+EP-009
+
+1.14
+
+1.53 × 10
+17
+
+2.0032
+
+1.7
+
+EP-010
+
+1.20
+
+1.24 × 10
+17
+
+2.0031
+
+0.7
+
+EP-011
+
+1.09
+
+1.37 × 10
+17
+
+2.0030
+
+34.3
+
+EP-012
+
+0.29
+
+1.75 × 10
+17
+
+2.0029
+
+3.4
+
+EP-013
+
+0.27
+
+1.64 × 10
+17
+
+2.0028
+
+5.5
+
+EP-014
+
+0.20
+
+2.93 × 10
+17
+
+2.0027
+
+59.4*
+
+EP-015
+
+0.33
+
+1.10 × 10
+17
+
+2.0027
+
+4.2
+
+EP-016
+
+0.57
+
+2.74 × 10
+17
+
+2.0025
+
+23.5
+
+EP-017
+
+0.31
+
+9.06 × 10
+16
+
+2.0035
+
+2.4
+
+EP-018
+
+0.59
+
+2.90 × 10
+17
+
+2.0026
+
+50.1
+
+EP-019
+
+a
+
+0.11
+
+2.83× 10
+
+17
+
+2.0025
+
+6.7
+
+EP-020
+
+0.08
+
+1.55× 10
+
+17
+
+2.0026
+
+30.9
+
+EP-021
+
+0.11
+
+1.85× 10
+
+17
+
+2.0028
+
+88.2*
+
+b
+
+EP-022
+
+0.20
+
+4.27× 10
+
+17
+
+2.0027
+
+26.0
+
+EP-023
+
+0.27
+
+5.56× 10
+
+17
+
+2.0025
+
+31.3
+
+EP-024
+
+0.11
+
+1.93× 10
+
+17
+
+2.0029
+
+13.4
+
+EP-025
+
+1.17
+
+1.39 × 10
+17
+
+2.0023
+
+18.8
+
+EP-026
+
+1.30
+
+4.00 × 10
+16
+
+2.0027
+
+0.2
+
+EP-027
+
+1.39
+
+1.26 × 10
+17
+
+2.0030
+
+10.3
+
+Open in a new tab
+
+a
+Bold italicized text indicates samples obtained in the “restricted zone”.
+
+b
+Asterisk indicates TEQ values above RML (51 pg g
+−1
+).
+
+These survey samples exhibited concentration values of up to five times higher than the average background concentration. These elevated concentrations are notable as it has been demonstrated that EPFRs are connected to significant health impacts.
+15–21
+Though environmentally stabilized through resonance,
+7,11
+the activity of EPFRs changes dramatically once introduced to aqueous conditions
+22–24
+like those found in the human body. The presence of elevated levels of EPFRs in the soil near the derailment site could signify potential exposure risk to the disaster responders (cleanup and assessment) and the surrounding community at large. When compared to previously studied contaminated soils, some samples collected in the “restricted zone” (area near the derailment site) contained radical concentrations comparable to or greater than those seen at types of facilities where EPFRs have been observed, including wood treatment facilities
+28
+(5.83 × 10
+17
+spins per g) and past coking sites
+30
+(3.00 × 10
+17
+spins per g). Radical values observed outside of the restricted zone throughout the East Palestine community (average = 1.33 × 10
+17
+spins per g) were consistently lower than the value observed on the imported fill dirt sample (1.95 × 10
+17
+spins per g) collected after spill zone remediation. These concentrations are comparable to those measured on previously studied non-contaminated soils.
+28
+
+Via
+deconvolution, the characteristic
+g
+-values for each of the three radicals involved in the multi-radical system were identified as ∼2.001, ∼2.003, and ∼2.007. Measured
+g
+-values of 2.0010 ± 0.002 and 2.0070 ± 0.002 were consistent for all post-incident samples, possibly indicating the presence of lead-organometallic radical complexes and sulfur-centered radicals respectively.
+85
+An example of the deconvolution output can be found in ESI Fig. S3.
+†
+For this study of EPFRs, the primary focus is on the radical at
+g
+-value ∼2.003, which is associated with the organic radical.
+4,7,86
+As this component is the focus of this work, further discussion of
+g
+-value will be in reference to the organic radical of the observed EPR signals. Samples in this dataset had
+g
+-values of 2.0024–2.0035 (
+Table 1
+). Values seen in this dataset below 2.0030 correspond to carbon-centered radicals, with those above 2.0030 representing carbon-centered radicals that are adjacent to an oxygen atom.
+
+The
+g
+-values observed in the EPFR analysis (2.0024–2.0035) align with the
+g
+-values of other contamination events. Samples reported by Dela Cruz
+et al.
+studying Superfund soils from wood treatment sites had carbon-centered radical
+g
+-values ranging from 2.0027 to 2.0030.
+28
+Previous work on samples collected from combustion and/or industrial sites has also reported
+g
+-values consistent with those observed in this sampling effort.
+30–32
+The range of
+g
+-values seen across the East Palestine soil samples is consistent with the hypothesis that events occurring during and after the burn of hazardous chemicals from the train derailment could play a role in the formation of EPFRs. There is the potential that the carbon-centered radicals observed through this study are connected to the deposition of carbon-rich ash related to the vented burn. The
+g
+-values in this dataset are also consistent with those measured in studies where radical recombination to form dioxins and furans was observed.
+60,63,64
+Dioxin/furan analysis
+
+Analysis of dioxin and furan concentrations resulted in a range of TEQs across the dataset (0.19–88.2 pg g
+−1
+) that vary from below the cancer RSL of 4.8 pg g
+−1
+to those above the noncancer RSL of 51.0 pg g
+−1
+.
+Table 1
+contains the calculated dioxin/furan TEQ values for each of the East Palestine samples. Of the 27 post-incident samples collected by this group, 13 sites had dioxin TEQ values at or above the cancer RSL, including two of those samples containing TEQs that exceeded the noncancer RSL.
+
+TEQ values of the dioxin and furan data from the East Palestine soil samples collected in this work were compared with publicly available data reported by the U.S. EPA (32% of samples with TEQ values above the cancer RSL, 7.9% above the noncancer RSL) and Norfolk Southern (33% of samples with TEQ values above the cancer RSL, 4.6% above the noncancer RSL).
+69,70,87
+Values observed in this sampling campaign (48% of samples with TEQ values above the cancer RSL, 7.4% above the noncancer RSL) had similar proportions above the cancer and noncancer RSLs when compared with the other collected data in the immediate area. The three datasets are visualized in
+Fig. 2
+with the U.S. EPA-designated cancer and noncancer RSLs as overlayed reference lines.
+
+Fig. 2. Dioxin/furan TEQ values for samples collected by Norfolk Southern and U.S. EPA as well as the samples collected by LSU/KSU. Cancer RSL (4.8 pg g
+−1
+) and noncancer RSL (51.0 pg g
+−1
+) are included for visualization, and TEQ data are presented on a log scale.
+
+Open in a new tab
+Measured TEQ values were found to be elevated in proximity to the site of the derailment and vented burn. The spatial distribution of the TEQ values measured in this dataset is shown in
+Fig. 3
+. All TEQ values measured in the restricted zone (average TEQ = 32.8 pg g
+−1
+; median TEQ = 31.1 pg g
+−1
+) were above the cancer RSL of 4.8 pg g
+−1
+, with this area also containing the highest calculated TEQ (88.2 pg g
+−1
+). This finding is consistent with previous studies connecting the formation of dioxins and furans to combustion processes.
+46–49
+These data also support previous research associating the burning of vinyl chloride with the formation of these toxic compounds.
+68
+The levels of dioxins and furans observed in the East Palestine dataset suggest that further remediation efforts may be necessary to properly address the associated risk in the community.
+
+Fig. 3. Map of TEQ values observed on samples collected in the East Palestine sampling effort. Location markers were intentionally enlarged to maintain privacy. The asterisk denotes the derailment site.
+
+Open in a new tab
+Dioxin and furan concentrations observed in this dataset suggest an elevated level of contamination present. Urban
+et al.
+generated a review of available dioxin data to determine background dioxin TEQ values present in rural and urban/suburban soils throughout the United States.
+88
+Using census data as a guide, the East Palestine samples were found to be comparable to the urban/suburban soil sites reported by Urban
+et al.
+88
+The urban/suburban data reported within the Urban
+et al.
+study,
+88
+along with the East Palestine sample results are reported in ESI Table S4.
+†
+Samples collected by the authors for the East Palestine post-incident dataset presented a mean TEQ value of 15.8 pg g
+−1
+, a median TEQ of 4.5 pg g
+−1
+, a minimum TEQ of 0.2 pg g
+−1
+, and a maximum TEQ of 88.2 pg g
+−1
+. Mean and median TEQ values for the East Palestine soil samples were higher than the values reported at 75% of the locations included in the Urban
+et al.
+review.
+88
+Correlation between EPFRs and dioxin/furan congeners
+
+Relationships were determined for the concentration of EPFRs with dioxin/furan congeners, as well as with TEQ. These analyses were conducted as previous research has suggested a link between EPFRs and dioxins, particularly polychlorinated-dibenzo furans (PCDFs).
+4,60–64
+Our results show that EPFRs were significantly (
+p
+< 0.00139) correlated with TEQ, five congeners, five aggregate congener types including hexa-chloro-dibenzo dioxins and furans and penta-chloro-dibenzo furans, and two metals, Na and Zn.
+Table 2
+contains Pearson correlation values for the 17 congeners and 7 aggregates measured. Statistically significant correlations are illustrated in ESI Fig. S5.
+†
+All significant correlations were positive and ranged from 0.62 (total HxCDF) to 0.77 (Zn). These positive correlations between EPFR concentration and dioxin congeners are the first to be observed on field-collected soil samples, to the knowledge of the authors. Regressions performed without outlier removal are provided in ESI Table S6.
+†
+
+Table 2. Relationships of dioxin congeners or aggregate values with EPFR concentration (×10
+17
+). Accounting for Bernoulli's multiple comparisons, the level of significance is
+p
+< 0.002. No more than one outlier was removed in each model.
+
+Dependent variable
+
+Slope
+
+p
+-Value
+
+Correlation
+
+Adjusted
+R
+2
+
+Outlier removed
+
+TEQ
+
+a
+
+11.38
+
+0.0008
+
+0.628
+
+0.368
+
+Yes
+
+2,3,7,8-TCDD
+
+204.01
+
+0.0051
+
+0.693
+
+0.433
+
+Yes
+
+Total TCDD
+
+41.50
+
+0.0062
+
+0.333
+
+0.071
+
+Yes
+
+2,3,7,8-TCDF
+
+2.990
+
+0.0024
+
+0.577
+
+0.299
+
+Yes
+
+Total TCDF
+
+5.770
+
+0.0006
+
+0.701
+
+0.469
+
+Yes
+
+1,2,3,7,8-PeCDD
+
+6.380
+
+0.0001
+
+0.542
+
+0.260
+
+Yes
+
+Total PeCDD
+
+10.39
+
+0.0005
+
+0.705
+
+0.475
+
+Yes
+
+1,2,3,7,8-PeCDF
+
+6.040
+
+0.0066
+
+0.696
+
+0.456
+
+No
+
+2,3,4,7,8-PeCDF
+
+14.63
+
+0.0084
+
+0.738
+
+0.523
+
+Yes
+
+Total PeCDF
+
+3.470
+
+0.0076
+
+0.703
+
+0.474
+
+Yes
+
+1,2,3,4,7,8-HxCDD
+
+1.940
+
+0.0007
+
+0.646
+
+0.391
+
+Yes
+
+1,2,3,6,7,8-HxCDD
+
+2.560
+
+0.0001
+
+0.657
+
+0.406
+
+Yes
+
+1,2,3,7,8,9-HxCDD
+
+0.420
+
+0.0086
+
+0.515
+
+0.233
+
+Yes
+
+Total HxCDD
+
+1.810
+
+0.0050
+
+0.671
+
+0.427
+
+Yes
+
+1,2,3,4,7,8-HxCDF
+
+1197.00
+
+0.0118
+
+0.727
+
+0.506
+
+Yes
+
+1,2,3,6,7,8-HxCDF
+
+69.90
+
+0.0069
+
+0.538
+
+0.258
+
+Yes
+
+Total HxCDF
+
+457.70
+
+0.0228
+
+0.617
+
+0.354
+
+Yes
+
+1,2,3,4,6,7,8-HpCDD
+
+86.27
+
+0.0092
+
+0.543
+
+0.264
+
+Yes
+
+Total HpCDD
+
+120.75
+
+0.0002
+
+0.445
+
+0.165
+
+Yes
+
+1,2,3,4,6,7,8-HpCDF
+
+107.22
+
+0.0010
+
+0.532
+
+0.251
+
+Yes
+
+1,2,3,4,7,8,9-HpCDF
+
+55.37
+
+0.0001
+
+0.602
+
+0.332
+
+Yes
+
+Total HpCDF
+
+109.73
+
+0.0001
+
+0.510
+
+0.228
+
+Yes
+
+OCDD
+
+5.240
+
+0.1113
+
+0.496
+
+0.213
+
+Yes
+
+OCDF
+
+81.91
+
+0.0001
+
+0.526
+
+0.245
+
+Yes
+
+TOC
+
+1.000
+
+0.0027
+
+0.565
+
+0.291
+
+Yes
+
+B
+
+1.520
+
+0.0569
+
+0.378
+
+0.107
+
+Yes
+
+Ca
+
+7618.00
+
+0.0223
+
+0.446
+
+0.166
+
+Yes
+
+Cu
+
+9.690
+
+0.0312
+
+0.557
+
+0.282
+
+Yes
+
+Fe
+
+2182.00
+
+0.1422
+
+0.296
+
+0.050
+
+Yes
+
+K
+
+−109.70
+
+0.4205
+
+0.165
+
+−0.013
+
+Yes
+
+Mg
+
+543.90
+
+0.2662
+
+0.226
+
+0.012
+
+Yes
+
+Mn
+
+206.10
+
+0.1352
+
+0.301
+
+0.053
+
+Yes
+
+Na
+
+28.870
+
+0.0005
+
+0.633
+
+0.376
+
+Yes
+
+P
+
+86.770
+
+0.1729
+
+0.276
+
+0.037
+
+Yes
+
+S
+
+175.81
+
+0.0035
+
+0.551
+
+0.274
+
+Yes
+
+Zn
+
+56.910
+
+4.42 × 10
+
+−6
+
+0.769
+
+0.574
+
+Yes
+
+Open in a new tab
+
+a
+Bold italicized text indicates statistical significance.
+
+Our findings highlight the complex dynamics of EPFR and dioxin/furan contamination following the East Palestine derailment, offering new insights into pollution dispersal mechanisms and potential health impacts. Results from the EPFR analysis in this work are consistent with previous work studying Superfund or other contaminated soils.
+26–30
+Notably, samples nearest to the derailment site in the restricted zone displayed elevated radical concentration levels (average = 3.00 × 10
+17
+spins per g) when compared to the remainder of the sample set (average = 1.33 × 10
+17
+spins per g) (
+Fig. 4
+). EPFR levels in restricted zone compared with the remaining samples were not significantly higher (
+p
+= 0.11), due to the small sample size in the restricted zone. The average radical concentration seen on the ten background soil samples collected before the derailment was 1.10 × 10
+17
+spins per g. Total EPFR analysis results of the background samples are reported in ESI Table S7.
+†
+Sample locations displaying the highest radical concentrations were located just southeast of the derailment site (EP-022 and EP-023). This finding is consistent with our hypothesis that EPFRs were formed during the combustion processes utilized in the response efforts for two reasons. First, it is known that combustion processes result in the formation of EPFRs.
+5,8–10
+Second, winds moved toward the southeast during the first day of the prescribed burn, and they shifted to flow towards the northwest on the second day. Wind speeds ranging from 0 to 7.7 m s
+−1
+indicate a potential for some deposition near the burn site for calm winds and some transport several km downwind for higher winds (ESI Fig. S8
+†
+). Observed EPFRs near the combustion site in the restricted zone are consistent with expected results for deposited combustion products in calm conditions and for a burn at ground level. Predicted soot deposition based on the Interagency Modeling and Atmospheric Assessment Center (IMAAC) model (ESI Fig. S9
+†
+) is consistent with the latter condition showing the deposition pathway resulting from the vented burn.
+89
+
+Fig. 4. Map of EPFR concentrations observed on samples collected in the East Palestine sampling effort. Location markers were intentionally enlarged to maintain privacy. The asterisk denotes the derailment site. Sites EP.019–EP.024 are referred to as the “restricted zone”.
+
+Open in a new tab
+The positive statistical correlations observed between EPFR concentration and dioxin/furan congeners are consistent with previous laboratory research showing the formation of dioxins and furans from EPFR-containing precursors.
+4,60–63
+The
+g
+-values of the EPFRs seen here are also consistent with radicals previously shown to recombine into these dioxins and furans.
+60,63,64
+In the East Palestine dataset, correlations between the EPFR concentration and the total measured concentrations of PeCDD and PeCDF had the greatest statistical significance, suggesting a chemical connection between these compounds. The pentachlorinated character of the congeners that exhibited the strongest correlations supports previous field and laboratory research connecting the precursor chemicals in the vented burn processes (vinyl chloride) to the formation of dioxin/furans
+via
+chlorine contribution.
+68
+These findings suggest a shared source, although we recognize that our regression estimates are designed to identify relationships between EPFRs and dioxin/furan congeners rather than confirming any causality.
+
+The observations of elevated levels of both EPFRs and dioxin/furans near the derailment site (<0.30 mi) (
+Table 1
+) and their correlations are noteworthy. These findings point toward a two-pronged risk to the community of East Palestine, as it is known that both EPFRs and dioxin/furans are persistent compounds, directly connected to significant health impacts.
+15–21,33–42
+This work shows statistically significant correlations between soil concentrations of EPFRs and TEQ, along with statistically significant associations between EPFR concentration and some dioxin/furan congeners. The previous findings showing stable EPFRs undergoing recombination resulting in the formation of more toxic dioxin/furans,
+60,63,64
+are supported by the correlations seen in this research. Based on these findings, it is necessary to conduct further research on the co-formation between toxic compounds, especially in complex native substrates such as soils.
+
+It is important to note that soil remediation efforts have been carried out by the U.S. EPA and Norfolk Southern, some of which had not been concluded at the time of this sampling. The site sampled after remediation EP-024, in which the contaminated soil was excavated, removed, and replaced with imported fill soil, still showed higher concentrations of EPFRs and dioxins/furans when compared to background levels. Additional remediation efforts may have addressed some of the elevated levels seen in this work, however, the EPFR and TEQ values observed through this sampling effort indicate that additional sampling research is necessary to properly assess any potential remaining risk levels from these contaminants in East Palestine. The exact nature of the EPFRs measured in this work is unknown, and thus the lifetimes of these radicals cannot be pinpointed. Additionally, the specific generation pathway of these EPFRs cannot be determined as it is known that EPFRs can be formed through combustion processes and chemical interaction with soil components.
+90,91
+These samples, collected six months after the derailment, could present radical concentrations lower than those present during the initial days of the incident, as it is known that some radicals exhibit shorter lifetimes than others,
+7,11
+however sample concentrations relative to one another should be consistent as these radicals are suspected to be generated by the same source. All samples collected in this data set were obtained from the surface 0–15 cm. Surface samples do not provide any information about legacy concentrations in the area, therefore additional sampling of deeper soils is needed. Industrial operations have historically taken place in East Palestine and potentially could have been a source of soil contamination. While this remains an uncertainty, there is no reason to believe that contamination due to legacy sources would be greater at the site of the derailment compared with elsewhere in the community. A more comprehensive analysis of potential contaminating compounds is also necessary to address the limited hazard assessment completed in this work. An additional limitation of this work was the small sample size, particularly inside the derailment area. This will be addressed through future sampling campaigns to further investigate deposition influences from the vented burn. Simulations by the IMAAC High-Resolution Numerical North American Model (Fig. S8
+†
+) suggest potential deposition along a swath of land at least 50 miles long, where the maximum deposition is expected to be approximately 10 miles southeast of East Palestine.
+89
+Because EPFRs, dioxins, and furans are persistent compounds with long lifetimes, we anticipate seeing a signature of these materials in soil collected from the identified deposition area even if the controlled burn only produced PM that deposited to the area over a few hours.
+
+The analysis of the soil samples collected from the East Palestine community and the surrounding area, both before and after the February 3, 2023, derailment and subsequent vented burn supported our initial hypotheses that EPFRs and dioxins/furans will be co-located. Observed EPFR concentrations and
+g
+-values were consistent with previous research related to contamination events.
+26–32
+TEQ values observed in this study were higher than many areas reported in the Urban
+et al.
+review,
+88
+but in a similar range as other dioxin/furan data from East Palestine measured by Norfolk Southern and U.S. EPA.
+69,70,87
+Conclusion
+
+A key finding from this report is that EPFR concentrations and dioxin/furan TEQ values were elevated in soil samples collected closer to the derailment when compared to the remainder of the dataset, suggesting the controlled vented burn of February 6th, 2023, as a potential source. The findings in this work indicate that additional research is necessary in the East Palestine region to systematically investigate the spatial distribution of EPFRs and dioxins/furans with respect to other sources in evaluating the potential risks that remain. This study also found a positive correlation between EPFR radical concentration and the measured congeners of dioxins/furans. Previous research has shown that EPFR radical recombination can lead to the formation of dioxins/furans,
+46–49
+and significant positive correlations found in this study between the EPFR concentrations and dioxin/furan congener concentrations are consistent with those reports.
+
+To the best of our knowledge, this study is the first to demonstrate a direct link between EPFRs and dioxin/furan concentrations in real-world soil, providing critical insights into environmental contamination and public health risks. Our findings underscore the urgent need for comprehensive environmental monitoring and stricter regulations to mitigate the long-term impacts of industrial accidents on the ecosystem and human health. Future studies should explore the mechanistic pathways through which EPFRs contribute to the formation of dioxins/furans, utilizing longitudinal studies to assess their long-term environmental and health impacts.
+Data availability
+
+All data enclosed in this work can be accessed
+via
+an online dataset.
+92
+Conflicts of interest
+
+The authors have no known conflicts of interest to report.
+Supplementary Material
+
+EM-027-D4EM00609G-s001
+
+EM-027-D4EM00609G-s001.pdf
+(840.3KB, pdf)
+
+Acknowledgments
+
+This research kindly acknowledges Mr Mark Durno and the U.S. EPA for their cooperation and assistance in this soil sampling effort and data collection. We would also like to acknowledge Dr Randall Hall for the creation of the macro used in the deconvolution process, and Ms. Sandra Morgan for her coordination efforts. This work was supported by the National Institute of Environmental Health Sciences (NIEHS) Superfund Research Program grant (P42ES013648), the NIEHS-funded North Carolina State University Center for Human Health and the Environment (P30ES025128), the National Institute of Environmental Health Sciences of the National Institutes of Health under Award Number R21ES036033, and the Herbert W. Hoover Foundation (KSU Index Number 411844). The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health or the Herbert W. Hoover Foundation.
+
+†
+Electronic supplementary information (ESI) available. See DOI:
+https://doi.org/10.1039/d4em00609g
+
+References
+
+U.S.EPA, East Palestine Background,
+https://www.epa.gov/east-palestine-oh-train-derailment/background
+
+Li C. Gao P. Yu R. Zhong H. Wu M. Lam S. S. Sonne C. Vinyl chloride accident unleashes a toxic legacy. Environ. Sci. Ecotechnology. 2023;14:100259. doi: 10.1016/j.ese.2023.100259.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+N. T. S. B. (NTSB), Norfolk Southern Railway Train Derailment with Subsequent Hazardous Material Release and Fires,
+https://www.ntsb.org
+, 2023
+
+Dellinger B. Lomnicki S. Khachatryan L. Maskos Z. Hall R. W. Adounkpe J. McFerrin C. Truong H. Formation and stabilization of persistent free radicals. Proc. Combust. Inst. 2007;31:521–528. doi: 10.1016/j.proci.2006.07.172.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Dellinger B. Pryor W. A. Cueto R. Squadrito G. L. Deutsch W. A. Combustion-generated radicals and their role in the toxicity of fine particulate. Organohalogen Compd. 2000;46:302–305.
+[
+Google Scholar
+]
+
+Dellinger B. Taylor P. Chemical aspects of combustion of hazardous wastes. Cent. Eur. J. Publ. Health. 1998;6:79–87.
+[
+Google Scholar
+]
+
+Gehling W. Dellinger B. Environmentally persistent free radicals and their lifetimes in PM2.5. Environ. Sci. Technol. 2013;47:8172–8178. doi: 10.1021/es401767m.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Dellinger B. Pryor W. A. Cueto R. Squadrito G. L. Hegde V. Deutsch W. A. Role of free radicals in the toxicity of airborne fine particulate matter. Chem. Res. Toxicol. 2001;14:1371–1377. doi: 10.1021/tx010050x.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Maskos Z. Khachatryan L. Dellinger B. Precursors of radicals in tobacco smoke and the role of particulate matter in forming and stabilizing radicals. Energy Fuels. 2005;19:2466–2473. doi: 10.1021/ef058018o.
+[
+DOI
+] [
+Google Scholar
+]
+
+Cormier S. A. Lomnicki S. Backes W. Dellinger B. Origin and health impacts of emissions of toxic by-products and fine particles from combustion and thermal treatment of hazardous wastes and materials. Environ. Health Perspect. 2006;114:810–817. doi: 10.1289/ehp.8629.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Guo C. Richmond-Bryant J. A critical review of environmentally persistent free radical (EPFR) solvent extraction methodology and retrieval efficiency. Chemosphere. 2021;284:131353. doi: 10.1016/j.chemosphere.2021.131353.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Calabrese E. J. Stanek E. J. What proportion of household dust is derived from outdoor soil? J. Soil Contam. 1992;1:253–263. doi: 10.1080/15320389209383415.
+[
+DOI
+] [
+Google Scholar
+]
+
+Calabrese E. J. Stanek E. J. Gilbert C. E. Barnes R. M. Preliminary adult soil ingestion estimates: results of a pilot study. Regul. Toxicol. Pharmacol. 1990;12:88–95. doi: 10.1016/S0273-2300(05)80049-2.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Bierkens J., Van Holderbeke M., Cornelis C. and Torfs R., Exposure through soil and dust ingestion, Dealing with Contaminated Sites: from Theory towards Practical Application, 2011, 261–286
+[
+Google Scholar
+]
+
+Balakrishna S. Saravia J. Thevenot P. Ahlert T. Lominiki S. Dellinger B. Cormier S. A. Environmentally persistent free radicals induce airway hyperresponsiveness in neonatal rat lungs. Part. Fibre Toxicol. 2011;8:11. doi: 10.1186/1743-8977-8-11.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Mahne S. Chuang G. C. Pankey E. Kiruri L. Kadowitz P. J. Dellinger B. Varner K. J. Environmentally persistent free radicals decrease cardiac function and increase pulmonary artery pressure. Am. J. Physiol. Heart Circ. Physiol. 2012;303:H1135–H1142. doi: 10.1152/ajpheart.00545.2012.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Wang K. You D. Balakrishna S. Ripple M. Ahlert T. Fahmy B. Becnel D. Daly M. Subra W. McElduff J. S. Lomax L. G. Troxclair D. Cormier S. A. Sediment from hurricane katrina: potential to produce pulmonary dysfunction in mice. Int. J. Clin. Exp. Med. 2008;1:130–144.
+[
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Wang P. Thevenot P. Saravia J. Ahlert T. Cormier S. A. Radical-containing particles activate dendritic cells and enhance Th17 inflammation in a mouse model of asthma. Am. J. Respir. Cell Mol. Biol. 2011;45:977–983. doi: 10.1165/rcmb.2011-0001OC.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Burn B. R. Varner K. J. Environmentally persistent free radicals compromise left ventricular function during ischemia/reperfusion injury. Am. J. Physiol. Heart Circ. Physiol. 2015;308:H998–h1006. doi: 10.1152/ajpheart.00891.2014.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Lord K. Moll D. Lindsey J. K. Mahne S. Raman G. Dugas T. Cormier S. Troxlair D. Lomnicki S. Dellinger B. Varner K. Environmentally persistent free radicals decrease cardiac function before and after ischemia/reperfusion injury in vivo. J. Recept. Signal Transduction. 2011;31:157–167. doi: 10.3109/10799893.2011.555767.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Chuang G. C. Xia H. Mahne S. E. Varner K. J. Environmentally Persistent Free Radicals Cause Apoptosis in HL-1 Cardiomyocytes. Cardiovasc. Toxicol. 2017;17:140–149. doi: 10.1007/s12012-016-9367-x.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Khachatryan L. Vejerano E. Lomnicki S. Dellinger B. Environmentally Persistent Free Radicals (EPFRs). 1. Generation of Reactive Oxygen Species in Aqueous Solutions. Environ. Sci. Technol. 2011;45:8559–8566. doi: 10.1021/es201309c.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Khachatryan L. Dellinger B. Environmentally Persistent Free Radicals (EPFRs)-2. Are Free Hydroxyl Radicals Generated in Aqueous Solutions? Environ. Sci. Technol. 2011;45:9232–9239. doi: 10.1021/es201702q.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Khachatryan L. McFerrin C. A. Hall R. W. Dellinger B. Environmentally Persistent Free Radicals (EPFRs). 3. Free versus Bound Hydroxyl Radicals in EPFR Aqueous Solutions. Environ. Sci. Technol. 2014;48:9220–9226. doi: 10.1021/es501158r.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Kelley M. A. Hebert V. Y. Thibeaux T. M. Orchard M. A. Hasan F. Cormier S. A. Thevenot P. T. Lomnicki S. M. Varner K. J. Dellinger B. Latimer B. M. Dugas T. R. Model Combustion-Generated Particulate Matter Containing Persistent Free Radicals Redox Cycle to Produce Reactive Oxygen Species. Chem. Res. Toxicol. 2013;26:1862–1871. doi: 10.1021/tx400227s.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Dela Cruz A. L. N. Gehling W. Lomnicki S. Cook R. Dellinger B. Detection of Environmentally Persistent Free Radicals at a Superfund Wood Treating Site. Environ. Sci. Technol. 2011;45:6356–6365. doi: 10.1021/es2012947.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Dela Cruz A. L. N. Cook R. L. Lomnicki S. M. Dellinger B. Effect of Low Temperature Thermal Treatment on Soils Contaminated with Pentachlorophenol and Environmentally Persistent Free Radicals. Environ. Sci. Technol. 2012;46:5971–5978. doi: 10.1021/es300362k.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Dela Cruz A. L. N. Cook R. L. Dellinger B. Lomnicki S. M. Donnelly K. C. Kelley M. A. Cosgriff D. Assessment of environmentally persistent free radicals in soils and sediments from three Superfund sites. Environ. Sci.: Processes Impacts. 2014;16:44–52. doi: 10.1039/C3EM00428G.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Zhang Y. Guo X. Si X. Yang R. Zhou J. Quan X. Environmentally persistent free radical generation on contaminated soil and their potential biotoxicity to luminous bacteria. Sci. Total Environ. 2019;687:348–354. doi: 10.1016/j.scitotenv.2019.06.137.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Jia H. Zhao S. Nulaji G. Tao K. Wang F. Sharma V. K. Wang C. Environmentally Persistent Free Radicals in Soils of Past Coking Sites: Distribution and Stabilization. Environ. Sci. Technol. 2017;51:6000–6008. doi: 10.1021/acs.est.7b00599.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Tian L. Koshland C. P. Yano J. Yachandra V. K. Yu I. T. S. Lee S. C. Lucas D. Carbon-Centered Free Radicals in Particulate Matter Emissions from Wood and Coal Combustion. Energy Fuels. 2009;23:2523–2526. doi: 10.1021/ef8010096.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Zhu Y. Wei J. Liu Y. Liu X. Li J. Zhang J. Assessing the effect on the generation of environmentally persistent free radicals in hydrothermal carbonization of sewage sludge. Sci. Rep. 2019;9:17092. doi: 10.1038/s41598-019-53781-3.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Kanan S. Samara F. Dioxins and furans: A review from chemical and environmental perspectives. Trends Environ. Anal. Chem. 2018;17:1–13. doi: 10.1016/j.teac.2017.12.001.
+[
+DOI
+] [
+Google Scholar
+]
+
+Kulkarni P. S. Crespo J. G. Afonso C. A. M. Dioxins sources and current remediation technologies — A review. Environ. Int. 2008;34:139–153. doi: 10.1016/j.envint.2007.07.009.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Murray F. Smith F. Nitschke K. Humiston C. Kociba R. Schwetz B. Three-generation reproduction study of rats given 2, 3, 7, 8-tetrachlorodibenzo-p-dioxin (TCDD) in the diet. Toxicol. Appl. Pharmacol. 1979;50:241–252. doi: 10.1016/0041-008X(79)90149-2.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Vulsma T. Impact of exposure to maternal PCBs and dioxins on the neonate's thyroid hormone status. Epidemiology. 2000;11:239–241. doi: 10.1097/00001648-200005000-00002.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Çakmak H. Atak N. Dioxins and Health Impacts. Med. J SDU. 2017;24:188–197.
+[
+Google Scholar
+]
+
+Mukerjee D. Health Impact of Polychlorinated Dibenzo-p-dioxins: A Critical Review. J. Air Waste Manage. Assoc. 1998;48:157–165. doi: 10.1080/10473289.1998.10463655.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Bastomsky C. Enhanced Thyroxine Metabolism and High Uptake Goiters in Rats After a Single Dose of 2, 3, 7, 8-Tetrachlorodibenzo-p-Dioxin1. Endocrinology. 1977;101:292–296. doi: 10.1210/endo-101-1-292.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Hardell L. Eriksson M. Soft-tissue sarcomas, phenoxy herbicides, and chlorinated phenols. Lancet. 1981;318:250. doi: 10.1016/S0140-6736(81)90491-8.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Hardell L. Eriksson M. Lenner P. Lundgren E. Malignant lymphoma and exposure to chemicals, especially organic solvents, chlorophenols and phenoxy acids: a case-control study. Br. J. Cancer. 1981;43:169–176. doi: 10.1038/bjc.1981.25.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Hardell L. Sandström A. Case-control study: soft-tissue sarcomas and exposure to phenoxyacetic acids or chlorophenols. Br. J. Cancer. 1979;39:711–717. doi: 10.1038/bjc.1979.125.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+S. Institute of Medicine Committee on the Implications of Dioxin in the Food, in Dioxins and Dioxin-like Compounds in the Food Supply: Strategies to Decrease Exposure, National Academies Press (US), Washington (DC), 2003, 10.17226/10763
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Sullivan J. B. and Krieger G. R., Clinical Environmental Health and Toxic Exposures, Lippincott Williams & Wilkins, Philadelphia, 2001
+[
+Google Scholar
+]
+
+Krieger R. I., Handbook of Pesticide Toxicology, Principles, Academic Press, San Diego, CA, 2001, vol. 1
+[
+Google Scholar
+]
+
+Abad E. Adrados M. Caixach J. Rivera J. Dioxin abatement strategies and mass balance at a municipal waste management plant. Environ. Sci. Technol. 2002;36:92–99. doi: 10.1021/es010039j.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Abad E. Caixach J. Rivera J. Improvements in dioxin abatement strategies at a municipal waste management plant in Barcelona. Chemosphere. 2003;50:1175–1182. doi: 10.1016/S0045-6535(02)00483-6.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Karademir A. Bakoglu M. Taspinar F. Ayberk S. Removal of PCDD/Fs from flue gas by a fixed-bed activated carbon filter in a hazardous waste incinerator. Environ. Sci. Technol. 2004;38:1201–1207. doi: 10.1021/es034681k.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Stanmore B. The formation of dioxins in combustion systems. Combust. Flame. 2004;136:398–427. doi: 10.1016/j.combustflame.2003.11.004.
+[
+DOI
+] [
+Google Scholar
+]
+
+Andersson P. Rappe C. Maaskant O. Unsworth J. Marklund S. Low temperature catalytic destruction of PCDD/F in flue gas from waste incineration. Organohalogen Compd. 1998;36:109–112.
+[
+Google Scholar
+]
+
+Cieplik M. K. Carbonell J. P. Muñoz C. Baker S. Krüger S. Liljelind P. Marklund S. Louw R. On dioxin formation in iron ore sintering. Environ. Sci. Technol. 2003;37:3323–3331. doi: 10.1021/es026292g.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Öberg L. Wagman N. Andersson R. Rappe C. De novo formation of PCDD/Fs in compost and sewage sludge–a status report. Organohalogen Compd. 1993;11:297–302.
+[
+Google Scholar
+]
+
+Sidhu S. Edwards P. Role of phenoxy radicals in PCDD/F formation. Int. J. Chem. Kinet. 2002;34:531–541. doi: 10.1002/kin.10083.
+[
+DOI
+] [
+Google Scholar
+]
+
+Clement R. and Tashiro C., Forest fires as a source of PCDD and PCDF, 11th International Symposium on Chlorinated Dioxins and Related Compounds, Research Triangle Park, NC, 1991, 23, 27
+[
+Google Scholar
+]
+
+Salamanca M. Chandía C. Hernández A. Impact of forest fires on the concentrations of polychlorinated dibenzo-p-dioxin and dibenzofurans in coastal waters of central Chile. Sci. Total Environ. 2016;573:1397–1405. doi: 10.1016/j.scitotenv.2016.07.113.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Ruokojärvi P. Aatamila M. Ruuskanen J. Toxic chlorinated and polyaromatic hydrocarbons in simulated house fires. Chemosphere. 2000;41:825–828. doi: 10.1016/S0045-6535(99)00549-4.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Dopico M. Gómez A. Review of the current state and main sources of dioxins around the world. J. Air Waste Manage. Assoc. 2015;65:1033–1049. doi: 10.1080/10962247.2015.1058869.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Yang L. Liu G. Shen J. Wang M. Yang Q. Zheng M. Environmental characteristics and formations of polybrominated dibenzo-p-dioxins and dibenzofurans. Environ. Int. 2021;152:106450. doi: 10.1016/j.envint.2021.106450.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Isosaari P. Kohonen T. Kiviranta H. Tuomisto J. Vartiainen T. Assessment of levels, distribution, and risks of polychlorinated dibenzo-p-dioxins and dibenzofurans in the vicinity of a vinyl chloride monomer production plant. Environ. Sci. Technol. 2000;34:2684–2689. doi: 10.1021/es991311g.
+[
+DOI
+] [
+Google Scholar
+]
+
+Lomnicki S. Dellinger B. A Detailed Mechanism of the Surface-Mediated Formation of PCDD/F from the Oxidation of 2-Chlorophenol on a CuO/Silica Surface. J. Phys. Chem. A. 2003;107:4387–4395. doi: 10.1021/jp026045z.
+[
+DOI
+] [
+Google Scholar
+]
+
+Vejerano E. P. Holder A. L. Marr L. C. Emissions of Polycyclic Aromatic Hydrocarbons, Polychlorinated Dibenzo-p-Dioxins, and Dibenzofurans from Incineration of Nanomaterials. Environ. Sci. Technol. 2013;47:4866–4874. doi: 10.1021/es304895z.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Vejerano E. P. Rao G. Khachatryan L. Cormier S. A. Lomnicki S. Environmentally Persistent Free Radicals: Insights on a New Class of Pollutants. Environ. Sci. Technol. 2018;52:2468–2481. doi: 10.1021/acs.est.7b04439.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Truong H. Lomnicki S. Dellinger B. Potential for Misidentification of Environmentally Persistent Free Radicals as Molecular Pollutants in Particulate Matter. Environ. Sci. Technol. 2010;44:1933–1939. doi: 10.1021/es902648t.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Liu X. Yang L. Liu G. Zheng M. Formation of Environmentally Persistent Free Radicals during Thermochemical Processes and their Correlations with Unintentional Persistent Organic Pollutants. Environ. Sci. Technol. 2021;55:6529–6541. doi: 10.1021/acs.est.0c08762.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Nganai S. Lomnicki S. Surface catalysed PCDD/F formation from precursors - high PCDF yield does not indicate de novo mechanism! Int. J. Environ. Pollut. 2017;61:208–222. doi: 10.1504/IJEP.2017.087761.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Guan X. Ghimire A. Potter P. M. Lomnicki S. M. Role of Fe2O3 in fly ash surrogate on PCDD/Fs formation from 2-monochlorophenol. Chemosphere. 2019;226:809–816. doi: 10.1016/j.chemosphere.2019.03.175.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Chen T. Sun C. Wang T. Lomnicki S. Zhan M. Li X. Lu S. Yan J. Formation of DF, PCDD/Fs and EPFRs from 1,2,3-trichlorobenzene over metal oxide/silica surface. Waste Manage. 2020;118:27–35. doi: 10.1016/j.wasman.2020.08.024.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Zhang M. Buekens A. Jiang X. Li X. Dioxins and polyvinylchloride in combustion and fires. Waste Manag. Res. 2015;33:630–643. doi: 10.1177/0734242X15590651.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+N. Southern, Norfolk Southern Residential, Commercial and Agricultural Soil Sampling Results,
+https://www.epa.gov
+, 2023
+
+U.S.EPA, Phase 1 Soil Sampling Results,
+https://www.epa.gov/east-palestine-oh-train-derailment/phase-one-residential-commercial-and-agricultural-soil-sampling#df
+, 2023
+
+U.S.EPA, Soil Sampling Operating Procedure,
+https://www.epa.gov/sites/default/files/2015-06/documents/Soil-Sampling.pdf
+, 2023
+
+Nykamp M. Becker F. Hoelzmann P. Total organic carbon quantification in soils and sediments: Performance test of a modified sample preparation method. MethodsX. 2024;13:102934. doi: 10.1016/j.mex.2024.102934.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Wang J. Zhu L. Wang Y. Gao S. Daut G. A comparison of different methods for determining the organic and inorganic carbon content of lake sediment from two lakes on the Tibetan Plateau. Quat. Int. 2012;250:49–54. doi: 10.1016/j.quaint.2011.06.030.
+[
+DOI
+] [
+Google Scholar
+]
+
+Schumacher B., Methods for the Determination of Total Organic Carbon (TOC) In Soils and Sediments, Ecological Risk Assessment Support, Center Office of Research and Development, 2002
+[
+Google Scholar
+]
+
+Li X. Coles B. J. Ramsey M. H. Thornton I. Sequential extraction of soils for multielement analysis by ICP-AES. Chem. Geol. 1995;124:109–123. doi: 10.1016/0009-2541(95)00029-L.
+[
+DOI
+] [
+Google Scholar
+]
+
+Moré J., The Levenberg-Marquaerdt algorithm: Implementation and theory, Numerical Analysis, 1978, pp. 105–116
+[
+Google Scholar
+]
+
+U.S.EPA, Method 8290A,
+https://www.epa.gov/sites/default/files/2015-07/documents/epa-8290a.pdf
+, 2007
+
+U.S.EPA, Fact Sheet: Soil Sampling Plan,
+https://www.epa.gov/system/files/documents/2023-03/EPTDSoilSamplingFactsheetV3.pdf
+, 2023
+
+U.S.EPA, Dioxin and Dioxin-like Compounds; Toxic Equivalency Information; Community Right-To-Know Toxic Chemical Release Reporting,
+https://www.govinfo.gov/content/pkg/FR-2007-05-10/pdf/E7-9015.pdf
+, 2007, 72, 26544–26554.
+[
+Google Scholar
+]
+
+U.S.EPA, Residential Soil RSL,
+https://semspub.epa.gov/work/HQ/404334.pdf
+, 2023
+
+U.S.EPA, Human Health Risk Models and Tools,
+https://www.epa.gov/risk/human-health-risk-models-and-tools
+, 2023
+
+Grubbs F. Procedures for Detecting Outlying Observations in Samples. Technometrics. 1969;11(1):1–21. doi: 10.1080/00401706.1969.10490657.
+[
+DOI
+] [
+Google Scholar
+]
+
+Shiraishi T.-a., Multiple Comparisons for Bernoulli Data,
+https://link.springer.com/book/10.1007/978-981-19-2708-9
+, 2022
+
+U.S.EPA, Definition and Procedure for the Determination of the Method Detection Limit,
+https://www.epa.gov
+, 2016, Revision 2
+
+Cook R. L., Ampiah E., Sprunger P. T. and Hall R. W., in Encyclopedia of Soils in the Environment, ed. M. J. Goss and M. Oliver, Academic Press, Oxford, 2nd edn, 2023, pp. 533–543, 10.1016/B978-0-12-822974-3.00088-4
+[
+DOI
+] [
+Google Scholar
+]
+
+Lomnicki S. Truong H. Vejerano E. Dellinger B. Copper oxide-based model of persistent free radical formation on combustion-derived particulate matter. Environ. Sci. Technol. 2008;42:4982–4988. doi: 10.1021/es071708h.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+U.S.EPA, Summary of Phase 1 Dioxin Results for the East Palestine Derailment Incident,
+https://www.epa.gov/system/files/documents/2023-10/phase-1-soil-sampling-technical-memo-20230914pdf.pdf
+, 2023
+
+Urban J. D. Wikoff D. S. Bunch A. T. Harris M. A. Haws L. C. A review of background dioxin concentrations in urban/suburban and rural soils across the United States: implications for site assessments and the establishment of soil cleanup levels. Sci. Total Environ. 2014;466–467:586–597. doi: 10.1016/j.scitotenv.2013.07.065.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+U.S.EPA, Retrospective Soot Deposition Analysis for the East Palestine Derailment Incident Response,
+https://www.epa.gov/system/files/documents/2023-06/IMAACRetrospectiveAnalysisfortheEastPalestineDerailment-FINALTechnicalMemo.pdf
+, 2023
+
+Nwosu U. G. Roy A. dela Cruz A. L. N. Dellinger B. Cook R. Formation of environmentally persistent free radical (EPFR) in iron(iii) cation-exchanged smectite clay. Environ. Sci.: Processes Impacts. 2016;18:42–50. doi: 10.1039/C5EM00554J.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Nwosu U. G. Khachatryan L. Youm S. G. Roy A. Dela Cruz A. L. N. Nesterov E. E. Dellinger B. Cook R. L. Model system study of environmentally persistent free radicals formation in a semiconducting polymer modified copper clay system at ambient temperature. RSC Adv. 2016;6:43453–43462. doi: 10.1039/C6RA08051K.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Lard M. L., Eichler S. E., Gao P., Singh K., Ortiz J., Cook R. L., Cormier S. A. and Richmond-Bryant J., East Palestine Soil Sample Analysis - August, 2023, Online Dataset, 2024, 10.5281/zenodo.12777352
+[
+DOI
+]
+
+Associated Data
+
+This section collects any data citations, data availability statements, or supplementary materials included in this article.
+
+Supplementary Materials
+
+EM-027-D4EM00609G-s001
+
+EM-027-D4EM00609G-s001.pdf
+(840.3KB, pdf)
+
+Data Availability Statement
+
+All data enclosed in this work can be accessed
+via
+an online dataset.
+92
+
+Articles from Environmental Science. Processes & Impacts are provided here courtesy of
+Royal Society of Chemistry
+
+ACTIONS
+
+View on publisher site
+
+Cite
+
+Collections
+
+Permalink
+
+PERMALINK
+
+Copy
+
+RESOURCES
+
+Similar articles
+
+Cited by other articles
+
+Links to NCBI Databases
+
+Cite
+
+Copy
+
+Download .nbib
+
+.nbib
+
+Format:
+
+AMA
+
+APA
+
+MLA
+
+NLM
+
+Add to Collections
+
+Create a new collection
+
+Add to an existing collection
+
+Name your collection
+
+*
+
+Choose a collection
+
+Unable to load your collection due to an error
+
+Please try again
+
+Add
+
+Cancel
+
+Follow NCBI
+
+NCBI on X (formerly known as Twitter)
+
+NCBI on Facebook
+
+NCBI on LinkedIn
+
+NCBI on GitHub
+
+NCBI RSS feed
+
+Connect with NLM
+
+NLM on X (formerly known as Twitter)
+
+NLM on Facebook
+
+NLM on YouTube
+
+National Library of Medicine
+
+8600 Rockville Pike
+Bethesda, MD 20894
+
+Web Policies
+
+FOIA
+
+HHS Vulnerability Disclosure
+
+Help
+
+Accessibility
+
+Careers
+
+NLM
+
+NIH
+
+HHS
+
+USA.gov
+
+Back to Top

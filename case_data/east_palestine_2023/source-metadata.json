@@ -1,0 +1,222 @@
+[
+  {
+    "artifact_content_hashes": [
+      "dfadf9808a5f6f1a4db7a431368c04c1e6dfe85d1112f6f180077e4376e83663"
+    ],
+    "canonical_url": "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P101CYLV.TXT",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/epa-aspect.txt",
+    "cleaned_content_sha256": "dfadf9808a5f6f1a4db7a431368c04c1e6dfe85d1112f6f180077e4376e83663",
+    "is_first_hand": true,
+    "is_official": true,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "US Environmental Protection Agency",
+    "saved_snapshot_bytes": 980,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/epa-aspect.txt",
+    "saved_snapshot_sha256": "ad875d0d9007487954b84f965eacd5b1053a0664ec7dce36be1f75bf6f31b428",
+    "snapshot_cleaned_sha256": "dfadf9808a5f6f1a4db7a431368c04c1e6dfe85d1112f6f180077e4376e83663",
+    "snapshot_id": "SS-4189ccc869dd402ac856452ea53bc00e",
+    "snapshot_raw_sha256": "ad875d0d9007487954b84f965eacd5b1053a0664ec7dce36be1f75bf6f31b428",
+    "source_id": "S-829317ad30ea944125057baab20c1a8d",
+    "source_type": "OFFICIAL_REPORT",
+    "title": "EPA ASPECT response record"
+  },
+  {
+    "artifact_content_hashes": [
+      "f77bfcdd81ad0a6505eb8fd1c3217a1a2db193010677f1a0d8d4c04cbfb6c8e7"
+    ],
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10413936/",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/pmc-air-patterns.txt",
+    "cleaned_content_sha256": "f77bfcdd81ad0a6505eb8fd1c3217a1a2db193010677f1a0d8d4c04cbfb6c8e7",
+    "is_first_hand": false,
+    "is_official": false,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "Environmental Science & Technology Letters",
+    "saved_snapshot_bytes": 144109,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/pmc-air-patterns.html",
+    "saved_snapshot_sha256": "cf37f49890b2378c2e6c38caa8d45dd38074fac9b2bfc1e5be79196af59d50f6",
+    "snapshot_cleaned_sha256": "f77bfcdd81ad0a6505eb8fd1c3217a1a2db193010677f1a0d8d4c04cbfb6c8e7",
+    "snapshot_id": "SS-27087b254e0d2037ddbabdbb1b490260",
+    "snapshot_raw_sha256": "cf37f49890b2378c2e6c38caa8d45dd38074fac9b2bfc1e5be79196af59d50f6",
+    "source_id": "S-e2ffcb0f233da6e399ca2900e92c7590",
+    "source_type": "TECHNICAL_ANALYSIS",
+    "title": "Air Pollutant Patterns and Human Health Risk"
+  },
+  {
+    "artifact_content_hashes": [
+      "d2ed740678b1fff304523fcba312740a185339065d8d862c4e78b2d98d11bbc9"
+    ],
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11843876/",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/pmc-soil.txt",
+    "cleaned_content_sha256": "d2ed740678b1fff304523fcba312740a185339065d8d862c4e78b2d98d11bbc9",
+    "is_first_hand": false,
+    "is_official": false,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "Environmental Science: Processes & Impacts",
+    "saved_snapshot_bytes": 255779,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/pmc-soil.html",
+    "saved_snapshot_sha256": "54fdb711680405286c5d994189e8bf2b05ad87a30cb15b950e559e0e9c62a372",
+    "snapshot_cleaned_sha256": "d2ed740678b1fff304523fcba312740a185339065d8d862c4e78b2d98d11bbc9",
+    "snapshot_id": "SS-7281e5fe70f94087999b8295feb3a7f6",
+    "snapshot_raw_sha256": "54fdb711680405286c5d994189e8bf2b05ad87a30cb15b950e559e0e9c62a372",
+    "source_id": "S-357cc0884120ffee3e8bb27716c3be41",
+    "source_type": "TECHNICAL_ANALYSIS",
+    "title": "Soil contamination following the East Palestine derailment"
+  },
+  {
+    "artifact_content_hashes": [
+      "ccf35d4f0667a2fa282e8578ac40b3c0948623da8177dcd71ac1928930a28786"
+    ],
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12583197/",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/pmc-hazard-review.txt",
+    "cleaned_content_sha256": "ccf35d4f0667a2fa282e8578ac40b3c0948623da8177dcd71ac1928930a28786",
+    "is_first_hand": false,
+    "is_official": false,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "Journal of Exposure Science & Environmental Epidemiology",
+    "saved_snapshot_bytes": 309150,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/pmc-hazard-review.html",
+    "saved_snapshot_sha256": "90c63d8cb6e24055028317ae72d1c9f07a6d13a3cf12c5194be233489d9a2861",
+    "snapshot_cleaned_sha256": "ccf35d4f0667a2fa282e8578ac40b3c0948623da8177dcd71ac1928930a28786",
+    "snapshot_id": "SS-5f440f188c8de12e11ee029aa7de8b3c",
+    "snapshot_raw_sha256": "90c63d8cb6e24055028317ae72d1c9f07a6d13a3cf12c5194be233489d9a2861",
+    "source_id": "S-41137a0b27a77f83ff23313173b89eb1",
+    "source_type": "TECHNICAL_ANALYSIS",
+    "title": "Known and unknown health hazards: a phased scoping review"
+  },
+  {
+    "artifact_content_hashes": [
+      "f9f8fd80ba1706745adde4796ebb78027e55157544dd296042fe581fd251e385"
+    ],
+    "canonical_url": "https://www.epa.gov/east-palestine-oh-train-derailment/about-air-monitoring",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/epa-air.txt",
+    "cleaned_content_sha256": "f9f8fd80ba1706745adde4796ebb78027e55157544dd296042fe581fd251e385",
+    "is_first_hand": true,
+    "is_official": true,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "US Environmental Protection Agency",
+    "saved_snapshot_bytes": 80659,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/epa-air.html",
+    "saved_snapshot_sha256": "b5aa056a1bd2f8d8f16f9528f63fd10adb05906786396422aaff664d0840ea8b",
+    "snapshot_cleaned_sha256": "f9f8fd80ba1706745adde4796ebb78027e55157544dd296042fe581fd251e385",
+    "snapshot_id": "SS-394bf524b128f20a2ee893aed0aac196",
+    "snapshot_raw_sha256": "b5aa056a1bd2f8d8f16f9528f63fd10adb05906786396422aaff664d0840ea8b",
+    "source_id": "S-e80ce44a5fbd5a400546f26562b4bc57",
+    "source_type": "OFFICIAL_REPORT",
+    "title": "About Air Monitoring in East Palestine"
+  },
+  {
+    "artifact_content_hashes": [
+      "35b4628ea25068597a39ef7e1ef1fd4a3c62f92cc96f106051e77191c498c1b6"
+    ],
+    "canonical_url": "https://www.epa.gov/east-palestine-oh-train-derailment/about-executive-order-14108",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/epa-executive-order.txt",
+    "cleaned_content_sha256": "35b4628ea25068597a39ef7e1ef1fd4a3c62f92cc96f106051e77191c498c1b6",
+    "is_first_hand": true,
+    "is_official": true,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "US Environmental Protection Agency",
+    "saved_snapshot_bytes": 70526,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/epa-executive-order.html",
+    "saved_snapshot_sha256": "94137bb13ba2ef5b5cd42e73e1bd50f82f0d4a1e281e1c59fada58351aafb619",
+    "snapshot_cleaned_sha256": "35b4628ea25068597a39ef7e1ef1fd4a3c62f92cc96f106051e77191c498c1b6",
+    "snapshot_id": "SS-c0fd7ae9e8808a3600ad10d453d82463",
+    "snapshot_raw_sha256": "94137bb13ba2ef5b5cd42e73e1bd50f82f0d4a1e281e1c59fada58351aafb619",
+    "source_id": "S-8054a1656efb57e78a952e49a01b4f6c",
+    "source_type": "OFFICIAL_REPORT",
+    "title": "Executive Order 14108 response summary"
+  },
+  {
+    "artifact_content_hashes": [
+      "7eaf7b994ae394589c7a1ce02cd4606cb52f90b855b762e71421e6ed57006a8b"
+    ],
+    "canonical_url": "https://www.epa.gov/east-palestine-oh-train-derailment/what-status-cleanup-site",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/epa-cleanup.txt",
+    "cleaned_content_sha256": "7eaf7b994ae394589c7a1ce02cd4606cb52f90b855b762e71421e6ed57006a8b",
+    "is_first_hand": true,
+    "is_official": true,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "US Environmental Protection Agency",
+    "saved_snapshot_bytes": 64976,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/epa-cleanup.html",
+    "saved_snapshot_sha256": "59ff86702cf8733d9722d1aefd6244791a4e9b75320da4ce678bcb92e5e11aae",
+    "snapshot_cleaned_sha256": "7eaf7b994ae394589c7a1ce02cd4606cb52f90b855b762e71421e6ed57006a8b",
+    "snapshot_id": "SS-bd1489ff059963763e095d142141dea0",
+    "snapshot_raw_sha256": "59ff86702cf8733d9722d1aefd6244791a4e9b75320da4ce678bcb92e5e11aae",
+    "source_id": "S-1cfbbb5770e0a592852854ae5291de6a",
+    "source_type": "OFFICIAL_REPORT",
+    "title": "Status of cleanup at the derailment site"
+  },
+  {
+    "artifact_content_hashes": [
+      "ba03a761c436afe85224159d593db96918e82bbd844460d3027c82349934968c"
+    ],
+    "canonical_url": "https://www.epa.gov/newsreleases/statement-regional-administrator-debra-shore-east-palestine-train-derailment",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/epa-statement.txt",
+    "cleaned_content_sha256": "ba03a761c436afe85224159d593db96918e82bbd844460d3027c82349934968c",
+    "is_first_hand": true,
+    "is_official": true,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "US Environmental Protection Agency",
+    "saved_snapshot_bytes": 54351,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/epa-statement.html",
+    "saved_snapshot_sha256": "7e9f964633b880f616a597187dd42a6663cc8df7363e37731123d47f3ee43eed",
+    "snapshot_cleaned_sha256": "ba03a761c436afe85224159d593db96918e82bbd844460d3027c82349934968c",
+    "snapshot_id": "SS-6b3a4c0ea2add3ed9f4931134f3d0bfd",
+    "snapshot_raw_sha256": "7e9f964633b880f616a597187dd42a6663cc8df7363e37731123d47f3ee43eed",
+    "source_id": "S-5949492da139aefa629e82c26e8357b2",
+    "source_type": "OFFICIAL_REPORT",
+    "title": "EPA regional statement on the East Palestine derailment"
+  },
+  {
+    "artifact_content_hashes": [
+      "47d61dd739c5af7ae75512362077ece6152adab1fb1f2fbfe80db8f170aff0a0"
+    ],
+    "canonical_url": "https://www.ntsb.gov/investigations/Documents/RRD23MR005%20East%20Palestine%20OH%20Prelim.pdf",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/ntsb_rrd23mr005_preliminary.txt",
+    "cleaned_content_sha256": "e32b8ffd1f4fcb44cd70cf5458898b5a6fbab6eedab7934b77ec86a2f47841e1",
+    "is_first_hand": true,
+    "is_official": true,
+    "parser_name": "pypdf-text-layer",
+    "parser_version": "1",
+    "publisher": "National Transportation Safety Board",
+    "saved_snapshot_bytes": 424776,
+    "saved_snapshot_path": "case_data/east_palestine_2023/ntsb_rrd23mr005_preliminary.pdf",
+    "saved_snapshot_sha256": "cca48e3523dca01a34488b3b5a6c28b6a05b485c895b21fc15e9304fa61da7ac",
+    "snapshot_cleaned_sha256": "e32b8ffd1f4fcb44cd70cf5458898b5a6fbab6eedab7934b77ec86a2f47841e1",
+    "snapshot_id": "SS-36063a9c3a25e4f129b1159513eb1f9c",
+    "snapshot_raw_sha256": "cca48e3523dca01a34488b3b5a6c28b6a05b485c895b21fc15e9304fa61da7ac",
+    "source_id": "S-95051240aa84f894649e0f7f92fbfd47",
+    "source_type": "OFFICIAL_REPORT",
+    "title": "NTSB Preliminary Report RRD23MR005"
+  },
+  {
+    "artifact_content_hashes": [
+      "26ae0a9f3b1364ba12b7f55e012e042d7a639380e5fb75c5e4263320fcb7b461"
+    ],
+    "canonical_url": "https://www.ntsb.gov/investigations/Pages/RRD23MR005.aspx",
+    "cleaned_content_path": "case_data/east_palestine_2023/cleaned/ntsb-investigation.txt",
+    "cleaned_content_sha256": "26ae0a9f3b1364ba12b7f55e012e042d7a639380e5fb75c5e4263320fcb7b461",
+    "is_first_hand": true,
+    "is_official": true,
+    "parser_name": "html",
+    "parser_version": "1",
+    "publisher": "National Transportation Safety Board",
+    "saved_snapshot_bytes": 117300,
+    "saved_snapshot_path": "case_data/east_palestine_2023/snapshots/ntsb-investigation.html",
+    "saved_snapshot_sha256": "e2c21e543627a9fb9e4eb176ba08ac287289bcc531142ea92464d1e07cb16f64",
+    "snapshot_cleaned_sha256": "26ae0a9f3b1364ba12b7f55e012e042d7a639380e5fb75c5e4263320fcb7b461",
+    "snapshot_id": "SS-458d94978c85cbce1bedca7546f8cb8b",
+    "snapshot_raw_sha256": "e2c21e543627a9fb9e4eb176ba08ac287289bcc531142ea92464d1e07cb16f64",
+    "source_id": "S-424c7b317753d4582d84c7f4c5b947e1",
+    "source_type": "WEB_PAGE",
+    "title": "NTSB East Palestine investigation docket summary"
+  }
+]

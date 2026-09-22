@@ -1,0 +1,147 @@
+"""Composition root for the Investigation Console API.
+
+This module intentionally does not reuse the legacy MarketPulse HTTP app.  It
+owns the Investigation database migration, repository/session lifetime, and
+the two Phase 5 routers required by the local console.
+"""
+
+from __future__ import annotations
+
+import logging
+import os
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+import uvicorn
+from alembic import command
+from alembic.config import Config
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from sqlalchemy import Engine, text
+
+from marketpulse.config import Settings
+from marketpulse.investigation.api import ReplayCaseRunner
+from marketpulse.investigation.api import router as investigation_router
+from marketpulse.investigation.persistence.base import (
+    create_investigation_engine,
+    create_session_factory,
+)
+from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from marketpulse.investigation.review.api import router as review_router
+
+LOGGER = logging.getLogger("marketpulse.investigation.server")
+
+
+def _alembic_config(database_url: str) -> Config:
+    source_root = Path(__file__).resolve().parents[3]
+    source_config = source_root / "alembic.ini"
+    if source_config.is_file():
+        config = Config(source_config)
+    else:
+        packaged_root = Path(__file__).resolve().parent / "persistence"
+        config = Config(packaged_root / "alembic.ini")
+    config.attributes["database_url"] = database_url
+    return config
+
+
+def _upgrade_database(database_url: str) -> None:
+    command.upgrade(_alembic_config(database_url), "head")
+
+
+def create_app(
+    *,
+    settings: Settings | None = None,
+    east_palestine_replay: ReplayCaseRunner | None = None,
+) -> FastAPI:
+    runtime_settings = settings or Settings.from_env(require_api_key=False)
+    database_url = runtime_settings.database_url.get_secret_value()
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        _upgrade_database(database_url)
+        engine = create_investigation_engine(database_url)
+        sessions = create_session_factory(engine)
+        repository = InvestigationRepository(sessions)
+        app.state.inv_engine = engine
+        app.state.inv_sessions = sessions
+        app.state.inv_repository = repository
+        app.state.review_session_factory = sessions
+        app.state.settings = runtime_settings
+        replay_runner = east_palestine_replay
+        if replay_runner is None:
+            from marketpulse.investigation.case_replay import (
+                EastPalestineReplayService,
+                default_blob_root,
+                default_case_root,
+            )
+
+            replay_runner = EastPalestineReplayService(
+                sessions=sessions,
+                repository=repository,
+                case_root=default_case_root(),
+                blob_root=default_blob_root(),
+            )
+        app.state.east_palestine_replay = replay_runner
+        try:
+            yield
+        finally:
+            engine.dispose()
+
+    app = FastAPI(
+        title="Search Report Investigation API",
+        version="0.1.0",
+        lifespan=lifespan,
+    )
+    if runtime_settings.review_allowed_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=list(runtime_settings.review_allowed_origins),
+            allow_credentials=True,
+            allow_methods=["GET", "POST"],
+            allow_headers=["Content-Type", "Idempotency-Key", "X-Requested-With"],
+        )
+    app.include_router(investigation_router)
+    app.include_router(review_router)
+
+    @app.get("/api/health")
+    def health(request: Request) -> dict[str, str]:
+        engine = request.app.state.inv_engine
+        assert isinstance(engine, Engine)
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+        return {
+            "status": "ok",
+            "service": "search-report-investigation",
+            "database": "ok",
+        }
+
+    if os.getenv("INVESTIGATION_SERVE_FRONTEND", "false").lower() in {
+        "1",
+        "true",
+        "yes",
+    }:
+        frontend_root = Path(__file__).resolve().parents[3] / "frontend"
+        if frontend_root.is_dir():
+            app.mount("/", StaticFiles(directory=frontend_root, html=True), name="console")
+
+    return app
+
+
+app = create_app()
+
+
+def main() -> None:
+    logging.basicConfig(level=os.getenv("MARKETPULSE_LOG_LEVEL", "INFO").upper())
+    uvicorn.run(
+        "marketpulse.investigation.server:app",
+        host=os.getenv("INVESTIGATION_API_HOST", "127.0.0.1"),
+        port=int(os.getenv("INVESTIGATION_API_PORT", "8000")),
+        reload=False,
+        workers=1,
+    )
+
+
+if __name__ == "__main__":
+    main()

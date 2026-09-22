@@ -1,0 +1,514 @@
+RRD23MR005.aspx
+
+Investigations
+
+Investigation Process
+
+Investigation Reports
+
+Investigation Dockets
+
+Investigative Offices
+
+Safety Recommendations
+
+Safety Research
+
+Accident Data
+
+Statistical Reviews - Aviation
+
+Marine Safety Data Dashboard
+
+Safety Research Reports
+
+News & Events
+
+Events
+
+Newsroom
+
+Official Testimony
+
+Congressional and Regulatory Correspondence
+
+Advocacy
+
+Safety Alerts
+
+Safety Issues
+
+Advocacy Activities
+
+Family Assistance
+
+Survivors, Family, and Friends
+
+Response Community
+
+About Us
+
+History
+
+The Board
+
+Organization
+
+FOIA
+
+Legal
+
+Employment
+
+Procurement Information
+
+Budget & Performance Reports
+
+​
+​
+
+Investigations
+
+Investigation Process
+
+Investigation Reports
+
+Investigation Dockets
+
+Investigative Offices
+
+Safety Recommendations
+
+Safety Research
+
+Accident Data
+
+Statistical Reviews - Aviation
+
+Marine Safety Data Dashboard
+
+Safety Research Reports
+
+News & Events
+
+Events
+
+Newsroom
+
+Official Testimony
+
+Congressional and Regulatory Correspondence
+
+Advocacy
+
+Safety Alerts
+
+Safety Issues
+
+Advocacy Activities
+
+Family Assistance
+
+Survivors, Family, and Friends
+
+Response Community
+
+About Us
+
+History
+
+The Board
+
+Organization
+
+FOIA
+
+Legal
+
+Employment
+
+Procurement Information
+
+Budget & Performance Reports
+​
+
+Home
+
+Investigations
+
+Norfolk Southern Railway Derailment and Hazardous Materials Release
+
+Investigations
+Currently selected
+
+Libraries
+Lists
+Pictures
+The Investigative Process
+Accident Dockets
+Investigation Reports
+Aviation Database
+
+Accident Location
+
+Investigative Detail Image
+
+​​Overhead view of derailment and early fire. (Courtesy of Eric’s Train Yard.)
+
+Norfolk Southern Railway Derailment and Hazardous Materials Release
+
+What Happened
+
+What Happened
+​​On February 3, 2023, about 8:54 p.m., eastbound Norfolk Southern Railway (NS) train 32N derailed 38 mixed freight railcars at milepost 49.5 on the NS Fort Wayne Line of the Keystone Division in East Palestine, Ohio. Three tank cars carrying flammable and combustible hazardous materials were mechanically breached during the derailment. A fire ignited during the derailment and grew to involve lading released from these three mechanically breached tank cars, additional derailed tank cars carrying both hazardous and non-hazardous materials, and freight cars. Emergency responders established a 1-mile evacuation zone that affected about 2,000 residents.
+The derailed equipment included five hazardous materials tank cars carrying vinyl chloride monomer (VCM), a compressed liquified flammable gas offered for shipment as “UN1086 vinyl chloride, stabilized, 2.1.” The five VCM tank cars were not mechanically breached during the derailment, but over the next day, four of these tank cars were exposed to fires and released material from pressure relief devices. These releases ceased on the afternoon of February 4. Acting on information provided by NS and its contractors that a dangerous chemical reaction was occurring within a VCM tank car, the incident commander managing the response chose to expand the evacuation zone and perform a vent and burn (a deliberate breach of a tank car) on all five derailed VCM tank cars. The incident commander was not aware of dissenting opinions the VCM shipper had provided to NS and its contractors. A contractor hired by NS breached the VCM tank cars at 4:37 p.m. on February 6, releasing and igniting their lading.
+No injuries were reported during the derailment or emergency response.
+
+What We Found
+
+What We Found
+​We determined that the probable cause of the derailment involving Norfolk Southern Railway train 32N was the failure of the L1 bearing on the 23rd railcar in the consist that overheated and caused the axle to separate, derailing the train and leading to a postderailment fire that likely began with the release of a Class 3 flammable liquid from a DOT-111 tank car that was punctured during the derailment.
+Contributing to the postderailment fire and the severity of the hazardous materials release was the continued use of DOT-111 tank cars in hazardous materials service. Also contributing to the severity of the hazardous materials release were:
+the failure of Norfolk Southern Railway and its contractors to communicate relevant expertise and dissenting opinions to the incident commander and
+the inaccurate representation by Norfolk Southern Railway and its contractors that the tank cars were at risk of catastrophic failure from a polymerization reaction, which created unwarranted urgency and led to the unnecessary decision to vent and burn five derailed vinyl chloride monomer tank cars to prevent a polymerization-induced tank car rupture.
+Contributing to the exposure of emergency responders and the public to postderailment hazards were:
+​Norfolk Southern Railway’s delay in transmitting the train consist information to emergency responders and
+​the state of Ohio’s insufficient training requirements for volunteer firefighters.​
+
+What We Recommended
+
+What We Recommended
+​As a result of this investigation, we issued 34 new recommendations. Read the
+complete list ​
+of
+recomme​ndations​​​. ​We issued recommendations to:
+the Secretary of Transportation​,
+​the Federal Railroad Administration,
+​the Pipeline and Hazardous Materials Safety Administration,
+​the state of Ohio,
+​the Columbiana County Emergency Management Agency,
+​the Association of American Railroads,
+the National Volunteer Fire Council:,
+​ the International Association of Fire Chiefs,
+the International Association of Fire Fighters,
+the National Volunteer Fire Council,
+​​the Chlorine Institute,
+the American Chemistry Council and The Chlorine Institute​,
+​Norfolk Southern Railway, and
+​​Oxy Vinyls, LP
+
+We reiterated the following safety recommendation:​To the Class I railroads​
+​:​
+​​​​Install in all controlling locomotive cabs and cab car operating compartments crash- and fire-protected inward- and outward-facing audio and image recorders. The devices should have a minimum 12-hour continuous recording capability. (
+R-13-26
+)
+
+We also adopted the following classification changes for previously issued recommendations:
+
+​
+​​​Safety Recommendation​
+R-19-7
+to the Secretary of Transportation is classified Closed-Superseded
+​Safety Recommendations
+
+R-10-1
+and
+R-10-2
+to the Federal Railroad Administration are classified Closed-Superseded​
+Safety Recommendation
+R-07-04​
+to the Pipeline and Hazardous Materials Safety Administration is classified Closed—Acceptable Action.
+
+Lessons Learned
+
+Video
+
+NTSB Board Meeting June 25, 2024
+
+https://www.youtube.com/watch?v=Itra5ny_nQ8
+
+June 23, and 24, 2023 Investigative Hearing
+
+https://youtu.be/N-nBIg516b0
+
+B-Roll East Palestine, Ohio
+
+https://youtu.be/7AyXTVkVBT4
+
+Investigation Details
+
+Status:
+Completed
+
+Railroad
+
+Investigation ID
+
+RRD23MR005
+
+Event Date
+
+2/3/2023
+
+Location
+
+East Palestine, OH
+
+Docket
+
+RRD23MR005
+
+Safety Alert
+
+SA
+
+Reports
+
+RIR-24-05
+
+East Palestine Illustrated Digest
+
+Recommendations
+
+I-24-001
+
+R-24-001
+
+R-24-002
+
+R-24-003
+
+R-24-004
+
+R-24-005
+
+R-24-006
+
+R-24-007
+
+R-24-008
+
+R-24-009
+
+R-24-010
+
+R-24-011
+
+R-24-012
+
+R-24-013
+
+R-24-014
+
+R-24-015
+
+R-24-016
+
+R-24-017
+
+R-24-018
+
+R-24-019
+
+R-24-020
+
+R-24-021
+
+R-24-022
+
+R-24-023
+
+R-24-024
+
+R-24-025
+
+R-24-026
+
+R-24-027
+
+R-24-028
+
+R-24-029
+
+R-24-030
+
+R-24-031
+
+R-24-032
+
+R-24-033
+
+News
+
+NTSB Releases Illustrated Digest of East Palestine Investigation Report
+
+​​Provides summary of investigation into 2023 derailment and fire
+
+WASHINGTON (Sept. 24, 2024) — The National Transportation Safety Board released an
+...
+
+Continue Reading
+
+Failed Wheel Bearing Caused Norfolk Southern Train Derailment in East Palestine, Ohio
+
+​​
+​​NTSB: Decision to vent and burn hazmat tank cars “unnecessary”
+
+EAST PALESTINE, Ohio (June 25, 2024) — The National Transportation Safety Board said...
+
+Continue Reading
+
+NTSB to Meet and Approve Final Report on Norfolk Southern Train Derailment Investigation in East Palestine, Ohio
+
+NTSB Chair will also hold two community meetings
+​​
+
+WASHINGTON (June 13, 2024) — The National Transportation Safety Board will return to East...
+
+Continue Reading
+
+NTSB Board Meeting on East Palestine, Ohio, Train Derailment Set for June 25
+
+​
+​​Community meetings also planned
+
+WASHINGTON (Feb. 7, 2024) — The National Transportation Safety Board announced today that it will return to East...
+
+Continue Reading
+
+NTSB Releases Witness Lineup for East Palestine Investigative Hearing
+
+​​​WASHINGTON (June 16, 2023) — The National Transportation Safety Board Friday released the list of organizations providing witnesses for the two-day...
+
+Continue Reading
+
+NTSB to Hold East Palestine, Ohio, Investigative Hearing June 22-23
+
+​​June 21 community meeting also scheduled
+
+​​WASHINGTON (May 24, 2023) — The National Transportation Safety Board will hold a two-day investigative...
+
+Continue Reading
+
+NTSB Examines Pressure Relief Devices In East Palestine Derailment
+
+​​​WASHINGTON (March 21, 2023) — Investigators with the
+National Transportation Safety Board
+examined and tested pressure relief devices removed from...
+
+Continue Reading
+
+NTSB Examining Rail Car Component in East Palestine Derailment
+
+​Aluminum protective covers melted in heat
+
+​WASHINGTON (March 2, 2023) — The
+National Transportation Safety Board
+​ is looking closely at aluminum...
+
+Continue Reading
+
+NTSB to Issue Preliminary Report on East Palestine Derailment
+
+​
+​​Media Availability Scheduled for 1 p.m. Thursday
+
+WASHINGTON (Feb. 22, 2023) — The National Transportation Safety Board will issue its preliminary...
+
+Continue Reading
+
+NTSB Issues Investigative Update on Ohio Train Derailment
+
+​​WASHINGTON (Feb. 14, 2023) — The NTSB investigation of the Feb. 3 Norfolk Southern freight train derailment in East Palestine, Ohio is ongoing.
+
+On...
+
+Continue Reading
+
+Events
+
+Jun
+
+22
+
+2023
+
+Investigative Hearing: Norfolk Southern Railway Train Derailment with Subsequent Hazardous Material Release and Fires
+
+Thu 12:00 AM
+
+Jun
+
+21
+
+2023
+
+Community Meeting: Norfolk Southern Railway Train Derailment with Subsequent Hazardous Material Release and Fires
+
+Wed 6:00 PM
+
+Jun
+
+25
+
+2024
+
+East Palestine Board Meeting
+
+Tue 9:30 AM
+
+Jun
+
+25
+
+2024
+
+Community Meeting 2: Norfolk Southern Railway Train Derailment with Subsequent Hazardous Material Release and Fires
+
+Tue 6:00 PM
+
+Contact
+
+Family Assistance Contact
+
+[email protected]
+
+NTSB Media Relations
+
+[email protected]
+
+​​​​​​
+
+Privacy
+
+Accessibility
+
+Web Policies
+
+No FEAR Act
+
+FOIA
+
+Office of Inspector General
+
+Contact Us
+
+National Transportation Safety Board
+•
+490 L'Enfant Plaza, SW Washington, DC 20594
+
+USA.gov
+(
+USAGov en Español
+)
+Connect With Us:
+
+​
+
+​@NTSB
+
+@NTSB_Newsroom
+
+​
+​
+​

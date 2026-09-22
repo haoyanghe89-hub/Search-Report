@@ -1,0 +1,1150 @@
+Air Pollutant Patterns and Human Health Risk following the East Palestine, Ohio, Train Derailment - PMC
+
+Skip to main content
+
+An official website of the United States government
+
+Here's how you know
+
+Here's how you know
+
+Official websites use .gov
+
+A
+
+.gov
+website belongs to an official
+government organization in the United States.
+
+Secure .gov websites use HTTPS
+
+A
+lock
+(
+
+) or
+https://
+means you've safely
+connected to the .gov website. Share sensitive
+information only on official, secure websites.
+
+Search
+
+Log in
+
+Dashboard
+
+Publications
+
+Account settings
+
+Log out
+
+Search...
+
+Search NCBI
+
+Primary site navigation
+
+Search
+
+Logged in as:
+
+Dashboard
+
+Publications
+
+Account settings
+
+Log in
+
+Search PMC Full-Text Archive
+
+Search in PMC
+
+Journal List
+
+User Guide
+
+PERMALINK
+
+Copy
+
+As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+the contents by NLM or the National Institutes of Health.
+
+Learn more:
+
+PMC Disclaimer
+
+|
+
+PMC Copyright Notice
+
+Environ Sci Technol Lett
+. 2023 Jul 12;10(8):680–685. doi:
+10.1021/acs.estlett.3c00324
+
+Search in PMC
+
+Search in PubMed
+
+View in NLM Catalog
+
+Add to search
+
+Air Pollutant
+Patterns and Human Health Risk following
+the East Palestine, Ohio, Train Derailment
+
+Oladayo Oladeji
+
+Oladayo Oladeji
+
+†
+Department
+of Mechanical Engineering, Carnegie Mellon
+University, Pittsburgh, Pennsylvania 15213, United States
+
+Find articles by
+Oladayo Oladeji
+
+†
+,
+Mariana Saitas
+
+Mariana Saitas
+
+‡
+Department
+of Environmental and Occupational Health, Interdisciplinary Faculty
+of Toxicology, Texas A&M University, College Station, Texas 77843, United States
+
+Find articles by
+Mariana Saitas
+
+‡
+,
+Toriq Mustapha
+
+Toriq Mustapha
+
+‡
+Department
+of Environmental and Occupational Health, Interdisciplinary Faculty
+of Toxicology, Texas A&M University, College Station, Texas 77843, United States
+
+Find articles by
+Toriq Mustapha
+
+‡
+,
+Natalie M Johnson
+
+Natalie M Johnson
+
+‡
+Department
+of Environmental and Occupational Health, Interdisciplinary Faculty
+of Toxicology, Texas A&M University, College Station, Texas 77843, United States
+
+Find articles by
+Natalie M Johnson
+
+‡
+,
+Weihsueh A Chiu
+
+Weihsueh A Chiu
+
+§
+Department
+of Veterinary Physiology and Pharmacology, Interdisciplinary Faculty
+of Toxicology, Texas A&M University, College Station, Texas 77843, United States
+
+Find articles by
+Weihsueh A Chiu
+
+§
+,
+Ivan Rusyn
+
+Ivan Rusyn
+
+§
+Department
+of Veterinary Physiology and Pharmacology, Interdisciplinary Faculty
+of Toxicology, Texas A&M University, College Station, Texas 77843, United States
+
+Find articles by
+Ivan Rusyn
+
+§
+,
+Allen L Robinson
+
+Allen L Robinson
+
+†
+Department
+of Mechanical Engineering, Carnegie Mellon
+University, Pittsburgh, Pennsylvania 15213, United States
+
+Find articles by
+Allen L Robinson
+
+†
+,
+Albert A Presto
+
+Albert A Presto
+
+†
+Department
+of Mechanical Engineering, Carnegie Mellon
+University, Pittsburgh, Pennsylvania 15213, United States
+
+Find articles by
+Albert A Presto
+
+†,
+*
+
+Author information
+
+Article notes
+
+Copyright and License information
+
+†
+Department
+of Mechanical Engineering, Carnegie Mellon
+University, Pittsburgh, Pennsylvania 15213, United States
+
+‡
+Department
+of Environmental and Occupational Health, Interdisciplinary Faculty
+of Toxicology, Texas A&M University, College Station, Texas 77843, United States
+
+§
+Department
+of Veterinary Physiology and Pharmacology, Interdisciplinary Faculty
+of Toxicology, Texas A&M University, College Station, Texas 77843, United States
+
+*
+apresto@andrew.cmu.edu
+, 412-721-5203
+
+Received 2023 May 17; Accepted 2023 Jun 20; Revised 2023 Jun 16; Collection date 2023 Aug 8.
+
+© 2023 The Authors. Published by American Chemical Society
+
+Permits the broadest form of re-use including for commercial purposes, provided that author attribution and integrity are maintained (
+https://creativecommons.org/licenses/by/4.0/
+).
+
+PMC Copyright notice
+
+PMCID: PMC10413936 PMID:
+37577363
+
+Abstract
+
+On February 3, 2023, a train carrying numerous hazardous
+chemicals
+derailed in East Palestine, OH, spurring temporary evacuation of residents
+and a controlled burn of some of the hazardous cargo. Residents reported
+health symptoms, including headaches and respiratory, skin, and eye
+irritation. Initial data from U.S. Environmental Protection Agency
+(EPA) stationary air monitors indicated levels of potential concern
+for air toxics based on hazard quotient calculations. To provide complementary
+data, we conducted mobile air quality sampling on February 20 and
+21 using proton transfer reaction-mass spectrometry. Measurements
+were taken at 1 s intervals along routes designed to sample both close
+to and farther from the derailment. Mobile air monitoring indicated
+that average concentrations of benzene, toluene, xylenes, and vinyl
+chloride were below minimal risk levels for intermediate and chronic
+exposures, similar to EPA stationary monitoring data. Levels of acrolein
+were high relative to those of other volatile organic compounds, with
+spatial analyses showing levels in East Palestine up to 6 times higher
+than the local rural background. Nontargeted analyses identified levels
+of additional unique compounds above background levels, some displaying
+spatiotemporal patterns similar to that of acrolein and others exhibiting
+distinct hot spots. These initial findings warrant follow-up mobile
+air quality monitoring to characterize longitudinal exposure and risk
+levels.
+
+Keywords:
+air toxics, hazardous air pollutants, VOCs, disaster response research, mobile monitoring
+Introduction
+
+Substantial releases of hazardous volatile
+organic compounds (VOCs)
+into the atmosphere following both natural and anthropogenic disasters
+are increasingly recognized, as exemplified by the changes in hazardous
+air pollutant (HAP) emissions along the Texas Gulf Coast after Hurricane
+Harvey
+1
+in 2017 and in eastern North Carolina
+following Hurricane Florence
+2
+in 2018.
+In the aftermath of the Intercontinental Terminals Company fire in
+2019 in Deer Park, TX, high levels of benzene, a known human carcinogen,
+necessitated a shelter in place as a public health measure.
+3
+
+Another example of a massive release of
+VOCs due to an anthropogenic
+disaster is the event that occurred on February 3, 2023, when a freight
+train carrying many hazardous chemicals, including vinyl chloride,
+derailed in the village of East Palestine, OH, ∼50 miles northwest
+of Pittsburgh, PA (for the train manifest, see
+Figure S3
+). Initially, nearly 2000 of the town’s ∼4700
+residents were told to evacuate from within one mile of the crash
+site due to air quality concerns. Fearing a chemical explosion of
+the tank cars with vinyl chloride, authorities initiated a controlled
+release and burn on February 6, and the evacuation zone was expanded
+to a 1 × 2 mile area because additional air toxics were released.
+By February 8, the evacuation order was lifted, but reports of air
+quality-related health effects persisted. According to a health survey
+4
+conducted within weeks of the derailment, local
+residents reported a range of sensory irritation and psychosomatic
+symptoms consistent with exposures to VOCs, including headache (74%),
+anxiety (64%), cough (61%), fatigue/tiredness (58%), and irritation,
+pain, or burning of skin (52%). The U.S. Environmental Protection
+Agency (EPA) set up stationary air monitor(s) to inform local ambient
+air quality, and the preliminary data have been posted online.
+5
+
+Exposure assessment for air pollution is
+a critical input into
+risk assessment and management.
+6
+Air quality
+monitoring in the aftermath of a disaster is an especially challenging
+task. There are three prominent challenges in research for disaster
+response for air toxics: the lack of appropriate local background
+(i.e., predisaster) levels, the low sensitivity of the instrumentation
+that is often deployed for rapid response, and the paucity of long-term
+measurements of air quality beyond the immediate weeks after an event.
+
+One typical source of background information is the routine EPA
+observation of hazardous air pollutants (HAPs), also termed air toxics,
+through a network of stationary air monitors as part of the National
+Air Toxics Trends Station (NATTS) Network.
+7
+The current network includes 26 sites (21 urban and five rural)
+across the United States. There are typically >100 HAPs monitored
+at each NATTS, although only 19 of those are formally required. Target
+HAPs include VOCs, carbonyls, PM
+10
+metals, and polycyclic
+aromatic hydrocarbons (PAHs). Another example of the information that
+is used for evaluation of air toxics across the United States is the
+EPA’s Air Toxics Screening Assessment or AirToxScreen. This
+tool provides census tract-level estimates of concentrations of air
+toxics based on the National Emissions Inventory (data on emissions
+from point, nonpoint, and mobile sources, biogenic sources, and fires)
+and two air quality models: the American Meteorological Society/Environmental
+Protection Agency Regulatory Model (AERMOD) atmospheric dispersion
+model and the Community Multiscale Air Quality (CMAQ) photochemical
+model.
+8
+However, confidence in using NATTS,
+AirToxSceen, or site-specific data collected using typical field-deployable
+analytical approaches for risk management is often hindered by both
+model uncertainty and method detection limits. This is especially
+relevant in disaster response because most instruments used by government
+agencies and other parties responding to disasters suffer from a lack
+of sensitivity, resulting in method detection limits that are near
+or greater than corresponding health-protective exposure thresholds.
+7
+
+Repeated measures with improved spatial
+and temporal resolution
+are needed during disaster response to assess both short- and long-term
+consequences of HAP releases. Moreover, nontargeted analyses for identification
+of chemicals that may be present beyond a predetermined range of analytes
+(i.e., targeted analyses) constitute a current gap in rapid response
+and emergency scenarios.
+9
+,
+10
+Therefore, to provide
+both context and complementary data to EPA stationary monitoring during
+initial phases of disaster response and recovery of the East Palestine
+disaster, we conducted mobile air monitoring using a highly sensitive
+nontargeted approach of proton transfer reaction time-of-flight (PTR-ToF)
+mass spectrometry
+11
+to characterize spatial
+and temporal patterns of VOCs near the site of a derailment and a
+subsequent controlled burn.
+Materials and Methods
+
+Stationary air monitoring data
+were downloaded from the EPA.
+5
+The hazard
+quotient (HQ) for East Palestine data
+was determined by dividing the median and highest reported concentrations
+by the EPA reference concentration (RfC) values (
+Table S3
+), which are levels considered to be without appreciable
+risk of deleterious effects over lifetime exposure.
+12
+For comparison, HQ values were also determined for median
+and highest county-level ambient air concentration levels in the United
+States, state of Ohio, and Columbiana County, where East Palestine
+is located, using the most recent EPA AirToxScreen data release.
+8
+HQ values of <1 indicate little concern for
+a single chemical, and HQ values of <0.1 indicate little concern
+for multiple chemicals present at the same time. In addition, both
+EPA data and our data were compared to the Agency for Toxic Substances
+and Disease Registry (ATSDR) intermediate (15 days to 1 year) and
+chronic (>1 year) minimal risk levels (MRLs).
+
+Mobile air
+monitoring measurements were conducted by using the
+Carnegie Mellon University (CMU) mobile air quality laboratory. The
+mobile laboratory is an instrumented Nissan 2500 cargo van, previously
+described by Li et al.
+13
+,
+14
+All instruments in the mobile
+laboratory were powered by a 110 V, 60 Hz alternator coupled to the
+van’s engine. A pair of 0.5 in. outside diameter stainless
+steel tubes carried the samples from the roof of the van (∼3
+m above ground level, at the front of the van) to instruments as well
+as a mechanical backing pump. Previous deployments of this mobile
+platform over the previous decade indicate that self-sampling is not
+a concern.
+15
+−
+17
+We saw no indication of self-sampling during the
+testing and sampling periods.
+
+The data we report here rely on
+measurements made with an Ionicon
+Analytik (Innsbruck, Austria) 4000 PTR-ToF mass spectrometer. The
+PTR-ToF operations and analysis details are described in the
+Supporting Information
+. Briefly, the mobile sampling
+strategy followed our previous field sampling campaigns.
+15
+The van was driven along public roads in East
+Palestine at approximately 20–25 mph. The PTR-ToF collected
+data at 1 Hz; this yielded a spatial resolution of ∼11 m when
+PTR-ToF data were merged with GPS coordinates. Measurements were collected
+on February 21 and 22, 2023. On both days, sampling was conducted
+in locations upwind and downwind of the train derailment site. On
+February 20, 2023, the PTR-ToF was operated in hydronium mode (H
+3
+O) from approximately 11:30 am until 8:00 pm. On February
+21, 2023, the PTR-ToF was operated in oxygen (O
+2
+) mode,
+which provides improved sensitivity for chlorinated compounds from
+approximately 12:00 pm until 7:30 pm.
+Results
+
+The preliminary data reported
+5
+by EPA
+stationary air monitoring in East Palestine indicated that concentrations
+for nine of the approximately 50 chemicals measured were relatively
+high in comparison to the levels considered safe for lifetime exposure
+(
+Figure
+1
+). Acrolein
+had the greatest HQ values for both the median (14.0) and highest
+(40) measurements. Notably, however, the detection limit for acrolein
+in the EPA data release
+5
+for East Palestine
+is much higher than the RfC, so although the median measured value
+in East Palestine was below the reporting limit, these data cannot
+ensure that acrolein levels are below those of long-term health concern.
+Additionally, 1,1,2-trichloroethane and naphthalene had calculated
+HQ values of >1.0 for the highest values measured in East Palestine,
+though median levels were lower. The remaining VOCs, including 1,3-butadiene,
+benzene, xylenes, trichloroethylene, and vinyl chloride, had calculated
+HQ values of >0.1 for the highest values measured in East Palestine.
+Overall, if ambient levels persisted for these chemicals, they could
+pose health concerns, either individually (e.g., acrolein, a known
+respiratory irritant) or cumulatively. Thus, subsequent, spatiotemporal
+analysis was pertinent.
+
+Figure 1.
+
+Open in a new tab
+
+Comparison of hazard quotients (HQs) based on
+EPA stationary monitoring
+data in East Palestine, OH, with those determined from the most recent
+(2019) EPA National Air Toxics estimates. All HQ values were compared
+to the RfC values from the EPA Superfund RSL Table (November 2022
+version). For some concentrations in East Palestine, levels of nine
+of ∼50 chemicals EPA reported were higher than “normal”.
+If these levels persist, then they may be of health concern (especially
+acrolein).
+Temporal data from EPA monitoring sites A-01 (in
+the center of
+East Palestine) and WA-01 (near the derailment site) from February
+8 to March 1, 2023 (
+Figure
+2
+A), indicated sustained decreases in ambient concentrations
+of benzene, toluene, and xylenes. All were under different types of
+health-protective levels of exposure. While vinyl chloride levels
+varied during this time, all concentrations were also under established
+levels of health concern. To contextualize these measurements to another
+environmental disaster scenario, we compared concentrations with those
+from our previous mobile monitoring
+2
+in
+response to Hurricane Florence in eastern North Carolina (
+Figure
+2
+B). Median concentrations
+of benzene, toluene, and xylenes were similar to median concentrations
+detected by mobile monitoring in East Palestine and in Pittsburgh.
+Moreover, median concentrations were below health-protective levels
+of exposure and were similar to EPA stationary monitoring data. Vinyl
+chloride, typically not present in ambient air and one of the chemicals
+onboard the train that derailed, showed higher median levels for mobile
+monitoring data. This may be explained by the enhanced spatial variability
+and shorter sampling window (i.e., only 1 day). Even so, levels were
+also under established levels of health concern.
+
+Figure 2.
+
+Open in a new tab
+
+(A) Concentrations of
+benzene, toluene, xylenes, and vinyl chloride
+in East Palestine reported by EPA stationary monitor(s) from February
+8 to 22. Site A-01 was in the center of East Palestine, and site WA-01
+was near the derailment site. (B) Violin plots provide context from
+past mobile monitoring by Texas A&M University (TAMU) after Hurricane
+Florence in eastern North Carolina (September 2018 through May 2019).
+EPA stationary monitoring data from February compared with mobile
+monitoring data from Carnegie Mellon University (CMU) mobile monitoring
+in East Palestine and Pittsburgh: thick red line, median; thin black
+lines, quartiles; dots, individual sample data, in context with health-protective
+levels (see
+Table S3
+); yellow line, ATSDR
+intermediate (15 days to 1 year MRL); solid red line, ATSDR chronic
+(>1 year) MRL; dashed red line, EPA lifetime RfC; dashed black
+line,
+EPA excess cancer risk 1 in 10 000.
+Consistent with the EPA stationary sampling data,
+levels of acrolein
+measured through mobile air monitoring were high relative to those
+of other volatile compounds detected. Temporal analysis showed higher
+levels in the mid-day sampling versus the evening sampling (
+Figure
+3
+A). Spatial analysis
+showed that the level of acrolein was ≤6 times higher than
+the local rural background near the train derailment site (
+Figure
+3
+B). Levels were largely
+at or below the background in the evening sampling across the sampled
+area (
+Figure
+3
+C).
+
+Figure 3.
+
+Open in a new tab
+
+Acrolein
+(C
+3
+H
+4
+O) concentrations during mid-day
+(10:00 to 14:00) and evening (17:00 to 20:00) on February 20, 2023,
+each normalized to the local rural background collected between Pittsburgh
+and East Palestine, OH. (A) Temporal distribution and (B and C) spatial
+distribution of acrolein concentrations. (D and E) Concentrations
+of a chemical with a mass of 58.080, identified as C
+3
+H
+6
+O, showing temporal and spatial “hot spots”
+in East Palestine. (F) Correlations among 12 unique molecular masses
+revealed by analysis of nontargeted data in the hydronium mode. Levels
+of several (CH
+3
+NO, C
+2
+H
+4
+O
+2
+, C
+3
+H
+6
+O
+3
+, and C
+3
+H
+6
+O
+2
+) were above local background levels and displayed
+temporal and spatial patterns similar to those of acrolein (C
+3
+H
+4
+O). Meteorological information for this sampling
+day is summarized in
+Figure S4
+.
+Nontargeted data analysis revealed additional unique
+species. The
+levels of several were above local background levels and displayed
+temporal and spatial patterns similar to those of acrolein, which
+was confirmed by correlation analysis (
+Figure
+3
+F). These included compounds CH
+3
+NO (formamide), C
+2
+H
+4
+O
+2
+, C
+3
+H
+6
+O
+2
+, C
+3
+H
+6
+O
+3
+, C
+11
+H
+20
+O
+2
+(ethyl hexyl acrylate),
+and C
+17
+H
+12
+O
+2
+(butyl acrylate); all
+were detected as the protonated parent ion as described in the
+Supporting Information
+. These compounds are a
+mix of species carried on the train (e.g., butyl acrylate) and potential
+oxidation products formed either during combustion or via atmospheric
+chemistry. C
+2
+H
+4
+O
+2
+was identified
+as possibly acetic acid or methyl formate; however, the PTR-ToF could
+not distinguish between these. C
+3
+H
+6
+O
+2
+could be several compounds that have the same exact mass, including
+(1) acetic acid, methyl ester; (2) formic acid, ethyl ester; or (3)
+propanoic acid. C
+3
+H
+6
+O
+3
+was identified
+as carbonic acid and dimethyl ester. Other species, such as C
+3
+H
+6
+O, exhibited distinct hot spots above background
+levels in different parts of the sampling area (
+Figure
+3
+D,E). This species, identified as the protonated
+ion at an exact mass of
+m
+/
+z
+58.080,
+could represent many potential chemicals, including (1) acetone, (2)
+methoxy ethene, (3) oxetane, (4) propanal, or (5) propylene oxide.
+Several other compounds were detected, however, with no clear spatial
+patterns, for instance, C
+4
+H
+8
+O, C
+5
+H
+8
+, or C
+6
+H
+10
+. In all cases, the
+concentrations of these compounds were well below health relevant
+exposure limits.
+Discussion
+
+Following the train derailment, chemical
+spill, and controlled
+burn, the EPA began targeted stationary air monitoring. On the basis
+of our analysis of HQs determined for East Palestine, several chemicals
+posed higher risk than normal background levels in the United States
+and Ohio. Importantly, these included several known respiratory irritants
+and human carcinogens. Our initial calculations provided the rationale
+for conducting mobile monitoring in East Palestine. Data from our
+mobile air monitoring in East Palestine provide an example of the
+utility of highly sensitive, nontargeted VOC measurements with enhanced
+spatial resolution for characterizing air quality postdisaster, particularly
+to investigate two key questions. (1) How representative are stationary
+monitoring data in space and time? (2) Have targeted analyses missed
+any VOCs with increased levels?
+
+With respect to the first question,
+we found that levels of targets
+benzene, toluene, and xylenes were largely similar to stationary monitoring
+data. Additionally, these levels were similar to baseline levels in
+the United States and to levels from postdisaster mobile monitoring
+we previously conducted in 2018–2019 of emissions after Hurricane
+Florence and were all below long-term health thresholds. These chemicals
+are ubiquitous VOCs with large mobile source contributions. Similarly,
+while the level of vinyl chloride, one of the chemicals carried on
+the train and a known human carcinogen, was initially increased, measurements
+over time from both stationary and mobile monitoring indicated levels
+below long-term health thresholds. Importantly, for many of these
+compounds, including oxidation products of vinyl chloride, there is
+still a lack of hazard data for acute end points, especially in sensitive
+subpopulations, which warrants additional research. Reports of symptoms
+in East Palestine indicated a portion of the population experienced
+headaches, nausea, cough, bloody noses, and respiratory, skin, and
+eye irritation. Additional information from health surveys will provide
+further context for adverse health effects.
+
+By contrast, elevated
+levels of acrolein were identified by both
+stationary and our mobile monitoring data, with targeted analyses
+from the EPA showing some levels substantially above long-term health
+thresholds. Acrolein is a common combustion product and a known respiratory
+irritant. Breathing low levels is linked with eye watering, burning
+of the nose and throat, and decreased breathing rates. Experimental
+studies show inhalation causes irritation of the nasal cavity, decreased
+breathing rates, and damage to the lining of the lung, as well as
+pathological lesions and nasal tumors with long-term chronic exposure.
+Additionally, our mobile sampling data indicated substantial spatial
+and temporal variation in acrolein that could not be characterized
+through stationary sampling.
+
+With respect to the question of
+whether targeted analyses “missed”
+anything, our nontargeted mobile sampling found numerous other chemicals
+with increased levels in East Palestine compared to the local rural
+background. A number of these had spatiotemporal patterns that correlated
+highly with that of acrolein, suggesting a common source. Although
+only putatively identified, a number of these compounds have also
+been linked to respiratory effects. For instance, exposure to formamide
+has been linked with irritation of the eyes and skin, drowsiness,
+and nausea,
+18
+and methyl formate exposure
+has been linked with numerous symptoms, including irritation of the
+eyes and nose, chest tightness, dyspnea, and central nervous system
+depression.
+18
+Several other compounds exhibited
+distinct hot spot patterns with peaks ≤10 times above the background,
+but characterizing their persistence would require additional sampling.
+
+These initial findings support the need for continued mobile monitoring
+to characterize the air quality impacts of the East Palestine train
+derailment, especially as cleanup activities may result in resuspension
+and revolatilization of contaminants from the soil. More broadly,
+this study illustrates that the ability of highly sensitive, nontargeted
+mobile monitoring to detect known and unknown VOCs can serve as a
+complement to the targeted and stationary monitoring typically deployed,
+facilitating characterization of the impacts of disasters on air quality
+and ultimately better protecting public health.
+Acknowledgments
+
+This work was supported in part by National Institute of Environmental
+Health Sciences Grant P42 ES027704. M.S. was supported by National
+Institute of Environmental Health Sciences Training Grant T32 ES026568.
+Additional funding was provided by the Heinz Endowments.
+Supporting Information Available
+
+The Supporting Information is
+available free of charge at
+https://pubs.acs.org/doi/10.1021/acs.estlett.3c00324
+.
+
+Additional details of PTR-ToF operation, calibration,
+and data analysis; health relevant reference levels for comparison
+to ambient concentrations; train manifest; and meteorological data
+(
+PDF
+)
+The
+authors declare no
+competing financial interest.
+Supplementary Material
+
+ez3c00324_si_001.pdf
+(386.9KB, pdf)
+
+References
+
+Adair K.; Miller S.; Gage Witvliet M.
+An Exploratory Investigation of Government
+Air Monitoring Data after Hurricane Harvey. Int. J. Environ. Res. Public Health
+2022, 19 (9), 5559. 10.3390/ijerph19095559.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Bhandari S.; Casillas G.; Aly N. A.; Zhu R.; Newman G.; Wright F. A.; Miller A.; Adler G.; Rusyn I.; Chiu W. A.
+Spatial and Temporal Analysis of Impacts of Hurricane
+Florence on Criteria Air Pollutants and Air Toxics in Eastern North
+Carolina. Int. J. Environ. Res. Public Health
+2022, 19 (3), 1757. 10.3390/ijerph19031757.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Sansom G. T.; Aarvig K.; Sansom L.; Thompson C.; Fawkes L.; Katare A.
+Understanding Risk
+Communication and Willingness to
+Follow Emergency Recommendations Following Anthropogenic Disasters. Environmental Justice
+2021, 14 (2), 159–167. 10.1089/env.2020.0050.
+[
+DOI
+] [
+Google Scholar
+]
+
+Ohio
+Emergency Management Agency . East Palestine Update - 3/3/23. 2023.
+https://ema.ohio.gov/media-publications/news/030323-east-palestine-update
+(last accessed 2023-06-10).
+
+U.S. EPA . East Palestine, Ohio Train Derailment.
+https://www.epa.gov/east-palestine-oh-train-derailment
+(last
+accessed 2023-06-10).
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+]
+
+Kim S. Y.; Blanco M. N.; Bi J.; Larson T. V.; Sheppard L.
+Exposure Assessment
+for Air Pollution Epidemiology: A Scoping Review of Emerging Monitoring
+Platforms and Designs. Environ Res
+2023, 223, 115451 10.1016/j.envres.2023.115451.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Strum M.; Scheffe R.
+National Review of
+Ambient Air Toxics Observations. J Air Waste
+Manage Assoc
+2016, 66 (2), 120–133. 10.1080/10962247.2015.1076538.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+U.S. EPA . Air Toxics Screening Assessment.
+https://www.epa.gov/AirToxScreen
+(last accessed 2023-06-10).
+
+Phillips A. L.; Williams A. J.; Sobus J. R.; Ulrich E. M.; Gundersen J.; Langlois-Miller C.; Newton S. R.
+A Framework for Utilizing High-Resolution
+Mass Spectrometry and Nontargeted Analysis in Rapid Response and Emergency
+Situations. Environ. Toxicol. Chem.
+2022, 41 (5), 1117–1130. 10.1002/etc.5196.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Sloop J. T.; Chao A.; Gundersen J.; Phillips A. L.; Sobus J. R.; Ulrich E. M.; Williams A. J.; Newton S. R.
+Demonstrating the
+Use of Non-Targeted Analysis for Identification of Unknown Chemicals
+in Rapid Response Scenarios. Environ. Sci. Technol.
+2023, 57 (8), 3075–3084. 10.1021/acs.est.2c06804.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Sekimoto K.; Koss A. R.
+Modern Mass Spectrometry in Atmospheric Sciences: Measurement
+of Volatile Organic Compounds in the Troposphere Using Proton-Transfer-Reaction
+Mass Spectrometry. Journal of Mass Spectrometry
+2021, 56 (3), e4619 10.1002/jms.4619.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+U.S. EPA . Integrated Risk Information System (IRIS).
+https://www.epa.gov/iris
+(last accessed 2023-06-10).
+
+Li H. Z.; Dallmann T. R.; Gu P.; Presto A. A.
+Application of Mobile
+Sampling to Investigate Spatial Variation in Fine Particle Composition. Atmos. Environ.
+2016, 142, 71–82. 10.1016/j.atmosenv.2016.07.042.
+[
+DOI
+] [
+Google Scholar
+]
+
+Li H. Z.; Dallmann T. R.; Li X.; Gu P.; Presto A. A.
+Urban Organic
+Aerosol Exposure: Spatial Variations in Composition and Source Impacts. Environ. Sci. Technol.
+2018, 52 (2), 415–426. 10.1021/acs.est.7b03674.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Shah R. U.; Robinson E. S.; Gu P.; Robinson A. L.; Apte J. S.; Presto A. A.
+High-Spatial-Resolution
+Mapping and Source Apportionment
+of Aerosol Composition in Oakland, California, Using Mobile Aerosol
+Mass Spectrometry. Atmos Chem Phys
+2018, 18 (22), 16325–16344. 10.5194/acp-18-16325-2018.
+[
+DOI
+] [
+Google Scholar
+]
+
+Gu P.; Li H. Z.; Ye Q.; Robinson E. S.; Apte J. S.; Robinson A. L.; Presto A. A.
+Intra-City
+Variability of PM Exposure
+Is Driven by Carbonaceous Sources and Correlated with Land Use Variables. Environ. Sci. Technol.
+2018, 52 (20), 11545–11554. 10.1021/acs.est.8b03833.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+Saha P.; Hankey S.; Marshall J.; Robinson A.; Presto A.
+High-Spatial-Resolution
+Estimates of Ultrafine Particle Concentrations across the Continental
+United States. Environ. Sci. Technol.
+2021, 55 (15), 10320–10331. 10.1021/acs.est.1c03237.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+
+NIOSH . NIOSH Pocket Guide to Chemical Hazards; 2007.
+[
+PubMed
+] [
+Google Scholar
+]
+
+Associated Data
+
+This section collects any data citations, data availability statements, or supplementary materials included in this article.
+
+Supplementary Materials
+
+ez3c00324_si_001.pdf
+(386.9KB, pdf)
+
+Articles from Environmental Science & Technology Letters are provided here courtesy of
+American Chemical Society
+
+ACTIONS
+
+View on publisher site
+
+PDF (5.1 MB)
+
+Cite
+
+Collections
+
+Permalink
+
+PERMALINK
+
+Copy
+
+RESOURCES
+
+Similar articles
+
+Cited by other articles
+
+Links to NCBI Databases
+
+Cite
+
+Copy
+
+Download .nbib
+
+.nbib
+
+Format:
+
+AMA
+
+APA
+
+MLA
+
+NLM
+
+Add to Collections
+
+Create a new collection
+
+Add to an existing collection
+
+Name your collection
+
+*
+
+Choose a collection
+
+Unable to load your collection due to an error
+
+Please try again
+
+Add
+
+Cancel
+
+Follow NCBI
+
+NCBI on X (formerly known as Twitter)
+
+NCBI on Facebook
+
+NCBI on LinkedIn
+
+NCBI on GitHub
+
+NCBI RSS feed
+
+Connect with NLM
+
+NLM on X (formerly known as Twitter)
+
+NLM on Facebook
+
+NLM on YouTube
+
+National Library of Medicine
+
+8600 Rockville Pike
+Bethesda, MD 20894
+
+Web Policies
+
+FOIA
+
+HHS Vulnerability Disclosure
+
+Help
+
+Accessibility
+
+Careers
+
+NLM
+
+NIH
+
+HHS
+
+USA.gov
+
+Back to Top

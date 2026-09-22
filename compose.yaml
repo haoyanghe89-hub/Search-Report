@@ -4,24 +4,53 @@ services:
     environment:
       POSTGRES_DB: marketpulse
       POSTGRES_USER: marketpulse
-      POSTGRES_PASSWORD: ${MARKETPULSE_PG_PASSWORD:?Set MARKETPULSE_PG_PASSWORD in .env}
-    ports:
-      - "127.0.0.1:55432:5432"
-    volumes:
-      - blackboard:/var/lib/postgresql/data
+      POSTGRES_PASSWORD: ${MARKETPULSE_PG_PASSWORD:-marketpulse-local}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U marketpulse -d marketpulse"]
-      interval: 5s
+      interval: 3s
       timeout: 3s
-      retries: 10
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "127.0.0.1:56379:6379"
+      retries: 20
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MARKETPULSE_DATABASE_URL: postgresql+psycopg://marketpulse:${MARKETPULSE_PG_PASSWORD:-marketpulse-local}@postgres:5432/marketpulse
+      INVESTIGATION_API_HOST: 0.0.0.0
+      INVESTIGATION_API_PORT: 8000
+      INVESTIGATION_BLOB_ROOT: /data/blobs
+      REVIEWER_ID: ${REVIEWER_ID:-}
+      REVIEWER_DISPLAY_NAME: ${REVIEWER_DISPLAY_NAME:-}
+      REVIEWER_PASSWORD_HASH: ${REVIEWER_PASSWORD_HASH:-}
+      REVIEW_RATE_LIMIT_FINGERPRINT_SECRET: ${REVIEW_RATE_LIMIT_FINGERPRINT_SECRET:-}
+      REVIEW_ALLOWED_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+      REVIEW_ALLOW_INSECURE_LOOPBACK: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - blob-data:/data/blobs
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3000:80"
+
 volumes:
-  blackboard:
+  postgres-data:
+  blob-data:

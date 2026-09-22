@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Search Report — Investigation Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to investigation</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Search Report home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Search Report</span>
+        </a>
+        <div class="system-state" id="system-state" aria-live="polite">
+          <span class="pulse-dot"></span>
+          Connecting
+        </div>
+      </header>
+
+      <aside class="rail" aria-label="Investigations">
+        <div class="rail-heading">
+          <h2>Investigations</h2>
+          <button class="icon-button" id="refresh-button" type="button" title="Refresh">↻</button>
+        </div>
+        <div id="investigation-list" class="investigation-list"></div>
+        <button class="secondary-button create-button" id="new-investigation" type="button">
+          New investigation
+        </button>
+      </aside>
+
+      <main id="workspace" class="workspace" tabindex="-1">
+        <section class="case-hero" id="case-hero">
+          <div class="case-kicker">Built-in replay case</div>
+          <div class="case-title-row">
+            <div>
+              <h1>East Palestine derailment</h1>
+              <p>Hazardous-material release · Ohio · 3 February 2023</p>
+            </div>
+            <button class="primary-button" id="run-replay" type="button">
+              Run replay investigation
+            </button>
+          </div>
+          <div class="case-contract">
+            <span>10+ traceable sources</span>
+            <span>Agent feedback loop</span>
+            <span>Claim-bound citations</span>
+            <span>No network or model key</span>
+          </div>
+        </section>
+
+        <section class="active-investigation is-hidden" id="active-investigation">
+          <div class="investigation-header">
+            <div>
+              <p class="breadcrumb" id="investigation-breadcrumb">Investigation</p>
+              <h1 id="investigation-title"></h1>
+              <p id="investigation-goal"></p>
+            </div>
+            <div class="run-badge" id="run-badge"></div>
+          </div>
+
+          <nav class="tabs" id="tabs" aria-label="Investigation views">
+            <button data-tab="overview" class="is-active">Overview</button>
+            <button data-tab="process">Agent process</button>
+            <button data-tab="sources">Sources</button>
+            <button data-tab="evidence">Evidence</button>
+            <button data-tab="claims">Claims</button>
+            <button data-tab="conflicts">Conflicts &amp; gaps</button>
+            <button data-tab="report">Report</button>
+            <button data-tab="review">Review</button>
+          </nav>
+
+          <div id="panel" class="panel" aria-live="polite"></div>
+        </section>
+
+        <section class="empty-guidance" id="empty-guidance">
+          <div class="ledger-glyph" aria-hidden="true"><span></span><span></span><span></span></div>
+          <h2>Inspect the chain, not just the answer.</h2>
+          <p>
+            Start the built-in replay to reconstruct planning, collection, analysis,
+            verification, citations, and release governance from persisted inputs.
+          </p>
+        </section>
+      </main>
+
+      <aside class="citation-drawer" id="citation-drawer" aria-label="Citation detail" aria-hidden="true">
+        <div class="drawer-header">
+          <div>
+            <span class="drawer-label">Citation trace</span>
+            <h2 id="citation-title">Evidence chain</h2>
+          </div>
+          <button class="icon-button" id="close-citation" type="button" aria-label="Close citation">×</button>
+        </div>
+        <div id="citation-content" class="drawer-content"></div>
+      </aside>
+    </div>
+
+    <dialog id="new-dialog">
+      <form id="new-form" method="dialog">
+        <div class="dialog-header">
+          <h2>New investigation</h2>
+          <button class="icon-button" value="cancel" aria-label="Close">×</button>
+        </div>
+        <label>Title<input name="title" required maxlength="500" /></label>
+        <label>Event description<textarea name="event_description" required rows="4"></textarea></label>
+        <label>Investigation goal<textarea name="investigation_goal" required rows="3"></textarea></label>
+        <label>Questions, one per line<textarea name="questions" rows="5"></textarea></label>
+        <div class="dialog-actions">
+          <button class="secondary-button" value="cancel">Cancel</button>
+          <button class="primary-button" value="default">Create investigation</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+[Page 1]
+1
+
+This information is preliminary and subject to change.
+Norfolk Southern Railway Train Derailment
+with Subsequent Hazardous Material Release
+and Fires
+East Palestine, Ohio
+February 3, 2023
+
+On February 3, 2023, about 8:54 p.m. local time, eastbound Norfolk Southern
+Railway (NS) general merchandise freight train 32N derailed 38 railcars on main track 1 of
+the NS Fort Wayne Line of the Keystone Division in East Palestine, Ohio.1 (See figure.)
+The derailed equipment included 11 tank cars carrying hazardous materials that
+subsequently ignited, fueling fires that damaged an additional 12 non-derailed railcars.
+First responders implemented a 1-mile evacuation zone surrounding the derailment site
+that affected up to 2,000 residents. There were no reported fatalities or injuries. At the
+time of the accident, visibility conditions were dark and clear; the weather was 10°F with
+no precipitation.
+
+1 (a) All times in this report are local time. (b) Train 32N was traveling from Madison, Illinois, to
+Conway, Pennsylvania.
+Issued: February 23, 2023
+
+Preliminary Report RRD23MR005
+
+[Page 2]
+2
+
+Figure. Aerial photograph of derailment site.
+Train 32N comprised 2 head-end locomotives, 149 railcars, and 1 distributed
+power locomotive located between railcars 109 and 110. The consist included 20
+placarded hazardous materials tank cars transporting combustible liquids, flammable
+liquids, and flammable gas, including vinyl chloride.2 Train 32N was traveling about 47
+mph at the time of the derailment, which was less than the maximum authorized
+timetable speed of 50 mph.3 Train movements near the derailment site are authorized
+by cab signals and wayside signal indications with an overlaid positive train control
+system and are coordinated by the NS Cleveland East train dispatcher located in
+Atlanta, Georgia. The positive train control system was enabled and operating at the
+time of the derailment.
+Train 32N was operating with a dynamic brake application as the train passed a
+wayside defect detector on the east side of Palestine, Ohio, at milepost (MP) 49.81.4
+The wayside defect detector, or hot bearing detector (HBD), transmitted a critical
+
+2 (a) Vinyl chloride is a flammable petrochemical used in the manufacture of polymer polyvinyl
+chloride, or PVC. When exposed to heat, vinyl chloride can undergo a rapid polymerization reaction,
+an exothermic chemical process that can pose an explosion hazard. (b) Residues of some hazardous
+materials are considered flammable liquids; in this case, two placarded tank cars contained benzene
+residue.
+3 The train crew was governed by the rules and instructions in the NS Pittsburgh Division,
+Northern Region, Timetable No. 1.
+4 On a diesel-electric locomotive, dynamic braking uses electric traction motors as generators,
+slowing the train and dissipating mechanical energy as heat.
+
+[Page 3]
+3
+
+audible alarm message instructing the crew to slow and stop the train to inspect a hot
+axle. The train engineer increased the dynamic brake application to further slow and
+stop the train. During this deceleration, an automatic emergency brake application
+initiated, and train 32N came to a stop.5
+On the Fort Wayne Line of the Keystone Division, NS has equipped their rail
+network with HBD systems to assess the temperature conditions of wheel bearings
+while en route. The function of the HBD is to detect overheated bearings and provide
+audible real-time warnings to train crews. Train 32N passed three HBD systems on its
+trip before the derailment. At MP 79.9, the suspect bearing from the 23rd car had a
+recorded temperature of 38°F above ambient temperature. When train 32N passed
+the next HBD, at MP 69.01, the bearing’s recorded temperature was 103°F above
+ambient. The third HBD, at MP 49.81, recorded the suspect bearing’s temperature at
+253°F above ambient. NS has established the following HBD alarm thresholds (above
+ambient temperature) and criteria for bearings:
+• Between 170°F and 200°F, warm bearing (non-critical); stop and inspect
+• A difference between bearings on the same axle greater than or equal
+to 115°F (non-critical); stop and inspect
+• Greater than 200°F (critical); set out railcar
+After the train stopped, the crew observed fire and smoke and notified the
+Cleveland East dispatcher of a possible derailment. With dispatcher authorization, the
+crew applied handbrakes to the two railcars at the head of the train, uncoupled the
+head-end locomotives, and moved the locomotives about 1 mile from the uncoupled
+railcars. Responders arrived at the derailment site and began response efforts.
+On February 5, responders mitigated the fire, but five derailed DOT-105
+specification tank cars (railcars 28–31 and 55) carrying 115,580 gallons of vinyl
+chloride continued to concern authorities because the temperature inside one tank
+car was still rising. This increase in temperature suggested that the vinyl chloride was
+undergoing a polymerization reaction, which could pose an explosion hazard.
+Responders scheduled a controlled venting of the five vinyl chloride tank cars to
+release and burn the vinyl chloride, expanded the evacuation zone to a 1-mile by 2-
+mile area, and dug ditches to contain released vinyl chloride liquid while it vaporized
+and burned. The controlled venting began about 4:40 p.m. on February 6 and
+continued for several hours.
+While on scene, National Transportation Safety Board (NTSB) investigators
+examined railroad equipment and track conditions; reviewed data from the signal
+
+5 An automatic emergency brake application is the full application of a train’s main air brakes.
+An automatic emergency brake application can occur when a train experiences a separation that
+disconnects the air brake hoses between railcars.
+
+[Page 4]
+4
+
+system, wayside defect detectors, local surveillance cameras, and the lead
+locomotive’s event recorder and forward-facing and inward-facing image recorders;
+and completed interviews. NTSB investigators identified and examined the first railcar
+to derail, the 23rd railcar in the consist. Surveillance video from a local residence
+showed what appeared to be a wheel bearing in the final stage of overheat failure
+moments before the derailment. The wheel bearing and affected wheelset have been
+collected as evidence and will be examined by the NTSB. The vinyl chloride tank car
+top fittings, including the relief valves, were also removed and examined by the NTSB
+on scene. The top fittings will be shipped to Texas for testing under the direction of
+the NTSB.
+The hazardous material tank cars have been decontaminated. NTSB
+investigators returned to Ohio on February 21, 2023, to examine each hazardous
+material tank car, document damage, and secure evidence for laboratory analysis.
+The NTSB’s investigation is ongoing. Future investigative activity will focus on
+the wheelset and bearing; tank car design and derailment damage; a review of the
+accident response, including the venting and burning of the vinyl chloride; railcar
+design and maintenance procedures and practices; NS use of wayside defect
+detectors; and NS railcar inspection practices.
+The NTSB is not involved in air monitoring, testing of water quality,
+environmental remediation, or evacuation orders. Questions on environmental issues
+should be referred to the Environmental Protection Agency.
+Parties to the investigation include the Pipeline and Hazardous Materials Safety
+Administration, the Federal Railroad Administration, Ohio State Highway Patrol, the
+Village of East Palestine, Norfolk Southern Railway, Trinity Industries Leasing
+Company, GATX Corporation, the Brotherhood of Railway Carmen, the International
+Association of Sheet Metal, Air, Rail and Transportation Workers, the Brotherhood of
+Locomotive Engineers and Trainmen, and the International Association of Fire
+Fighters.

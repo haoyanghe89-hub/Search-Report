@@ -298,3 +298,25 @@ class AuditActorType(StrEnum):
     SYSTEM = "SYSTEM"
     HUMAN = "HUMAN"
     AGENT = "AGENT"
+
+
+class FindingSeverity(StrEnum):
+    HARD = "HARD"
+    GOVERNANCE = "GOVERNANCE"
+
+
+class ReleaseDecision(StrEnum):
+    BLOCK = "BLOCK"
+    PUBLISH = "PUBLISH"
+    RESTRICT = "RESTRICT"
+    REQUIRE_REVIEW = "REQUIRE_REVIEW"
+
+
+class ReviewDecisionOrigin(StrEnum):
+    LIVE = "LIVE"
+    REPLAY = "REPLAY"
+
+
+class ReportValidatorKind(StrEnum):
+    CITATION = "CITATION"
+    REPORT = "REPORT"

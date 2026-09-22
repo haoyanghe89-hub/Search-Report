@@ -1,0 +1,320 @@
+About Air Monitoring | US EPA
+
+Skip to main content
+
+An official website of the United States government
+
+Here’s how you know
+
+Here’s how you know
+
+Official websites use .gov
+
+A
+.gov
+website belongs to an official government organization in the United States.
+
+Secure .gov websites use HTTPS
+
+A
+lock
+(
+) or
+https://
+means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.
+
+Menu
+
+Search
+
+Search
+
+Environmental Topics
+
+Environmental Topics
+Air
+Bed Bugs
+Chemicals, Toxics, and Pesticide
+Emergency Response
+Environmental Information by Location
+Health
+Land, Waste, and Cleanup
+Lead
+Mold
+Radon
+Research
+Science Topics
+Water Topics
+A-Z Topic Index
+
+Laws & Regulations
+
+Laws & Regulations
+By Business Sector
+By Topic
+Compliance
+Enforcement
+Guidance
+Laws and Executive Orders
+Regulations
+
+Report a Violation
+
+Report a Violation
+Environmental Violations
+Fraud, Waste or Abuse
+
+About EPA
+
+About EPA
+Our Mission and What We Do
+Headquarters Offices
+Regional Offices
+Labs and Research Centers
+Newsroom
+Planning, Budget, and Results
+Organization Chart
+EPA History
+
+Breadcrumb
+
+Home
+
+East Palestine, Ohio Train Derailment
+
+Air Monitoring and Sampling Data
+
+About Air Monitoring
+
+The goal of air monitoring is to quickly detect contaminants in the air so that actions can be taken to reduce air emissions, if necessary. Air monitoring uses electronic devices to measure concentrations of contaminants. These devices can be set up quickly and collect real-time air data. These data are used to guide actions in the field by indicating the location of the chemicals in the air which may be of concern.
+
+Data are compared to the site-specific thresholds. If concentrations for a contaminant are above the threshold, they are given a closer look and action may be needed to protect human health and environment.
+
+Thresholds for each contaminant are informed by toxicologists, who are professionals who study the effects of contaminants to humans and other living things. If the data are at or above the threshold, actions may be taken to control or lessen the source of air emissions
+
+The
+final report is available on the accuracy and precision of the photoionization detectors
+, or PIDs, that used real-time air monitoring screening at more than 600 in East Palestine homes following the lifted evacuation order. The summary below highlights the results.
+
+On this page:
+
+Stationary and Roving Air Monitoring
+
+Air Monitoring Vehicles
+
+Collecting and Using Data from Air Monitoring Vehicles
+
+Accuracy and Precision of Photoionization Detectors
+
+Stationary and Roving Air Monitoring
+
+Stationary (not moving) and mobile (moving or roving) air monitors provide continuous real-time data of air contamination to inform when concentrations rise above the threshold. As part of the response, EPA and Norfolk Southern have used several types of air monitoring instruments to measure contaminants at and around the derailment site. Learn more about air monitoring instruments in the slideshow below.
+
+Multi-gas monitor for Volatile Organic Compounds (VOCs)
+
+Dust monitors for particulates
+
+HAPSITE units monitor for vinyl chloride and n-butyl acrylate
+
+Roving crews with mobile monitoring instruments are collecting data at specific locations around the derailment site, such as areas where odor complaints have been received. Data from mobile instruments can also be used to confirm data from stationary instruments.
+
+Air Monitoring Vehicles
+
+Air monitoring vehicles are being used in East Palestine for air monitoring during removal work. They have been active at the site since early March roaming nearly every day from at least 8 a.m. to 5 p.m. The vehicles continue to monitor air quality near the derailment site and in the surrounding community.
+
+Air monitoring vehicles spend most of their time close to the four main areas of contamination (click to enlarge images, hit your browser’s back button to return to this page):
+
+Derailment Location where soil is being removed
+
+Stockpiles of contaminated soil
+
+Tanks of wastewater
+
+Staging areas where trucks are loaded
+
+Collecting and using the Data from air monitoring vehicles
+
+Air monitoring vehicles are the first line of defense for air monitoring.
+
+While driving its route, air is pumped into the air vehicles’ on-board instruments and analyzed in real time. The mass spectrometer produces more accurate results than portable monitoring instruments.
+
+If contaminants go above the mobile site threshold:
+
+the system alerts the air monitoring vehicle crews
+
+the air monitoring vehicles’ crews then notify the site teams to put procedures in place to protect workers and the public
+
+These procedures are called engineering controls. Engineering controls are changes to the workplace that increase worker or community protection. At the derailment site these changes may include:
+
+covering waste piles.
+
+spraying to reduce vapor emissions.
+
+stopping work for a period.
+
+The vehicles then park at the closest downwind location where people may be breathing that air to see how well the vapor controls are working. If the vehicles detects continued concentrations above the stationary site threshold, work will be stopped. Norfolk Southern will have to present an approach to ensure the operation does not pose an unacceptable risk to workers and nearby residents.
+
+Accuracy and Precision of Photoionization Detectors
+
+Overview
+
+In the first days after the February 3, 2023, Norfolk Southern train derailment in East Palestine, Ohio, many home and business owners in the surrounding Ohio and Pennsylvania areas were evacuated. During the evacuation and after the evacuation order was lifted, air was tested for volatile organic compounds (VOCs) using photoionization detectors (PIDs) as real-time air monitoring screening instruments in conjunction with more accurate and sensitive analytical sampling methods. These PID instruments were used to monitor both worker and community exposure during all phases of the response.
+
+In early March, potential inconsistencies in detecting butyl acrylate with PIDs were observed between manufacturer-provided documentation and in-field instrument performance. These potential inconsistencies were compounded by discrepancies between PID field measurements and those made by the EPA Trace Atmospheric Gas Analyzer (TAGA) mobile laboratory. To investigate further, members of Unified Command began assessing the performance of these PIDs to monitor VOCs in outdoor air in the community as well as in indoor air inside homes and businesses. Specifically, members of Unified Command conducted a rapid field evaluation to determine the PIDs’ ability to detect both butyl acrylate and vinyl chloride.
+
+However, during this field evaluation, additional questions arose relating to calibration gas mixtures, measurement variation between different instruments and PID models, and whether butyl acrylate would interfere with the detection of vinyl chloride. Following the initial rapid assessment, Unified Command convened a task force to conduct a more thorough assessment of the PIDs used during the response.
+
+PID Task Force Assessment Summary
+
+A multi-organizational task force consisting of members of Unified Command was established along with expert third-party reviewers. The task force evaluated the types of PIDs that have been used on the East Palestine Train Derailment Incident including the two versions of the MultiRAE Pro & AreaRAE Plus/Pro and one version of the ppbRAE. The task force conducted the study during the first week of May 2023.
+
+The overall objective of the performance assessment was to evaluate the accuracy and precision of the PIDs. Highlights of the results are as follows:
+
+Most versions of the PIDs could detect butyl acrylate at 0.2 ppm.
+
+All versions of the PIDs could detect vinyl chloride at 0.2 ppm.
+
+The more sensitive (ppb range instrument versions) could also detect vinyl chloride at 0.05 ppm.
+
+Vinyl chloride detection was not affected by instrument exposure to butyl acrylate.
+
+Below 0.2 ppm, the accuracy of the instruments was generally lowest.
+
+Above 1 ppm, the accuracy of the instruments was generally greater.
+
+Performance Assessment for the Monitoring of Butyl Acrylate and Vinyl Chloride in Air Using Honeywell PIDs (pdf)
+
+(8.83 MB)
+
+East Palestine, Ohio Train Derailment
+
+East Palestine, Ohio Train Derailment Home
+
+Operational Updates
+
+Resources for Affected Residents
+Public Health Resources
+Home and Office Cleaning
+Settlement Update
+
+Air Monitoring and Sampling Data
+About Air Monitoring
+Air Sampling Data
+Air Monitoring Documents
+
+Soil and Sediment Data
+Soil and Sediment Sampling Data
+Phase One Residential, Commercial, and Agricultural Soil Sampling Results
+Soil and Sediment Sampling Results Quick Reference Guide
+Event Reconstruction Plume Map
+City Park Soil Sampling Results
+Qualitative Sheen Assessment Results
+Response to Inaccurate Dioxin Reporting
+Workplan to Cleanup Sediment in Sulphur and Leslie Runs
+
+Water Sampling Data
+Water Management Update
+
+Data Validation Reports: Air, Soil, Water
+
+Photos
+
+Videos
+
+Newsletters
+
+Legal and other documents
+About Executive Order 14108
+Clean Water Act Administrative Order and Directives
+Full Characterization Workplan
+
+Frequently Asked Questions
+About Soil Sampling
+Taggart Street Reopening
+
+Background
+
+News Releases
+
+Contact Us About the East Palestine, Ohio Train Derailment
+
+Contact Us About the East Palestine, Ohio Train Derailment
+to ask a question, provide feedback, or report a problem.
+
+Last updated on March 9, 2026
+
+Assistance
+
+Spanish
+
+Arabic
+
+Chinese (simplified)
+
+Chinese (traditional)
+
+French
+
+Haitian Creole
+
+Korean
+
+Portuguese
+
+Russian
+
+Tagalog
+
+Vietnamese
+
+Discover.
+
+Accessibility Statement
+
+Budget & Performance
+
+Contracting
+
+EPA www Web Snapshot
+
+Grants
+
+No FEAR Act Data
+
+Plain Writing
+
+Privacy and Security Notice
+
+Connect.
+
+Data
+
+Inspector General
+
+Jobs
+
+Newsroom
+
+Regulations.gov
+
+Subscribe
+
+USA.gov
+
+White House
+
+Ask.
+
+Contact EPA
+
+EPA Disclaimers
+
+Hotlines
+
+FOIA Requests
+
+Frequent Questions
+
+Site Feedback
+
+Follow.

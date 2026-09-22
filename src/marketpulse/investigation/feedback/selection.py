@@ -83,7 +83,7 @@ class ArtifactSelector:
         return tuple(output)
 
     @staticmethod
-    def _sort_key(candidate: ArtifactCandidate) -> tuple[int, str]:
+    def _sort_key(candidate: ArtifactCandidate) -> tuple[int, str, str, str]:
         score = (
             16 * int(candidate.from_current_task)
             + 8 * int(candidate.relevant_to_question)
@@ -91,4 +91,9 @@ class ArtifactSelector:
             + 2 * int(candidate.related_to_gap)
             + int(candidate.related_to_conflict)
         )
-        return (-score, candidate.artifact.artifact_id)
+        return (
+            -score,
+            candidate.artifact.sha256,
+            candidate.snapshot.raw_sha256,
+            str(candidate.source.canonical_url),
+        )

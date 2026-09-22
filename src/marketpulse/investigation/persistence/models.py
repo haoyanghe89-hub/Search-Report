@@ -35,6 +35,7 @@ from marketpulse.investigation.domain.enums import (
     EntailmentStatus,
     ExecutionStepStatus,
     ExternalCallStatus,
+    FindingSeverity,
     GapSeverity,
     GapStatus,
     LineageOriginType,
@@ -42,11 +43,14 @@ from marketpulse.investigation.domain.enums import (
     LocatorType,
     ParseStatus,
     RelationStance,
+    ReleaseDecision,
     ReportReleaseStatus,
     ReportReviewStatus,
     ReportType,
+    ReportValidatorKind,
     ResearchGapType,
     ResearchTaskStatus,
+    ReviewDecisionOrigin,
     ReviewDecisionType,
     RunMode,
     RunStatus,
@@ -134,6 +138,8 @@ class InvestigationRunRow(Base):
     last_completed_step_key: Mapped[str | None] = mapped_column(String(256))
     owner_instance_id: Mapped[str | None] = mapped_column(String(128))
     owner_heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    origin_run_id: Mapped[str | None] = mapped_column(String(128))
+    origin_review_request_id: Mapped[str | None] = mapped_column(String(128))
 
 
 class ExecutionStepRow(Base):
@@ -809,15 +815,19 @@ class TimelineEvidenceRow(Base):
 
 
 class ReportRow(Base):
+    """Append-only report version; lifecycle state lives in ReportProjectionRow."""
+
     __tablename__ = "inv_reports"
     __table_args__ = (
         CheckConstraint("version >= 1", name="ck_inv_report_version"),
         CheckConstraint("length(report_hash) = 64", name="ck_inv_report_hash"),
         CheckConstraint("length(claim_set_hash) = 64", name="ck_inv_report_claim_set_hash"),
+        CheckConstraint("length(citation_set_hash) = 64", name="ck_inv_report_citation_set_hash"),
         UniqueConstraint("investigation_id", "version", name="uq_inv_report_version"),
-        Index("ix_inv_reports_run_release", "run_id", "release_status"),
+        Index("ix_inv_reports_run", "run_id"),
         Index("ix_inv_reports_hash", "report_hash"),
         Index("ix_inv_reports_claim_set_hash", "claim_set_hash"),
+        Index("ix_inv_reports_snapshot_hash", "report_input_snapshot_hash"),
     )
 
     report_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -831,17 +841,13 @@ class ReportRow(Base):
     report_type: Mapped[ReportType] = mapped_column(
         enum_type(ReportType, "inv_report_type"), nullable=False
     )
-    review_status: Mapped[ReportReviewStatus] = mapped_column(
-        enum_type(ReportReviewStatus, "inv_report_review_status"), nullable=False
-    )
-    release_status: Mapped[ReportReleaseStatus] = mapped_column(
-        enum_type(ReportReleaseStatus, "inv_report_release_status"), nullable=False
-    )
+    report_input_snapshot_hash: Mapped[str] = mapped_column(HASH, nullable=False)
     report_hash: Mapped[str] = mapped_column(HASH, nullable=False)
     claim_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    citation_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
     release_policy_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    schema_version: Mapped[str] = mapped_column(String(100), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
 class ReportSectionRow(Base):
@@ -905,6 +911,12 @@ class ReviewDecisionRow(Base):
     report_hash: Mapped[str] = mapped_column(HASH, nullable=False)
     claim_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
     release_policy_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    review_request_id: Mapped[str | None] = mapped_column(String(128))
+    reviewer_session_public_id: Mapped[str | None] = mapped_column(String(128))
+    reviewer_config_fingerprint: Mapped[str | None] = mapped_column(HASH)
+    decision_origin: Mapped[ReviewDecisionOrigin] = mapped_column(
+        enum_type(ReviewDecisionOrigin, "inv_review_decision_origin"), nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
@@ -1076,3 +1088,274 @@ class RecordedModelCallRow(Base):
     )
     recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReportInputSnapshotRow(Base):
+    __tablename__ = "inv_report_input_snapshots"
+    __table_args__ = (
+        CheckConstraint("length(snapshot_hash) = 64", name="ck_inv_ris_snapshot_hash"),
+        CheckConstraint("length(claim_set_hash) = 64", name="ck_inv_ris_claim_set_hash"),
+        CheckConstraint(
+            "length(source_state_fingerprint) = 64", name="ck_inv_ris_source_fingerprint"
+        ),
+        UniqueConstraint("snapshot_hash", name="uq_inv_ris_snapshot_hash"),
+        Index("ix_inv_ris_run", "run_id"),
+        Index("ix_inv_ris_claim_set_hash", "claim_set_hash"),
+    )
+
+    snapshot_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    investigation_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_investigations.investigation_id", ondelete="RESTRICT"), nullable=False
+    )
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_runs.run_id", ondelete="RESTRICT"), nullable=False
+    )
+    run_mode: Mapped[RunMode] = mapped_column(enum_type(RunMode, "inv_run_mode"), nullable=False)
+    snapshot_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    claim_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    source_state_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
+    semantic_payload: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, nullable=False)
+    runtime_references: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, nullable=False)
+    assembled_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReportProjectionRow(Base):
+    """Controlled-mutable latest lifecycle projection for a report version."""
+
+    __tablename__ = "inv_report_projections"
+
+    report_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_reports.report_id", ondelete="CASCADE"), primary_key=True
+    )
+    investigation_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_investigations.investigation_id", ondelete="RESTRICT"), nullable=False
+    )
+    review_status: Mapped[ReportReviewStatus] = mapped_column(
+        enum_type(ReportReviewStatus, "inv_report_review_status"), nullable=False
+    )
+    release_status: Mapped[ReportReleaseStatus] = mapped_column(
+        enum_type(ReportReleaseStatus, "inv_report_release_status"), nullable=False
+    )
+    active_review_request_id: Mapped[str | None] = mapped_column(String(128))
+    latest_evaluation_id: Mapped[str | None] = mapped_column(String(128))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class CitationRow(Base):
+    __tablename__ = "inv_citations"
+    __table_args__ = (
+        CheckConstraint("display_ordinal >= 0", name="ck_inv_citations_ordinal"),
+        CheckConstraint("length(citation_hash) = 64", name="ck_inv_citations_hash"),
+        UniqueConstraint("report_id", "citation_hash", name="uq_inv_citations_report_hash"),
+        Index("ix_inv_citations_hash", "citation_hash"),
+        Index("ix_inv_citations_report_section", "report_id", "section_key"),
+        Index("ix_inv_citations_claim", "claim_id"),
+        Index("ix_inv_citations_evidence", "evidence_id"),
+    )
+
+    citation_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    report_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_reports.report_id", ondelete="RESTRICT"), nullable=False
+    )
+    display_ordinal: Mapped[int] = mapped_column(Integer, nullable=False)
+    claim_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_claims.claim_id", ondelete="RESTRICT"), nullable=False
+    )
+    evidence_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_evidence.evidence_id", ondelete="RESTRICT"), nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    report_input_snapshot_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    claim_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    section_key: Mapped[str] = mapped_column(String(100), nullable=False)
+    unit_key: Mapped[str] = mapped_column(String(200), nullable=False)
+    claim_semantic_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    validation_semantic_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    relation_semantics: Mapped[str] = mapped_column(String(200), nullable=False)
+    evidence_semantic_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    canonical_locator: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, nullable=False)
+    resolved_quote_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    artifact_content_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    snapshot_content_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    source_semantic_identity: Mapped[str] = mapped_column(String(500), nullable=False)
+    entailment_judgment: Mapped[str] = mapped_column(String(100), nullable=False)
+    entailment_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    schema_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    citation_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+
+
+class ReportValidationFindingRow(Base):
+    __tablename__ = "inv_report_validation_findings"
+    __table_args__ = (Index("ix_inv_rvf_report_severity", "report_id", "severity"),)
+
+    finding_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    report_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_reports.report_id", ondelete="RESTRICT"), nullable=False
+    )
+    validator: Mapped[ReportValidatorKind] = mapped_column(
+        enum_type(ReportValidatorKind, "inv_report_validator_kind"), nullable=False
+    )
+    severity: Mapped[FindingSeverity] = mapped_column(
+        enum_type(FindingSeverity, "inv_finding_severity"), nullable=False
+    )
+    code: Mapped[str] = mapped_column(String(100), nullable=False)
+    detail: Mapped[str] = mapped_column(Text, nullable=False)
+    section_key: Mapped[str | None] = mapped_column(String(100))
+    unit_key: Mapped[str | None] = mapped_column(String(200))
+    claim_stable_key: Mapped[str | None] = mapped_column(String(200))
+    validator_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReleasePolicyEvaluationRow(Base):
+    __tablename__ = "inv_release_policy_evaluations"
+    __table_args__ = (
+        CheckConstraint("hard_finding_count >= 0", name="ck_inv_rpe_hard_count"),
+        CheckConstraint("governance_finding_count >= 0", name="ck_inv_rpe_governance_count"),
+        UniqueConstraint("report_id", "evaluation_hash", name="uq_inv_rpe_report_hash"),
+        Index("ix_inv_rpe_report", "report_id"),
+    )
+
+    evaluation_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    report_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_reports.report_id", ondelete="RESTRICT"), nullable=False
+    )
+    policy_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    decision: Mapped[ReleaseDecision] = mapped_column(
+        enum_type(ReleaseDecision, "inv_release_decision"), nullable=False
+    )
+    release_status: Mapped[ReportReleaseStatus] = mapped_column(
+        enum_type(ReportReleaseStatus, "inv_report_release_status"), nullable=False
+    )
+    review_status: Mapped[ReportReviewStatus] = mapped_column(
+        enum_type(ReportReviewStatus, "inv_report_review_status"), nullable=False
+    )
+    evaluation_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    report_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    claim_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    citation_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    hard_finding_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    governance_finding_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    basis: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReviewRequestRow(Base):
+    __tablename__ = "inv_review_requests"
+    __table_args__ = (
+        CheckConstraint("report_version >= 1", name="ck_inv_rrq_report_version"),
+        Index("ix_inv_rrq_report_created", "report_id", "created_at"),
+        Index("ix_inv_rrq_evaluation", "evaluation_hash"),
+    )
+
+    request_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    report_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_reports.report_id", ondelete="RESTRICT"), nullable=False
+    )
+    report_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    snapshot_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    claim_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    citation_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    report_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    evaluation_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    evaluation_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_release_policy_evaluations.evaluation_id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    validator_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    policy_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    trigger_reason: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReviewerSessionRow(Base):
+    __tablename__ = "inv_reviewer_sessions"
+    __table_args__ = (
+        CheckConstraint("generation >= 1", name="ck_inv_reviewer_sessions_generation"),
+        UniqueConstraint("token_hash", name="uq_inv_reviewer_sessions_token_hash"),
+        Index("ix_inv_reviewer_sessions_reviewer", "reviewer_id"),
+    )
+
+    session_public_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    reviewer_id: Mapped[str] = mapped_column(String(200), nullable=False)
+    token_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    reviewer_config_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
+    generation: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class ReviewerAuthStateRow(Base):
+    __tablename__ = "inv_reviewer_auth_state"
+
+    reviewer_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    active_session_public_id: Mapped[str | None] = mapped_column(String(128))
+    active_generation: Mapped[int] = mapped_column(Integer, nullable=False)
+    config_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReviewRateBucketRow(Base):
+    __tablename__ = "inv_reviewer_rate_buckets"
+
+    bucket_fingerprint: Mapped[str] = mapped_column(HASH, primary_key=True)
+    failure_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    window_started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReviewResearchRequestRow(Base):
+    __tablename__ = "inv_review_research_requests"
+    __table_args__ = (Index("ix_inv_rrr_report", "report_id"),)
+
+    request_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    review_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_review_decisions.review_id", ondelete="RESTRICT"), nullable=False
+    )
+    report_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_reports.report_id", ondelete="RESTRICT"), nullable=False
+    )
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    follow_up_run_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_runs.run_id", ondelete="SET NULL")
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReviewIdempotencyRow(Base):
+    __tablename__ = "inv_review_idempotency"
+    __table_args__ = (Index("ix_inv_review_idempotency_report", "report_id"),)
+
+    idempotency_key: Mapped[str] = mapped_column(String(200), primary_key=True)
+    report_id: Mapped[str] = mapped_column(
+        ForeignKey("inv_reports.report_id", ondelete="RESTRICT"), nullable=False
+    )
+    reviewer_id: Mapped[str] = mapped_column(String(200), nullable=False)
+    decision: Mapped[ReviewDecisionType] = mapped_column(
+        enum_type(ReviewDecisionType, "inv_review_decision"), nullable=False
+    )
+    response_payload: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class RecordedHumanReviewDecisionRow(Base):
+    __tablename__ = "inv_recorded_human_review_decisions"
+    __table_args__ = (UniqueConstraint("semantic_fingerprint", name="uq_inv_rhrd_fingerprint"),)
+
+    recorded_id: Mapped[str] = mapped_column(ID, primary_key=True)
+    reviewer_id: Mapped[str] = mapped_column(String(200), nullable=False)
+    decision: Mapped[ReviewDecisionType] = mapped_column(
+        enum_type(ReviewDecisionType, "inv_review_decision"), nullable=False
+    )
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    report_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    claim_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    snapshot_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    citation_set_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    release_policy_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    evaluation_hash: Mapped[str] = mapped_column(HASH, nullable=False)
+    semantic_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

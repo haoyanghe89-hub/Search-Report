@@ -81,6 +81,8 @@ class InvestigationRun(DomainModel):
     last_completed_step_key: str | None = None
     owner_instance_id: str | None = None
     owner_heartbeat_at: datetime | None = None
+    origin_run_id: EntityId | None = None
+    origin_review_request_id: EntityId | None = None
 
 
 class ExecutionStep(DomainModel):
