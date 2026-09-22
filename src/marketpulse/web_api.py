@@ -94,6 +94,18 @@ app.state.inv_sessions = _inv_sessions
 app.state.inv_repository = _inv_repository
 app.state.review_session_factory = _inv_sessions
 app.state.settings = _inv_settings
+# Configure East Palestine replay runner
+from marketpulse.investigation.case_replay import (
+    EastPalestineReplayService,
+    default_blob_root,
+    default_case_root,
+)
+app.state.east_palestine_replay = EastPalestineReplayService(
+    sessions=_inv_sessions,
+    repository=_inv_repository,
+    case_root=default_case_root(),
+    blob_root=default_blob_root(),
+)
 # include_router has compatibility issues with this FastAPI version; add routes directly
 for _route in investigation_router.routes:
     app.router.routes.append(_route)

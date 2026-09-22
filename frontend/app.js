@@ -41,6 +41,17 @@ function showToast(message) {
   window.setTimeout(() => toast.classList.remove("is-visible"), 2800);
 }
 
+function showLoading(text = "正在调查…") {
+  $("#loading-text").textContent = text;
+  $("#loading-overlay").classList.add("is-visible");
+  $("#loading-overlay").setAttribute("aria-hidden", "false");
+}
+
+function hideLoading() {
+  $("#loading-overlay").classList.remove("is-visible");
+  $("#loading-overlay").setAttribute("aria-hidden", "true");
+}
+
 async function fetchJson(path, options = {}) {
   const response = await fetch(path, { credentials: "include", ...options });
   if (!response.ok) {
@@ -86,6 +97,7 @@ async function openInvestigation(investigationId, preferredRunId = null) {
       fetchJson(`/api/investigations/${encodeURIComponent(investigationId)}/runs`),
     ]);
     state.investigation = investigation;
+    state.liveResult = null;
     const selected = preferredRunId ? runs.find((run) => run.run_id === preferredRunId) : runs[0];
     state.run = selected ? (await fetchJson(`/api/runs/${encodeURIComponent(selected.run_id)}`)).run : null;
     state.report = null;
@@ -237,6 +249,7 @@ async function startLiveResearch() {
     button.disabled = true;
     button.textContent = "正在调研，请稍候…";
   }
+  showLoading("正在调用大模型进行真实调研…");
   try {
     const result = await fetchJson("/api/reports", {
       method: "POST",
@@ -256,6 +269,8 @@ async function startLiveResearch() {
       button.disabled = false;
       button.textContent = "真实大模型调研";
     }
+  } finally {
+    hideLoading();
   }
 }
 
@@ -266,6 +281,7 @@ async function startRun() {
     button.disabled = true;
     button.textContent = "正在启动调查…";
   }
+  showLoading("正在执行内置回放调查…");
   try {
     const result = await fetchJson(
       `/api/investigations/${encodeURIComponent(state.investigation.investigation_id)}/runs`,
@@ -279,6 +295,8 @@ async function startRun() {
       button.disabled = false;
       button.textContent = "开始调查";
     }
+  } finally {
+    hideLoading();
   }
 }
 
@@ -286,6 +304,7 @@ async function runReplay() {
   const button = $("#run-replay");
   button.disabled = true;
   button.textContent = "正在回放持久化工作流…";
+  showLoading("正在回放调查工作流…");
   try {
     const result = await fetchJson("/api/cases/east-palestine-2023/replay", { method: "POST" });
     showToast("回放完成并已持久化");
@@ -293,6 +312,7 @@ async function runReplay() {
   } catch (error) {
     showToast(error.message);
   } finally {
+    hideLoading();
     button.disabled = false;
     button.textContent = "运行回放调查";
   }
