@@ -572,11 +572,18 @@ $("#new-investigation").addEventListener("click", () => $("#new-dialog").showMod
 $("#new-form").addEventListener("submit", async (event) => {
   if (event.submitter?.value === "cancel") return;
   event.preventDefault();
-  const form = new FormData(event.currentTarget);
-  const created = await fetchJson("/api/investigations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: form.get("title"), event_description: form.get("event_description"), investigation_goal: form.get("investigation_goal"), questions: String(form.get("questions") || "").split("\n").map((item) => item.trim()).filter(Boolean) }) });
-  $("#new-dialog").close();
-  event.currentTarget.reset();
-  await openInvestigation(created.investigation_id);
+  // Capture the form element before any await: event.currentTarget becomes
+  // null once event dispatch ends (the first await ends it).
+  const formEl = event.currentTarget;
+  const form = new FormData(formEl);
+  try {
+    const created = await fetchJson("/api/investigations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: form.get("title"), event_description: form.get("event_description"), investigation_goal: form.get("investigation_goal"), questions: String(form.get("questions") || "").split("\n").map((item) => item.trim()).filter(Boolean) }) });
+    $("#new-dialog").close();
+    formEl.reset();
+    await openInvestigation(created.investigation_id);
+  } catch (error) {
+    showToast("创建失败: " + error.message);
+  }
 });
 
 $("#edit-investigation").addEventListener("click", () => {
