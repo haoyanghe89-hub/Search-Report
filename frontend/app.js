@@ -176,8 +176,6 @@ async function renderReport() {
     $("#generate-report")?.addEventListener("click", generateReport);
     return;
   }
-  $("#export-pdf")?.addEventListener("click", exportPdf);
-  }
   const citationsByUnit = new Map();
   for (const citation of state.citations) {
     const group = citationsByUnit.get(citation.unit_key) || [];
@@ -188,6 +186,7 @@ async function renderReport() {
     <div class="record-meta"><span>${statusChip(report.report.release_status)}</span><span>审核 ${words(report.report.review_status)}</span><span>哈希 ${escapeHtml(report.report.report_hash.slice(0, 16))}…</span></div>
     <div class="export-bar"><button class="secondary-button" id="export-pdf">导出 PDF</button></div>
     <article>${report.sections.map((section) => `<section class="report-section"><h3>${words(section.section_type)}</h3>${(section.content?.units || []).map((unit) => `<p class="report-unit">${escapeHtml(unit.text)} ${(citationsByUnit.get(unit.unit_key) || []).map((citation) => `<button class="citation-button" data-citation-id="${escapeHtml(citation.citation_id)}">[${citation.display_ordinal}]</button>`).join(" ")}</p>`).join("") || `<p class="report-unit">${words(section.content?.status || "无支持材料")}</p>`}</section>`).join("")}</article>`;
+  $("#export-pdf")?.addEventListener("click", exportPdf);
 }
 
 async function renderReview() {
