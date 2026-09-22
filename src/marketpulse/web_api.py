@@ -203,7 +203,7 @@ async def health() -> dict[str, str]:
     return {"status": "ok", "service": "marketpulse"}
 
 
-@app.get("/api/runs/{run_id}", response_model=BlackboardState)
+@app.get("/api/blackboard-runs/{run_id}", response_model=BlackboardState)
 def read_run(run_id: str) -> BlackboardState:
     settings = Settings.from_env(require_api_key=False)
     board = BlackboardStore(settings.database_url.get_secret_value())
@@ -215,7 +215,7 @@ def read_run(run_id: str) -> BlackboardState:
         board.close()
 
 
-@app.get("/api/runs/{run_id}/events", response_model=list[BlackboardEvent])
+@app.get("/api/blackboard-runs/{run_id}/events", response_model=list[BlackboardEvent])
 def read_run_events(run_id: str, after_version: int = -1) -> list[BlackboardEvent]:
     settings = Settings.from_env(require_api_key=False)
     board = BlackboardStore(settings.database_url.get_secret_value())
@@ -307,6 +307,10 @@ class InvestigationUpdateIn(BaseModel):
 def update_investigation(
     investigation_id: str, payload: InvestigationUpdateIn, request: Request
 ) -> dict:
+    from marketpulse.investigation.case_replay import INVESTIGATION_ID as BUILTIN_CASE_ID
+
+    if investigation_id == BUILTIN_CASE_ID:
+        raise HTTPException(status_code=409, detail="内置回放案例不可编辑（回放指纹依赖其固定内容）")
     sessions = request.app.state.inv_sessions
     now = datetime.now(UTC)
     with sessions() as session:

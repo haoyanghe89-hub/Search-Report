@@ -172,7 +172,7 @@ async function renderOverview() {
 
 async function renderProcess() {
   if (state.liveResult) {
-    const events = await fetchJson(`/api/runs/${encodeURIComponent(state.liveResult.run_id)}/events`);
+    const events = await fetchJson(`/api/blackboard-runs/${encodeURIComponent(state.liveResult.run_id)}/events`);
     panel.innerHTML = `${panelHeading("智能体流程", `${events.length} 个黑板事件`)}
       <div class="trace"><div class="trace-stage"><strong>规划者</strong><span>PLAN</span></div><div class="trace-stage"><strong>研究员</strong><span>SEARCH</span></div><div class="trace-stage"><strong>分析师</strong><span>ANALYZE</span></div><div class="trace-stage"><strong>报告员</strong><span>REPORT</span></div></div>
       ${(state.liveResult.research_round || 0) > 1 ? `<div class="feedback-loop">复盘决策触发了第 ${state.liveResult.research_round} 轮补充研究。</div>` : ""}

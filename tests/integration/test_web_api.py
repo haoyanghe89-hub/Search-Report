@@ -99,9 +99,9 @@ async def test_read_committed_blackboard_and_events() -> None:
     async with httpx.AsyncClient(
         transport=httpx.ASGITransport(app=app), base_url="http://test"
     ) as client:
-        snapshot = await client.get("/api/runs/run_api")
-        history = await client.get("/api/runs/run_api/events?after_version=0")
-        missing = await client.get("/api/runs/missing")
+        snapshot = await client.get("/api/blackboard-runs/run_api")
+        history = await client.get("/api/blackboard-runs/run_api/events?after_version=0")
+        missing = await client.get("/api/blackboard-runs/missing")
     assert snapshot.json()["version"] == 1
     assert snapshot.json()["warnings"] == ["missing evidence"]
     assert len(history.json()) == 1
