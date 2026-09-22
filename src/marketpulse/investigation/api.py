@@ -20,6 +20,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from marketpulse.investigation.domain.enums import (
+    RunMode,
     GapStatus,
     RelationStance,
     ReportType,
@@ -747,6 +748,34 @@ def create_investigation(
         updated_at=now,
         counts=InvestigationCountsOut(sources=0, evidence=0, claims=0, conflicts=0, open_gaps=0),
     )
+
+
+@router.post(
+    "/investigations/{investigation_id}/runs",
+    response_model=ReplayCaseOut,
+    status_code=202,
+)
+async def start_investigation_run(
+    investigation_id: str, request: Request
+) -> ReplayCaseOut:
+    """Start a replay run for the given investigation.
+
+    Uses the bundled East Palestine fixture so the full pipeline can be
+    exercised without live model/search access.
+    """
+    sessions = _sessions(request)
+    with sessions() as session:
+        _get_investigation_row(session, investigation_id)
+    runner = cast(
+        "ReplayCaseRunner | None",
+        getattr(request.app.state, "east_palestine_replay", None),
+    )
+    if runner is None:
+        raise _error(503, "REPLAY_NOT_CONFIGURED", "replay runner is not configured")
+    run_for_investigation = getattr(runner, "run_for_investigation", None)
+    if run_for_investigation is None:
+        raise _error(501, "RUN_NOT_SUPPORTED", "runner does not support arbitrary investigations")
+    return await run_for_investigation(investigation_id)
 
 
 @router.get("/investigations/{investigation_id}", response_model=InvestigationDetailOut)

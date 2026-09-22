@@ -201,7 +201,9 @@ async function renderReview() {
 
 function renderNoRun() {
   panel.innerHTML = `${panelHeading("暂无运行", "创建或回放一个调查")}
-    <div class="record"><p>该调查尚无持久化运行记录。</p></div>`;
+    <div class="record"><p>该调查尚无持久化运行记录。</p>
+    <button class="primary-button" id="start-run">开始调查</button></div>`;
+  $("#start-run")?.addEventListener("click", startRun);
 }
 
 async function renderTab(tab) {
@@ -213,6 +215,29 @@ async function renderTab(tab) {
     await renderers[tab]();
   } catch (error) {
     panel.innerHTML = `<div class="error-state">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+async function startRun() {
+  if (!state.investigation) return;
+  const button = $("#start-run");
+  if (button) {
+    button.disabled = true;
+    button.textContent = "正在启动调查…";
+  }
+  try {
+    const result = await fetchJson(
+      `/api/investigations/${encodeURIComponent(state.investigation.investigation_id)}/runs`,
+      { method: "POST" }
+    );
+    showToast("调查运行已启动并持久化");
+    await openInvestigation(result.investigation_id, result.run_id);
+  } catch (error) {
+    showToast(error.message);
+    if (button) {
+      button.disabled = false;
+      button.textContent = "开始调查";
+    }
   }
 }
 

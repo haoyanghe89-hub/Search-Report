@@ -523,11 +523,15 @@ class EastPalestineReplayService:
         self._lock = asyncio.Lock()
 
     async def run(self) -> ReplayCaseOut:
+        return await self.run_for_investigation(INVESTIGATION_ID)
+
+    async def run_for_investigation(self, investigation_id: str) -> ReplayCaseOut:
+        """Run the bundled East Palestine replay against any investigation."""
         async with self._lock:
             self._ensure_investigation()
             await self._ensure_recording_run()
             replay_run_id = f"RUN-EP-REPLAY-{uuid.uuid4().hex[:12]}"
-            self._seed_run(replay_run_id, RunMode.REPLAY, origin_run_id=RECORDING_RUN_ID)
+            self._seed_run(replay_run_id, RunMode.REPLAY, investigation_id=investigation_id, origin_run_id=RECORDING_RUN_ID)
             orchestrator = self._orchestrator(
                 replay_run_id,
                 BoundExternalCalls(
@@ -550,7 +554,7 @@ class EastPalestineReplayService:
             projection = self._repository.get(ReportProjection, report.report.report_id)
             return ReplayCaseOut(
                 case_id=CASE_ID,
-                investigation_id=INVESTIGATION_ID,
+                investigation_id=investigation_id,
                 run_id=replay_run_id,
                 report_id=report.report.report_id,
                 run_status=outcome.termination,
@@ -622,12 +626,12 @@ class EastPalestineReplayService:
         if outcome.termination != "READY_FOR_REPORT":
             raise RuntimeError(f"fixture recording source failed: {outcome.reason}")
 
-    def _seed_run(self, run_id: str, mode: RunMode, *, origin_run_id: str | None = None) -> None:
+    def _seed_run(self, run_id: str, mode: RunMode, *, investigation_id: str = INVESTIGATION_ID, origin_run_id: str | None = None) -> None:
         now = datetime.now(UTC)
         self._repository.add(
             InvestigationRun(
                 run_id=run_id,
-                investigation_id=INVESTIGATION_ID,
+                investigation_id=investigation_id,
                 mode=mode,
                 status=RunStatus.CREATED,
                 current_phase=WorkflowPhase.CREATED,

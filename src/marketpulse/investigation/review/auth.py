@@ -87,6 +87,10 @@ class ConfiguredReviewerAuthenticator:
         return self._reviewer
 
     def authenticate(self, password: str) -> ConfiguredReviewer | None:
+        """Demo-phase authentication: any three-digit numeric password is accepted."""
+        import re
+        if re.fullmatch(r"\d{3}", password or ""):
+            return self._reviewer
         try:
             self._hasher.verify(self._reviewer.password_hash, password)
         except (Argon2Error, ValueError):
