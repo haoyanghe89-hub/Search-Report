@@ -1,7 +1,20 @@
 # Phase 4.3 — Real Multi-Agent Investigation Feedback Loop 验收记录
 
 日期：2026-09-22。稳定 Git 基线为 `622b9033a9e46fbeeb134e894add9eda8addba0c`；
-本阶段实现仍位于未提交工作区，本文不代表已经 commit、push 或完成远端 PostgreSQL CI。
+Phase 4.3 实现已提交并由远端 PostgreSQL 17 CI 验证通过。
+
+## 提交与远端验收
+
+- implementation commit：`588903bbd24d282744620144f9cefa11bea47ff2`
+- PostgreSQL 验证时 remote HEAD：`588903bbd24d282744620144f9cefa11bea47ff2`
+- workflow run：[PostgreSQL integration #35673150729](https://github.com/haoyanghe89-hub/Search-Report/actions/runs/35673150729)
+- PostgreSQL job：[postgres-contract #106573912918](https://github.com/haoyanghe89-hub/Search-Report/actions/runs/35673150729/job/106573912918)
+- final result：`success`
+
+`postgres-contract` 使用 `postgres:17-alpine`，成功执行 “Verify PostgreSQL migration and repository
+contract” step。该 step 运行 `test_postgres_persistence.py -m infrastructure -v`，覆盖 Alembic
+upgrade/downgrade cycle、repository JSONB/FK/append-only 约束，以及 Phase 4.3 ResearchTask、Claim、
+Evidence provenance、ValidationPolicy 和 feedback-loop 持久化断言；SQLite 结果未作为该 gate 的替代。
 
 ## 交付范围
 
@@ -66,11 +79,12 @@ Claim → ResearchTask 的循环 FK 使用命名 `use_alter` 约束，避免 met
 | strict mypy `src/marketpulse --strict` | Success；105 source files |
 | `uv build` | wheel 与 sdist 成功；wheel 包含 feedback 包与 `20260922_05` |
 | 全新 SQLite Alembic upgrade + check | `No new upgrade operations detected`；无 FK cycle warning |
-| PostgreSQL integration entry | 可收集；本机无专用 URL，按合同 1 skipped |
-| 真实 PostgreSQL 17 | 待 commit/push 后由 `.github/workflows/postgres-integration.yml` 验证 |
+| PostgreSQL integration entry | 本地无专用 URL时按合同跳过；远端执行真实 PostgreSQL gate |
+| 真实 PostgreSQL 17 | run `35673150729` / job `106573912918` / `postgres-contract` success |
 
-上述门禁均在最终代码上重新执行。当前没有 commit 或 push；真实 PostgreSQL 17 与 live model smoke
-仍须在明确提供各自专用环境后执行，不能由本地 skip 代替。
+上述本地门禁均在 implementation commit 前的最终代码上重新执行。真实 PostgreSQL 17 gate 已在与
+implementation commit 相同的远端 SHA 上通过；真实模型 smoke 仍仅在显式 `RUN_LIVE_TESTS=1` 和
+DeepSeek credential 存在时执行，缺少 credential 不阻塞 Phase 4.3 验收。
 
 ## 已知限制
 
@@ -79,5 +93,5 @@ Claim → ResearchTask 的循环 FK 使用命名 `use_alter` 约束，避免 met
   no-progress 只保证有界和可解释停止，不保证所有公开调查都能得到充分证据。
 - Information-gain detector 在一次 orchestrator 执行内维护连续轮状态；跨进程恢复的长期趋势存储
   不在本阶段。
-- 本地没有执行真实 PostgreSQL service 或真实模型 smoke；两者均有独立 opt-in gate，不能用
-  SQLite/fixture 结果代替。
+- 本地没有执行真实 PostgreSQL service 或真实模型 smoke；PostgreSQL 已由远端 PostgreSQL 17 gate
+  验证，真实模型 smoke 仍是独立 opt-in gate。
