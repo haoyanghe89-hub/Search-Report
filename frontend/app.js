@@ -303,13 +303,13 @@ async function renderReview() {
 }
 
 function renderNoRun() {
+  const isOverview = state.activeTab === "overview";
   panel.innerHTML = `${panelHeading("暂无运行", "创建或回放一个调查")}
     <div class="record">
-      <p>该调查尚无运行记录。点击下方按钮启动真实大模型调查：</p>
-      <button class="primary-button" id="start-run">开始调查</button>
-      <p class="record-meta" style="margin-top:12px;">将调用搜索、抓取与大模型 API（需配置 DEEPSEEK_API_KEY），结果整理到来源/证据/声明视图。</p>
+      <p>该调查尚无运行记录。${isOverview ? "点击下方按钮启动真实大模型调查：" : '请切换到「概览」页启动调查。'}</p>
+      ${isOverview ? '<button class="primary-button" id="start-run">开始调查</button><p class="record-meta" style="margin-top:12px;">将调用搜索、抓取与大模型 API（需配置 DEEPSEEK_API_KEY），结果整理到来源/证据/声明视图。</p>' : ""}
     </div>`;
-  $("#start-run")?.addEventListener("click", startRun);
+  if (isOverview) $("#start-run")?.addEventListener("click", startRun);
 }
 
 async function renderTab(tab) {
