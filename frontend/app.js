@@ -173,6 +173,8 @@ async function renderReport() {
     $("#generate-report")?.addEventListener("click", generateReport);
     return;
   }
+  $("#export-pdf")?.addEventListener("click", exportPdf);
+  }
   const citationsByUnit = new Map();
   for (const citation of state.citations) {
     const group = citationsByUnit.get(citation.unit_key) || [];
@@ -181,6 +183,7 @@ async function renderReport() {
   }
   panel.innerHTML = `${panelHeading("调查报告", `版本 ${report.report.version} · ${words(report.report.report_type)}`)}
     <div class="record-meta"><span>${statusChip(report.report.release_status)}</span><span>审核 ${words(report.report.review_status)}</span><span>哈希 ${escapeHtml(report.report.report_hash.slice(0, 16))}…</span></div>
+    <div class="export-bar"><button class="secondary-button" id="export-pdf">导出 PDF</button></div>
     <article>${report.sections.map((section) => `<section class="report-section"><h3>${words(section.section_type)}</h3>${(section.content?.units || []).map((unit) => `<p class="report-unit">${escapeHtml(unit.text)} ${(citationsByUnit.get(unit.unit_key) || []).map((citation) => `<button class="citation-button" data-citation-id="${escapeHtml(citation.citation_id)}">[${citation.display_ordinal}]</button>`).join(" ")}</p>`).join("") || `<p class="report-unit">${words(section.content?.status || "无支持材料")}</p>`}</section>`).join("")}</article>`;
 }
 
@@ -255,6 +258,43 @@ async function runReplay() {
     button.disabled = false;
     button.textContent = "运行回放调查";
   }
+}
+
+function exportPdf() {
+  if (!state.report) return;
+  const title = escapeHtml(state.investigation?.title || "调查报告");
+  const meta = state.report.report;
+  const sectionsHtml = state.report.sections.map((section) => {
+    const units = (section.content?.units || []).map((unit) => `<p>${escapeHtml(unit.text)}</p>`).join("");
+    return `<section><h2>${words(section.section_type)}</h2>${units || "<p>（无内容）</p>"}</section>`;
+  }).join("");
+  const citationsHtml = state.citations.length
+    ? `<section><h2>引用来源</h2><ol>${state.citations.map((c) => `<li>[${c.display_ordinal}] ${escapeHtml(c.claim_id)} — ${escapeHtml(c.evidence_id)}</li>`).join("")}</ol></section>`
+    : "";
+  const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>${title}</title>
+<style>
+  @page { size: A4; margin: 2cm; }
+  body { font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; color: #102536; line-height: 1.7; }
+  h1 { font-size: 1.6rem; border-bottom: 2px solid #1d6f9c; padding-bottom: 8px; }
+  h2 { font-size: 1.2rem; color: #102c44; margin-top: 24px; }
+  p { margin: 8px 0; }
+  .meta { color: #607280; font-size: 0.85rem; margin-bottom: 16px; }
+  ol { padding-left: 20px; }
+</style></head><body>
+<h1>${title}</h1>
+<div class="meta">版本 ${escapeHtml(String(meta.version))} · 类型 ${words(meta.report_type)} · 发布状态 ${words(meta.release_status || "—")}</div>
+${sectionsHtml}
+${citationsHtml}
+</body></html>`;
+  const win = window.open("", "_blank");
+  if (!win) {
+    showToast("请允许弹出窗口以导出 PDF");
+    return;
+  }
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => { win.print(); }, 300);
 }
 
 async function generateReport() {

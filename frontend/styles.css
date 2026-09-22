@@ -146,3 +146,5 @@ dialog form { padding: 24px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+.export-bar { display: flex; justify-content: flex-end; margin: 12px 0 20px; }

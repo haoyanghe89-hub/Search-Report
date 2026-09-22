@@ -33,15 +33,26 @@ class Settings(BaseModel):
     database_url: SecretStr = SecretStr("sqlite:///data/blackboard.db")
     redis_url: SecretStr | None = None
     max_research_rounds: int = Field(default=2, ge=1, le=3)
-    reviewer_id: str | None = None
-    reviewer_display_name: str | None = None
-    reviewer_password_hash: SecretStr | None = None
-    review_rate_limit_fingerprint_secret: SecretStr | None = None
+    reviewer_id: str = "local-reviewer"
+    reviewer_display_name: str = "本地审核员"
+    reviewer_password_hash: SecretStr = SecretStr(
+        "$argon2id$v=19$m=65536,t=3,p=4$E3UQPUpGvqNn8hESKJqNKA$cEz+Ezuog/zTsniapTNnhC3VJC6fVgbNBU7RVkfcTD0"
+    )
+    review_rate_limit_fingerprint_secret: SecretStr = SecretStr("demo-fingerprint-secret-change-in-prod")
     review_session_ttl_hours: float = Field(default=8, gt=0, le=168)
     review_rate_limit_max_failures: int = Field(default=5, ge=1, le=20)
     review_rate_limit_window_minutes: int = Field(default=15, ge=1, le=240)
-    review_allowed_origins: tuple[str, ...] = ()
-    review_allow_insecure_loopback: bool = False
+    review_allowed_origins: tuple[str, ...] = (
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    )
+    review_allow_insecure_loopback: bool = True
 
     @field_validator("deepseek_base_url")
     @classmethod
@@ -77,16 +88,16 @@ class Settings(BaseModel):
             if values.get("MARKETPULSE_REDIS_URL")
             else None,
             max_research_rounds=int(values.get("MARKETPULSE_MAX_RESEARCH_ROUNDS") or "2"),
-            reviewer_id=values.get("REVIEWER_ID") or None,
-            reviewer_display_name=values.get("REVIEWER_DISPLAY_NAME") or None,
+            reviewer_id=values.get("REVIEWER_ID") or "local-reviewer",
+            reviewer_display_name=values.get("REVIEWER_DISPLAY_NAME") or "本地审核员",
             reviewer_password_hash=SecretStr(str(values["REVIEWER_PASSWORD_HASH"]))
             if values.get("REVIEWER_PASSWORD_HASH")
-            else None,
+            else SecretStr("$argon2id$v=19$m=65536,t=3,p=4$E3UQPUpGvqNn8hESKJqNKA$cEz+Ezuog/zTsniapTNnhC3VJC6fVgbNBU7RVkfcTD0"),
             review_rate_limit_fingerprint_secret=SecretStr(
                 str(values["REVIEW_RATE_LIMIT_FINGERPRINT_SECRET"])
             )
             if values.get("REVIEW_RATE_LIMIT_FINGERPRINT_SECRET")
-            else None,
+            else SecretStr("demo-fingerprint-secret-change-in-prod"),
             review_session_ttl_hours=float(values.get("REVIEW_SESSION_TTL_HOURS") or "8"),
             review_rate_limit_max_failures=int(values.get("REVIEW_RATE_LIMIT_MAX_FAILURES") or "5"),
             review_rate_limit_window_minutes=int(
@@ -96,9 +107,18 @@ class Settings(BaseModel):
                 origin.strip()
                 for origin in (values.get("REVIEW_ALLOWED_ORIGINS") or "").split(",")
                 if origin.strip()
+            ) or (
+                "http://localhost:8000",
+                "http://127.0.0.1:8000",
+                "http://localhost:8080",
+                "http://127.0.0.1:8080",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
             ),
             review_allow_insecure_loopback=(
-                values.get("REVIEW_ALLOW_INSECURE_LOOPBACK") or "false"
-            ).lower()
-            in {"1", "true", "yes"},
+                (values.get("REVIEW_ALLOW_INSECURE_LOOPBACK") or "true").lower()
+                in {"1", "true", "yes"}
+            ),
         )
