@@ -1,76 +1,76 @@
-<!doctype html>
-<html lang="en">
+﻿<!doctype html>
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light" />
-    <title>Search Report — Investigation Console</title>
+    <title>Search Report — 调查控制台</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <a class="skip-link" href="#workspace">Skip to investigation</a>
+    <a class="skip-link" href="#workspace">跳转到调查内容</a>
     <div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="#" aria-label="Search Report home">
+        <a class="brand" href="#" aria-label="Search Report 首页">
           <span class="brand-mark" aria-hidden="true"></span>
           <span>Search Report</span>
         </a>
         <div class="system-state" id="system-state" aria-live="polite">
           <span class="pulse-dot"></span>
-          Connecting
+          连接中
         </div>
       </header>
 
-      <aside class="rail" aria-label="Investigations">
+      <aside class="rail" aria-label="调查列表">
         <div class="rail-heading">
-          <h2>Investigations</h2>
-          <button class="icon-button" id="refresh-button" type="button" title="Refresh">↻</button>
+          <h2>调查</h2>
+          <button class="icon-button" id="refresh-button" type="button" title="刷新">↻</button>
         </div>
         <div id="investigation-list" class="investigation-list"></div>
         <button class="secondary-button create-button" id="new-investigation" type="button">
-          New investigation
+          新建调查
         </button>
       </aside>
 
       <main id="workspace" class="workspace" tabindex="-1">
         <section class="case-hero" id="case-hero">
-          <div class="case-kicker">Built-in replay case</div>
+          <div class="case-kicker">内置回放案例</div>
           <div class="case-title-row">
             <div>
-              <h1>East Palestine derailment</h1>
-              <p>Hazardous-material release · Ohio · 3 February 2023</p>
+              <h1>东巴勒斯坦列车脱轨事故</h1>
+              <p>危险化学品泄漏 · 俄亥俄州 · 2023年2月3日</p>
             </div>
             <button class="primary-button" id="run-replay" type="button">
-              Run replay investigation
+              运行回放调查
             </button>
           </div>
           <div class="case-contract">
-            <span>10+ traceable sources</span>
-            <span>Agent feedback loop</span>
-            <span>Claim-bound citations</span>
-            <span>No network or model key</span>
+            <span>10+ 可溯源来源</span>
+            <span>智能体反馈循环</span>
+            <span>声明级引用</span>
+            <span>无需网络或模型密钥</span>
           </div>
         </section>
 
         <section class="active-investigation is-hidden" id="active-investigation">
           <div class="investigation-header">
             <div>
-              <p class="breadcrumb" id="investigation-breadcrumb">Investigation</p>
+              <p class="breadcrumb" id="investigation-breadcrumb">调查</p>
               <h1 id="investigation-title"></h1>
               <p id="investigation-goal"></p>
             </div>
             <div class="run-badge" id="run-badge"></div>
           </div>
 
-          <nav class="tabs" id="tabs" aria-label="Investigation views">
-            <button data-tab="overview" class="is-active">Overview</button>
-            <button data-tab="process">Agent process</button>
-            <button data-tab="sources">Sources</button>
-            <button data-tab="evidence">Evidence</button>
-            <button data-tab="claims">Claims</button>
-            <button data-tab="conflicts">Conflicts &amp; gaps</button>
-            <button data-tab="report">Report</button>
-            <button data-tab="review">Review</button>
+          <nav class="tabs" id="tabs" aria-label="调查视图">
+            <button data-tab="overview" class="is-active">概览</button>
+            <button data-tab="process">智能体流程</button>
+            <button data-tab="sources">来源</button>
+            <button data-tab="evidence">证据</button>
+            <button data-tab="claims">声明</button>
+            <button data-tab="conflicts">冲突与缺口</button>
+            <button data-tab="report">报告</button>
+            <button data-tab="review">审核</button>
           </nav>
 
           <div id="panel" class="panel" aria-live="polite"></div>
@@ -78,21 +78,21 @@
 
         <section class="empty-guidance" id="empty-guidance">
           <div class="ledger-glyph" aria-hidden="true"><span></span><span></span><span></span></div>
-          <h2>Inspect the chain, not just the answer.</h2>
+          <h2>查看证据链，而非仅看结论。</h2>
           <p>
-            Start the built-in replay to reconstruct planning, collection, analysis,
-            verification, citations, and release governance from persisted inputs.
+            启动内置回放，从持久化输入重建规划、采集、分析、
+            验证、引用及发布治理全过程。
           </p>
         </section>
       </main>
 
-      <aside class="citation-drawer" id="citation-drawer" aria-label="Citation detail" aria-hidden="true">
+      <aside class="citation-drawer" id="citation-drawer" aria-label="引用详情" aria-hidden="true">
         <div class="drawer-header">
           <div>
-            <span class="drawer-label">Citation trace</span>
-            <h2 id="citation-title">Evidence chain</h2>
+            <span class="drawer-label">引用溯源</span>
+            <h2 id="citation-title">证据链</h2>
           </div>
-          <button class="icon-button" id="close-citation" type="button" aria-label="Close citation">×</button>
+          <button class="icon-button" id="close-citation" type="button" aria-label="关闭引用">×</button>
         </div>
         <div id="citation-content" class="drawer-content"></div>
       </aside>
@@ -101,16 +101,16 @@
     <dialog id="new-dialog">
       <form id="new-form" method="dialog">
         <div class="dialog-header">
-          <h2>New investigation</h2>
-          <button class="icon-button" value="cancel" aria-label="Close">×</button>
+          <h2>新建调查</h2>
+          <button class="icon-button" value="cancel" aria-label="关闭">×</button>
         </div>
-        <label>Title<input name="title" required maxlength="500" /></label>
-        <label>Event description<textarea name="event_description" required rows="4"></textarea></label>
-        <label>Investigation goal<textarea name="investigation_goal" required rows="3"></textarea></label>
-        <label>Questions, one per line<textarea name="questions" rows="5"></textarea></label>
+        <label>标题<input name="title" required maxlength="500" /></label>
+        <label>事件描述<textarea name="event_description" required rows="4"></textarea></label>
+        <label>调查目标<textarea name="investigation_goal" required rows="3"></textarea></label>
+        <label>问题，每行一个<textarea name="questions" rows="5"></textarea></label>
         <div class="dialog-actions">
-          <button class="secondary-button" value="cancel">Cancel</button>
-          <button class="primary-button" value="default">Create investigation</button>
+          <button class="secondary-button" value="cancel">取消</button>
+          <button class="primary-button" value="default">创建调查</button>
         </div>
       </form>
     </dialog>

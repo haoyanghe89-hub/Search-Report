@@ -1,185 +1,133 @@
-# MarketPulse Agent
+﻿# Search-Report — 多智能体事件调查与证据验证报告系统
 
-> 当前处于 Investigation Platform 原地迁移的 Phase 4.3。旧市场流程暂作回归基线；新调查领域已把录制/重放外部端口、Source Acquisition、Harness、Validation Core 与 ModelPort-backed Planner / Researcher / Analyst / Verifier 组合成可返工的 Investigation Loop。主链到 `READY_FOR_REPORT` 为止；完整 Writer、报告发布、Reviewer 授权和新前端尚未接入。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
+> 本项目已完成 **Phase 5 报告治理**，完整实现了从多智能体调查、证据验证到报告生成、审核发布的全链路。当前部署目标为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。
 
-MarketPulse 是一个 Python 3.11+ 四智能体市场研究应用：主 Agent 规划与复核，搜索 Agent 检索取证，分析 Agent 形成结论，报告 Agent 撰写中文报告。四个角色通过持久化黑板协作，主 Agent 可要求有限轮次的补查。
+Search-Report 是一个 Python 3.11+ 的多智能体事件调查系统：**Planner** 规划调查，**Researcher** 检索取证，**Analyst** 形成声明，**Verifier** 验证证据。四个角色通过持久化黑板协作，Verifier 可触发有限轮次的反馈循环补查。最终由报告治理模块生成带声明级引用的调查报告，并通过审核工作流决定是否发布。
 
-完整协作设计、接口和部署说明见 [四智能体架构](docs/05-multiagent-architecture.md)。
+完整架构设计见 [ARCHITECTURE.md](ARCHITECTURE.md)，各阶段验收记录见 [docs/](docs/)。
 
-## 技术边界
+## 核心特性
 
-- LLM：DeepSeek OpenAI 兼容 Chat Completions API，`https://api.deepseek.com`
-- Agent 编排：OpenAI Agents SDK；每次运行独立 DeepSeek client、独立角色提示词及结构化输出，关闭 tracing
-- 状态：SQLAlchemy 黑板，本地 SQLite，服务端可切换 PostgreSQL；可选 Redis 进度通知
-- 搜索：自定义 `PublicSearchClient`，DuckDuckGo 优先，依次回退 Bing、Yahoo 与无密钥 `ddgs` 元搜索
-- 抓取：HTTPX，遵守 robots.txt，拒绝私网目标、非文本和超过 2 MiB 的页面
-- 输出：固定 10 章节的中文 Markdown
+- **四智能体协作**：Planner → Researcher → Analyst → Verifier，带研究缺口反馈循环
+- **证据验证引擎**：15 阶段验证策略，覆盖完整性、语义蕴含、来源独立性、冲突检测等
+- **报告治理**：确定性报告生成、声明级引用绑定、15 阶段发布门禁
+- **审核工作流**：审核员认证、会话管理、批准/驳回/要求补充研究
+- **回放模式**：基于录制的外部调用确定性重放，无需网络或模型密钥
+- **East Palestine 案例**：内置 2023 年东巴勒斯坦列车脱轨事故完整调查案例
+
+## 技术栈
+
+- **后端**：FastAPI + SQLAlchemy + Alembic，SQLite（开发）/ PostgreSQL（生产）
+- **智能体**：OpenAI Agents SDK，DeepSeek OpenAI 兼容 API
+- **前端**：原生 HTML/CSS/JS 静态控制台（`frontend/`）+ React/Vite 旧版市场前端（`web/`）
+- **容器化**：Docker + Docker Compose
+- **搜索**：DuckDuckGo 优先，依次回退 Bing、Yahoo 与 `ddgs` 元搜索
+- **抓取**：HTTPX，遵守 robots.txt，拒绝私网目标
 
 ## 安装
 
 ```powershell
 uv sync --extra dev
 if (!(Test-Path .env)) { Copy-Item .env.example .env }
-# Edit .env and set DEEPSEEK_API_KEY; do not overwrite an existing configured .env.
+# 编辑 .env 设置 DEEPSEEK_API_KEY
 ```
 
-启动时读取当前工作目录的 `.env`，或 `MARKETPULSE_ENV_FILE` 指定的文件。进程环境变量优先，不扫描父目录。`.env`、数据文件和报告均被 Git 忽略；密钥不进入模型上下文或任务黑板。
+## 快速开始
 
-## 使用
+### 运行内置案例回放（无需网络/密钥）
 
 ```powershell
-uv run marketpulse "AI meeting notes tools"
-uv run marketpulse --competitors 5 "AI contract review for small businesses"
-uv run marketpulse --output reports/carbon.md --log-file logs/carbon.jsonl "carbon accounting software for SMBs"
+uv run python scripts/export_east_palestine_delivery.py
 ```
 
-`--competitors`、`--output`、`--log-file` 等全局选项需放在关键词之前。
-
-默认总时限 300 秒（可通过 `.env` 配置为 600 秒）、最多 12 个搜索查询、24 个页面、并发抓取 5。默认最多两轮研究；预留一部分预算给补查。搜索摘要只用于发现 URL；进入分析的证据来自成功读取的正文。
-
-## 可视化前端
-
-前端位于 `web/`，使用 Vite、React、TypeScript 与 shadcn/ui。它通过本地 FastAPI 适配层直接复用同一套 `run_marketpulse` Python 工作流，不会在 Node 进程中复制 Agent 逻辑。
-
-先启动 API：
+### 启动调查 API 服务
 
 ```powershell
-uv sync --extra dev --extra web
 uv run marketpulse-api
+# 服务运行在 http://127.0.0.1:8000
 ```
 
-再打开另一个终端启动前端：
+### 启动前端控制台
+
+直接用浏览器打开 `frontend/index.html`，或通过 Docker Compose 启动完整栈：
 
 ```powershell
-cd web
-npm install
-npm run dev
+docker compose up --build
+# 前端: http://localhost:8080
+# API:  http://localhost:8000
 ```
 
-访问 `http://localhost:5173`。开发服务器会把 `/api` 请求代理到 `http://127.0.0.1:8000`；生成的 Markdown 仍写入 `reports/`，页面同时展示结构化的结论、市场信号、竞品、定价与来源。
+## 前端控制台
 
-前端校验命令：
+`frontend/` 目录提供调查控制台静态界面，功能包括：
 
-```powershell
-cd web
-npm test
-npm run lint
-npm run build
-```
+- 调查列表与新建调查
+- 内置 East Palestine 案例一键回放
+- 八视图浏览：概览、智能体流程、来源、证据、声明、冲突与缺口、报告、审核
+- 声明级引用溯源抽屉
+- 审核员登录与发布决策
+
+界面文本已全部中文化。
 
 ## 测试
 
 离线测试不读取真实密钥，也不访问网络：
 
 ```powershell
-uv run pytest -m "not live" -q
+uv run pytest tests/unit tests/integration -q
 uv run ruff check src tests
 uv run mypy src
 ```
 
-联网冒烟测试必须显式启用，会调用 DeepSeek 并产生费用：
+联网冒烟测试必须显式启用（会调用 DeepSeek 并产生费用）：
 
 ```powershell
 $env:RUN_LIVE_TESTS = "1"
 uv run pytest tests/live -m live -v -s
 ```
 
-## 退出码
-
-| 退出码 | 含义 |
-|---:|---|
-| 0 | 成功 |
-| 2 | 输入无效 |
-| 3 | 配置或密钥缺失 |
-| 10 | 搜索服务不可用 |
-| 11 | 没有可用证据或分析结构无效 |
-| 12 | 超时或预算耗尽 |
-| 13 | 报告写入失败 |
-| 20 | 未预期内部错误 |
-
-## 调试
-
-- 使用 `--log-file logs/run.jsonl` 保存阶段、计数和错误分类。
-- 429、502、503、504、连接错误和超时最多重试两次。
-- 单页失败不会终止整次运行；所有页面失败才会返回退出码 11。
-- 低于 8 个来源或 3 个官方来源时仍可生成报告，但会显示覆盖警告并把置信度上限降为 55%。
-- `GET /api/runs/{run_id}` 查看已提交黑板；`GET /api/runs/{run_id}/events?after_version=0` 查看事件。接口仅用于本机开发，未增加认证。
-- 状态及事件用于审计，不会在进程崩溃后自动恢复执行。四个逻辑 Agent 当前由单进程调度，不是四个独立 worker。
-- 日志、报告和终端均不会输出 API Key 或模型隐藏推理。
-- 若可信本地代理把公网 DNS 映射到 `198.18.0.0/15`，可显式设置 `MARKETPULSE_ALLOW_PROXY_DNS=true`；其他私网和 localhost 仍会被拒绝。
-
-## Phase 1 通用 Blob Storage
-
-本地内容寻址存储无额外依赖，接收二进制输入、返回可持久化的逻辑引用。实际文件路径仅在 adapter 内使用。读取会重新校验 SHA-256；缺失/损坏分别抛出 `BLOB_NOT_FOUND` / `BLOB_INTEGRITY_ERROR`，不会重新联网补齐。
-
-```python
-from pathlib import Path
-from marketpulse.infrastructure.storage import BlobRef, BlobStoragePort
-from marketpulse.infrastructure.storage import LocalContentAddressedBlobStorage
-
-storage: BlobStoragePort = LocalContentAddressedBlobStorage(Path("data/blobs"))
-saved = storage.put_bytes(b"immutable source snapshot")
-portable_ref = saved.ref.uri  # blob://sha256/<hash>; can be stored as DB metadata
-assert storage.get_bytes(BlobRef.from_uri(portable_ref)) == b"immutable source snapshot"
-```
-
-Blob 先完整落盘，再由未来 repository 提交数据库引用。相同内容去重；适配器不提供覆盖和删除操作。需要支持同卷硬链接的本地文件系统（Windows NTFS / Linux 本地 Docker volume）。崩溃可能留下未引用完整 Blob 或 staging 临时文件，当前无自动 GC。该同步 Port 应由异步应用在线程执行器中调用，避免阻塞 API event loop。
+## 数据库迁移
 
 ```powershell
-uv run pytest tests/unit/test_blob_storage.py tests/unit/test_infrastructure_boundary.py -q
-```
-
-## Phase 2 Investigation Data Foundation
-
-新调查领域位于 `src/marketpulse/investigation/`，与旧市场领域单向隔离。它包含 Investigation/Run/Step、Source/Snapshot/Artifact/Evidence、Claim/Relation/Conflict/Validation、Gap/Timeline、Report/Review/Audit 以及逐调用录制的数据合同。Evidence 与 Claim 是不同类型和不同表。
-
-Investigation schema 使用 `inv_` 表前缀并由 Alembic 管理；旧 `mp_runs` / `mp_events` 不会被首个 migration 删除：
-
-```powershell
-# SQLite local development
+# SQLite 本地开发
 $env:MARKETPULSE_DATABASE_URL = "sqlite:///data/blackboard.db"
 uv run alembic upgrade head
 
-# PostgreSQL Compose target (password must be URL encoded)
+# PostgreSQL
 $env:MARKETPULSE_DATABASE_URL = "postgresql+psycopg://marketpulse:<password>@127.0.0.1:55432/marketpulse"
 uv run alembic upgrade head
 ```
 
-`SourceSnapshotPersistence` 先把 raw/cleaned 内容写入 `BlobStoragePort` 并验证 hash，再提交数据库 metadata。数据库回滚最多留下完整 orphan blob，不会提交指向 partial/missing blob 的行。读取从 Source ID/Snapshot metadata 解析逻辑 BlobRef，重新校验内容，不返回 OS 路径。
+## 项目结构
 
-```powershell
-uv run pytest tests/unit/investigation tests/integration/investigation -q
+```
+src/marketpulse/investigation/
+├── agents/          # Planner/Researcher/Analyst/Verifier 定义
+├── domain/          # 声明、证据、来源等领域模型
+├── harness/         # 运行时状态机、调用绑定、事务
+├── feedback/        # 研究缺口反馈循环
+├── validation/      # 15 阶段证据验证引擎
+├── reporting/       # 报告装配、写作、引用、发布策略
+├── review/          # 审核认证、会话、服务、API
+├── ingestion/       # HTML/PDF/纯文本解析
+├── recording/       # 外部调用录制与回放
+└── server.py        # FastAPI 应用入口
+
+frontend/            # 调查控制台（静态）
+web/                 # 旧版市场研究前端（React）
+case_data/           # East Palestine 案例数据
+migrations/          # Alembic 数据库迁移
+tests/               # 单元 + 集成测试
+docs/                # 设计文档与验收记录
 ```
 
-## Phase 3 Acquisition / Recording Foundation
+## 已知限制
 
-调查代码通过 `SearchPort`、`FetchPort`、`ModelPort` 调用外部能力。Live 组合为具体 provider → Recording adapter → Port；Replay 组合为 Replay adapter → 同一 Port。逐次请求和成功响应以 BlobRef 保存，fingerprint 包含 operation、规范化输入及 schema/prompt/config 版本；失败也记录分类，但没有完整响应的调用不可重放。Replay 只查精确匹配的成功录制，缺失返回 `REPLAY_CACHE_MISS`，损坏 Blob 返回 `BLOB_INTEGRITY_ERROR`，不联网补齐。
+- 单审核员模式，暂不支持多人协作审核
+- 无 OCR 能力，PDF 需包含可提取文本层
+- 回放模式不触发真实网络调用
+- `frontend/` 为静态控制台，`web/` 为旧版市场前端
 
-`SourceAcquisitionService` 将 Search → Source → Fetch → 原始 SourceSnapshot → 解析后的 DocumentArtifact 连通，不生成 Claim 或报告。解析器依据内容签名和 MIME 选择 HTML、纯文本或带文本层 PDF；扩展名只是提示。定位符引用持久化文本的精确字符区间，PDF 按可靠页面分别保存。扫描 PDF 保留 raw Snapshot、生成 `UNREADABLE_SOURCE` gap，不计入有效来源；部分 PDF 只让可靠页面参与取证。外部内容（包括官方来源）始终标记为不可信数据。
+## 交付物清单
 
-本阶段的 Live/Replay 纵向测试使用确定性 fixture，不依赖模型或真实网络；这不是完整 Investigation Replay，也不是 East Palestine 案例验收。PostgreSQL 集成测试由 [临时数据库 CI](.github/workflows/postgres-integration.yml) 实际运行，详见 [Phase 3 验收记录](docs/11-phase3-acquisition-recording-acceptance.md)。
-
-```powershell
-uv sync --extra dev --extra server
-uv run pytest tests/unit/investigation tests/integration/investigation -m "not infrastructure" -q
-# 真实 PostgreSQL 测试需要 MARKETPULSE_TEST_POSTGRES_URL；CI 自动提供临时数据库。
-uv run pytest tests/integration/investigation/test_postgres_persistence.py -m infrastructure -q
-```
-
-Phase 4.2 新增 Agent/Harness 独立的验证内核：Evidence 完整性、语义蕴含契约、Claim 规范化、来源 lineage/独立性、多维来源质量、冲突与强反证门禁、八类 typed profile、固定 15 步 ValidationPolicy、结构化 ResearchGap，以及 append-only ValidationResult 与 Claim latest projection。真实五 Agent、完整调查 Replay、Report Writer、发布/Reviewer 流程及调查前端尚未实现。详见 [Phase 4.2 独立验收记录](docs/13-phase4-2-validation-core-acceptance.md)。上面的市场 CLI/前端仅为迁移期回归基线，不是新调查系统入口。
-
-## Phase 4.3 Real Multi-Agent Investigation Feedback Loop
-
-Phase 4.3 提供四个只产出结构化 proposal 的真实 Agent：Supervisor / Planner、Researcher、Analyst 和 Verifier。Agent 只依赖 `ModelPort`；Live 与 Replay 由组合根注入不同 adapter。提示词、bounded context 与 response schema 分离，网页/PDF 摘录只作为 `UNTRUSTED_SOURCE_DATA` 进入 user context。Harness 负责路由、预算、工具执行、完整性校验、持久化和 lifecycle，Phase 4.2 `ValidationPolicy` 每轮重新计算最终 Claim status。
-
-确定性集成测试真实执行：
-
-```text
-PLAN → COLLECT → ANALYZE → VERIFY
-                          ↓ ResearchGap
-       COLLECT → ANALYZE → VERIFY → READY_FOR_REPORT
-```
-
-第一条主链从单一二手来源产生 `UNVERIFIED` 与独立性缺口，经 follow-up ResearchTask 获取官方来源后重验为 `VERIFIED`。第二条主链先产生强数值冲突与 `DISPUTED`，再由带 preliminary/final 时间语义的权威来源解释为 `RESOLVED_WITH_TIME`。Agent-level Replay 在新 Run 上复用精确绑定的 Model/Search/Fetch 录制，同时生成新 Step、Claim 和 ValidationResult，并重新执行 Policy。
-
-RunBudget 覆盖研究轮次、Search/Fetch/Model 调用、tokens、sources 与 active execution time。连续无信息增益或预算耗尽进入可解释 `BLOCKED`，不会伪装为成功。完成或停止后只生成 `InvestigationSummary` / `ReportInput` 边界，不生成或发布正式报告。实现与门禁见 [Phase 4.3 独立验收记录](docs/14-phase4-3-agent-loop-acceptance.md)。
+详细的 11 项交付物清单与验证方法见 [docs/16-FINAL-DELIVERY-MANIFEST.md](docs/16-FINAL-DELIVERY-MANIFEST.md)。
