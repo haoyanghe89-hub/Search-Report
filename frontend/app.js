@@ -80,24 +80,27 @@ async function loadInvestigations() {
 }
 
 async function openInvestigation(investigationId, preferredRunId = null) {
-  const [investigation, runs] = await Promise.all([
-    fetchJson(`/api/investigations/${encodeURIComponent(investigationId)}`),
-    fetchJson(`/api/investigations/${encodeURIComponent(investigationId)}/runs`),
-  ]);
-  state.investigation = investigation;
-  const selected = preferredRunId ? runs.find((run) => run.run_id === preferredRunId) : runs[0];
-  state.run = selected ? (await fetchJson(`/api/runs/${encodeURIComponent(selected.run_id)}`)).run : null;
-  state.report = null;
-  state.citations = [];
-  $("#case-hero").classList.add("is-hidden");
-  $("#empty-guidance").classList.add("is-hidden");
-  $("#active-investigation").classList.remove("is-hidden");
-  $("#investigation-title").textContent = investigation.title;
-  $("#investigation-goal").textContent = investigation.investigation_goal;
-  $("#investigation-breadcrumb").textContent = state.run ? `回放运行 · ${state.run.run_id}` : "调查草稿";
-  $("#run-badge").innerHTML = state.run ? statusChip(state.run.status) : statusChip("NO_RUN");
-  await loadInvestigations();
-  await renderTab(state.activeTab);
+  try {
+    const [investigation, runs] = await Promise.all([
+      fetchJson(`/api/investigations/${encodeURIComponent(investigationId)}`),
+      fetchJson(`/api/investigations/${encodeURIComponent(investigationId)}/runs`),
+    ]);
+    state.investigation = investigation;
+    const selected = preferredRunId ? runs.find((run) => run.run_id === preferredRunId) : runs[0];
+    state.run = selected ? (await fetchJson(`/api/runs/${encodeURIComponent(selected.run_id)}`)).run : null;
+    state.report = null;
+    state.citations = [];
+    $("#case-hero").classList.add("is-hidden");
+    $("#empty-guidance").classList.add("is-hidden");
+    $("#active-investigation").classList.remove("is-hidden");
+    $("#investigation-title").textContent = investigation.title;
+    $("#investigation-goal").textContent = investigation.investigation_goal;
+    $("#investigation-breadcrumb").textContent = state.run ? `回放运行 · ${state.run.run_id}` : "调查草稿";
+    $("#run-badge").innerHTML = state.run ? statusChip(state.run.status) : statusChip("NO_RUN");
+    await renderTab(state.activeTab);
+  } finally {
+    await loadInvestigations();
+  }
 }
 
 function panelHeading(title, detail) {
