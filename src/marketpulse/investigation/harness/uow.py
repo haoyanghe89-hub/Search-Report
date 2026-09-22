@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from types import TracebackType
+from typing import Protocol
 
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -8,6 +9,12 @@ from marketpulse.investigation.persistence.repositories import (
     InvestigationRepository,
     PersistedEntity,
 )
+
+
+class TransactionOperation(Protocol):
+    """A typed mutation applied inside the Harness completion UnitOfWork."""
+
+    def apply(self, session: Session, repository: InvestigationRepository) -> None: ...
 
 
 class UnitOfWork:

@@ -1,6 +1,6 @@
 # MarketPulse Agent
 
-> 当前处于 Investigation Platform 原地迁移的 Phase 4.2。旧市场流程暂作回归基线；新调查领域已有外部调用录制/重放、Source Acquisition、Phase 4.1 Harness，以及可脱离 Agent 调用的 Evidence / Claim / Validation Core。真实调查 Agent、完整 Agent Loop、报告生成/发布、审核和新前端尚未接入。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
+> 当前处于 Investigation Platform 原地迁移的 Phase 4.3。旧市场流程暂作回归基线；新调查领域已把录制/重放外部端口、Source Acquisition、Harness、Validation Core 与 ModelPort-backed Planner / Researcher / Analyst / Verifier 组合成可返工的 Investigation Loop。主链到 `READY_FOR_REPORT` 为止；完整 Writer、报告发布、Reviewer 授权和新前端尚未接入。目标部署为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。已确认合同见 [ARCHITECTURE.md](ARCHITECTURE.md)，阶段边界见 [迁移计划](docs/07-investigation-migration.md)。
 
 MarketPulse 是一个 Python 3.11+ 四智能体市场研究应用：主 Agent 规划与复核，搜索 Agent 检索取证，分析 Agent 形成结论，报告 Agent 撰写中文报告。四个角色通过持久化黑板协作，主 Agent 可要求有限轮次的补查。
 
@@ -167,3 +167,19 @@ uv run pytest tests/integration/investigation/test_postgres_persistence.py -m in
 ```
 
 Phase 4.2 新增 Agent/Harness 独立的验证内核：Evidence 完整性、语义蕴含契约、Claim 规范化、来源 lineage/独立性、多维来源质量、冲突与强反证门禁、八类 typed profile、固定 15 步 ValidationPolicy、结构化 ResearchGap，以及 append-only ValidationResult 与 Claim latest projection。真实五 Agent、完整调查 Replay、Report Writer、发布/Reviewer 流程及调查前端尚未实现。详见 [Phase 4.2 独立验收记录](docs/13-phase4-2-validation-core-acceptance.md)。上面的市场 CLI/前端仅为迁移期回归基线，不是新调查系统入口。
+
+## Phase 4.3 Real Multi-Agent Investigation Feedback Loop
+
+Phase 4.3 提供四个只产出结构化 proposal 的真实 Agent：Supervisor / Planner、Researcher、Analyst 和 Verifier。Agent 只依赖 `ModelPort`；Live 与 Replay 由组合根注入不同 adapter。提示词、bounded context 与 response schema 分离，网页/PDF 摘录只作为 `UNTRUSTED_SOURCE_DATA` 进入 user context。Harness 负责路由、预算、工具执行、完整性校验、持久化和 lifecycle，Phase 4.2 `ValidationPolicy` 每轮重新计算最终 Claim status。
+
+确定性集成测试真实执行：
+
+```text
+PLAN → COLLECT → ANALYZE → VERIFY
+                          ↓ ResearchGap
+       COLLECT → ANALYZE → VERIFY → READY_FOR_REPORT
+```
+
+第一条主链从单一二手来源产生 `UNVERIFIED` 与独立性缺口，经 follow-up ResearchTask 获取官方来源后重验为 `VERIFIED`。第二条主链先产生强数值冲突与 `DISPUTED`，再由带 preliminary/final 时间语义的权威来源解释为 `RESOLVED_WITH_TIME`。Agent-level Replay 在新 Run 上复用精确绑定的 Model/Search/Fetch 录制，同时生成新 Step、Claim 和 ValidationResult，并重新执行 Policy。
+
+RunBudget 覆盖研究轮次、Search/Fetch/Model 调用、tokens、sources 与 active execution time。连续无信息增益或预算耗尽进入可解释 `BLOCKED`，不会伪装为成功。完成或停止后只生成 `InvestigationSummary` / `ReportInput` 边界，不生成或发布正式报告。实现与门禁见 [Phase 4.3 独立验收记录](docs/14-phase4-3-agent-loop-acceptance.md)。

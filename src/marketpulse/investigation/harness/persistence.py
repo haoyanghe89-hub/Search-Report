@@ -21,7 +21,7 @@ from marketpulse.investigation.harness.state_machine import (
     require_route,
     status_for,
 )
-from marketpulse.investigation.harness.uow import UnitOfWork
+from marketpulse.investigation.harness.uow import TransactionOperation, UnitOfWork
 from marketpulse.investigation.persistence.models import (
     ExecutionStepRow,
     InvestigationRunRow,
@@ -248,6 +248,7 @@ class HarnessStore:
         output_refs: tuple[str, ...],
         output_schema_version: str,
         business_outputs: tuple[PersistedEntity, ...],
+        transaction_operations: tuple[TransactionOperation, ...] = (),
         route: Route,
     ) -> ExecutionStep:
         now = self.clock()
@@ -268,6 +269,8 @@ class HarnessStore:
             self._accrue(session, step, elapsed_ms, now)
             for entity in business_outputs:
                 work.add(entity)
+            for operation in transaction_operations:
+                operation.apply(session, self.repository)
             step.output_refs = list(output_refs)
             step.output_schema_version = output_schema_version
             step.status = ExecutionStepStatus.COMPLETED

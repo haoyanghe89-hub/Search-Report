@@ -154,8 +154,20 @@ class SourceAcquisitionService:
                 canonical_url=item.url,
                 title=item.title,
                 source_type=_SOURCE_TYPES.get(item.source_type_hint or "", SourceType.WEB_PAGE),
-                is_official=item.source_type_hint == "official",
-                is_first_hand=item.source_type_hint == "official",
+                publisher=item.publisher,
+                organization=item.organization,
+                author=item.author,
+                published_at=item.published_at,
+                is_official=(
+                    item.is_official
+                    if item.is_official is not None
+                    else item.source_type_hint == "official"
+                ),
+                is_first_hand=(
+                    item.is_first_hand
+                    if item.is_first_hand is not None
+                    else item.source_type_hint == "official"
+                ),
                 discovered_at=search_result.retrieved_at,
             )
             self._repository.add(source)
@@ -164,6 +176,7 @@ class SourceAcquisitionService:
                 source=source,
                 url=canonical_url,
                 search_provider=search_result.provider,
+                quality_metadata=item.quality_metadata,
                 id_factory=self._id_factory,
             )
             self._repository.add_snapshot_bundle(snapshot, artifacts, gaps)
@@ -197,8 +210,20 @@ class SourceAcquisitionService:
                 canonical_url=item.url,
                 title=item.title,
                 source_type=_SOURCE_TYPES.get(item.source_type_hint or "", SourceType.WEB_PAGE),
-                is_official=item.source_type_hint == "official",
-                is_first_hand=item.source_type_hint == "official",
+                publisher=item.publisher,
+                organization=item.organization,
+                author=item.author,
+                published_at=item.published_at,
+                is_official=(
+                    item.is_official
+                    if item.is_official is not None
+                    else item.source_type_hint == "official"
+                ),
+                is_first_hand=(
+                    item.is_first_hand
+                    if item.is_first_hand is not None
+                    else item.source_type_hint == "official"
+                ),
                 discovered_at=search_result.retrieved_at,
             )
             if existing is None:
@@ -208,6 +233,7 @@ class SourceAcquisitionService:
                 source=source,
                 url=canonical_url,
                 search_provider=search_result.provider,
+                quality_metadata=item.quality_metadata,
                 id_factory=_stable_factory(request.run_id, logical_step_key, canonical_url),
             )
             outcomes.append(outcome)
@@ -224,6 +250,7 @@ class SourceAcquisitionService:
         source: Source,
         url: str,
         search_provider: str,
+        quality_metadata: dict[str, JsonValue],
         id_factory: IdFactory,
     ) -> tuple[
         AcquiredSource,
@@ -293,6 +320,17 @@ class SourceAcquisitionService:
         )
         provenance: dict[str, JsonValue] = {
             "search_provider": search_provider,
+            **{
+                key: value
+                for key, value in quality_metadata.items()
+                if key
+                in {
+                    "data_provenance",
+                    "methodology",
+                    "speculation_level",
+                    "explicit_uncertainty",
+                }
+            },
             "requested_url": url,
             "final_url": str(fetch_result.final_url),
             "declared_content_type": fetch_result.content_type,

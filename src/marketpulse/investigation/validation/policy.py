@@ -14,6 +14,7 @@ from marketpulse.investigation.domain.claims import (
 from marketpulse.investigation.domain.enums import (
     ConflictResolutionStatus,
     ConflictSeverity,
+    ConflictStatus,
     EntailmentStatus,
     GapSeverity,
     GapStatus,
@@ -149,6 +150,13 @@ class ValidationPolicy:
             lineage=lineage,
         )
 
+        detected = self._conflicts.detect(
+            investigation_id=request.claim.investigation_id,
+            run_id=request.claim.run_id,
+            observations=tuple(observation_by_evidence.values()),
+            created_at=request.created_at,
+        )
+        conflict_updates = self._merge_conflicts(request.existing_conflicts, detected.conflicts)
         profile = PROFILES[request.claim.claim_type]
         profile_result = profile.evaluate(
             ProfileContext(
@@ -158,17 +166,10 @@ class ValidationPolicy:
                 source_by_id=source_by_id,
                 independence=independence,
                 quality_by_source=quality_by_source,
-                conflicts=request.existing_conflicts,
+                conflicts=conflict_updates,
                 strong_contradiction=strong,
             )
         )
-        detected = self._conflicts.detect(
-            investigation_id=request.claim.investigation_id,
-            run_id=request.claim.run_id,
-            observations=tuple(observation_by_evidence.values()),
-            created_at=request.created_at,
-        )
-        conflict_updates = self._merge_conflicts(request.existing_conflicts, detected.conflicts)
         status = self._status(
             profile_status=profile_result.recommended_status,
             profile_sufficient=profile_result.sufficient,
@@ -361,6 +362,39 @@ class ValidationPolicy:
         detected: tuple[ConflictSet, ...],
     ) -> tuple[ConflictSet, ...]:
         by_id = {item.conflict_id: item for item in (*existing, *detected)}
+        resolved = tuple(
+            item
+            for item in detected
+            if item.resolution_status is not ConflictResolutionStatus.UNRESOLVED
+        )
+        for conflict_id, conflict in tuple(by_id.items()):
+            if conflict.resolution_status is not ConflictResolutionStatus.UNRESOLVED:
+                continue
+            explanation = next(
+                (
+                    item
+                    for item in resolved
+                    if item.conflict_type is conflict.conflict_type
+                    and set(item.claim_ids) == set(conflict.claim_ids)
+                    and bool(set(item.evidence_ids) & set(conflict.evidence_ids))
+                ),
+                None,
+            )
+            if explanation is None:
+                continue
+            by_id[conflict_id] = conflict.model_copy(
+                update={
+                    "status": ConflictStatus.RESOLVED,
+                    "evidence_ids": tuple(
+                        sorted(set(conflict.evidence_ids) | set(explanation.evidence_ids))
+                    ),
+                    "possible_explanations": explanation.possible_explanations,
+                    "resolution_status": explanation.resolution_status,
+                    "resolution_basis": explanation.resolution_basis,
+                    "resolution_summary": explanation.resolution_summary,
+                    "updated_at": explanation.updated_at,
+                }
+            )
         return tuple(by_id[item] for item in sorted(by_id))
 
     @staticmethod
@@ -557,6 +591,7 @@ class ValidationPolicy:
                     gap_type=gap_type,
                     target_question_id=request.target_question_id,
                     target_claim_id=request.claim.claim_id,
+                    origin_validation_id=validation_id,
                     reason=reason,
                     preferred_source_type=self._preferred_source_type(gap_type),
                     missing_requirement=missing,

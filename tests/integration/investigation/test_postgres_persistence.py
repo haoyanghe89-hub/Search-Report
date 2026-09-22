@@ -30,6 +30,7 @@ from marketpulse.investigation.domain.enums import (
     EntailmentStatus,
     ParseStatus,
     RelationStance,
+    ResearchTaskStatus,
     RunMode,
     RunStatus,
     SemanticJudgmentStatus,
@@ -42,6 +43,7 @@ from marketpulse.investigation.domain.runtime import (
     Investigation,
     InvestigationRun,
     InvestigationScope,
+    ResearchTask,
     RunBudget,
 )
 from marketpulse.investigation.domain.sources import (
@@ -50,6 +52,7 @@ from marketpulse.investigation.domain.sources import (
     Source,
     SourceSnapshot,
 )
+from marketpulse.investigation.feedback.store import ReserveSourcesOperation
 from marketpulse.investigation.harness.persistence import HarnessStore
 from marketpulse.investigation.harness.state_machine import Route
 from marketpulse.investigation.ingestion.locators import make_text_locator
@@ -193,6 +196,7 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
                 max_model_calls=3,
                 max_tokens=100,
                 max_wall_time_ms=10_000,
+                max_sources=2,
                 updated_at=now,
             )
         )
@@ -207,20 +211,73 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
             owner_instance_id="postgres-ci",
             research_round=1,
         )
+        task = ResearchTask(
+            task_id=f"T-{suffix}",
+            investigation_id=investigation_id,
+            run_id=run_id,
+            title="PostgreSQL follow-up",
+            objective="Verify Phase 4.3 task persistence",
+            purpose="Exercise typed feedback-loop persistence",
+            status=ResearchTaskStatus.PENDING,
+            priority=90,
+            preferred_source_types=(SourceType.OFFICIAL_REPORT,),
+            suggested_queries=("official PostgreSQL fixture",),
+            round=1,
+            created_at=now,
+            updated_at=now,
+        )
         store.complete_step(
             step_id=step.step_id,
             owner_instance_id="postgres-ci",
             elapsed_ms=20,
             output_refs=(),
             output_schema_version="ResearchProposal",
-            business_outputs=(),
+            business_outputs=(task,),
+            transaction_operations=(
+                ReserveSourcesOperation(run_id=run_id, count=1, updated_at=now),
+            ),
             route=Route.ANALYZE,
         )
-        assert repository.get(RunBudget, run_id).consumed_wall_time_ms == 20
+        budget = repository.get(RunBudget, run_id)
+        assert budget.consumed_wall_time_ms == 20
+        assert budget.sources_used == 1
+        stored_task = repository.get(ResearchTask, task.task_id)
+        assert stored_task.purpose == "Exercise typed feedback-loop persistence"
+        assert stored_task.preferred_source_types == (SourceType.OFFICIAL_REPORT,)
+        assert stored_task.suggested_queries == ("official PostgreSQL fixture",)
         assert repository.get(InvestigationRun, run_id).last_completed_step_key == (
             "research:postgres:round-1"
         )
         assert {"inv_run_budgets", "inv_call_bindings"} <= set(inspect(engine).get_table_names())
+        postgres_inspector = inspect(engine)
+        assert {"max_sources", "sources_used"} <= {
+            item["name"] for item in postgres_inspector.get_columns("inv_run_budgets")
+        }
+        assert {
+            "target_claim_id",
+            "origin_gap_id",
+            "parent_task_id",
+            "preferred_source_types",
+            "suggested_queries",
+            "round",
+        } <= {item["name"] for item in postgres_inspector.get_columns("inv_research_tasks")}
+        assert {"created_by_step_id", "research_task_id"} <= {
+            item["name"] for item in postgres_inspector.get_columns("inv_evidence")
+        }
+        assert {"created_by_step_id", "research_task_id"} <= {
+            item["name"] for item in postgres_inspector.get_columns("inv_claims")
+        }
+        assert "origin_validation_id" in {
+            item["name"] for item in postgres_inspector.get_columns("inv_research_gaps")
+        }
+        assert {
+            "inv_claims",
+            "inv_research_gaps",
+            "inv_research_tasks",
+        } <= {
+            item["referred_table"]
+            for item in postgres_inspector.get_foreign_keys("inv_research_tasks")
+        }
 
         source = repository.get(Source, source_id)
         snapshot = repository.get(SourceSnapshot, snapshot_id)
@@ -245,6 +302,8 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
             extracted_at=now,
             extractor_name="fixture",
             extractor_version="1",
+            created_by_step_id=step.step_id,
+            research_task_id=task.task_id,
         )
         claim = Claim(
             claim_id=f"C-{suffix}",
@@ -253,6 +312,8 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
             statement="Official source stated the PostgreSQL fixture value",
             claim_type=ClaimType.STATEMENT,
             importance=ClaimImportance.HIGH,
+            created_by_step_id=step.step_id,
+            research_task_id=task.task_id,
             created_at=now,
             updated_at=now,
         )
@@ -268,6 +329,8 @@ def test_postgres_investigation_contract_and_migration_cycle() -> None:
         repository.add(evidence)
         repository.add(claim)
         repository.add(relation)
+        assert repository.get(Evidence, evidence.evidence_id).research_task_id == task.task_id
+        assert repository.get(Claim, claim.claim_id).created_by_step_id == step.step_id
         judgment = SemanticJudgment(
             judgment_id=f"SJ-{suffix}",
             run_id=run_id,

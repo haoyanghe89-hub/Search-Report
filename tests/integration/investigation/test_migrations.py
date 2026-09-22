@@ -77,6 +77,39 @@ def test_upgrade_and_downgrade_preserve_legacy_schema(tmp_path: Path) -> None:
         "ix_inv_validation_evidence_set_hash",
         "ix_inv_validation_policy",
     } <= validation_indexes
+    assert {"max_sources", "sources_used"} <= {
+        item["name"] for item in inspector.get_columns("inv_run_budgets")
+    }
+    assert {
+        "target_claim_id",
+        "origin_gap_id",
+        "parent_task_id",
+        "purpose",
+        "preferred_source_types",
+        "suggested_queries",
+        "round",
+    } <= {item["name"] for item in inspector.get_columns("inv_research_tasks")}
+    task_fk_tables = {
+        item["referred_table"] for item in inspector.get_foreign_keys("inv_research_tasks")
+    }
+    assert {
+        "inv_claims",
+        "inv_research_gaps",
+        "inv_research_tasks",
+    } <= task_fk_tables
+    assert {"created_by_step_id", "research_task_id"} <= {
+        item["name"] for item in inspector.get_columns("inv_evidence")
+    }
+    assert {"created_by_step_id", "research_task_id"} <= {
+        item["name"] for item in inspector.get_columns("inv_claims")
+    }
+    assert "origin_validation_id" in {
+        item["name"] for item in inspector.get_columns("inv_research_gaps")
+    }
+    assert {
+        "ix_inv_tasks_origin_gap",
+        "ix_inv_tasks_target_claim",
+    } <= {item["name"] for item in inspector.get_indexes("inv_research_tasks")}
     family_member_fks = inspector.get_foreign_keys("inv_source_family_members")
     assert {item["referred_table"] for item in family_member_fks} == {
         "inv_source_families",

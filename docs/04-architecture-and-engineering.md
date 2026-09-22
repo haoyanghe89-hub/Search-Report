@@ -416,3 +416,31 @@ npm run build
 ```
 
 这套结构的核心不是“让模型搜索并写文章”，而是让模型在受预算、数据契约、证据引用和质量规则约束的工程流程中完成它最擅长的规划与综合判断。
+
+## 17. Investigation Phase 4.3 Agent Feedback Loop
+
+新调查主链位于 `marketpulse.investigation`，与上述旧市场工作流并存。四个 ModelPort-backed Agent 只返回严格 Pydantic proposal：Planner 决定调查任务，Researcher 提出查询，Analyst 提出 Evidence/Claim/关系/冲突候选，Verifier 只提出语义蕴含判断与缺口。Agent 不能调用工具、写数据库 lifecycle、设置最终 ValidationStatus 或决定发布。
+
+```mermaid
+flowchart LR
+    P[Planner proposal] --> H[Harness]
+    H --> R[Researcher proposal]
+    R --> SF[Search/Fetch recording]
+    SF --> A[Source Acquisition]
+    A --> AN[Analyst candidates]
+    AN --> G[Integrity and Claim guards]
+    G --> V[Verifier semantics]
+    V --> VP[ValidationPolicy]
+    VP -->|blocking ResearchGap| P
+    VP -->|sufficient| RR[READY_FOR_REPORT]
+```
+
+每个 Agent 的 system prompt、bounded context 和 response schema 分离。外部内容只在 user context 中以 `UNTRUSTED_SOURCE_DATA` 标识。`AgentContextBuilder` 按角色裁剪问题、任务、来源 family、artifact excerpt、Claim、冲突、gap 和剩余预算，并对规范化 context 计算 fingerprint。Artifact selector 使用确定性优先级和 artifact/excerpt/字符上限，不把整个数据库或全文集合交给模型。
+
+网络与模型执行不持有数据库事务。Step 开始和外部调用录制可先独立持久化；完成时由短 UnitOfWork 原子写入业务输出、typed transaction operations、Step COMPLETED 与 Run checkpoint/state version。ValidationResult、ResearchGap、conflict/family relations 及 Claim latest projection通过 in-session persistence 加入同一完成事务。
+
+RunBudget 持久化轮次、Search/Fetch/Model 调用、tokens、sources 和 active execution time。每轮计算新来源/family/Evidence/Claim、gap 和 conflict 变化以及 Validation status 变化；连续配置轮数无信息增益时以 `NO_INFORMATION_GAIN` 停止。预算耗尽、证据不足和未解冲突进入保留证据链的 `BLOCKED`，不会转换成 VERIFIED。
+
+Trace resolver 支持 `Claim → ValidationResult → Relation → Evidence → Snapshot → Artifact locator → Source`，以及 `Claim → Analysis Step/ModelCall → ResearchTask → Researcher ModelCall/SearchCall`；返工链可从 ValidationResult 追到 ResearchGap 与 follow-up ResearchTask。Replay 只复用精确匹配的 Model/Search/Fetch 录制，在新 Run 中重建 Step 和业务对象，并重新运行 ValidationPolicy。
+
+本阶段终止于 `READY_FOR_REPORT` 或可解释停止，仅形成 `InvestigationSummary` / `ReportInput`。完整 Writer、release policy、Reviewer 授权、OCR、分布式队列、新前端和最终发布验收不在 Phase 4.3 范围内。

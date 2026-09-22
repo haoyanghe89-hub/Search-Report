@@ -295,6 +295,10 @@ class InvestigationRepository:
         if isinstance(entity, ResearchTask):
             payload = _plain(entity)
             payload["query_hints"] = list(entity.query_hints)
+            payload["preferred_source_types"] = [
+                item.value for item in entity.preferred_source_types
+            ]
+            payload["suggested_queries"] = list(entity.suggested_queries)
             return ResearchTaskRow(**payload), []
         if isinstance(entity, Source):
             payload = _plain(entity)

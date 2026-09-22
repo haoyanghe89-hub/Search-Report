@@ -24,8 +24,10 @@ from marketpulse.investigation.domain.enums import (
     StepType,
     WorkflowPhase,
 )
+from marketpulse.investigation.domain.runtime import ExecutionStep
 from marketpulse.investigation.harness.persistence import HarnessStore
 from marketpulse.investigation.harness.state_machine import Route
+from marketpulse.investigation.harness.uow import TransactionOperation
 from marketpulse.investigation.persistence.repositories import PersistedEntity
 
 OutputT = TypeVar("OutputT", bound=BaseModel)
@@ -37,6 +39,7 @@ class StepOutcome:
     proposal: BaseModel
     route: Route
     business_outputs: tuple[PersistedEntity, ...] = ()
+    transaction_operations: tuple[TransactionOperation, ...] = ()
 
 
 def semantic_fingerprint(value: BaseModel, *, workflow_version: str) -> str:
@@ -93,6 +96,7 @@ class InvestigationHarness:
         semantic_input: BaseModel,
         output_model: type[OutputT],
         handler: Callable[[], Awaitable[StepOutcome]],
+        on_step_started: Callable[[ExecutionStep], None] | None = None,
         dependency_keys: tuple[str, ...] = (),
         research_round: int = 0,
         timeout_seconds: float = 120.0,
@@ -119,6 +123,9 @@ class InvestigationHarness:
                 self.blobs.get_bytes(BlobRef.from_uri(step.output_refs[0]))
             )
 
+        if on_step_started is not None:
+            on_step_started(step)
+
         budget = self.store.read_budget(run_id)
         remaining_ms = max(1, budget.max_wall_time_ms - budget.consumed_wall_time_ms)
         effective_timeout = min(timeout_seconds, remaining_ms / 1000)
@@ -144,6 +151,7 @@ class InvestigationHarness:
                 output_refs=(stored.ref.uri,),
                 output_schema_version=output_model.__name__,
                 business_outputs=outcome.business_outputs,
+                transaction_operations=outcome.transaction_operations,
                 route=outcome.route,
             )
         except BaseException as error:

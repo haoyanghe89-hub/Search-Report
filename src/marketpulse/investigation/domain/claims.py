@@ -45,6 +45,8 @@ class Claim(DomainModel):
     confidence: Confidence | None = None
     confidence_basis: str | None = None
     latest_validation_id: EntityId | None = None
+    created_by_step_id: EntityId | None = None
+    research_task_id: EntityId | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -121,6 +123,7 @@ class ResearchGap(DomainModel):
     gap_type: ResearchGapType
     target_question_id: EntityId | None = None
     target_claim_id: EntityId | None = None
+    origin_validation_id: EntityId | None = None
     source_id: EntityId | None = None
     reason: NonEmptyText
     preferred_source_type: SourceType | None = None

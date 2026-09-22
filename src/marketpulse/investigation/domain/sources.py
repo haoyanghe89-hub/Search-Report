@@ -98,6 +98,8 @@ class Evidence(DomainModel):
     extracted_at: datetime
     extractor_name: NonEmptyText
     extractor_version: NonEmptyText
+    created_by_step_id: EntityId | None = None
+    research_task_id: EntityId | None = None
 
     @model_validator(mode="after")
     def content_digest_matches(self) -> Evidence:

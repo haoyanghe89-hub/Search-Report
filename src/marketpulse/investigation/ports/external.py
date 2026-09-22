@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Generic, Literal, Protocol, TypeVar, cast
 
-from pydantic import AnyHttpUrl, BaseModel, ConfigDict, Field, field_validator
+from pydantic import AnyHttpUrl, BaseModel, ConfigDict, Field, JsonValue, field_validator
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -44,6 +44,13 @@ class SearchResultItem(PortModel):
     snippet: str = ""
     rank: int = Field(ge=1)
     source_type_hint: str | None = None
+    publisher: str | None = None
+    organization: str | None = None
+    author: str | None = None
+    published_at: datetime | None = None
+    is_official: bool | None = None
+    is_first_hand: bool | None = None
+    quality_metadata: dict[str, JsonValue] = Field(default_factory=dict)
 
 
 class SearchResult(PortModel):

@@ -11,6 +11,7 @@ from marketpulse.investigation.domain.enums import (
     ResearchTaskStatus,
     RunMode,
     RunStatus,
+    SourceType,
     StepType,
     WorkflowPhase,
 )
@@ -111,12 +112,14 @@ class RunBudget(DomainModel):
     max_model_calls: int = Field(ge=0)
     max_tokens: int = Field(ge=0)
     max_wall_time_ms: int = Field(ge=0)
+    max_sources: int = Field(default=100, ge=0)
     research_rounds_used: int = Field(default=0, ge=0)
     search_calls_used: int = Field(default=0, ge=0)
     fetch_calls_used: int = Field(default=0, ge=0)
     model_calls_used: int = Field(default=0, ge=0)
     tokens_used: int = Field(default=0, ge=0)
     consumed_wall_time_ms: int = Field(default=0, ge=0)
+    sources_used: int = Field(default=0, ge=0)
     updated_at: datetime
 
 
@@ -141,11 +144,18 @@ class ResearchTask(DomainModel):
     investigation_id: EntityId
     run_id: EntityId
     target_question_id: EntityId | None = None
+    target_claim_id: EntityId | None = None
+    origin_gap_id: EntityId | None = None
+    parent_task_id: EntityId | None = None
     title: NonEmptyText
     objective: NonEmptyText
+    purpose: NonEmptyText | None = None
     status: ResearchTaskStatus
     priority: int = Field(ge=0, le=100)
     query_hints: tuple[str, ...] = ()
+    preferred_source_types: tuple[SourceType, ...] = ()
+    suggested_queries: tuple[str, ...] = ()
+    round: int = Field(default=1, ge=1)
     created_at: datetime
     updated_at: datetime
     completed_at: datetime | None = None

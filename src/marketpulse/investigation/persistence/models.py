@@ -177,6 +177,8 @@ class RunBudgetRow(Base):
     __tablename__ = "inv_run_budgets"
     __table_args__ = (
         CheckConstraint("consumed_wall_time_ms >= 0", name="ck_inv_budget_wall_nonnegative"),
+        CheckConstraint("sources_used >= 0", name="ck_inv_budget_sources_nonnegative"),
+        CheckConstraint("sources_used <= max_sources", name="ck_inv_budget_sources_limit"),
     )
 
     run_id: Mapped[str] = mapped_column(
@@ -188,12 +190,14 @@ class RunBudgetRow(Base):
     max_model_calls: Mapped[int] = mapped_column(Integer, nullable=False)
     max_tokens: Mapped[int] = mapped_column(Integer, nullable=False)
     max_wall_time_ms: Mapped[int] = mapped_column(Integer, nullable=False)
+    max_sources: Mapped[int] = mapped_column(Integer, nullable=False, default=100)
     research_rounds_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     search_calls_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     fetch_calls_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     model_calls_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     tokens_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     consumed_wall_time_ms: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    sources_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
@@ -233,7 +237,10 @@ class ResearchTaskRow(Base):
     __tablename__ = "inv_research_tasks"
     __table_args__ = (
         CheckConstraint("priority >= 0 AND priority <= 100", name="ck_inv_task_priority"),
+        CheckConstraint("round >= 1", name="ck_inv_task_round_positive"),
         Index("ix_inv_tasks_run_status_priority", "run_id", "status", "priority"),
+        Index("ix_inv_tasks_origin_gap", "origin_gap_id"),
+        Index("ix_inv_tasks_target_claim", "target_claim_id"),
     )
 
     task_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -246,13 +253,30 @@ class ResearchTaskRow(Base):
     target_question_id: Mapped[str | None] = mapped_column(
         ForeignKey("inv_investigation_questions.question_id", ondelete="SET NULL")
     )
+    target_claim_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_claims.claim_id", ondelete="SET NULL")
+    )
+    origin_gap_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_research_gaps.gap_id", ondelete="SET NULL")
+    )
+    parent_task_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_research_tasks.task_id", ondelete="SET NULL")
+    )
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     objective: Mapped[str] = mapped_column(Text, nullable=False)
+    purpose: Mapped[str | None] = mapped_column(Text)
     status: Mapped[ResearchTaskStatus] = mapped_column(
         enum_type(ResearchTaskStatus, "inv_research_task_status"), nullable=False
     )
     priority: Mapped[int] = mapped_column(Integer, nullable=False)
     query_hints: Mapped[list[str]] = mapped_column(JSON_DOCUMENT, nullable=False, default=list)
+    preferred_source_types: Mapped[list[str]] = mapped_column(
+        JSON_DOCUMENT, nullable=False, default=list
+    )
+    suggested_queries: Mapped[list[str]] = mapped_column(
+        JSON_DOCUMENT, nullable=False, default=list
+    )
+    round: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -379,6 +403,8 @@ class EvidenceRow(Base):
         Index("ix_inv_evidence_snapshot", "snapshot_id"),
         Index("ix_inv_evidence_artifact", "artifact_id"),
         Index("ix_inv_evidence_content_hash", "content_hash"),
+        Index("ix_inv_evidence_created_step", "created_by_step_id"),
+        Index("ix_inv_evidence_task", "research_task_id"),
     )
 
     evidence_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -399,6 +425,12 @@ class EvidenceRow(Base):
     extracted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     extractor_name: Mapped[str] = mapped_column(String(100), nullable=False)
     extractor_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    created_by_step_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_execution_steps.step_id", ondelete="SET NULL")
+    )
+    research_task_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_research_tasks.task_id", ondelete="SET NULL")
+    )
 
 
 class ClaimRow(Base):
@@ -412,6 +444,8 @@ class ClaimRow(Base):
         Index("ix_inv_claims_type_status", "claim_type", "validation_status"),
         Index("ix_inv_claims_critical_status", "is_critical", "validation_status"),
         Index("ix_inv_claims_latest_validation", "latest_validation_id"),
+        Index("ix_inv_claims_created_step", "created_by_step_id"),
+        Index("ix_inv_claims_task", "research_task_id"),
     )
 
     claim_id: Mapped[str] = mapped_column(ID, primary_key=True)
@@ -439,6 +473,17 @@ class ClaimRow(Base):
     confidence: Mapped[float | None] = mapped_column(Float)
     confidence_basis: Mapped[str | None] = mapped_column(Text)
     latest_validation_id: Mapped[str | None] = mapped_column(ID)
+    created_by_step_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_execution_steps.step_id", ondelete="SET NULL")
+    )
+    research_task_id: Mapped[str | None] = mapped_column(
+        ForeignKey(
+            "inv_research_tasks.task_id",
+            name="fk_inv_claims_task",
+            ondelete="SET NULL",
+            use_alter=True,
+        )
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
@@ -592,6 +637,7 @@ class ResearchGapRow(Base):
         Index("ix_inv_gaps_run_status", "run_id", "status"),
         Index("ix_inv_gaps_investigation_severity", "investigation_id", "severity"),
         Index("ix_inv_gaps_claim_type", "target_claim_id", "gap_type"),
+        Index("ix_inv_gaps_origin_validation", "origin_validation_id"),
         CheckConstraint(
             "gap_type IN ('EVIDENCE_GAP', 'UNREADABLE_SOURCE', 'SOURCE_CONFLICT', "
             "'MISSING_PRIMARY_SOURCE', 'INSUFFICIENT_INDEPENDENCE', "
@@ -615,6 +661,9 @@ class ResearchGapRow(Base):
     )
     target_claim_id: Mapped[str | None] = mapped_column(
         ForeignKey("inv_claims.claim_id", ondelete="SET NULL")
+    )
+    origin_validation_id: Mapped[str | None] = mapped_column(
+        ForeignKey("inv_validation_results.validation_id", ondelete="SET NULL")
     )
     source_id: Mapped[str | None] = mapped_column(
         ForeignKey("inv_sources.source_id", ondelete="SET NULL")

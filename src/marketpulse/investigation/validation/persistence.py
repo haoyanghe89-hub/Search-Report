@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+from dataclasses import dataclass
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
@@ -42,38 +43,49 @@ class ValidationPersistence:
         request: ValidationRequest,
         outcome: ValidationOutcome,
     ) -> ValidationResult:
+        with self._sessions.begin() as session:
+            self.persist_in_session(session, self._repository, request=request, outcome=outcome)
+        return self._repository.get(ValidationResult, outcome.result.validation_id)
+
+    @classmethod
+    def persist_in_session(
+        cls,
+        session: Session,
+        repository: InvestigationRepository,
+        *,
+        request: ValidationRequest,
+        outcome: ValidationOutcome,
+    ) -> None:
         if request.validation_id != outcome.result.validation_id:
             raise ValueError("request and outcome validation IDs differ")
-        with self._sessions.begin() as session:
-            if session.get(ValidationResultRow, outcome.result.validation_id) is not None:
-                raise AppendOnlyValidationError("ValidationResult is append-only")
-            claim_row = session.get(ClaimRow, outcome.result.claim_id)
-            if claim_row is None:
-                raise KeyError(outcome.result.claim_id)
-            if claim_row.run_id != outcome.result.run_id:
-                raise ValueError("ValidationResult and Claim belong to different Runs")
+        if session.get(ValidationResultRow, outcome.result.validation_id) is not None:
+            raise AppendOnlyValidationError("ValidationResult is append-only")
+        claim_row = session.get(ClaimRow, outcome.result.claim_id)
+        if claim_row is None:
+            raise KeyError(outcome.result.claim_id)
+        if claim_row.run_id != outcome.result.run_id:
+            raise ValueError("ValidationResult and Claim belong to different Runs")
 
-            self._persist_semantic_judgments(session, request)
-            for conflict in outcome.conflict_updates:
-                self._persist_conflict(session, conflict)
-            self._repository.add_in_session(session, outcome.result)
-            session.add_all(
-                ValidationConflictRow(
-                    validation_id=outcome.result.validation_id,
-                    conflict_id=conflict_id,
-                )
-                for conflict_id in outcome.result.conflict_set_refs
+        cls._persist_semantic_judgments(session, request)
+        for conflict in outcome.conflict_updates:
+            cls._persist_conflict(session, repository, conflict)
+        repository.add_in_session(session, outcome.result)
+        session.add_all(
+            ValidationConflictRow(
+                validation_id=outcome.result.validation_id,
+                conflict_id=conflict_id,
             )
-            self._persist_families(session, outcome)
-            for gap in outcome.research_gaps:
-                self._repository.add_in_session(session, gap)
+            for conflict_id in outcome.result.conflict_set_refs
+        )
+        cls._persist_families(session, outcome)
+        for gap in outcome.research_gaps:
+            repository.add_in_session(session, gap)
 
-            claim_row.validation_status = outcome.result.status
-            claim_row.confidence = outcome.result.confidence
-            claim_row.confidence_basis = outcome.result.confidence_basis
-            claim_row.latest_validation_id = outcome.result.validation_id
-            claim_row.updated_at = outcome.result.created_at
-        return self._repository.get(ValidationResult, outcome.result.validation_id)
+        claim_row.validation_status = outcome.result.status
+        claim_row.confidence = outcome.result.confidence
+        claim_row.confidence_basis = outcome.result.confidence_basis
+        claim_row.latest_validation_id = outcome.result.validation_id
+        claim_row.updated_at = outcome.result.created_at
 
     def assert_latest_projection_consistent(self, claim_id: str) -> None:
         with self._sessions() as session:
@@ -123,10 +135,15 @@ class ValidationPersistence:
             if any(getattr(existing, field) != payload[field] for field in immutable_fields):
                 raise AppendOnlyValidationError("SemanticJudgment ID has different content")
 
-    def _persist_conflict(self, session: Session, conflict: ConflictSet) -> None:
+    @staticmethod
+    def _persist_conflict(
+        session: Session,
+        repository: InvestigationRepository,
+        conflict: ConflictSet,
+    ) -> None:
         row = session.get(ConflictSetRow, conflict.conflict_id)
         if row is None:
-            self._repository.add_in_session(session, conflict)
+            repository.add_in_session(session, conflict)
             return
         row.conflict_type = conflict.conflict_type
         row.severity = conflict.severity
@@ -190,3 +207,17 @@ class ValidationPersistence:
                 )
                 for source_id in family.member_source_ids
             )
+
+
+@dataclass(frozen=True, slots=True)
+class PersistValidationOperation:
+    request: ValidationRequest
+    outcome: ValidationOutcome
+
+    def apply(self, session: Session, repository: InvestigationRepository) -> None:
+        ValidationPersistence.persist_in_session(
+            session,
+            repository,
+            request=self.request,
+            outcome=self.outcome,
+        )
