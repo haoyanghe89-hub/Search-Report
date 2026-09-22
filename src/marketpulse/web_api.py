@@ -33,6 +33,14 @@ from marketpulse.workflow import (
     WorkflowDependencies,
     run_marketpulse,
 )
+from marketpulse.investigation.api import router as investigation_router
+from marketpulse.investigation.review.api import router as review_router
+from marketpulse.investigation.persistence.base import (
+    create_investigation_engine,
+    create_session_factory,
+)
+from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from fastapi.staticfiles import StaticFiles
 
 
 class ReportRequest(BaseModel):
@@ -60,10 +68,52 @@ class ReportResponse(BaseModel):
 app = FastAPI(title="MarketPulse API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
     allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Idempotency-Key", "X-Requested-With"],
 )
+
+# --- Investigation API integration ---
+_inv_settings = Settings.from_env(require_api_key=False)
+_inv_db_url = _inv_settings.database_url.get_secret_value()
+_inv_engine = create_investigation_engine(_inv_db_url)
+_inv_sessions = create_session_factory(_inv_engine)
+_inv_repository = InvestigationRepository(_inv_sessions)
+app.state.inv_engine = _inv_engine
+app.state.inv_sessions = _inv_sessions
+app.state.inv_repository = _inv_repository
+app.state.review_session_factory = _inv_sessions
+app.state.settings = _inv_settings
+# include_router has compatibility issues with this FastAPI version; add routes directly
+for _route in investigation_router.routes:
+    app.router.routes.append(_route)
+for _route in review_router.routes:
+    app.router.routes.append(_route)
+
+# --- Frontend static files ---
+if os.getenv("INVESTIGATION_SERVE_FRONTEND", "false").lower() in {"1", "true", "yes"}:
+    from fastapi.responses import FileResponse
+    _frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
+    if _frontend_dir.is_dir():
+        @app.get("/")
+        def _serve_index() -> FileResponse:
+            return FileResponse(str(_frontend_dir / "index.html"))
+        @app.get("/app.js")
+        def _serve_app_js() -> FileResponse:
+            return FileResponse(str(_frontend_dir / "app.js"))
+        @app.get("/styles.css")
+        def _serve_styles() -> FileResponse:
+            return FileResponse(str(_frontend_dir / "styles.css"))
 
 # Keep local API workload bounded; model clients are now scoped to each run.
 _run_lock = asyncio.Lock()

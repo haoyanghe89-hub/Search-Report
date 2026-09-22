@@ -206,9 +206,16 @@ async function renderReview() {
 
 function renderNoRun() {
   panel.innerHTML = `${panelHeading("暂无运行", "创建或回放一个调查")}
-    <div class="record"><p>该调查尚无持久化运行记录。</p>
-    <button class="primary-button" id="start-run">开始调查</button></div>`;
+    <div class="record">
+      <p>该调查尚无持久化运行记录。可选择以下方式启动：</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="primary-button" id="start-run">内置回放</button>
+        <button class="secondary-button" id="start-live">真实大模型调研</button>
+      </div>
+      <p class="record-meta" style="margin-top:12px;">真实调研将调用搜索、抓取与大模型 API，需配置 DEEPSEEK_API_KEY。</p>
+    </div>`;
   $("#start-run")?.addEventListener("click", startRun);
+  $("#start-live")?.addEventListener("click", startLiveResearch);
 }
 
 async function renderTab(tab) {
@@ -220,6 +227,35 @@ async function renderTab(tab) {
     await renderers[tab]();
   } catch (error) {
     panel.innerHTML = `<div class="error-state">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+async function startLiveResearch() {
+  if (!state.investigation) return;
+  const button = $("#start-live");
+  if (button) {
+    button.disabled = true;
+    button.textContent = "正在调研，请稍候…";
+  }
+  try {
+    const result = await fetchJson("/api/reports", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: state.investigation.title }),
+    });
+    showToast("真实调研完成");
+    panel.innerHTML = `${panelHeading("真实调研报告", result.topic)}
+      <div class="record-meta"><span>运行 ${escapeHtml(result.run_id)}</span><span>生成于 ${formatDate(result.generated_at)}</span></div>
+      <div class="record"><h3>质量评估</h3><div class="record-meta"><span>置信度 ${result.quality?.confidence_score?.toFixed(2) ?? "—"}</span><span>${result.quality?.overall_grade ?? "—"}</span></div></div>
+      <div class="record"><h3>覆盖来源（${result.sources?.length || 0}）</h3><ul>${(result.sources || []).map((s) => `<li>${escapeHtml(s.title || s.url)} <a href="${escapeHtml(safeUrl(s.url))}" target="_blank" rel="noreferrer">链接</a></li>`).join("")}</ul></div>
+      <div class="record"><h3>报告正文</h3><pre style="white-space:pre-wrap;font-family:inherit;">${escapeHtml(result.report_markdown || "")}</pre></div>
+      ${result.warnings?.length ? `<div class="record"><h3>警告</h3><ul>${result.warnings.map((w) => `<li>${escapeHtml(w)}</li>`).join("")}</ul></div>` : ""}`;
+  } catch (error) {
+    showToast(error.message);
+    if (button) {
+      button.disabled = false;
+      button.textContent = "真实大模型调研";
+    }
   }
 }
 
