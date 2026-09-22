@@ -177,7 +177,10 @@ class PublicSearchClient:
                         break
                     await self.sleep(float(2**attempt))
         try:
-            resilient_results = await asyncio.to_thread(self._search_ddgs, query, limit)
+            resilient_results = await asyncio.wait_for(
+                asyncio.to_thread(self._search_ddgs, query, limit),
+                timeout=25.0,
+            )
             if resilient_results:
                 return resilient_results
         except Exception as exc:
@@ -188,7 +191,14 @@ class PublicSearchClient:
     def _search_ddgs(cls, query: SearchQuery, limit: int) -> list[SearchCandidate]:
         candidates: list[SearchCandidate] = []
         seen: set[str] = set()
-        for item in DDGS().text(query.text, max_results=limit):
+        # Skip engines that reliably time out from CN networks (google, mojeek);
+        # pick the region matching the query language for better recall.
+        has_cjk = any("\u4e00" <= ch <= "\u9fff" for ch in query.text)
+        region = "cn-zh" if has_cjk else "us-en"
+        backend = "bing,duckduckgo,yahoo,brave,wikipedia"
+        for item in DDGS(timeout=10).text(
+            query.text, max_results=limit, region=region, backend=backend
+        ):
             href = item.get("href")
             if not isinstance(href, str):
                 continue

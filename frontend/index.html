@@ -59,7 +59,10 @@
               <h1 id="investigation-title"></h1>
               <p id="investigation-goal"></p>
             </div>
-            <div class="run-badge" id="run-badge"></div>
+            <div class="header-actions">
+              <div class="run-badge" id="run-badge"></div>
+              <button class="icon-button" id="edit-investigation" type="button" title="编辑调查">✎</button>
+            </div>
           </div>
 
           <nav class="tabs" id="tabs" aria-label="调查视图">
@@ -96,6 +99,11 @@
         </div>
         <div id="citation-content" class="drawer-content"></div>
       </aside>
+
+      <div class="loading-overlay" id="loading-overlay" aria-hidden="true">
+        <div class="loading-spinner"></div>
+        <p class="loading-text" id="loading-text">正在调查…</p>
+      </div>
     </div>
 
     <dialog id="new-dialog">
@@ -115,10 +123,23 @@
       </form>
     </dialog>
 
-    <div class="loading-overlay" id="loading-overlay" aria-hidden="true">
-      <div class="loading-spinner"></div>
-      <p class="loading-text" id="loading-text">正在调查…</p>
-    </div>
+    <dialog id="edit-dialog">
+      <form id="edit-form" method="dialog">
+        <div class="dialog-header">
+          <h2>编辑调查</h2>
+          <button class="icon-button" value="cancel" formnovalidate aria-label="关闭">×</button>
+        </div>
+        <label>标题<input name="title" required maxlength="500" /></label>
+        <label>事件描述<textarea name="event_description" required rows="4"></textarea></label>
+        <label>调查目标<textarea name="investigation_goal" required rows="3"></textarea></label>
+        <label>问题，每行一个<textarea name="questions" rows="5"></textarea></label>
+        <div class="dialog-actions">
+          <button class="secondary-button" value="cancel" formnovalidate>取消</button>
+          <button class="primary-button" value="default">保存修改</button>
+        </div>
+      </form>
+    </dialog>
+
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

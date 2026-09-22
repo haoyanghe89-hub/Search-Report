@@ -8,6 +8,22 @@
   liveResult: null,
 };
 
+const liveRunCache = {};
+
+const PHASE_LABELS = {
+  plan: "规划研究问题",
+  search: "搜索公开来源",
+  fetch: "抓取网页正文",
+  extract: "提取证据",
+  analyze: "分析证据",
+  review: "复盘与补查决策",
+  quality: "质量评估",
+  report: "撰写报告",
+  write: "保存报告",
+  completed: "已完成",
+};
+const AGENT_LABELS = { master: "规划者", search: "研究员", analysis: "分析师", report: "报告员", harness: "调度器" };
+
 const $ = (selector) => document.querySelector(selector);
 const panel = $("#panel");
 
@@ -99,17 +115,25 @@ async function openInvestigation(investigationId, preferredRunId = null) {
     ]);
     state.investigation = investigation;
     state.liveResult = null;
-    const selected = preferredRunId ? runs.find((run) => run.run_id === preferredRunId) : runs[0];
-    state.run = selected ? (await fetchJson(`/api/runs/${encodeURIComponent(selected.run_id)}`)).run : null;
     state.report = null;
     state.citations = [];
+    const cachedLive = liveRunCache[investigationId] || null;
+    const selected = preferredRunId
+      ? runs.find((run) => run.run_id === preferredRunId)
+      : (cachedLive ? null : runs[0]);
+    state.run = selected ? (await fetchJson(`/api/runs/${encodeURIComponent(selected.run_id)}`)).run : null;
+    if (cachedLive && !state.run) _applyLiveState(cachedLive);
     $("#case-hero").classList.add("is-hidden");
     $("#empty-guidance").classList.add("is-hidden");
     $("#active-investigation").classList.remove("is-hidden");
     $("#investigation-title").textContent = investigation.title;
     $("#investigation-goal").textContent = investigation.investigation_goal;
-    $("#investigation-breadcrumb").textContent = state.run ? `回放运行 · ${state.run.run_id}` : "调查草稿";
-    $("#run-badge").innerHTML = state.run ? statusChip(state.run.status) : statusChip("NO_RUN");
+    $("#investigation-breadcrumb").textContent = state.run
+      ? `回放运行 · ${state.run.run_id}`
+      : (state.liveResult ? `真实调研 · ${state.liveResult.run_id}` : "调查草稿");
+    $("#run-badge").innerHTML = state.run
+      ? statusChip(state.run.status)
+      : (state.liveResult ? statusChip("COMPLETED") : statusChip("NO_RUN"));
     await renderTab(state.activeTab);
   } finally {
     await loadInvestigations();
@@ -125,13 +149,14 @@ async function renderOverview() {
   if (state.liveResult) {
     const r = state.liveResult;
     const a = r.analysis || {};
+    const q = r.quality;
     panel.innerHTML = `${panelHeading("调查概览", `真实调研 · ${escapeHtml(r.topic)}`)}
       <div class="metric-strip">
-        ${[[r.sources?.length || 0, "来源"], [_liveEvidence(r).length, "证据"], [_liveClaims(r).length, "声明"], [r.coverage?.claim_count || 0, "覆盖声明"], [r.warnings?.length || 0, "警告"]].map(([value, label]) => `<div class="metric"><strong>${value}</strong><span>${label}</span></div>`).join("")}
+        ${[[r.evidence?.sources?.length || 0, "来源"], [r.evidence?.claims?.length || 0, "证据"], [r.executed_queries?.length || 0, "搜索查询"], [r.research_round || 0, "研究轮次"], [r.warnings?.length || 0, "警告"]].map(([value, label]) => `<div class="metric"><strong>${value}</strong><span>${label}</span></div>`).join("")}
       </div>
+      ${q ? `<div class="record"><div class="record-top"><h3>质量评估</h3>${statusChip(q.passed ? "PASSED" : "FAILED")}</div>${(q.issues || []).length ? `<ul>${q.issues.map((i) => `<li>${escapeHtml(i.code)}：${escapeHtml(i.message)}</li>`).join("")}</ul>` : "<p>未发现问题。</p>"}</div>` : ""}
       <div class="record"><h3>执行摘要</h3><p>${escapeHtml(a.executive_summary || "无")}</p></div>
-      <div class="record"><h3>置信度</h3><p>${(a.confidence ?? 0).toFixed(2)}</p></div>
-      <div class="record"><h3>建议</h3><p>${escapeHtml(a.recommendation?.summary || a.recommendation?.action || "无")}</p></div>
+      <div class="record"><h3>结论建议</h3><div class="record-meta"><span>${escapeHtml(a.recommendation || "—")}</span><span>置信度 ${(a.confidence ?? 0).toFixed(2)}</span></div></div>
       <div class="record"><h3>下一步</h3><ul>${(a.next_steps || []).map((s) => `<li>${escapeHtml(s)}</li>`).join("") || "<li>无</li>"}</ul></div>`;
     return;
   }
@@ -146,6 +171,14 @@ async function renderOverview() {
 }
 
 async function renderProcess() {
+  if (state.liveResult) {
+    const events = await fetchJson(`/api/runs/${encodeURIComponent(state.liveResult.run_id)}/events`);
+    panel.innerHTML = `${panelHeading("智能体流程", `${events.length} 个黑板事件`)}
+      <div class="trace"><div class="trace-stage"><strong>规划者</strong><span>PLAN</span></div><div class="trace-stage"><strong>研究员</strong><span>SEARCH</span></div><div class="trace-stage"><strong>分析师</strong><span>ANALYZE</span></div><div class="trace-stage"><strong>报告员</strong><span>REPORT</span></div></div>
+      ${(state.liveResult.research_round || 0) > 1 ? `<div class="feedback-loop">复盘决策触发了第 ${state.liveResult.research_round} 轮补充研究。</div>` : ""}
+      <ul class="record-list">${events.map((ev) => `<li class="record"><div class="record-top"><h3>${escapeHtml(AGENT_LABELS[ev.actor] || ev.actor)} · ${escapeHtml(ev.event)}</h3></div><div class="record-meta"><span>${escapeHtml(PHASE_LABELS[ev.phase] || ev.phase)}</span><span>${formatDate(ev.created_at)}</span><span>版本 ${ev.version}</span></div></li>`).join("")}</ul>`;
+    return;
+  }
   if (!state.run) return renderNoRun();
   const steps = await fetchJson(`/api/runs/${encodeURIComponent(state.run.run_id)}/steps`);
   const looped = steps.some((step) => step.research_round && step.research_round > 1);
@@ -157,8 +190,8 @@ async function renderProcess() {
 
 async function renderSources() {
   if (state.liveResult) {
-    const rows = _liveSources(state.liveResult);
-    panel.innerHTML = `${panelHeading("来源", `${rows.length} 个来源`)}<ul class="record-list">${rows.map((row) => `<li class="record"><div class="record-top"><h3>${escapeHtml(row.title)}</h3>${statusChip(row.parse_status || "DISCOVERED")}</div><p>${escapeHtml(row.publisher || "未记录发布方")}</p><div class="record-meta"><span>${words(row.source_type)}</span><span>${row.is_official ? "官方" : "独立"}</span><span>${row.is_first_hand ? "一手" : "二手"}</span></div><p><a href="${escapeHtml(safeUrl(row.canonical_url))}" target="_blank" rel="noreferrer">打开原始来源</a></p></li>`).join("")}</ul>`;
+    const rows = state.liveResult.evidence?.sources || [];
+    panel.innerHTML = `${panelHeading("来源", `${rows.length} 个公开来源`)}<ul class="record-list">${rows.map((row) => `<li class="record"><div class="record-top"><h3>${escapeHtml(row.title)}</h3>${statusChip(row.source_type || "other")}</div><p>${escapeHtml(row.domain || "未知域名")}</p><div class="record-meta"><span>${escapeHtml(row.id)}</span><span>访问于 ${formatDate(row.accessed_at)}</span></div><p><a href="${escapeHtml(safeUrl(row.url))}" target="_blank" rel="noreferrer">打开原始来源</a></p></li>`).join("") || `<li class="record"><p>未采集到来源。</p></li>`}</ul>`;
     return;
   }
   if (!state.run) return renderNoRun();
@@ -168,8 +201,12 @@ async function renderSources() {
 
 async function renderEvidence() {
   if (state.liveResult) {
-    const rows = _liveEvidence(state.liveResult);
-    panel.innerHTML = `${panelHeading("证据", `${rows.length} 条定位器绑定摘录`)}<ul class="record-list">${rows.map((row) => `<li class="record"><h3>${escapeHtml(row.evidence_id)}</h3><blockquote class="evidence-quote">${escapeHtml(row.content)}</blockquote><div class="record-meta"><span>${words(row.locator_type)}</span><span>${escapeHtml(JSON.stringify(row.locator_payload))}</span><span>${row.relations.length} 个声明关联</span></div></li>`).join("")}</ul>`;
+    const rows = state.liveResult.evidence?.claims || [];
+    const sourcesById = new Map((state.liveResult.evidence?.sources || []).map((s) => [s.id, s]));
+    panel.innerHTML = `${panelHeading("证据", `${rows.length} 条带来源引用的证据摘录`)}<ul class="record-list">${rows.map((row) => {
+      const src = sourcesById.get(row.source_id);
+      return `<li class="record"><div class="record-top"><h3>${escapeHtml(row.id)} · ${escapeHtml(row.subject)}</h3>${statusChip(row.claim_type)}</div><p>${escapeHtml(row.statement)}</p><blockquote class="evidence-quote">${escapeHtml(row.quote)}</blockquote><div class="record-meta"><span>来源 ${escapeHtml(row.source_id)}${src ? ` · ${escapeHtml(src.domain)}` : ""}</span></div>${src ? `<p><a href="${escapeHtml(safeUrl(src.url))}" target="_blank" rel="noreferrer">查看来源原文</a></p>` : ""}</li>`;
+    }).join("") || `<li class="record"><p>未提取到证据。</p></li>`}</ul>`;
     return;
   }
   if (!state.run) return renderNoRun();
@@ -179,8 +216,13 @@ async function renderEvidence() {
 
 async function renderClaims() {
   if (state.liveResult) {
-    const rows = _liveClaims(state.liveResult);
-    panel.innerHTML = `${panelHeading("声明", `${rows.length} 条原子声明`)}<ul class="record-list">${rows.map((row) => `<li class="record"><div class="record-top"><h3>${escapeHtml(row.statement)}</h3>${statusChip(row.validation_status)}</div><div class="record-meta"><span>${words(row.claim_type)}</span><span>${words(row.importance)}</span><span>置信度 ${row.confidence == null ? "—" : row.confidence.toFixed(2)}</span><span>${row.supporting_evidence_ids.length} 条支持证据</span></div></li>`).join("")}</ul>`;
+    const a = state.liveResult.analysis || {};
+    const rows = [];
+    if (a.executive_summary) rows.push({ statement: a.executive_summary, claim_type: "summary", confidence: a.confidence, source_ids: [] });
+    (a.market_signals || []).forEach((s) => rows.push({ statement: s.statement, claim_type: "market_signal", confidence: a.confidence, source_ids: s.source_ids || [], interpretation: s.interpretation }));
+    (a.rationale || []).forEach((r) => rows.push({ statement: r, claim_type: "rationale", confidence: a.confidence, source_ids: [] }));
+    (a.opportunities || []).forEach((o) => rows.push({ statement: o, claim_type: "opportunity", confidence: a.confidence, source_ids: [] }));
+    panel.innerHTML = `${panelHeading("声明", `${rows.length} 条分析声明`)}<ul class="record-list">${rows.map((row) => `<li class="record"><div class="record-top"><h3>${escapeHtml(row.statement)}</h3>${statusChip(row.claim_type)}</div>${row.interpretation ? `<p>${escapeHtml(row.interpretation)}</p>` : ""}<div class="record-meta"><span>置信度 ${row.confidence == null ? "—" : row.confidence.toFixed(2)}</span><span>${row.source_ids.length ? `引用 ${row.source_ids.map(escapeHtml).join("、")}` : "基于整体证据"}</span></div></li>`).join("") || `<li class="record"><p>暂无声明。</p></li>`}</ul>`;
     return;
   }
   if (!state.run) return renderNoRun();
@@ -191,9 +233,11 @@ async function renderClaims() {
 async function renderConflicts() {
   if (state.liveResult) {
     const a = state.liveResult.analysis || {};
-    panel.innerHTML = `${panelHeading("风险与局限", `${(a.risks || []).length} 项风险 · ${(a.limitations || []).length} 项局限`)}
+    const warnings = state.liveResult.warnings || [];
+    panel.innerHTML = `${panelHeading("风险与局限", `${(a.risks || []).length} 项风险 · ${(a.limitations || []).length} 项局限 · ${warnings.length} 条警告`)}
       <ul class="record-list">${(a.risks || []).map((r) => `<li class="record"><div class="record-top"><h3>风险</h3></div><p>${escapeHtml(r)}</p></li>`).join("") || "<li class='record'><p>无风险记录。</p></li>"}</ul>
-      <ul class="record-list">${(a.limitations || []).map((l) => `<li class="record"><div class="record-top"><h3>局限</h3></div><p>${escapeHtml(l)}</p></li>`).join("") || "<li class='record'><p>无局限记录。</p></li>"}</ul>`;
+      <ul class="record-list">${(a.limitations || []).map((l) => `<li class="record"><div class="record-top"><h3>局限</h3></div><p>${escapeHtml(l)}</p></li>`).join("")}</ul>
+      <ul class="record-list">${warnings.map((w) => `<li class="record"><div class="record-top"><h3>采集警告</h3></div><p>${escapeHtml(w)}</p></li>`).join("")}</ul>`;
     return;
   }
   if (!state.run) return renderNoRun();
@@ -238,6 +282,12 @@ async function renderReport() {
 }
 
 async function renderReview() {
+  if (state.liveResult) {
+    panel.innerHTML = `${panelHeading("发布审核", "真实调研报告")}
+      <div class="record"><p>真实调研结果直接在报告页查看与导出，无需发布审核流程（该流程面向内置回放案例的治理演示）。</p><button class="secondary-button" id="goto-report">前往报告页</button></div>`;
+    $("#goto-report")?.addEventListener("click", () => renderTab("report"));
+    return;
+  }
   const report = state.report || await loadLatestReport();
   if (!report) return renderReport();
   const review = await fetchJson(`/api/reports/${encodeURIComponent(report.report.report_id)}/review`);
@@ -274,51 +324,29 @@ async function renderTab(tab) {
   }
 }
 
-function _liveSources(result) {
-  return (result.sources || []).map((s, i) => ({
-    source_id: s.id || `SRC-${i + 1}`,
-    title: s.title || s.url,
-    publisher: s.domain || "",
-    source_type: s.source_type || "other",
-    is_official: s.source_type === "official",
-    is_first_hand: true,
-    canonical_url: s.url,
-    parse_status: "VERIFIED",
-    snapshot_id: s.id || `SRC-${i + 1}`,
-  }));
-}
-
-function _liveEvidence(result) {
-  const analysis = result.analysis || {};
-  const items = [];
-  (analysis.market_signals || []).forEach((sig, i) => {
-    items.push({ evidence_id: `EVC-SIG-${i + 1}`, content: sig.statement || sig.interpretation || "", locator_type: "text", locator_payload: { text: sig.statement || "" }, relations: (sig.source_ids || []).map((id) => ({ target_id: id, relation_type: "supports" })) });
-  });
-  (analysis.competitors || []).forEach((comp, i) => {
-    items.push({ evidence_id: `EVC-COMP-${i + 1}`, content: `${comp.name || "竞品"} — ${(comp.strengths || []).join("、") || ""}`, locator_type: "text", locator_payload: { text: comp.name || "" }, relations: [] });
-  });
-  (analysis.opportunities || []).forEach((o, i) => {
-    items.push({ evidence_id: `EVC-OPP-${i + 1}`, content: o, locator_type: "text", locator_payload: { text: o }, relations: [] });
-  });
-  (analysis.risks || []).forEach((r, i) => {
-    items.push({ evidence_id: `EVC-RISK-${i + 1}`, content: r, locator_type: "text", locator_payload: { text: r }, relations: [] });
-  });
-  return items;
-}
-
-function _liveClaims(result) {
-  const analysis = result.analysis || {};
-  const claims = [];
-  if (analysis.executive_summary) {
-    claims.push({ statement: analysis.executive_summary, claim_type: "summary", importance: "HIGH", confidence: analysis.confidence ?? 0.8, validation_status: "VERIFIED", supporting_evidence_ids: ["EVC-SIG-1"] });
-  }
-  (analysis.rationale || []).forEach((r, i) => {
-    claims.push({ statement: r, claim_type: "rationale", importance: "MEDIUM", confidence: analysis.confidence ?? 0.7, validation_status: "VERIFIED", supporting_evidence_ids: [`EVC-SIG-${(i % 3) + 1}`] });
-  });
-  if (analysis.recommendation?.summary) {
-    claims.push({ statement: analysis.recommendation.summary, claim_type: "recommendation", importance: "HIGH", confidence: analysis.confidence ?? 0.75, validation_status: "VERIFIED", supporting_evidence_ids: [] });
-  }
-  return claims;
+function _applyLiveState(st) {
+  state.liveResult = st;
+  state.run = null;
+  state.citations = [];
+  const draft = st.draft;
+  state.report = draft
+    ? {
+        report: {
+          title: st.topic,
+          version: 1,
+          report_type: "LIVE_RESEARCH",
+          release_status: "DRAFT",
+          review_status: "LIVE",
+          report_hash: st.run_id,
+        },
+        sections: [
+          { section_type: "executive_summary", content: { units: [{ text: draft.executive_summary.text }] } },
+          { section_type: "rationale", content: { units: (draft.rationale || []).map((r) => ({ text: r.text })) } },
+          { section_type: "next_steps", content: { units: (draft.next_steps || []).map((t) => ({ text: t })) } },
+          { section_type: "limitations", content: { units: (draft.limitations || []).map((t) => ({ text: t })) } },
+        ],
+      }
+    : null;
 }
 
 async function startRun() {
@@ -328,18 +356,50 @@ async function startRun() {
     button.disabled = true;
     button.textContent = "正在调查…";
   }
-  showLoading("正在调用搜索、抓取与大模型进行调查…");
+  showLoading("正在启动调查…");
+  let pollTimer = null;
   try {
-    const result = await fetchJson("/api/reports", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic: state.investigation.title }),
+    const started = await fetchJson(
+      `/api/investigations/${encodeURIComponent(state.investigation.investigation_id)}/research`,
+      { method: "POST" }
+    );
+    const runId = started.run_id;
+    const finalState = await new Promise((resolve, reject) => {
+      let attempts = 0;
+      const tick = async () => {
+        attempts += 1;
+        if (attempts > 240) {
+          reject(new Error("调查超时（超过 10 分钟）"));
+          return;
+        }
+        let st;
+        try {
+          st = await fetchJson(`/api/live-runs/${encodeURIComponent(runId)}`);
+        } catch {
+          showLoading("正在启动调查…");
+          pollTimer = setTimeout(tick, 2500);
+          return;
+        }
+        if (st.status === "completed") {
+          resolve(st);
+          return;
+        }
+        if (st.status === "failed" || st.status === "cancelled") {
+          reject(new Error(`调查未完成：${st.error_category || "未知原因"}，请重试`));
+          return;
+        }
+        const phase = PHASE_LABELS[st.phase] || st.phase || "进行中";
+        const agent = AGENT_LABELS[st.active_agent] || "";
+        const counts = `${st.evidence?.sources?.length || 0} 来源 · ${st.evidence?.claims?.length || 0} 证据`;
+        showLoading(`正在调查（第 ${(st.research_round || 0) + 1} 轮）：${phase}${agent ? ` · ${agent}` : ""} — ${counts}`);
+        pollTimer = setTimeout(tick, 2500);
+      };
+      tick();
     });
-    state.liveResult = result;
-    state.run = null;
-    state.report = null;
-    $("#investigation-breadcrumb").textContent = `真实调研 · ${result.run_id}`;
-    $("#run-badge").innerHTML = statusChip("VERIFIED");
+    liveRunCache[state.investigation.investigation_id] = finalState;
+    _applyLiveState(finalState);
+    $("#investigation-breadcrumb").textContent = `真实调研 · ${finalState.run_id}`;
+    $("#run-badge").innerHTML = statusChip("COMPLETED");
     showToast("调查完成，结果已整理到来源/证据/声明");
     await renderTab("overview");
   } catch (error) {
@@ -349,6 +409,7 @@ async function startRun() {
       button.textContent = "开始调查";
     }
   } finally {
+    if (pollTimer) clearTimeout(pollTimer);
     hideLoading();
   }
 }
@@ -490,6 +551,39 @@ $("#new-form").addEventListener("submit", async (event) => {
   $("#new-dialog").close();
   event.currentTarget.reset();
   await openInvestigation(created.investigation_id);
+});
+
+$("#edit-investigation").addEventListener("click", () => {
+  const inv = state.investigation;
+  if (!inv) return;
+  const form = $("#edit-form");
+  form.elements.title.value = inv.title;
+  form.elements.event_description.value = inv.event_description;
+  form.elements.investigation_goal.value = inv.investigation_goal;
+  form.elements.questions.value = (inv.questions || []).map((q) => q.text).join("\n");
+  $("#edit-dialog").showModal();
+});
+$("#edit-form").addEventListener("submit", async (event) => {
+  if (event.submitter?.value === "cancel") return;
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  try {
+    await fetchJson(`/api/investigations/${encodeURIComponent(state.investigation.investigation_id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: form.get("title"),
+        event_description: form.get("event_description"),
+        investigation_goal: form.get("investigation_goal"),
+        questions: String(form.get("questions") || "").split("\n").map((item) => item.trim()).filter(Boolean),
+      }),
+    });
+    $("#edit-dialog").close();
+    showToast("调查已更新");
+    await openInvestigation(state.investigation.investigation_id, state.run?.run_id || null);
+  } catch (error) {
+    showToast(error.message);
+  }
 });
 
 boot();

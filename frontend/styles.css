@@ -43,7 +43,8 @@ a { color: var(--blue); }
 .investigation-link strong { display: block; font-size: 0.9rem; }
 .investigation-link span { display: block; margin-top: 5px; color: var(--muted); font-size: 0.76rem; }
 .create-button { width: 100%; margin-top: 18px; }
-.workspace { overflow: auto; padding: 34px clamp(22px, 4vw, 64px) 60px; }
+.workspace {
+  position: relative; overflow: auto; padding: 34px clamp(22px, 4vw, 64px) 60px; }
 .case-hero { max-width: 1180px; margin: 0 auto; padding: 28px 32px; background: var(--paper); border: 1px solid var(--line); border-left: 6px solid var(--blue); box-shadow: var(--shadow); }
 .case-kicker { color: var(--blue); font-weight: 700; font-size: 0.78rem; }
 .case-title-row { display: flex; gap: 32px; justify-content: space-between; align-items: center; }
@@ -150,7 +151,7 @@ dialog form { padding: 24px; }
 .export-bar { display: flex; justify-content: flex-end; margin: 12px 0 20px; }
 
 .loading-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 9999;
   display: none;
@@ -181,3 +182,4 @@ dialog form { padding: 24px; }
 @keyframes loading-spin {
   to { transform: rotate(360deg); }
 }
+.header-actions { display: flex; align-items: center; gap: 10px; }

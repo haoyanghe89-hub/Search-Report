@@ -4,6 +4,7 @@ import asyncio
 import logging
 import os
 import re
+import uuid
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -40,6 +41,10 @@ from marketpulse.investigation.persistence.base import (
     create_session_factory,
 )
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from marketpulse.investigation.persistence.models import (
+    InvestigationQuestionRow,
+    InvestigationRow,
+)
 from fastapi.staticfiles import StaticFiles
 
 
@@ -142,9 +147,9 @@ def _report_path(topic: str) -> Path:
     return root / f"{_slug(topic)}-{stamp}.md"
 
 
-async def _run_topic(payload: ReportRequest) -> MarketPulseResult:
+async def _run_topic(payload: ReportRequest, run_id: str | None = None) -> MarketPulseResult:
     settings = Settings.from_env()
-    stats = RunStats()
+    stats = RunStats(run_id=run_id) if run_id else RunStats()
     logger = RunLogger(stats.run_id)
     budget = RunBudget.start(settings)
     runner = DeepSeekAgentRunner(settings)
@@ -243,6 +248,91 @@ async def create_report(payload: ReportRequest) -> ReportResponse:
         state_version=result.state_version,
         storage_backend=result.storage_backend,
     )
+
+
+# --- Async live research (background task + polling) ---
+_live_tasks: dict[str, asyncio.Task] = {}
+
+
+class LiveResearchStartOut(BaseModel):
+    run_id: str
+    status: str = "running"
+
+
+@app.post(
+    "/api/investigations/{investigation_id}/research",
+    response_model=LiveResearchStartOut,
+    status_code=202,
+)
+async def start_live_research(investigation_id: str, request: Request) -> LiveResearchStartOut:
+    sessions = request.app.state.inv_sessions
+    with sessions() as session:
+        row = session.get(InvestigationRow, investigation_id)
+        if row is None:
+            raise HTTPException(status_code=404, detail="调查不存在")
+        topic = row.title if not row.investigation_goal else f"{row.title}：{row.investigation_goal}"
+    run_id = f"run_{uuid.uuid4().hex[:12]}"
+
+    async def _job() -> None:
+        try:
+            await _run_topic(ReportRequest(topic=topic[:200]), run_id=run_id)
+        except Exception:
+            logging.getLogger("marketpulse").exception("live research failed: %s", run_id)
+
+    _live_tasks[run_id] = asyncio.create_task(_job())
+    return LiveResearchStartOut(run_id=run_id)
+
+
+@app.get("/api/live-runs/{run_id}")
+def read_live_run(run_id: str) -> dict:
+    settings = Settings.from_env(require_api_key=False)
+    board = BlackboardStore(settings.database_url.get_secret_value())
+    try:
+        state = board.load(run_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="运行尚未就绪或不存在") from exc
+    finally:
+        board.close()
+    return state.model_dump(mode="json")
+
+
+class InvestigationUpdateIn(BaseModel):
+    title: str = Field(min_length=1, max_length=500)
+    event_description: str = Field(min_length=1)
+    investigation_goal: str = Field(min_length=1)
+    questions: list[str] = Field(default_factory=list)
+
+
+@app.patch("/api/investigations/{investigation_id}")
+def update_investigation(
+    investigation_id: str, payload: InvestigationUpdateIn, request: Request
+) -> dict:
+    sessions = request.app.state.inv_sessions
+    now = datetime.now(UTC)
+    with sessions() as session:
+        row = session.get(InvestigationRow, investigation_id)
+        if row is None:
+            raise HTTPException(status_code=404, detail="调查不存在")
+        row.title = payload.title.strip()
+        row.event_description = payload.event_description
+        row.investigation_goal = payload.investigation_goal
+        row.scope = {"summary": payload.event_description}
+        row.updated_at = now
+        session.query(InvestigationQuestionRow).filter_by(
+            investigation_id=investigation_id
+        ).delete()
+        for text in payload.questions:
+            if text.strip():
+                session.add(
+                    InvestigationQuestionRow(
+                        question_id=f"Q-{uuid.uuid4().hex}",
+                        investigation_id=investigation_id,
+                        text=text.strip(),
+                        is_critical=False,
+                    )
+                )
+        session.commit()
+    return {"investigation_id": investigation_id, "updated_at": now.isoformat()}
 
 
 def main() -> None:
