@@ -1,5 +1,5 @@
 {
-  "citation_count": 9,
+  "citation_count": 12,
   "generated_by": "ReportPipeline + DeterministicWriter + CitationFactory",
   "release_policy_evaluation": {
     "basis": {
@@ -8,7 +8,8 @@
         "review_status": "APPROVED"
       },
       "governance_claim_stable_keys": [
-        "claim:0fcd2a5d2c7a1db3fc90851e"
+        "claim:0fcd2a5d2c7a1db3fc90851e",
+        "claim:2b6213e16a015dd34211fb86"
       ],
       "governance_profile_version": "governance-profile-v1",
       "governance_triggers": [
@@ -21,53 +22,53 @@
       },
       "report_type": "FULL_INVESTIGATION"
     },
-    "citation_set_hash": "6bc929b6504b8a58f0ddd011f8f78eab6da23e22c7a20fc2059993b54f7d9fcd",
-    "claim_set_hash": "c575293a06aa824beb555c1b477801b72852ab955299ffbdc4632908a5f50988",
-    "created_at": "2026-09-22T07:18:57.862256",
+    "citation_set_hash": "b3d93aa6623ccefde830d9ac422bb23c2f260b498f4d2f0230569b2e8fba8549",
+    "claim_set_hash": "5c4ebf8a4ede3d5435de02c27fe62c7ac17b6c22a88fed3f7d38ea334772371f",
+    "created_at": "2026-09-22T10:18:26.232599",
     "decision": "REQUIRE_REVIEW",
-    "evaluation_hash": "e6c2ef13f4fc8f78c2f0abadb8c449488e1fc029a5327b2c9223af1f46fee837",
-    "evaluation_id": "EVA-RPT-047147bfbbd2",
+    "evaluation_hash": "eda011e2b9deb366ef5860e5c8e2da2e9e9de71143e5d133924e0804d4b90a2d",
+    "evaluation_id": "EVA-RPT-6456a49a7859",
     "governance_finding_count": 0,
     "hard_finding_count": 0,
     "policy_version": "phase5-release-policy-v1",
     "release_status": "REVIEW_REQUIRED",
-    "report_hash": "db2b23d36f9116991aaa3dcbbb350937a9f4b93de7a9efc8a5ccc7e9c30d7770",
-    "report_id": "RPT-047147bfbbd2",
+    "report_hash": "96015605ddadde6c057118b403845c415fb8c989172632d5412a48b37accab42",
+    "report_id": "RPT-6456a49a7859",
     "review_status": "PENDING"
   },
   "report": {
-    "citation_set_hash": "6bc929b6504b8a58f0ddd011f8f78eab6da23e22c7a20fc2059993b54f7d9fcd",
-    "claim_set_hash": "c575293a06aa824beb555c1b477801b72852ab955299ffbdc4632908a5f50988",
-    "created_at": "2026-09-22T07:18:57.862256",
+    "citation_set_hash": "b3d93aa6623ccefde830d9ac422bb23c2f260b498f4d2f0230569b2e8fba8549",
+    "claim_set_hash": "5c4ebf8a4ede3d5435de02c27fe62c7ac17b6c22a88fed3f7d38ea334772371f",
+    "created_at": "2026-09-22T10:18:26.232599",
     "investigation_id": "INV-EAST-PALESTINE-2023",
     "release_policy_version": "phase5-release-policy-v1",
-    "report_hash": "db2b23d36f9116991aaa3dcbbb350937a9f4b93de7a9efc8a5ccc7e9c30d7770",
-    "report_id": "RPT-047147bfbbd2",
-    "report_input_snapshot_hash": "0f0aa7fe8f98d323706aefeec094165c49fd8ec784f6c9a874e0b7b3a31246fa",
+    "report_hash": "96015605ddadde6c057118b403845c415fb8c989172632d5412a48b37accab42",
+    "report_id": "RPT-6456a49a7859",
+    "report_input_snapshot_hash": "2687f5f362e83bbde4dd482ece7e5939c419328b0dd22a0cb66a38bcc241eb3b",
     "report_type": "FULL_INVESTIGATION",
-    "run_id": "RUN-EP-REPLAY-da4b1d79663c",
+    "run_id": "RUN-EP-REPLAY-2f82ba193a42",
     "schema_version": "phase5-report-v1",
     "version": 1
   },
   "report_markdown_path": "case_data/east_palestine_2023/outputs/east-palestine-full-investigation-report.md",
-  "report_markdown_sha256": "56c20eb0fbee69c05e4e646ab07cbfc8f9d710abd3402d4fe97679694530f9b6",
+  "report_markdown_sha256": "bcf0f66e18a58771a8447f0c0ac0fd9291567c2b793a23c83421340386466be1",
   "review_request": {
-    "citation_set_hash": "6bc929b6504b8a58f0ddd011f8f78eab6da23e22c7a20fc2059993b54f7d9fcd",
-    "claim_set_hash": "c575293a06aa824beb555c1b477801b72852ab955299ffbdc4632908a5f50988",
-    "created_at": "2026-09-22T07:18:57.862256",
-    "evaluation_hash": "e6c2ef13f4fc8f78c2f0abadb8c449488e1fc029a5327b2c9223af1f46fee837",
-    "evaluation_id": "EVA-RPT-047147bfbbd2",
-    "expires_at": "2026-09-29T07:18:57.862256",
+    "citation_set_hash": "b3d93aa6623ccefde830d9ac422bb23c2f260b498f4d2f0230569b2e8fba8549",
+    "claim_set_hash": "5c4ebf8a4ede3d5435de02c27fe62c7ac17b6c22a88fed3f7d38ea334772371f",
+    "created_at": "2026-09-22T10:18:26.232599",
+    "evaluation_hash": "eda011e2b9deb366ef5860e5c8e2da2e9e9de71143e5d133924e0804d4b90a2d",
+    "evaluation_id": "EVA-RPT-6456a49a7859",
+    "expires_at": "2026-09-29T10:18:26.232599",
     "policy_version": "phase5-release-policy-v1",
-    "report_hash": "db2b23d36f9116991aaa3dcbbb350937a9f4b93de7a9efc8a5ccc7e9c30d7770",
-    "report_id": "RPT-047147bfbbd2",
+    "report_hash": "96015605ddadde6c057118b403845c415fb8c989172632d5412a48b37accab42",
+    "report_id": "RPT-6456a49a7859",
     "report_version": 1,
-    "request_id": "RRQ-401bcee50ab847b08e00959ce53f5e59",
-    "snapshot_hash": "0f0aa7fe8f98d323706aefeec094165c49fd8ec784f6c9a874e0b7b3a31246fa",
+    "request_id": "RRQ-6e0f3c16bce947c689ba31488bc81395",
+    "snapshot_hash": "2687f5f362e83bbde4dd482ece7e5939c419328b0dd22a0cb66a38bcc241eb3b",
     "trigger_reason": "GOVERNANCE_CLAIM_SCOPE",
     "validator_version": "report-validator-v1"
   },
-  "section_count": 15,
+  "section_count": 17,
   "trace_path": "case_data/east_palestine_2023/outputs/east-palestine-run-trace.json",
-  "trace_sha256": "b676dc8c2848d2c8f622876300c88efd1f48ace55169ae08cea453f33ca23f6f"
+  "trace_sha256": "f19c0e4f4679fb1fc488e2de25b7c32888660ceb46d5ee23f91890a3b79858b8"
 }

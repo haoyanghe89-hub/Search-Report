@@ -117,7 +117,7 @@ def test_projection_excludes_trusted_material() -> None:
 
 
 def test_section_schemas() -> None:
-    assert len(FULL_SECTIONS) == 15
+    assert len(FULL_SECTIONS) == 17
     assert len(STATUS_SECTIONS) == 7
     assert required_sections(ReportType.FULL_INVESTIGATION) == FULL_SECTIONS
     assert required_sections(ReportType.RESTRICTED_INVESTIGATION) == FULL_SECTIONS

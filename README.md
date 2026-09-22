@@ -1,4 +1,4 @@
-﻿# Search-Report — 多智能体事件调查与证据验证报告系统
+# Search-Report — 多智能体事件调查与证据验证报告系统
 
 > 本项目已完成 **Phase 5 报告治理**，完整实现了从多智能体调查、证据验证到报告生成、审核发布的全链路。当前部署目标为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。
 
@@ -127,6 +127,8 @@ docs/                # 设计文档与验收记录
 - 无 OCR 能力，PDF 需包含可提取文本层
 - 回放模式不触发真实网络调用
 - `frontend/` 为静态控制台，`web/` 为旧版市场前端
+
+完整的已知问题与局限性说明见 [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md)。
 
 ## 交付物清单
 

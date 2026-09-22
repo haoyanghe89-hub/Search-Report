@@ -125,7 +125,7 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         report_id = replay["report_id"]
         report = client.get(f"/api/reports/{report_id}").json()
         assert report["report"]["report_type"] == "FULL_INVESTIGATION"
-        assert len(report["sections"]) == 15
+        assert len(report["sections"]) == 17
 
         citations = client.get(f"/api/reports/{report_id}/citations").json()
         assert citations

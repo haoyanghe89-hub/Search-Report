@@ -227,8 +227,9 @@ _CLAIMS: tuple[dict[str, Any], ...] = (
         "statement": (
             "Authorities established evacuation and protective-action zones around the derailment."
         ),
-        "claim_type": "EVENT_FACT",
+        "claim_type": "IMPACT",
         "importance": "HIGH",
+        "entity_qualifiers": {"impact_subtype": "OBSERVED_IMPACT"},
     },
     {
         "claim_key": "monitoring-response",
@@ -236,8 +237,14 @@ _CLAIMS: tuple[dict[str, Any], ...] = (
             "Federal and state responders conducted air, water, and soil monitoring "
             "after the release."
         ),
-        "claim_type": "EVENT_FACT",
+        "claim_type": "INSTITUTIONAL_ACTION",
         "importance": "HIGH",
+        "entity_qualifiers": {
+            "actor": "Federal and state responders",
+            "action": "environmental monitoring",
+        },
+        "scope_qualifiers": {"coverage": "air, water, and soil"},
+        "time_qualifiers": {"date": "2023-02"},
     },
     {
         "claim_key": "cleanup-response",
@@ -245,8 +252,14 @@ _CLAIMS: tuple[dict[str, Any], ...] = (
             "Cleanup included contaminated-soil excavation, water treatment, and "
             "continued monitoring."
         ),
-        "claim_type": "EVENT_FACT",
+        "claim_type": "INSTITUTIONAL_ACTION",
         "importance": "MEDIUM",
+        "entity_qualifiers": {
+            "actor": "Norfolk Southern and contracted responders",
+            "action": "site cleanup and remediation",
+        },
+        "scope_qualifiers": {"coverage": "contaminated soil, water treatment, continued monitoring"},
+        "time_qualifiers": {"date": "2023-02"},
     },
 )
 

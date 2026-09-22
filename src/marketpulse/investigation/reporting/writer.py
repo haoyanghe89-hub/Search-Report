@@ -53,9 +53,11 @@ FULL_SECTIONS: tuple[str, ...] = (
     "PROBABLE_FINDINGS",
     "DISPUTED_FINDINGS",
     "QUANTITATIVE_FINDINGS",
+    "IMPACT_SCOPE_AND_ANALYSIS",
     "CAUSAL_AND_MECHANISM_ANALYSIS",
     "ACTOR_AND_ATTRIBUTION_ASSESSMENT",
     "CONFLICT_ANALYSIS",
+    "REMEDIATION_AND_FOLLOW_UP",
     "LIMITATIONS_AND_RESEARCH_GAPS",
     "CONCLUSIONS_AND_NEXT_STEPS",
 )
@@ -380,6 +382,8 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
 
     quantitative = [c for c in p.claims if c.claim_type is ClaimType.QUANTITATIVE]
     sections.append(_claims_section("QUANTITATIVE_FINDINGS", quantitative))
+    impact = [c for c in p.claims if c.claim_type is ClaimType.IMPACT]
+    sections.append(_claims_section("IMPACT_SCOPE_AND_ANALYSIS", impact))
     causal = [c for c in p.claims if c.claim_type is ClaimType.CAUSAL]
     sections.append(_claims_section("CAUSAL_AND_MECHANISM_ANALYSIS", causal))
     attribution = [c for c in p.claims if c.claim_type is ClaimType.ATTRIBUTION]
@@ -408,6 +412,9 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
         sections.append(
             DraftSection(section_key="CONFLICT_ANALYSIS", status=SectionStatus.NOT_APPLICABLE)
         )
+
+    remediation = [c for c in p.claims if c.claim_type is ClaimType.INSTITUTIONAL_ACTION]
+    sections.append(_claims_section("REMEDIATION_AND_FOLLOW_UP", remediation))
 
     limitation_units = tuple(
         _unit(

@@ -36,19 +36,19 @@ The investigation draws on 10 sources across 0 independent families.
 
 An overheated wheel bearing progressed to axle failure and caused the derailment. [1]
 
-Cleanup included contaminated-soil excavation, water treatment, and continued monitoring. [2]
+Authorities established evacuation and protective-action zones around the derailment. [2]
 
 Norfolk Southern train 32N derailed 38 railcars in East Palestine at about 8:54 p.m. on February 3, 2023. [3]
 
-Authorities established evacuation and protective-action zones around the derailment. [4]
+Federal and state responders conducted air, water, and soil monitoring after the release. [4]
 
 The NTSB preliminary report stated that train 32N derailed 38 railcars. [5]
 
 Responders conducted a controlled vent and burn of vinyl chloride from five tank cars. [6]
 
-Federal and state responders conducted air, water, and soil monitoring after the release. [7]
+Eleven derailed tank cars carried hazardous materials and ensuing fires damaged additional railcars. [7]
 
-Eleven derailed tank cars carried hazardous materials and ensuing fires damaged additional railcars. [8]
+Cleanup included contaminated-soil excavation, water treatment, and continued monitoring. [8]
 
 ## Probable Findings
 
@@ -62,9 +62,13 @@ _Insufficient Supported Material_
 
 _Insufficient Supported Material_
 
+## Impact Scope And Analysis
+
+Authorities established evacuation and protective-action zones around the derailment. [9]
+
 ## Causal And Mechanism Analysis
 
-An overheated wheel bearing progressed to axle failure and caused the derailment. [9]
+An overheated wheel bearing progressed to axle failure and caused the derailment. [10]
 
 ## Actor And Attribution Assessment
 
@@ -73,6 +77,12 @@ _Insufficient Supported Material_
 ## Conflict Analysis
 
 A QUANTITATIVE conflict (HIGH) remains RESOLVED: conflicting accounts span 1 claims and are not settled here.
+
+## Remediation And Follow Up
+
+Federal and state responders conducted air, water, and soil monitoring after the release. [11]
+
+Cleanup included contaminated-soil excavation, water treatment, and continued monitoring. [12]
 
 ## Limitations And Research Gaps
 
@@ -84,20 +94,26 @@ Conclusions follow strictly from validated claims; open gaps require the follow-
 
 ## Citations
 
-[1] claim `36c94eab4acd` evidence `298242e0f879` locator `TEXT_RANGE`
+[1] claim `36c94eab4acd` evidence `95c05f251453` locator `TEXT_RANGE`
 
-[2] claim `181bee6f6689` evidence `a4b0b710a5ba` locator `TEXT_RANGE`
+[2] claim `34091c2c487f` evidence `66ca4d4bab46` locator `TEXT_RANGE`
 
-[3] claim `fc46a49d5dde` evidence `af0fc11df0df` locator `TEXT_RANGE`
+[3] claim `fc46a49d5dde` evidence `e38d83736a3b` locator `TEXT_RANGE`
 
-[4] claim `5f4c23aba526` evidence `e38d83736a3b` locator `TEXT_RANGE`
+[4] claim `69cf476ba745` evidence `ed2a057d8ae9` locator `PDF_TEXT_RANGE`
 
 [5] claim `87fbfabbe5f9` evidence `ed2a057d8ae9` locator `PDF_TEXT_RANGE`
 
-[6] claim `93271a71bddf` evidence `ed2a057d8ae9` locator `PDF_TEXT_RANGE`
+[6] claim `93271a71bddf` evidence `95c05f251453` locator `TEXT_RANGE`
 
-[7] claim `10685403f47b` evidence `95c05f251453` locator `TEXT_RANGE`
+[7] claim `bdbf240a0991` evidence `a4b0b710a5ba` locator `TEXT_RANGE`
 
-[8] claim `bdbf240a0991` evidence `66ca4d4bab46` locator `TEXT_RANGE`
+[8] claim `279a1e815c70` evidence `4500bc2411d4` locator `TEXT_RANGE`
 
-[9] claim `36c94eab4acd` evidence `298242e0f879` locator `TEXT_RANGE`
+[9] claim `34091c2c487f` evidence `66ca4d4bab46` locator `TEXT_RANGE`
+
+[10] claim `36c94eab4acd` evidence `95c05f251453` locator `TEXT_RANGE`
+
+[11] claim `69cf476ba745` evidence `ed2a057d8ae9` locator `PDF_TEXT_RANGE`
+
+[12] claim `279a1e815c70` evidence `4500bc2411d4` locator `TEXT_RANGE`
