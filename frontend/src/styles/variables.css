@@ -1,0 +1,45 @@
+/* ============================================
+   设计系统 - CSS 变量
+   ============================================ */
+:root {
+  /* 纸张色系 */
+  --paper-base: #f7f3ec;
+  --paper-warm: #efe9dd;
+  --paper-deep: #e6ddcb;
+  --paper-shadow: rgba(60, 45, 20, 0.08);
+  --paper-edge: rgba(60, 45, 20, 0.12);
+
+  /* 墨水色系 */
+  --ink-black: #1c1610;
+  --ink-deep: #2d2418;
+  --ink-soft: #4a3f30;
+  --ink-muted: #6b5d4a;
+  --ink-faint: #9a8c74;
+
+  /* 点缀色 */
+  --accent: #8b5a2b;
+  --accent-light: #b08050;
+  --accent-pale: rgba(139, 90, 43, 0.08);
+  --accent-line: rgba(139, 90, 43, 0.2);
+
+  /* 状态色 */
+  --status-verified: #3d5a3d;
+  --status-probable: #8b6914;
+  --status-disputed: #8b3a1a;
+  --status-unverified: #8a7e6a;
+
+  /* 字体 */
+  --font-display: 'Fraunces', 'Cormorant Garamond', 'Noto Serif SC', serif;
+  --font-serif: 'Cormorant Garamond', 'Noto Serif SC', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', monospace;
+
+  /* 动画曲线 */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* 布局 */
+  --sidebar-width: 260px;
+  --topbar-height: 72px;
+  --content-max-width: 1400px;
+}

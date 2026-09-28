@@ -1,0 +1,18 @@
+{
+  "name": "search-report-frontend",
+  "version": "1.0.0",
+  "description": "基于智能体的事件调查与证据验证系统 - 前端",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.0.0"
+  }
+}
