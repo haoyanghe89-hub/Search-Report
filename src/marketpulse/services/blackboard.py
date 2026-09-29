@@ -111,7 +111,7 @@ class BlackboardStore:
 
     def history(self, run_id: str, *, after_version: int = -1) -> list[BlackboardEvent]:
         with self.engine.connect() as conn:
-            rows = (
+            rows: Any = (
                 conn.execute(
                     select(events.c.payload)
                     .where(events.c.run_id == run_id, events.c.version > after_version)

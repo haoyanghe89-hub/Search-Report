@@ -22,7 +22,7 @@ _REDIRECTS = {301, 302, 303, 307, 308}
 _TRANSIENT_STATUSES = {429, 502, 503, 504}
 
 
-async def is_public_host(host: str) -> bool:
+async def is_public_host(host: str, *, allow_proxy_dns: bool = False) -> bool:
     try:
         values = await asyncio.get_running_loop().run_in_executor(
             None, lambda: socket.getaddrinfo(host, None)
@@ -30,7 +30,10 @@ async def is_public_host(host: str) -> bool:
     except socket.gaierror:
         return False
     addresses = [ipaddress.ip_address(item[4][0]) for item in values]
-    return bool(addresses) and all(address.is_global for address in addresses)
+    fake_ip_range = ipaddress.ip_network("198.18.0.0/15")
+    return bool(addresses) and all(
+        address.is_global or (allow_proxy_dns and address in fake_ip_range) for address in addresses
+    )
 
 
 def _safe_host(url: str) -> str:
@@ -56,7 +59,8 @@ class HttpxFetchAdapter:
         self,
         client: httpx.AsyncClient,
         *,
-        host_validator: HostValidator = is_public_host,
+        host_validator: HostValidator | None = None,
+        allow_proxy_dns: bool = False,
         user_agent: str = "InvestigationPlatform/0.1",
         max_redirects: int = 5,
         max_retries: int = 2,
@@ -65,7 +69,11 @@ class HttpxFetchAdapter:
         if max_redirects < 0 or max_retries < 0:
             raise ValueError("redirect and retry limits must be nonnegative")
         self._client = client
-        self._host_validator = host_validator
+
+        async def configured_host_validator(host: str) -> bool:
+            return await is_public_host(host, allow_proxy_dns=allow_proxy_dns)
+
+        self._host_validator = host_validator or configured_host_validator
         self._user_agent = user_agent
         self._max_redirects = max_redirects
         self._max_retries = max_retries

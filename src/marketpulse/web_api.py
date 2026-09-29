@@ -26,6 +26,22 @@ from marketpulse.domain.analysis import MarketAnalysis, QualityResult
 from marketpulse.domain.collaboration import BlackboardEvent, BlackboardState
 from marketpulse.domain.evidence import CoverageSummary, Source
 from marketpulse.errors import ErrorCode, MarketPulseError
+from marketpulse.investigation.api import router as investigation_router
+from marketpulse.investigation.case_replay import (
+    EastPalestineReplayService,
+    default_blob_root,
+    default_case_root,
+)
+from marketpulse.investigation.persistence.base import (
+    create_investigation_engine,
+    create_session_factory,
+)
+from marketpulse.investigation.persistence.models import (
+    InvestigationQuestionRow,
+    InvestigationRow,
+)
+from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from marketpulse.investigation.review.api import router as review_router
 from marketpulse.observability import RunLogger, RunStats
 from marketpulse.services.blackboard import BlackboardStore
 from marketpulse.workflow import (
@@ -34,18 +50,6 @@ from marketpulse.workflow import (
     WorkflowDependencies,
     run_marketpulse,
 )
-from marketpulse.investigation.api import router as investigation_router
-from marketpulse.investigation.review.api import router as review_router
-from marketpulse.investigation.persistence.base import (
-    create_investigation_engine,
-    create_session_factory,
-)
-from marketpulse.investigation.persistence.repositories import InvestigationRepository
-from marketpulse.investigation.persistence.models import (
-    InvestigationQuestionRow,
-    InvestigationRow,
-)
-from fastapi.staticfiles import StaticFiles
 
 
 class ReportRequest(BaseModel):
@@ -100,11 +104,7 @@ app.state.inv_repository = _inv_repository
 app.state.review_session_factory = _inv_sessions
 app.state.settings = _inv_settings
 # Configure East Palestine replay runner
-from marketpulse.investigation.case_replay import (
-    EastPalestineReplayService,
-    default_blob_root,
-    default_case_root,
-)
+
 app.state.east_palestine_replay = EastPalestineReplayService(
     sessions=_inv_sessions,
     repository=_inv_repository,
@@ -120,17 +120,22 @@ for _route in review_router.routes:
 # --- Frontend static files ---
 if os.getenv("INVESTIGATION_SERVE_FRONTEND", "false").lower() in {"1", "true", "yes"}:
     from fastapi.responses import FileResponse
+
     _frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
     if _frontend_dir.is_dir():
+
         @app.get("/")
         def _serve_index() -> FileResponse:
             return FileResponse(str(_frontend_dir / "index.html"))
+
         @app.get("/app.js")
         def _serve_app_js() -> FileResponse:
             return FileResponse(str(_frontend_dir / "app.js"))
+
         @app.get("/styles.css")
         def _serve_styles() -> FileResponse:
             return FileResponse(str(_frontend_dir / "styles.css"))
+
 
 # Keep local API workload bounded; model clients are now scoped to each run.
 _run_lock = asyncio.Lock()
@@ -254,7 +259,7 @@ async def create_report(payload: ReportRequest) -> ReportResponse:
 
 
 # --- Async live research (background task + polling) ---
-_live_tasks: dict[str, asyncio.Task] = {}
+_live_tasks: dict[str, asyncio.Task[None]] = {}
 
 
 class LiveResearchStartOut(BaseModel):
@@ -273,7 +278,9 @@ async def start_live_research(investigation_id: str, request: Request) -> LiveRe
         row = session.get(InvestigationRow, investigation_id)
         if row is None:
             raise HTTPException(status_code=404, detail="调查不存在")
-        topic = row.title if not row.investigation_goal else f"{row.title}：{row.investigation_goal}"
+        topic = (
+            row.title if not row.investigation_goal else f"{row.title}：{row.investigation_goal}"
+        )
     run_id = f"run_{uuid.uuid4().hex[:12]}"
 
     async def _job() -> None:
@@ -291,7 +298,7 @@ async def start_live_research(investigation_id: str, request: Request) -> LiveRe
 
 
 @app.get("/api/live-runs/{run_id}")
-def read_live_run(run_id: str) -> dict:
+def read_live_run(run_id: str) -> dict[str, object]:
     settings = Settings.from_env(require_api_key=False)
     board = BlackboardStore(settings.database_url.get_secret_value())
     try:
@@ -304,7 +311,7 @@ def read_live_run(run_id: str) -> dict:
 
 
 @app.get("/api/investigations/{investigation_id}/live-runs")
-def list_live_runs(investigation_id: str) -> list[dict]:
+def list_live_runs(investigation_id: str) -> list[dict[str, object]]:
     import json as _json
 
     from sqlalchemy import text
@@ -351,11 +358,13 @@ class InvestigationUpdateIn(BaseModel):
 @app.patch("/api/investigations/{investigation_id}")
 def update_investigation(
     investigation_id: str, payload: InvestigationUpdateIn, request: Request
-) -> dict:
+) -> dict[str, object]:
     from marketpulse.investigation.case_replay import INVESTIGATION_ID as BUILTIN_CASE_ID
 
     if investigation_id == BUILTIN_CASE_ID:
-        raise HTTPException(status_code=409, detail="内置回放案例不可编辑（回放指纹依赖其固定内容）")
+        raise HTTPException(
+            status_code=409, detail="内置回放案例不可编辑（回放指纹依赖其固定内容）"
+        )
     sessions = request.app.state.inv_sessions
     now = datetime.now(UTC)
     with sessions() as session:

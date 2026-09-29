@@ -12,6 +12,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TypeVar
 
+from pydantic import JsonValue
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -28,6 +29,7 @@ from marketpulse.investigation.domain.enums import (
     ConflictResolutionStatus,
     ConflictStatus,
     GapStatus,
+    ReportType,
     RunStatus,
 )
 from marketpulse.investigation.domain.runtime import Investigation, InvestigationRun
@@ -45,7 +47,9 @@ from marketpulse.investigation.persistence.models import (
     ResearchGapRow,
     SourceFamilyMemberRow,
     SourceFamilyRow,
+    SourceSnapshotRow,
     TimelineEventRow,
+    ValidationResultRow,
 )
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
 from marketpulse.investigation.reporting.hashing import canonical_hash
@@ -61,6 +65,7 @@ from marketpulse.investigation.reporting.models import (
     SnapshotSource,
     SnapshotTimelineEvent,
 )
+from marketpulse.investigation.validation.relations import validated_relation
 
 ASSEMBLY_SCHEMA_VERSION = "phase5-report-input-v1"
 
@@ -90,6 +95,7 @@ class ReportInputAssembler:
         run_id: str,
         snapshot_id: str,
         assembled_at: datetime,
+        report_type: ReportType = ReportType.FULL_INVESTIGATION,
     ) -> ReportInputSnapshot:
         """Assemble and immutably persist; idempotent on semantic hash."""
         with self._sessions.begin() as session:
@@ -98,6 +104,7 @@ class ReportInputAssembler:
                 run_id=run_id,
                 snapshot_id=snapshot_id,
                 assembled_at=assembled_at,
+                report_type=report_type,
             )
             existing = session.scalar(
                 select(ReportInputSnapshotRow).where(
@@ -119,9 +126,13 @@ class ReportInputAssembler:
         run_id: str,
         snapshot_id: str,
         assembled_at: datetime,
+        report_type: ReportType = ReportType.FULL_INVESTIGATION,
     ) -> ReportInputSnapshot:
         run = self._get(session, InvestigationRun, run_id)
-        if run.status is not RunStatus.READY_FOR_REPORT:
+        allowed = {RunStatus.READY_FOR_REPORT}
+        if report_type is ReportType.INVESTIGATION_STATUS:
+            allowed.update({RunStatus.BLOCKED, RunStatus.FAILED, RunStatus.CANCELLED})
+        if run.status not in allowed:
             raise AssemblyError(f"run {run_id} is {run.status}, not READY_FOR_REPORT")
         investigation = self._get(session, Investigation, run.investigation_id)
 
@@ -129,6 +140,10 @@ class ReportInputAssembler:
             select(ClaimRow).where(ClaimRow.run_id == run_id).order_by(ClaimRow.claim_id)
         ).all()
         claims = [self._get(session, Claim, row.claim_id) for row in claim_rows]
+        status_only = report_type is ReportType.INVESTIGATION_STATUS
+        omitted_claims = [claim.claim_id for claim in claims if claim.latest_validation_id is None]
+        if status_only:
+            claims = [claim for claim in claims if claim.latest_validation_id is not None]
 
         validations: dict[str, ValidationResult] = {}
         relations: list[ClaimEvidenceRelation] = []
@@ -162,7 +177,7 @@ class ReportInputAssembler:
             ).all()
             for relation_row in relation_rows:
                 relation = self._get(session, ClaimEvidenceRelation, relation_row.relation_id)
-                relations.append(relation)
+                relations.append(validated_relation(relation, validation))
                 if relation.evidence_id in evidence_by_id:
                     continue
                 evidence = self._get(session, Evidence, relation.evidence_id)
@@ -183,6 +198,12 @@ class ReportInputAssembler:
                     artifacts[artifact.artifact_id] = artifact
                 evidence_by_id[evidence.evidence_id] = evidence
 
+        for row in session.scalars(
+            select(SourceSnapshotRow).where(SourceSnapshotRow.run_id == run_id)
+        ):
+            snapshots.setdefault(
+                row.snapshot_id, self._get(session, SourceSnapshot, row.snapshot_id)
+            )
         for snapshot in snapshots.values():
             sources[snapshot.source_id] = self._get(session, Source, snapshot.source_id)
 
@@ -193,6 +214,8 @@ class ReportInputAssembler:
         ).all()
         conflicts = [self._get(session, ConflictSet, row.conflict_id) for row in conflict_rows]
         claim_ids = {claim.claim_id for claim in claims}
+        if status_only:
+            conflicts = [item for item in conflicts if set(item.claim_ids) <= claim_ids]
         for conflict in conflicts:
             unknown = set(conflict.claim_ids) - claim_ids
             if unknown:
@@ -207,7 +230,11 @@ class ReportInputAssembler:
         ).all()
         gaps = [self._get(session, ResearchGap, row.gap_id) for row in gap_rows]
         for gap in gaps:
-            if gap.target_claim_id is not None and gap.target_claim_id not in claim_ids:
+            if (
+                not status_only
+                and gap.target_claim_id is not None
+                and gap.target_claim_id not in claim_ids
+            ):
                 raise AssemblyError(f"gap {gap.gap_id} targets unknown claim {gap.target_claim_id}")
 
         timeline_rows = session.scalars(
@@ -219,6 +246,10 @@ class ReportInputAssembler:
             self._get(session, TimelineEvent, row.timeline_event_id) for row in timeline_rows
         ]
         evidence_ids = set(evidence_by_id)
+        if status_only:
+            timeline = [
+                event for event in timeline if set(event.supporting_evidence_ids) <= evidence_ids
+            ]
         for event in timeline:
             unknown_evidence = set(event.supporting_evidence_ids) - evidence_ids
             if unknown_evidence:
@@ -243,6 +274,14 @@ class ReportInputAssembler:
             timeline=timeline,
             session=session,
         )
+        if status_only:
+            extra = [f"Run ended with status {run.status}. " + (run.interruption_reason or "")]
+            if omitted_claims:
+                extra.append(
+                    f"{len(omitted_claims)} claims have not completed validation; "
+                    "they are omitted from findings and remain available in the run record."
+                )
+            payload = payload.model_copy(update={"limitations": payload.limitations + tuple(extra)})
         runtime = SnapshotRuntimeReferences(
             claim_ids={claim_key_map[claim.claim_id]: claim.claim_id for claim in claims},
             evidence_ids={
@@ -306,6 +345,9 @@ class ReportInputAssembler:
                 validation_semantic_hash=_validation_semantic_hash(validations[claim.claim_id]),
                 importance=claim.importance,
                 is_critical=claim.is_critical,
+                report_section=str(claim.qualifiers["report_section"])
+                if claim.qualifiers.get("report_section")
+                else None,
             )
             for claim in claims
         )
@@ -353,10 +395,20 @@ class ReportInputAssembler:
                     },
                 ),
                 conflict_type=conflict.conflict_type,
+                resolution_summary=conflict.resolution_summary,
+                possible_explanations=conflict.possible_explanations,
+                competing_values=_conflict_values(conflict, evidence_keys),
                 severity=conflict.severity,
                 status=conflict.status,
                 claim_stable_keys=tuple(
-                    sorted(claim_keys[claim_id] for claim_id in conflict.claim_ids)
+                    sorted(
+                        {claim_keys[claim_id] for claim_id in conflict.claim_ids}
+                        | {
+                            claim_keys[relation.claim_id]
+                            for relation in relations
+                            if relation.evidence_id in conflict.evidence_ids
+                        }
+                    )
                 ),
                 semantic_hash=canonical_hash(
                     "phase5-conflict-semantic-v1",
@@ -366,7 +418,7 @@ class ReportInputAssembler:
                         "status": conflict.status,
                         "resolution_status": conflict.resolution_status,
                         "claims": sorted(claim_keys[claim_id] for claim_id in conflict.claim_ids),
-                        "competing_values": list(conflict.competing_values),
+                        "competing_values": list(_conflict_values(conflict, evidence_keys)),
                     },
                 ),
             )
@@ -395,9 +447,7 @@ class ReportInputAssembler:
                 status=gap.status,
                 reason=gap.reason,
             )
-            for gap in sorted(
-                gaps, key=lambda item: (str(item.gap_type), item.reason)
-            )
+            for gap in sorted(gaps, key=lambda item: (str(item.gap_type), item.reason))
         )
         snapshot_timeline = tuple(
             SnapshotTimelineEvent(
@@ -430,9 +480,7 @@ class ReportInputAssembler:
         )
         snapshot_sources = tuple(
             self._snapshot_source(session, run.run_id, source, source_keys[source_id])
-            for source_id, source in sorted(
-                sources.items(), key=lambda item: source_keys[item[0]]
-            )
+            for source_id, source in sorted(sources.items(), key=lambda item: source_keys[item[0]])
         )
         limitations = tuple(
             sorted(
@@ -461,6 +509,11 @@ class ReportInputAssembler:
                 },
             ),
             terminal_run_status=str(run.status),
+            execution_provenance=(
+                "CURATED_OFFLINE"
+                if run.workflow_version.startswith("curated-offline")
+                else "PROVIDER_WORKFLOW"
+            ),
             questions=question_texts,
             claims=snapshot_claims,
             evidence=snapshot_evidence,
@@ -481,7 +534,20 @@ class ReportInputAssembler:
         source_key: str,
     ) -> SnapshotSource:
         member = session.scalars(
-            select(SourceFamilyMemberRow).where(SourceFamilyMemberRow.source_id == source.source_id)
+            select(SourceFamilyMemberRow)
+            .join(
+                SourceFamilyRow,
+                SourceFamilyMemberRow.family_record_id == SourceFamilyRow.family_record_id,
+            )
+            .where(
+                SourceFamilyMemberRow.source_id == source.source_id,
+                SourceFamilyRow.run_id == run_id,
+            )
+            .join(
+                ValidationResultRow,
+                SourceFamilyRow.validation_id == ValidationResultRow.validation_id,
+            )
+            .order_by(ValidationResultRow.created_at.desc(), SourceFamilyRow.family_id)
         ).first()
         family_key = "UNGROUPED"
         role = "UNGROUPED"
@@ -501,6 +567,18 @@ class ReportInputAssembler:
             return self._repository.get_in_session(session, entity_type, entity_id)
         except KeyError as exc:
             raise AssemblyError(f"missing {entity_type.__name__} {entity_id}") from exc
+
+
+def _conflict_values(conflict: ConflictSet, evidence_keys: dict[str, str]) -> tuple[JsonValue, ...]:
+    values: list[JsonValue] = []
+    for value in conflict.competing_values:
+        if isinstance(value, dict):
+            value = dict(value)
+            evidence_id = value.pop("evidence_id", None)
+            if isinstance(evidence_id, str):
+                value["evidence_key"] = evidence_keys.get(evidence_id, "UNAVAILABLE")
+        values.append(value)
+    return tuple(values)
 
 
 def _claim_stable_key(claim: Claim) -> str:

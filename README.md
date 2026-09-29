@@ -1,135 +1,90 @@
-# Search-Report — 多智能体事件调查与证据验证报告系统
+# Search-Report：事件调查与证据验证
 
-> 本项目已完成 **Phase 5 报告治理**，完整实现了从多智能体调查、证据验证到报告生成、审核发布的全链路。当前部署目标为 **local trusted single-operator demo**，不适合直接暴露到 LAN/公网。
+Python 3.11–3.13 / FastAPI 后端，Vue 3 / Vite 调查控制台。Planner、Researcher、Analyst、Verifier 通过持久化调查状态协作；报告把声明、经过验证的证据关系与原文定位关联起来。当前交付面向**本机可信单操作员笔试演示**。
 
-Search-Report 是一个 Python 3.11+ 的多智能体事件调查系统：**Planner** 规划调查，**Researcher** 检索取证，**Analyst** 形成声明，**Verifier** 验证证据。四个角色通过持久化黑板协作，Verifier 可触发有限轮次的反馈循环补查。最终由报告治理模块生成带声明级引用的调查报告，并通过审核工作流决定是否发布。
+## 两种运行方式
 
-完整架构设计见 [ARCHITECTURE.md](ARCHITECTURE.md)，各阶段验收记录见 [docs/](docs/)。
+- **离线案例回放**：左侧“运行案例回放”使用仓库中的东巴勒斯坦事故归档来源和人工整理的声明—证据映射。无需模型密钥或外网；用于复现验证、门禁和报告。它不代表模型对陌生事件的调查质量。
+- **联网调查**：首页输入主题，点击“开始调查”或按 Enter，自动创建档案并启动搜索、抓取、模型分析与验证。左侧保留历史调查，详情顶部也可输入新主题。需要配置 `DEEPSEEK_API_KEY`，可能产生调用费用。未配置时返回明确的 503 提示，不使用案例数据替代。
 
-## 核心特性
+来源不足、验证失败或研究缺口会保留在结果中；运行结束并不意味着报告获准发布。前端读取实际运行状态和步骤，不生成模拟进度或预置结论。
 
-- **四智能体协作**：Planner → Researcher → Analyst → Verifier，带研究缺口反馈循环
-- **证据验证引擎**：15 阶段验证策略，覆盖完整性、语义蕴含、来源独立性、冲突检测等
-- **报告治理**：确定性报告生成、声明级引用绑定、15 阶段发布门禁
-- **审核工作流**：审核员认证、会话管理、批准/驳回/要求补充研究
-- **回放模式**：基于录制的外部调用确定性重放，无需网络或模型密钥
-- **East Palestine 案例**：内置 2023 年东巴勒斯坦列车脱轨事故完整调查案例
+LIVE 现支持四个互补研究员并行检索、并行抓取和分组语义验证。默认预算为 120 次逻辑搜索、300 次抓取、6 轮、30 分钟；这是上限，任务可因证据充分、无新增信息或其他预算先耗尽而提前停止。配置、代理适配和覆盖边界见 [并行调查说明](docs/PARALLEL_RESEARCH.md)。
 
-## 技术栈
+## Docker 一键启动
 
-- **后端**：FastAPI + SQLAlchemy + Alembic，SQLite（开发）/ PostgreSQL（生产）
-- **智能体**：OpenAI Agents SDK，DeepSeek OpenAI 兼容 API
-- **前端**：原生 HTML/CSS/JS 静态控制台（`frontend/`）+ React/Vite 旧版市场前端（`web/`）
-- **容器化**：Docker + Docker Compose
-- **搜索**：DuckDuckGo 优先，依次回退 Bing、Yahoo 与 `ddgs` 元搜索
-- **抓取**：HTTPX，遵守 robots.txt，拒绝私网目标
-
-## 安装
+需要 Docker Engine/Desktop 与 Compose v2。首次构建需要网络下载镜像和依赖。
 
 ```powershell
-uv sync --extra dev
-if (!(Test-Path .env)) { Copy-Item .env.example .env }
-# 编辑 .env 设置 DEEPSEEK_API_KEY
+Copy-Item .env.example .env
+# 已有 .env 时不要覆盖；离线回放可保持模型密钥为空。
+docker compose up --build --wait
 ```
 
-## 快速开始
+- 控制台：[http://localhost:3000](http://localhost:3000)
+- API / OpenAPI：[http://localhost:8000/docs](http://localhost:8000/docs)
+- 健康检查：[http://localhost:3000/api/health](http://localhost:3000/api/health)
 
-### 运行内置案例回放（无需网络/密钥）
+Compose 启动 PostgreSQL、调查 API 和 Nginx 前端；Nginx 将 `/api` 代理到后端。数据库和归档正文分别保存在 `postgres-data`、`blob-data` 卷中。仅绑定本机回环地址；不要直接修改成公网监听。
 
 ```powershell
-uv run python scripts/export_east_palestine_delivery.py
+docker compose logs -f backend
+docker compose down
+# down 不删除数据卷。
 ```
 
-### 启动调查 API 服务
+联网研究：编辑 `.env` 填入模型密钥后执行 `docker compose up -d --force-recreate backend`。数据库密码应使用 URL 安全字符；修改已有数据卷的密码需要同步更新数据库角色密码，不能只改 `.env`。
+
+## 本地开发启动
 
 ```powershell
-uv run marketpulse-api
-# 服务运行在 http://127.0.0.1:8000
+uv sync --extra dev --extra web --extra server
+Copy-Item .env.example .env
+uv run search-report-api
 ```
 
-### 启动前端控制台
-
-直接用浏览器打开 `frontend/index.html`，或通过 Docker Compose 启动完整栈：
+在另一个终端：
 
 ```powershell
-docker compose up --build
-# 前端: http://localhost:8080
-# API:  http://localhost:8000
+cd frontend
+npm ci
+npm run dev -- --host 127.0.0.1
 ```
 
-## 前端控制台
+打开 [http://localhost:5173](http://localhost:5173)。Vite 将 `/api` 代理到 `127.0.0.1:8000`。不能直接双击 `frontend/index.html`；生产资源需要 `npm run build`。`marketpulse-api` 和 `web/` 是保留的旧市场研究入口，不是本交付的调查入口。
 
-`frontend/` 目录提供调查控制台静态界面，功能包括：
+## 演示与验收路径
 
-- 调查列表与新建调查
-- 内置 East Palestine 案例一键回放
-- 八视图浏览：概览、智能体流程、来源、证据、声明、冲突与缺口、报告、审核
-- 声明级引用溯源抽屉
-- 审核员登录与发布决策
+1. 打开控制台，点击“运行案例回放”。等待后端返回后查看实际步骤、预算、来源数量和模式标记。
+2. 在“来源”检查发布时间、采集时间、可取证状态，点击归档正文。在“证据”检查摘录和精确定位。
+3. 在“声明”检查验证状态、依据、支持证据与反证。在“冲突与缺口”检查未解决事项。
+4. 打开“报告与审核”，点击 `[n]` 引用查看声明、摘录、来源和归档正文；导出 Markdown。导出不会绕过发布门禁。
+5. 首页输入主题并点击“开始调查”：无密钥时应明确报错并保留输入；有密钥时自动进入 LIVE 运行。运行中可取消，刷新后可从左侧历史档案继续查看。启动请求失败时重试会检查已创建档案中的运行，避免同一页面内重复创建或重复启动。
 
-界面文本已全部中文化。
+核心 API：`POST /api/investigations` 创建，`POST /api/investigations/{id}/runs` 返回 202 和 `{run_id,status}`，`GET /api/runs/{id}` 与 `/steps` 读取进度。离线回放独立使用 `POST /api/cases/east-palestine-2023/replay`。全部接口以 `/docs` 为准。
 
-## 测试
+## 审核员配置
 
-离线测试不读取真实密钥，也不访问网络：
+审核使用服务端配置的 Argon2id 密码哈希和 HttpOnly 会话 Cookie。未配置时仍可浏览调查，登录不可用。生成哈希与随机指纹密钥：
+
+```powershell
+uv run python -c "from argon2 import PasswordHasher; from getpass import getpass; print(PasswordHasher().hash(getpass('Reviewer password: ')))"
+uv run python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+将结果写入 `.env` 的 `REVIEWER_PASSWORD_HASH` 和 `REVIEW_RATE_LIMIT_FINGERPRINT_SECRET`。Compose `.env` 中哈希请用单引号包裹，避免 `$` 被插值；设置审核员 ID、显示名后重启后端。仅当报告有开放审核请求时才可提交决定；硬门禁不可由审核批准绕过。
+
+## 检查
 
 ```powershell
 uv run pytest tests/unit tests/integration -q
 uv run ruff check src tests
 uv run mypy src
+cd frontend
+npm test
+npm run build
 ```
 
-联网冒烟测试必须显式启用（会调用 DeepSeek 并产生费用）：
+`.github/workflows/frontend-delivery.yml` 在干净检出后安装依赖、测试、构建，并启动 Compose 检查前端和 API 代理。联网模型质量需另行进行真实事件评测；离线测试通过不能替代该评测。
 
-```powershell
-$env:RUN_LIVE_TESTS = "1"
-uv run pytest tests/live -m live -v -s
-```
-
-## 数据库迁移
-
-```powershell
-# SQLite 本地开发
-$env:MARKETPULSE_DATABASE_URL = "sqlite:///data/blackboard.db"
-uv run alembic upgrade head
-
-# PostgreSQL
-$env:MARKETPULSE_DATABASE_URL = "postgresql+psycopg://marketpulse:<password>@127.0.0.1:55432/marketpulse"
-uv run alembic upgrade head
-```
-
-## 项目结构
-
-```
-src/marketpulse/investigation/
-├── agents/          # Planner/Researcher/Analyst/Verifier 定义
-├── domain/          # 声明、证据、来源等领域模型
-├── harness/         # 运行时状态机、调用绑定、事务
-├── feedback/        # 研究缺口反馈循环
-├── validation/      # 15 阶段证据验证引擎
-├── reporting/       # 报告装配、写作、引用、发布策略
-├── review/          # 审核认证、会话、服务、API
-├── ingestion/       # HTML/PDF/纯文本解析
-├── recording/       # 外部调用录制与回放
-└── server.py        # FastAPI 应用入口
-
-frontend/            # 调查控制台（静态）
-web/                 # 旧版市场研究前端（React）
-case_data/           # East Palestine 案例数据
-migrations/          # Alembic 数据库迁移
-tests/               # 单元 + 集成测试
-docs/                # 设计文档与验收记录
-```
-
-## 已知限制
-
-- 单审核员模式，暂不支持多人协作审核
-- 无 OCR 能力，PDF 需包含可提取文本层
-- 回放模式不触发真实网络调用
-- `frontend/` 为静态控制台，`web/` 为旧版市场前端
-
-完整的已知问题与局限性说明见 [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md)。
-
-## 交付物清单
-
-详细的 11 项交付物清单与验证方法见 [docs/16-FINAL-DELIVERY-MANIFEST.md](docs/16-FINAL-DELIVERY-MANIFEST.md)。
+完整边界见 [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md)，设计记录见 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/](docs/)。旧阶段文档属于历史记录，启动方式与当前能力以本 README 和实际测试为准。

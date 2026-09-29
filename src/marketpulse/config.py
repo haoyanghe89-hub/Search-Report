@@ -14,14 +14,20 @@ class Settings(BaseModel):
 
     deepseek_api_key: SecretStr | None = None
     deepseek_base_url: str = "https://api.deepseek.com"
-    model: str = "deepseek-chat"
-    total_timeout_seconds: float = Field(default=300, gt=0, le=600)
-    max_search_queries: int = Field(default=12, ge=1, le=20)
+    model: str = "deepseek-flash"
+    model_thinking_enabled: bool = False
+    total_timeout_seconds: float = Field(default=1800, gt=0, le=7200)
+    max_search_queries: int = Field(default=120, ge=1, le=1000)
     max_initial_queries: int = Field(default=8, ge=1, le=12)
-    max_pages: int = Field(default=24, ge=1, le=50)
+    max_pages: int = Field(default=300, ge=1, le=2000)
     page_timeout_seconds: float = Field(default=15, gt=0, le=60)
     max_page_bytes: int = Field(default=2 * 1024 * 1024, ge=1024)
-    max_fetch_concurrency: int = Field(default=5, ge=1, le=10)
+    research_workers: int = Field(default=4, ge=1, le=4)
+    max_search_concurrency: int = Field(default=4, ge=1, le=16)
+    max_model_calls: int = Field(default=240, ge=1, le=2000)
+    max_tokens: int = Field(default=1000000, ge=1000, le=10000000)
+    max_queries_per_researcher: int = Field(default=3, ge=1, le=10)
+    max_fetch_concurrency: int = Field(default=8, ge=1, le=32)
     max_retries: int = Field(default=2, ge=0, le=5)
     allow_proxy_dns: bool = False
     user_agent: str = "MarketPulseBot/0.1 (+local-cli)"
@@ -32,13 +38,11 @@ class Settings(BaseModel):
     log_level: str = "INFO"
     database_url: SecretStr = SecretStr("sqlite:///data/blackboard.db")
     redis_url: SecretStr | None = None
-    max_research_rounds: int = Field(default=2, ge=1, le=3)
-    reviewer_id: str = "local-reviewer"
-    reviewer_display_name: str = "本地审核员"
-    reviewer_password_hash: SecretStr = SecretStr(
-        "$argon2id$v=19$m=65536,t=3,p=4$E3UQPUpGvqNn8hESKJqNKA$cEz+Ezuog/zTsniapTNnhC3VJC6fVgbNBU7RVkfcTD0"
-    )
-    review_rate_limit_fingerprint_secret: SecretStr = SecretStr("demo-fingerprint-secret-change-in-prod")
+    max_research_rounds: int = Field(default=6, ge=1, le=20)
+    reviewer_id: str | None = None
+    reviewer_display_name: str | None = None
+    reviewer_password_hash: SecretStr | None = None
+    review_rate_limit_fingerprint_secret: SecretStr | None = None
     review_session_ttl_hours: float = Field(default=8, gt=0, le=168)
     review_rate_limit_max_failures: int = Field(default=5, ge=1, le=20)
     review_rate_limit_window_minutes: int = Field(default=15, ge=1, le=240)
@@ -73,10 +77,18 @@ class Settings(BaseModel):
         return cls(
             deepseek_api_key=SecretStr(key) if key else None,
             deepseek_base_url=values.get("DEEPSEEK_BASE_URL") or "https://api.deepseek.com",
-            model=values.get("MARKETPULSE_MODEL") or "deepseek-chat",
-            total_timeout_seconds=float(values.get("MARKETPULSE_TOTAL_TIMEOUT_SECONDS") or "300"),
-            max_search_queries=int(values.get("MARKETPULSE_MAX_SEARCH_QUERIES") or "12"),
-            max_pages=int(values.get("MARKETPULSE_MAX_PAGES") or "24"),
+            model=values.get("MARKETPULSE_MODEL") or "deepseek-flash",
+            model_thinking_enabled=(values.get("MARKETPULSE_THINKING_ENABLED") or "false").lower()
+            in {"1", "true", "yes"},
+            total_timeout_seconds=float(values.get("MARKETPULSE_TOTAL_TIMEOUT_SECONDS") or "1800"),
+            max_search_queries=int(values.get("MARKETPULSE_MAX_SEARCH_QUERIES") or "120"),
+            max_pages=int(values.get("MARKETPULSE_MAX_PAGES") or "300"),
+            research_workers=int(values.get("MARKETPULSE_RESEARCH_WORKERS") or "4"),
+            max_search_concurrency=int(values.get("MARKETPULSE_SEARCH_CONCURRENCY") or "4"),
+            max_fetch_concurrency=int(values.get("MARKETPULSE_FETCH_CONCURRENCY") or "8"),
+            max_model_calls=int(values.get("MARKETPULSE_MAX_MODEL_CALLS") or "240"),
+            max_tokens=int(values.get("MARKETPULSE_MAX_TOKENS") or "1000000"),
+            max_queries_per_researcher=int(values.get("MARKETPULSE_QUERIES_PER_RESEARCHER") or "3"),
             page_timeout_seconds=float(values.get("MARKETPULSE_PAGE_TIMEOUT_SECONDS") or "15"),
             allow_proxy_dns=(values.get("MARKETPULSE_ALLOW_PROXY_DNS") or "false").lower()
             in {"1", "true", "yes"},
@@ -87,17 +99,17 @@ class Settings(BaseModel):
             redis_url=SecretStr(values.get("MARKETPULSE_REDIS_URL") or "")
             if values.get("MARKETPULSE_REDIS_URL")
             else None,
-            max_research_rounds=int(values.get("MARKETPULSE_MAX_RESEARCH_ROUNDS") or "2"),
-            reviewer_id=values.get("REVIEWER_ID") or "local-reviewer",
+            max_research_rounds=int(values.get("MARKETPULSE_MAX_RESEARCH_ROUNDS") or "6"),
+            reviewer_id=values.get("REVIEWER_ID") or None,
             reviewer_display_name=values.get("REVIEWER_DISPLAY_NAME") or "本地审核员",
             reviewer_password_hash=SecretStr(str(values["REVIEWER_PASSWORD_HASH"]))
             if values.get("REVIEWER_PASSWORD_HASH")
-            else SecretStr("$argon2id$v=19$m=65536,t=3,p=4$E3UQPUpGvqNn8hESKJqNKA$cEz+Ezuog/zTsniapTNnhC3VJC6fVgbNBU7RVkfcTD0"),
+            else None,
             review_rate_limit_fingerprint_secret=SecretStr(
                 str(values["REVIEW_RATE_LIMIT_FINGERPRINT_SECRET"])
             )
             if values.get("REVIEW_RATE_LIMIT_FINGERPRINT_SECRET")
-            else SecretStr("demo-fingerprint-secret-change-in-prod"),
+            else None,
             review_session_ttl_hours=float(values.get("REVIEW_SESSION_TTL_HOURS") or "8"),
             review_rate_limit_max_failures=int(values.get("REVIEW_RATE_LIMIT_MAX_FAILURES") or "5"),
             review_rate_limit_window_minutes=int(
@@ -107,7 +119,8 @@ class Settings(BaseModel):
                 origin.strip()
                 for origin in (values.get("REVIEW_ALLOWED_ORIGINS") or "").split(",")
                 if origin.strip()
-            ) or (
+            )
+            or (
                 "http://localhost:8000",
                 "http://127.0.0.1:8000",
                 "http://localhost:8080",

@@ -16,6 +16,7 @@ def settings(tmp_path: Path) -> Settings:
         max_search_queries=12,
         max_pages=24,
         max_retries=2,
+        max_research_rounds=2,
         database_url=f"sqlite:///{(tmp_path / 'blackboard.db').as_posix()}",
     )
 

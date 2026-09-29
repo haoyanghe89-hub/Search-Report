@@ -12,11 +12,18 @@ def test_settings_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("MARKETPULSE_ALLOW_PROXY_DNS", raising=False)
     settings = Settings.from_env()
     assert settings.deepseek_base_url == "https://api.deepseek.com"
-    assert settings.model == "deepseek-chat"
-    assert settings.total_timeout_seconds == 300
-    assert settings.max_search_queries == 12
-    assert settings.max_pages == 24
+    assert settings.model == "deepseek-flash"
+    assert settings.total_timeout_seconds == 1800
+    assert settings.max_search_queries == 120
+    assert settings.max_pages == 300
     assert settings.allow_proxy_dns is False
+
+
+def test_review_has_no_builtin_credential() -> None:
+    settings = Settings()
+    assert settings.reviewer_id is None
+    assert settings.reviewer_password_hash is None
+    assert settings.review_rate_limit_fingerprint_secret is None
 
 
 def test_settings_can_enable_proxy_dns(monkeypatch: pytest.MonkeyPatch) -> None:

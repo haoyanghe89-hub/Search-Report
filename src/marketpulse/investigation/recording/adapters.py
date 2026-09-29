@@ -318,6 +318,7 @@ class RecordingModelAdapter:
                     metadata={
                         **self._context.binding_metadata(),
                         "exception_type": type(error).__name__,
+                        "validation_issues": list(getattr(error, "validation_issues", ())),
                     },
                     recorded_at=started,
                     completed_at=self._clock(),

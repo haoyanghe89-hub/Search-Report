@@ -10,6 +10,7 @@ again into fresh rows.
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import os
 import uuid
@@ -64,8 +65,8 @@ from marketpulse.investigation.validation.policy import ValidationPolicy
 
 CASE_ID = "east-palestine-2023"
 INVESTIGATION_ID = "INV-EAST-PALESTINE-2023"
-RECORDING_RUN_ID = "RUN-EP-RECORDING-V1"
-FIXTURE_TIME = datetime(2023, 2, 23, 12, tzinfo=UTC)
+RECORDING_RUN_ID = "RUN-EP-CURATED-RECORDING-V2"
+FIXTURE_TIME = datetime(2026, 9, 28, tzinfo=UTC)  # case assembly date, not publication date
 HTTP_URL_ADAPTER = TypeAdapter(AnyHttpUrl)
 
 
@@ -81,25 +82,10 @@ class _FixtureSource:
     content_type: str = "text/html"
 
 
+# Research articles reporting new measurements are PRIMARY/first-hand. The
+# review and separately authored explanatory journalism are SECONDARY. Publisher
+# diversity alone does not establish independence of a particular factual claim.
 SECONDARY_SOURCES = (
-    _FixtureSource(
-        "pmc-air-patterns.html",
-        "Air Pollutant Patterns and Human Health Risk",
-        "https://pmc.ncbi.nlm.nih.gov/articles/PMC10413936/",
-        "Environmental Science & Technology Letters",
-        "research",
-        False,
-        False,
-    ),
-    _FixtureSource(
-        "pmc-soil.html",
-        "Soil contamination following the East Palestine derailment",
-        "https://pmc.ncbi.nlm.nih.gov/articles/PMC11843876/",
-        "Environmental Science: Processes & Impacts",
-        "research",
-        False,
-        False,
-    ),
     _FixtureSource(
         "pmc-hazard-review.html",
         "Known and unknown health hazards: a phased scoping review",
@@ -109,19 +95,45 @@ SECONDARY_SOURCES = (
         False,
         False,
     ),
+    _FixtureSource(
+        "chemistry-air.html",
+        "Mobile mass spec provides new insight into pollutants released "
+        "by East Palestine train derailment",
+        "https://www.chemistryworld.com/news/mobile-mass-spec-provides-new-insight-into-pollutants-released-by-east-palestine-train-derailment/4017802.article",
+        "Chemistry World",
+        "media",
+        False,
+        False,
+    ),
+    _FixtureSource(
+        "guardian-explainer.html",
+        "What do we know about the Ohio train derailment and toxic chemical leak?",
+        "https://www.theguardian.com/world/2023/feb/15/ohio-train-derailment-palestine-toxic-chemical-leak",
+        "The Guardian",
+        "media",
+        False,
+        False,
+    ),
 )
-
 OFFICIAL_SOURCES = (
     _FixtureSource(
         "../ntsb_rrd23mr005_preliminary.pdf",
         "NTSB Preliminary Report RRD23MR005",
-        "https://www.ntsb.gov/investigations/Documents/"
-        "RRD23MR005%20East%20Palestine%20OH%20Prelim.pdf",
+        "https://www.ntsb.gov/investigations/Documents/RRD23MR005%20East%20Palestine%20OH%20Prelim.pdf",
         "National Transportation Safety Board",
         "official",
         True,
         True,
         "application/pdf",
+    ),
+    _FixtureSource(
+        "ntsb-investigation.html",
+        "NTSB East Palestine final investigation summary",
+        "https://www.ntsb.gov/investigations/Pages/RRD23MR005.aspx",
+        "National Transportation Safety Board",
+        "official",
+        True,
+        True,
     ),
     _FixtureSource(
         "epa-air.html",
@@ -160,108 +172,35 @@ OFFICIAL_SOURCES = (
         True,
     ),
     _FixtureSource(
-        "ntsb-investigation.html",
-        "NTSB East Palestine investigation docket summary",
-        "https://www.ntsb.gov/investigations/Pages/RRD23MR005.aspx",
-        "National Transportation Safety Board",
-        "web",
-        True,
+        "pmc-air-patterns.html",
+        "Air Pollutant Patterns and Human Health Risk",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC10413936/",
+        "Environmental Science & Technology Letters",
+        "research",
+        False,
         True,
     ),
     _FixtureSource(
-        "epa-aspect.txt",
-        "EPA ASPECT response record",
-        "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P101CYLV.TXT",
-        "US Environmental Protection Agency",
-        "official",
+        "pmc-soil.html",
+        "Soil contamination following the East Palestine derailment",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC11843876/",
+        "Environmental Science: Processes & Impacts",
+        "research",
+        False,
         True,
-        True,
-        "text/plain",
     ),
 )
-
-_CLAIMS: tuple[dict[str, Any], ...] = (
-    {
-        "claim_key": "derailment-time-and-scale",
-        "statement": (
-            "Norfolk Southern train 32N derailed 38 railcars in East Palestine at about "
-            "8:54 p.m. on February 3, 2023."
-        ),
-        "claim_type": "EVENT_FACT",
-        "importance": "CRITICAL",
-        "critical": True,
-    },
-    {
-        "claim_key": "bearing-causal-chain",
-        "statement": (
-            "An overheated wheel bearing progressed to axle failure and caused the derailment."
-        ),
-        "claim_type": "CAUSAL",
-        "importance": "HIGH",
-        "entity_qualifiers": {
-            "temporal_ordering": True,
-            "mechanism_support": True,
-            "causal_attribution_evidence": True,
-            "alternative_explanations_considered": True,
-        },
-    },
-    {
-        "claim_key": "hazardous-material-release",
-        "statement": (
-            "Eleven derailed tank cars carried hazardous materials and ensuing fires damaged "
-            "additional railcars."
-        ),
-        "claim_type": "EVENT_FACT",
-        "importance": "HIGH",
-    },
-    {
-        "claim_key": "controlled-vent-and-burn",
-        "statement": (
-            "Responders conducted a controlled vent and burn of vinyl chloride from five tank cars."
-        ),
-        "claim_type": "EVENT_FACT",
-        "importance": "HIGH",
-    },
-    {
-        "claim_key": "evacuation-scope",
-        "statement": (
-            "Authorities established evacuation and protective-action zones around the derailment."
-        ),
-        "claim_type": "IMPACT",
-        "importance": "HIGH",
-        "entity_qualifiers": {"impact_subtype": "OBSERVED_IMPACT"},
-    },
-    {
-        "claim_key": "monitoring-response",
-        "statement": (
-            "Federal and state responders conducted air, water, and soil monitoring "
-            "after the release."
-        ),
-        "claim_type": "INSTITUTIONAL_ACTION",
-        "importance": "HIGH",
-        "entity_qualifiers": {
-            "actor": "Federal and state responders",
-            "action": "environmental monitoring",
-        },
-        "scope_qualifiers": {"coverage": "air, water, and soil"},
-        "time_qualifiers": {"date": "2023-02"},
-    },
-    {
-        "claim_key": "cleanup-response",
-        "statement": (
-            "Cleanup included contaminated-soil excavation, water treatment, and "
-            "continued monitoring."
-        ),
-        "claim_type": "INSTITUTIONAL_ACTION",
-        "importance": "MEDIUM",
-        "entity_qualifiers": {
-            "actor": "Norfolk Southern and contracted responders",
-            "action": "site cleanup and remediation",
-        },
-        "scope_qualifiers": {"coverage": "contaminated soil, water treatment, continued monitoring"},
-        "time_qualifiers": {"date": "2023-02"},
-    },
-)
+# Only dates explicitly found in the original publication are populated. Unknown
+# publication/retrieval dates stay unknown in the case provenance manifest.
+PUBLICATION_DATES = {
+    "../ntsb_rrd23mr005_preliminary.pdf": "2023-02-23",
+    "epa-statement.html": "2023-02-14",
+    "pmc-air-patterns.html": "2023-07-12",
+    "pmc-hazard-review.html": "2025-09-12",
+    "pmc-soil.html": "2025-02-18",
+    "chemistry-air.html": "2023-07-31",
+    "guardian-explainer.html": "2023-02-15",
+}
 
 
 class _FixtureSearch:
@@ -278,14 +217,23 @@ class _FixtureSearch:
                     publisher=item.publisher,
                     organization=item.publisher,
                     author=item.publisher,
-                    published_at=FIXTURE_TIME,
+                    published_at=(
+                        datetime.fromisoformat(PUBLICATION_DATES[item.filename]).replace(tzinfo=UTC)
+                        if item.filename in PUBLICATION_DATES
+                        else None
+                    ),
                     is_official=item.official,
                     is_first_hand=item.first_hand,
                     quality_metadata={
-                        "data_provenance": "published source snapshot",
+                        "data_provenance": (
+                            "curated published source snapshot; "
+                            "original retrieval time unknown for legacy files"
+                        ),
                         "methodology": "official record"
                         if item.official
-                        else "peer reviewed study",
+                        else "original study"
+                        if item.first_hand
+                        else "review or explanatory journalism",
                         "speculation_level": 0.0 if item.official else 0.1,
                         "explicit_uncertainty": True,
                     },
@@ -293,7 +241,7 @@ class _FixtureSearch:
                 for index, item in enumerate(sources[: request.max_results], start=1)
             ),
             provider="east-palestine-fixture-search",
-            retrieved_at=FIXTURE_TIME,
+            retrieved_at=datetime.now(UTC),
         )
 
 
@@ -316,12 +264,21 @@ class _FixtureFetch:
             status_code=200,
             content_type=item.content_type,
             body=body,
-            fetched_at=FIXTURE_TIME,
-            headers={"x-replay-fixture": CASE_ID},
+            fetched_at=datetime.now(UTC),
+            headers={"x-replay-fixture": CASE_ID, "x-fetch-kind": "local-archive-materialization"},
         )
 
 
 class _FixtureModel:
+    """Curated regression expectations, explicitly NOT live-model recordings."""
+
+    def __init__(self, case_root: Path) -> None:
+        data = json.loads((case_root / "reviewed-pairs.json").read_text(encoding="utf-8"))
+        self.pairs = data["pairs"]
+        self.source_titles = {
+            item.filename: item.title for item in (*SECONDARY_SOURCES, *OFFICIAL_SOURCES)
+        }
+
     async def generate(self, request: ModelRequest[Any]) -> StructuredModelResult[Any]:
         context = json.loads(request.messages[1].content)["bounded_context"]
         name = request.response_model.__name__
@@ -384,7 +341,9 @@ class _FixtureModel:
                             if official
                             else "find independent evidence"
                         ),
-                        "max_results": 7 if official else 3,
+                        "max_results": len(OFFICIAL_SOURCES)
+                        if official
+                        else len(SECONDARY_SOURCES),
                         "desired_source_role": "PRIMARY" if official else "SECONDARY",
                     }
                 ]
@@ -392,130 +351,153 @@ class _FixtureModel:
         elif name == "AnalysisProposal":
             payload = self._analysis_payload(context)
         elif name == "VerificationProposal":
-            payload = {
-                "judgments": [
-                    {
-                        "claim_key": claim["claim_key"],
-                        "evidence_key": evidence_key,
-                        "entailment": "ENTAILS",
-                        "rationale": (
-                            "The preserved source excerpt directly supports this bounded claim."
-                        ),
-                        "semantic_confidence": 0.93,
-                    }
-                    for claim in context["claims"]
-                    for evidence_key in claim["supporting_evidence_keys"]
-                ]
+            evidence = {item["evidence_key"]: item for item in context["evidence"]}
+            reviewed = {
+                (item["statement"], item["quote"]): item
+                for item in self.pairs
+                if "statement" in item
             }
+            judgments = []
+            scope_pair = next(item for item in self.pairs if item["key"] == "epa-air-scope")
+            scope_context = next(item for item in self.pairs if item["key"] == "mobile-acrolein")
+            for claim in context["claims"]:
+                keys = [
+                    *claim["supporting_evidence_keys"],
+                    *claim.get("contradicting_evidence_keys", []),
+                ]
+                if claim["statement"] == scope_pair["statement"]:
+                    keys.extend(
+                        key
+                        for key, item in evidence.items()
+                        if item["quote"] == scope_context["quote"] and key not in keys
+                    )
+                for evidence_key in keys:
+                    pair = reviewed.get((claim["statement"], evidence[evidence_key]["quote"]))
+                    judgments.append(
+                        {
+                            "claim_key": claim["claim_key"],
+                            "evidence_key": evidence_key,
+                            "entailment": pair["entailment"] if pair else "NOT_RELEVANT",
+                            "rationale": pair["rationale"]
+                            if pair
+                            else (
+                                "This statement/quote pair has no reviewed support "
+                                "in the curated offline case."
+                            ),
+                            "semantic_confidence": 0.9 if pair else 0.0,
+                        }
+                    )
+            payload = {"judgments": judgments}
         else:
             raise AssertionError(f"unsupported fixture model contract: {name}")
         output = request.response_model.model_validate(payload)
         return StructuredModelResult(
             output=output,
-            provider="east-palestine-recording",
-            model="deterministic-case-fixture-v1",
-            usage=ModelUsage(input_tokens=400, output_tokens=200),
+            provider="curated-offline-expectations-not-live-llm",
+            model="reviewed-statement-quote-allowlist-v2",
+            usage=ModelUsage(input_tokens=0, output_tokens=0),
         )
 
-    @staticmethod
-    def _analysis_payload(context: dict[str, Any]) -> dict[str, Any]:
-        artifacts = context["artifacts"]
-        evidence = [
-            {
-                "evidence_key": f"evidence-{index}",
-                "artifact_key": artifact["artifact_key"],
-                "quote": artifact["excerpt"],
-                "quote_hash": artifact["locator"]["quote_hash"],
-                "locator": artifact["locator"],
-            }
-            for index, artifact in enumerate(artifacts)
-        ]
-        all_keys = [item["evidence_key"] for item in evidence]
-        claims = [
-            {
-                **claim,
-                "canonical_statement": claim["statement"],
-                "supporting_evidence_keys": all_keys,
-                "atomicity": {"is_atomic": True},
-            }
-            for claim in _CLAIMS
-        ]
-        pdf_keys = [
-            evidence[index]["evidence_key"]
-            for index, artifact in enumerate(artifacts)
-            if artifact["source_title"] == "NTSB Preliminary Report RRD23MR005"
-            and artifact["locator"].get("page") == 1
-        ]
-        if pdf_keys:
+    def _analysis_payload(self, context: dict[str, Any]) -> dict[str, Any]:
+        evidence = []
+        matched: dict[str, str] = {}
+        for pair in self.pairs:
+            for artifact in context["artifacts"]:
+                if artifact["source_title"] != self.source_titles[pair["source_filename"]]:
+                    continue
+                start = artifact["excerpt"].find(pair["quote"])
+                if start < 0:
+                    continue
+                quote_hash = hashlib.sha256(pair["quote"].encode("utf-8")).hexdigest()
+                locator = dict(artifact["locator"])
+                locator.update(
+                    start=locator["start"] + start,
+                    end=locator["start"] + start + len(pair["quote"]),
+                    quote_hash=quote_hash,
+                )
+                key = "evidence-" + pair["key"]
+                evidence.append(
+                    {
+                        "evidence_key": key,
+                        "artifact_key": artifact["artifact_key"],
+                        "quote": pair["quote"],
+                        "quote_hash": quote_hash,
+                        "locator": locator,
+                    }
+                )
+                matched[pair["key"]] = key
+                break
+        claims = []
+        timeline = []
+        for pair in self.pairs:
+            if "statement" not in pair:
+                continue
+            keys = [matched[pair["key"]]] if pair["key"] in matched else []
+            qualifiers = {**pair.get("entity_qualifiers", {}), "report_section": pair["section"]}
             claims.append(
                 {
-                    "claim_key": "ntsb-preliminary-statement",
-                    "statement": (
-                        "The NTSB preliminary report stated that train 32N derailed 38 railcars."
-                    ),
-                    "canonical_statement": (
-                        "The NTSB preliminary report stated that train 32N derailed 38 railcars."
-                    ),
-                    "claim_type": "STATEMENT",
-                    "importance": "MEDIUM",
-                    "supporting_evidence_keys": pdf_keys,
+                    "claim_key": pair["key"],
+                    "statement": pair["statement"],
+                    "canonical_statement": pair["statement"],
+                    "claim_type": pair["claim_type"],
+                    "importance": pair["importance"],
+                    "critical": pair.get("critical", False),
+                    "entity_qualifiers": qualifiers,
+                    "supporting_evidence_keys": keys,
                     "atomicity": {"is_atomic": True},
                 }
             )
-        official_keys = [
-            evidence[index]["evidence_key"]
-            for index, artifact in enumerate(artifacts)
-            if artifact["is_official"]
-            and artifact["source_title"] != "NTSB Preliminary Report RRD23MR005"
-        ]
-        observations: list[dict[str, Any]] = []
-        if len(official_keys) >= 2:
-            observations = [
+            if keys and "event_time" in pair:
+                timeline.append(
+                    {
+                        "timeline_key": pair["key"],
+                        "description": pair["statement"],
+                        "event_time": pair["event_time"],
+                        "evidence_keys": keys,
+                    }
+                )
+        observations = []
+        for key, scope, definition in (
+            (
+                "epa-air-scope",
+                "EPA community monitoring after February 8",
+                "agency health-concern screening",
+            ),
+            (
+                "mobile-acrolein",
+                "mobile route sampling February 20-21",
+                "concentration relative to local rural background",
+            ),
+        ):
+            if key in matched and all(k in matched for k in ("epa-air-scope", "mobile-acrolein")):
+                pair = next(item for item in self.pairs if item["key"] == key)
+                observations.append(
+                    {
+                        "claim_key": "epa-air-scope",
+                        "evidence_key": matched[key],
+                        "statement": pair["statement"],
+                        "conflict_type": "SCOPE",
+                        "scope": scope,
+                        "definition": definition,
+                        "report_stage": "FINAL",
+                        "directness": 0.9,
+                        "specificity": 0.9,
+                    }
+                )
+        relations = []
+        if observations:
+            relations.append(
                 {
-                    "claim_key": "evacuation-scope",
-                    "evidence_key": official_keys[0],
-                    "statement": "A one-mile mandatory evacuation zone was implemented.",
-                    "conflict_type": "QUANTITATIVE",
-                    "numeric_value": 1,
-                    "unit": "mile",
-                    "scope": "mandatory evacuation zone",
-                    "definition": "mandatory evacuation",
-                    "report_stage": "FINAL",
-                    "directness": 0.9,
-                    "specificity": 0.9,
-                },
-                {
-                    "claim_key": "evacuation-scope",
-                    "evidence_key": official_keys[1],
-                    "statement": "A two-mile protective-action area was discussed.",
-                    "conflict_type": "QUANTITATIVE",
-                    "numeric_value": 2,
-                    "unit": "mile",
-                    "scope": "protective-action planning area",
-                    "definition": "protective action",
-                    "report_stage": "FINAL",
-                    "directness": 0.8,
-                    "specificity": 0.8,
-                },
-            ]
-        timeline = [
-            {
-                "timeline_key": "derailment",
-                "description": "Train 32N derailed in East Palestine.",
-                "event_time": "2023-02-03T20:54:00-05:00",
-                "evidence_keys": all_keys[:1],
-            },
-            {
-                "timeline_key": "vent-burn",
-                "description": "Responders conducted the controlled vent and burn.",
-                "event_time": "2023-02-06T15:30:00-05:00",
-                "evidence_keys": all_keys[:1],
-            },
-        ]
+                    "claim_key": "epa-air-scope",
+                    "evidence_key": matched["mobile-acrolein"],
+                    "stance": "CONTEXT",
+                }
+            )
         return {
             "evidence": evidence,
             "claims": claims,
             "timeline_events": timeline,
+            "relations": relations,
             "conflict_observations": observations,
         }
 
@@ -544,7 +526,12 @@ class EastPalestineReplayService:
             self._ensure_investigation()
             await self._ensure_recording_run()
             replay_run_id = f"RUN-EP-REPLAY-{uuid.uuid4().hex[:12]}"
-            self._seed_run(replay_run_id, RunMode.REPLAY, investigation_id=investigation_id, origin_run_id=RECORDING_RUN_ID)
+            self._seed_run(
+                replay_run_id,
+                RunMode.REPLAY,
+                investigation_id=investigation_id,
+                origin_run_id=RECORDING_RUN_ID,
+            )
             orchestrator = self._orchestrator(
                 replay_run_id,
                 BoundExternalCalls(
@@ -581,11 +568,14 @@ class EastPalestineReplayService:
         except KeyError:
             pass
         questions = (
-            "How did the derailment occur?",
-            "What was the event timeline?",
-            "How did hazardous materials spread and what impacts were observed?",
-            "Which statements are official, independent, disputed, or not established?",
-            "What remediation and risk-management lessons followed?",
+            "What happened, when and where?",
+            "What is the sourced event timeline?",
+            "What cause and contributing mechanisms did investigators identify?",
+            "How were hazardous materials released and dispersed?",
+            "What environmental and health impacts are observed versus unestablished?",
+            "What responsibility did official investigations attribute, and with what limits?",
+            "Where do official and independent accounts differ in scope or certainty?",
+            "What cleanup, follow-up, and risk-management lessons are supported?",
         )
         question_models = tuple(
             InvestigationQuestion(question_id=f"EP-Q{index}", text=text, is_critical=index == 1)
@@ -600,6 +590,7 @@ class EastPalestineReplayService:
                     "release, fires, response, environmental monitoring, and remediation."
                 ),
                 investigation_goal=(
+                    "Curated offline regression case (not a live LLM benchmark). "
                     "Reconstruct the event and distinguish verified facts, qualified findings, "
                     "source discrepancies, and remaining limitations."
                 ),
@@ -633,13 +624,20 @@ class EastPalestineReplayService:
             recordings=RepositoryRecordedCallStore(self._repository, self._blobs),
             live_search=_FixtureSearch(),
             live_fetch=_FixtureFetch(self._case_root),
-            live_model=_FixtureModel(),
+            live_model=_FixtureModel(self._case_root),
         )
         outcome = await self._orchestrator(RECORDING_RUN_ID, calls).run(RECORDING_RUN_ID)
         if outcome.termination != "READY_FOR_REPORT":
             raise RuntimeError(f"fixture recording source failed: {outcome.reason}")
 
-    def _seed_run(self, run_id: str, mode: RunMode, *, investigation_id: str = INVESTIGATION_ID, origin_run_id: str | None = None) -> None:
+    def _seed_run(
+        self,
+        run_id: str,
+        mode: RunMode,
+        *,
+        investigation_id: str = INVESTIGATION_ID,
+        origin_run_id: str | None = None,
+    ) -> None:
         now = datetime.now(UTC)
         self._repository.add(
             InvestigationRun(
@@ -650,7 +648,7 @@ class EastPalestineReplayService:
                 current_phase=WorkflowPhase.CREATED,
                 checkpoint_version=0,
                 state_version=0,
-                workflow_version="agent-feedback-v1",
+                workflow_version="curated-offline-v2",
                 origin_run_id=origin_run_id,
                 created_at=now,
                 updated_at=now,
@@ -661,11 +659,11 @@ class EastPalestineReplayService:
                 run_id=run_id,
                 max_research_rounds=2,
                 max_search_calls=4,
-                max_fetch_calls=12,
+                max_fetch_calls=16,
                 max_model_calls=24,
                 max_tokens=80_000,
                 max_wall_time_ms=180_000,
-                max_sources=12,
+                max_sources=16,
                 updated_at=now,
             )
         )
@@ -713,9 +711,10 @@ class EastPalestineReplayService:
             integrity=integrity,
             owner_instance_id=f"east-palestine-{run_id}",
             config=FeedbackLoopConfig(
+                workflow_version="curated-offline-v2",
                 max_artifacts=20,
                 max_excerpts=20,
-                max_context_chars=100_000,
+                max_context_chars=2_000_000,
                 max_verification_evidence=160,
             ),
             clock=lambda: FIXTURE_TIME,

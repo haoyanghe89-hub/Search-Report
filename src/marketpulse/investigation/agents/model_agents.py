@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from typing import TypeVar
 
 from pydantic import BaseModel
@@ -81,6 +82,7 @@ class StructuredAgent:
             separators=(",", ":"),
         )
         last_error: Exception | None = None
+        repair_hint = ""
         for attempt in range(self._repair_attempts + 1):
             messages = [
                 ModelMessage(role="system", content=system),
@@ -92,7 +94,9 @@ class StructuredAgent:
                         role="user",
                         content=(
                             "SCHEMA_REPAIR: the prior response was invalid. Return only one JSON "
-                            "object matching the response schema; do not add fields."
+                            "object matching the response schema; do not add fields. "
+                            "Copy reference IDs exactly from the bounded context; never shorten "
+                            "them. Use only schema enum values. Repair these errors: " + repair_hint
                         ),
                     )
                 )
@@ -103,15 +107,29 @@ class StructuredAgent:
                 prompt_version=f"{PROMPT_VERSION}:{role}",
                 config_version=self._config_version,
                 temperature=0.0,
-                max_output_tokens=self._max_output_tokens,
+                max_output_tokens=(
+                    min(self._max_output_tokens * 2, 16000)
+                    if getattr(last_error, "code", None) == "MODEL_OUTPUT_TRUNCATED"
+                    else self._max_output_tokens
+                ),
             )
             try:
                 result = await self._model.generate(model_request)
                 proposal = response_model.model_validate(result.output)
-                validate_agent_proposal(request, proposal)
+                try:
+                    validate_agent_proposal(request, proposal)
+                except ValueError as error:
+                    # Contract checks contain application-authored messages, not provider text.
+                    raise InvalidProviderResponseError(
+                        "model proposal failed reference validation",
+                        validation_issues=(str(error),),
+                    ) from error
                 return proposal
             except (InvalidProviderResponseError, ValueError) as error:
                 last_error = error
+                repair_hint = "; ".join(getattr(error, "validation_issues", ())) or (
+                    "Response must be a complete JSON object satisfying every required field."
+                )
         assert last_error is not None
         raise last_error
 
@@ -145,13 +163,58 @@ class ModelResearcherAgent(StructuredAgent):
 
 
 class ModelAnalystAgent(StructuredAgent):
-    async def analyze(self, request: AnalysisInput) -> AnalysisProposal:
-        return await self._generate(
+    async def analyze(
+        self, request: AnalysisInput, *, ground_quotes: bool = False
+    ) -> AnalysisProposal:
+        system = ANALYST_SYSTEM
+        if ground_quotes:
+            request = request.model_copy(
+                update={
+                    "max_candidate_evidence": min(request.max_candidate_evidence, 6),
+                    "max_candidate_claims": min(request.max_candidate_claims, 4),
+                }
+            )
+            system += (
+                "\nReturn at most 6 evidence items and 4 atomic claims focused on the target "
+                "question. Use short verbatim quotes (at most 300 characters each), copied "
+                "from one artifact excerpt. Copy that artifact's supplied locator as a "
+                "placeholder and omit quote_hash; the application computes exact substring "
+                "offsets and SHA-256 from the source. Never paraphrase quotes. Omit optional "
+                "fields when unnecessary. Do not repeat existing claims."
+            )
+        proposal = await self._generate(
             role="analyst.analyze",
-            system=ANALYST_SYSTEM,
+            system=system,
             request=request,
             response_model=AnalysisProposal,
         )
+        if not ground_quotes:
+            return proposal
+        artifacts = {item.artifact_key: item for item in request.artifacts}
+        grounded = []
+        for candidate in proposal.evidence:
+            artifact = artifacts[candidate.artifact_key]
+            # HTML extraction inserts line breaks around inline tags. Match whitespace
+            # flexibly, but preserve every other character and store original source text.
+            # Never fuzzy-match words or join disjoint passages.
+            pattern = r"\s+".join(re.escape(part) for part in re.split(r"\s+", candidate.quote))
+            matches = list(re.finditer(pattern, artifact.excerpt))
+            if len(matches) == 1:
+                match = matches[0]
+                quote = match.group()
+                digest = hashlib.sha256(quote.encode("utf-8")).hexdigest()
+                locator = artifact.locator.model_copy(
+                    update={
+                        "start": artifact.locator.start + match.start(),
+                        "end": artifact.locator.start + match.end(),
+                        "quote_hash": digest,
+                    }
+                )
+                candidate = candidate.model_copy(
+                    update={"locator": locator, "quote_hash": digest, "quote": quote}
+                )
+            grounded.append(candidate)
+        return proposal.model_copy(update={"evidence": tuple(grounded)})
 
     async def decompose(self, request: ClaimDecompositionInput) -> ClaimDecompositionProposal:
         return await self._generate(

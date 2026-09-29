@@ -131,7 +131,7 @@ class FeedbackStore:
         column = row_type.run_id
         order = getattr(row_type, id_field)
         with self.sessions() as session:
-            ids = session.scalars(select(order).where(column == run_id).order_by(order)).all()
+            ids: Any = session.scalars(select(order).where(column == run_id).order_by(order)).all()
         return tuple(
             self.repository.get(entity_type, entity_id)  # type: ignore[type-var]
             for entity_id in ids

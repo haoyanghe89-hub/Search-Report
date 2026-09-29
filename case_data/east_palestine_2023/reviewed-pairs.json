@@ -1,0 +1,198 @@
+{
+  "schema_version": "curated-case-pairs-v2",
+  "provenance": "Human-readable, manually curated expected semantic pairs for offline regression. Not recorded outputs from a live model. The validation policy still decides statuses. Unknown pairs are NOT_RELEVANT.",
+  "pairs": [
+    {
+      "key": "event",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "On February 3, 2023, about 8:54 p.m., eastbound Norfolk Southern Railway (NS) train 32N derailed 38 mixed freight railcars at milepost 49.5 on the NS Fort Wayne Line of the Keystone Division in East Palestine, Ohio.",
+      "statement": "NTSB records that train 32N derailed 38 freight railcars in East Palestine at about 20:54 local time on February 3, 2023.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "critical": true,
+      "section": "TIMELINE",
+      "event_time": "2023-02-03T20:54:00-05:00"
+    },
+    {
+      "key": "cause",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "We determined that the probable cause of the derailment involving Norfolk Southern Railway train 32N was the failure of the L1 bearing on the 23rd railcar in the consist that overheated and caused the axle to separate, derailing the train and leading to a postderailment fire that likely began with the release of a Class 3 flammable liquid from a DOT-111 tank car that was punctured during the derailment.",
+      "statement": "NTSB identified an overheated L1 bearing on the 23rd railcar, followed by axle separation, as the probable cause; the initial fire likely began with flammable liquid released from a punctured DOT-111 tank car.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "CAUSAL_AND_MECHANISM_ANALYSIS"
+    },
+    {
+      "key": "breaches",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "Three tank cars carrying flammable and combustible hazardous materials were mechanically breached during the derailment. A fire ignited during the derailment and grew to involve lading released from these three mechanically breached tank cars, additional derailed tank cars carrying both hazardous and non-hazardous materials, and freight cars.",
+      "statement": "NTSB records that three tank cars were mechanically breached; the resulting fire involved released cargo and additional railcars.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "CAUSAL_AND_MECHANISM_ANALYSIS"
+    },
+    {
+      "key": "evacuation",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "Emergency responders established a 1-mile evacuation zone that affected about 2,000 residents.",
+      "statement": "NTSB records a one-mile evacuation zone affecting about 2,000 residents.",
+      "claim_type": "IMPACT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "entity_qualifiers": {
+        "impact_subtype": "OBSERVED_IMPACT"
+      },
+      "section": "IMPACT_SCOPE_AND_ANALYSIS"
+    },
+    {
+      "key": "vent-burn",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "A contractor hired by NS breached the VCM tank cars at 4:37 p.m. on February 6, releasing and igniting their lading.",
+      "statement": "NTSB records that a Norfolk Southern contractor breached the five vinyl-chloride tank cars at 16:37 local time on February 6, releasing and igniting their contents.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "TIMELINE",
+      "event_time": "2023-02-06T16:37:00-05:00"
+    },
+    {
+      "key": "decision",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "the failure of Norfolk Southern Railway and its contractors to communicate relevant expertise and dissenting opinions to the incident commander and\nthe inaccurate representation by Norfolk Southern Railway and its contractors that the tank cars were at risk of catastrophic failure from a polymerization reaction, which created unwarranted urgency and led to the unnecessary decision to vent and burn five derailed vinyl chloride monomer tank cars to prevent a polymerization-induced tank car rupture.",
+      "statement": "NTSB concluded that missing expert and dissenting input, and inaccurate representations of polymerization risk, created unwarranted urgency and led to an unnecessary vent-and-burn decision.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "ACTOR_AND_ATTRIBUTION_ASSESSMENT"
+    },
+    {
+      "key": "responder-lessons",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "Contributing to the exposure of emergency responders and the public to postderailment hazards were:\n​Norfolk Southern Railway’s delay in transmitting the train consist information to emergency responders and\n​the state of Ohio’s insufficient training requirements for volunteer firefighters.",
+      "statement": "NTSB identified delayed train-consist information from Norfolk Southern and insufficient Ohio volunteer-firefighter training requirements as contributors to hazard exposure.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "REMEDIATION_AND_FOLLOW_UP"
+    },
+    {
+      "key": "recommendations",
+      "source_filename": "ntsb-investigation.html",
+      "quote": "As a result of this investigation, we issued 34 new recommendations.",
+      "statement": "NTSB issued 34 new safety recommendations after its investigation.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "REMEDIATION_AND_FOLLOW_UP"
+    },
+    {
+      "key": "epa-air-scope",
+      "source_filename": "epa-statement.html",
+      "quote": "Since the fire went out on February 8, EPA air monitoring has not detected any levels of health concern in the community that are attributed to the train derailment.",
+      "statement": "On February 14, 2023, EPA stated that its community air monitoring had found no derailment-attributed levels of health concern since the fire ended on February 8; this is a time- and monitoring-specific agency statement.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "CONFLICT_ANALYSIS"
+    },
+    {
+      "key": "epa-water",
+      "source_filename": "epa-statement.html",
+      "quote": "EPA Region 5 is also working closely with Ohio EPA to determine what impact the spill has had on surface and ground water. State and local agencies are conducting sampling throughout the Ohio River to ensure drinking water intakes aren’t affected, and EPA is continuing to assist the state with sampling efforts at water treatment intake points along the Ohio River.",
+      "statement": "EPA stated that it and state/local agencies were assessing surface and groundwater impacts and sampling at Ohio River drinking-water intakes.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "REMEDIATION_AND_FOLLOW_UP"
+    },
+    {
+      "key": "cleanup",
+      "source_filename": "epa-cleanup.html",
+      "quote": "In October 2023, it was announced that the excavation work, which removed the known areas of contaminated soil at the derailment site, was complete.",
+      "statement": "EPA reports that excavation of known contaminated-soil areas at the derailment site was complete in October 2023; this does not itself establish that all environmental or health risks ended.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "REMEDIATION_AND_FOLLOW_UP"
+    },
+    {
+      "key": "oversight",
+      "source_filename": "epa-executive-order.html",
+      "quote": "On September 20, 2023, Executive Order 14108 (Executive Order on Ensuring the People of East Palestine Are Protected Now and in the Future) was issued. The order directs EPA to submit a report within 30 days on the cleanup efforts and on Norfolk Southern’s compliance with EPA’s February 21, 2023, Comprehensive Environmental Response, Compensation, and Liability Act unilateral administrative order to address the imminent and substantial endangerment its derailment caused. Executive Order 14108 also directs EPA to explain the status of air, soil, surface water, groundwater, and drinking water sampling and monitoring, and to submit an updated report to the President every 60 days thereafter until all cleanup, assessment, and monitoring work required by EPA’s UAO has been completed.",
+      "statement": "EPA describes Executive Order 14108 as requiring repeated reporting on cleanup, Norfolk Southern compliance, and air, soil, and water monitoring.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "ACTOR_AND_ATTRIBUTION_ASSESSMENT"
+    },
+    {
+      "key": "soil-observation",
+      "source_filename": "pmc-soil.html",
+      "quote": "This work detected elevated levels of EPFRs and dioxins/furans in soil samples collected near the site of the derailment and subsequent burn.",
+      "statement": "A soil-sampling study detected elevated environmentally persistent free radicals and dioxins/furans in samples near the derailment and burn site; the observation alone does not quantify residents' disease burden.",
+      "claim_type": "IMPACT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "entity_qualifiers": {
+        "impact_subtype": "OBSERVED_IMPACT"
+      },
+      "section": "IMPACT_SCOPE_AND_ANALYSIS"
+    },
+    {
+      "key": "mobile-acrolein",
+      "source_filename": "pmc-air-patterns.html",
+      "quote": "Levels of acrolein\nwere high relative to those of other volatile organic compounds, with\nspatial analyses showing levels in East Palestine up to 6 times higher\nthan the local rural background.",
+      "statement": "The February 20–21 mobile-air study found acrolein levels in East Palestine up to six times the local rural background; this comparison is not a sixfold exceedance of a health limit.",
+      "claim_type": "IMPACT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "entity_qualifiers": {
+        "impact_subtype": "OBSERVED_IMPACT"
+      },
+      "section": "CONFLICT_ANALYSIS"
+    },
+    {
+      "key": "followup",
+      "source_filename": "pmc-air-patterns.html",
+      "quote": "These initial findings warrant follow-up mobile\nair quality monitoring to characterize longitudinal exposure and risk\nlevels.",
+      "statement": "The mobile-air researchers called for follow-up monitoring to characterize exposure and risk over time; the snapshot cannot establish long-term individual health outcomes.",
+      "claim_type": "STATEMENT",
+      "importance": "HIGH",
+      "entailment": "ENTAILS",
+      "rationale": "Reviewed case pair: this exact source passage supports the explicitly bounded statement; this is a curated offline expectation, not an LLM measurement.",
+      "section": "LIMITATIONS_AND_RESEARCH_GAPS"
+    },
+    {
+      "key": "guardian-evacuation",
+      "source_filename": "guardian-explainer.html",
+      "quote": "Residents within a one-mile radius of the derailment were evacuated"
+    },
+    {
+      "key": "chemistry-indoor-scope",
+      "source_filename": "chemistry-air.html",
+      "quote": "the new ambient air study did not focus on indoor air quality."
+    },
+    {
+      "key": "review-limits",
+      "source_filename": "pmc-hazard-review.html",
+      "quote": "First, this review did not incorporate measures to determine the true exposure or risk experienced by East Palestine residents."
+    }
+  ]
+}

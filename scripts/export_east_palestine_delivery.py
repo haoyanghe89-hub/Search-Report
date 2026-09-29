@@ -17,6 +17,7 @@ from sqlalchemy import select
 from marketpulse.infrastructure.storage.local import LocalContentAddressedBlobStorage
 from marketpulse.investigation.case_replay import (
     OFFICIAL_SOURCES,
+    PUBLICATION_DATES,
     RECORDING_RUN_ID,
     SECONDARY_SOURCES,
     EastPalestineReplayService,
@@ -180,7 +181,38 @@ async def _run() -> None:
             snapshot = governance.latest_snapshot_for_run_in_session(session, outcome.run_id)
 
         report_path = OUTPUT_ROOT / "east-palestine-full-investigation-report.md"
-        report_path.write_text(render_markdown(draft, citations), encoding="utf-8")
+        evidence_by_id = {item.evidence_id: item for item in state.evidence}
+        snapshots_by_id = {item.snapshot_id: item for item in state.snapshots}
+        sources_by_id = {item.source_id: item for item in state.sources}
+        lines = [
+            "# East Palestine curated offline investigation",
+            "",
+            f"Release status: {outcome.release_status}. Human review is required.",
+            "",
+            "This is a curated offline regression, not a live LLM evaluation. Archive "
+            "materialization timestamps below are not historical remote retrieval times.",
+            "",
+            render_markdown(draft, citations),
+            "## Located source references",
+            "",
+        ]
+        for citation in citations:
+            evidence = evidence_by_id[citation.evidence_id]
+            archived = snapshots_by_id[evidence.snapshot_id]
+            source = sources_by_id[archived.source_id]
+            lines.extend(
+                [
+                    f"[{citation.display_ordinal + 1}] {source.title}",
+                    f"URL: {source.canonical_url}",
+                    f"Published: {source.published_at or 'unknown'}; "
+                    f"archive materialized: {archived.retrieved_at}",
+                    f"Snapshot SHA256: {archived.cleaned_sha256 or archived.raw_sha256}",
+                    "Locator: " + json.dumps(evidence.locator.model_dump(mode="json")),
+                    "> " + evidence.content.replace("\n", "\n> "),
+                    "",
+                ]
+            )
+        report_path.write_text("\n".join(lines), encoding="utf-8")
 
         fixture_by_url = {
             item.url.rstrip("/"): item for item in (*SECONDARY_SOURCES, *OFFICIAL_SOURCES)
@@ -207,6 +239,16 @@ async def _run() -> None:
                     "source_type": source.source_type.value,
                     "is_official": source.is_official,
                     "is_first_hand": source.is_first_hand,
+                    "published_at": source.published_at,
+                    "publication_date_basis": "explicit original publication date"
+                    if fixture.filename in PUBLICATION_DATES
+                    else "unknown; not inferred from event date",
+                    "original_remote_retrieval_at": None,
+                    "archive_materialized_at": snapshot_item.retrieved_at,
+                    "retrieval_note": (
+                        "Legacy retrieval time was not preserved. Snapshot retrieved_at "
+                        "records local archive materialization, not remote HTTP retrieval."
+                    ),
                     "saved_snapshot_path": saved_path.relative_to(ROOT).as_posix(),
                     "saved_snapshot_sha256": _sha256(saved_path),
                     "saved_snapshot_bytes": saved_path.stat().st_size,
@@ -300,7 +342,9 @@ async def _run() -> None:
 
         manifest = {
             "case_id": "east_palestine_2023",
-            "case_version": "1.0.0-phase5-replay",
+            "case_version": "2.0.0-reviewed-pairs",
+            "fixture_kind": "curated offline regression expectations, not a live-model recording",
+            "reviewed_pairs_path": "case_data/east_palestine_2023/reviewed-pairs.json",
             "status": "replay_ready",
             "workflow_version": state.run.workflow_version,
             "schema_version": "phase5-report-governance-v1",
@@ -333,9 +377,10 @@ async def _run() -> None:
                 ),
             },
             "notes": (
-                "The report, trace, cleaned content, and metadata are generated from the full "
-                "recording-source plus isolated Replay pipeline. Expected conclusions are not "
-                "used as execution input."
+                "The pipeline is rerun from curated source snapshots and explicit reviewed "
+                "statement/quote expectations. Model responses are synthetic offline fixtures, "
+                "not a recording or benchmark of a real LLM. ValidationPolicy decides statuses. "
+                "Publisher diversity is not claim-level independent corroboration."
             ),
         }
         _write_json(CASE_ROOT / "manifest.json", manifest)

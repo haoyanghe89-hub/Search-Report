@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import json
 import uuid
@@ -19,6 +20,7 @@ from marketpulse.investigation.domain.enums import (
     SourceType,
 )
 from marketpulse.investigation.domain.sources import DocumentArtifact, Source, SourceSnapshot
+from marketpulse.investigation.feedback.parallel import bounded_map
 from marketpulse.investigation.ingestion.models import DocumentParseRequest
 from marketpulse.investigation.ingestion.registry import DocumentParserRegistry
 from marketpulse.investigation.persistence.repositories import (
@@ -30,7 +32,10 @@ from marketpulse.investigation.ports.external import (
     FetchRequest,
     SearchPort,
     SearchRequest,
+    SearchResult,
+    SearchResultItem,
 )
+from marketpulse.investigation.recording.errors import ProviderCallError, SecurityBlockedError
 
 Clock = Callable[[], datetime]
 IdFactory = Callable[[str], str]
@@ -122,6 +127,9 @@ class SourceAcquisitionService:
         parsers: DocumentParserRegistry,
         id_factory: IdFactory = _id,
         clock: Clock = _now,
+        fetch_concurrency: int = 1,
+        tolerate_fetch_errors: bool = False,
+        fetch_semaphore: asyncio.Semaphore | None = None,
     ) -> None:
         self._repository = repository
         self._blobs = blobs
@@ -130,6 +138,9 @@ class SourceAcquisitionService:
         self._parsers = parsers
         self._id_factory = id_factory
         self._clock = clock
+        self._fetch_concurrency = fetch_concurrency
+        self._tolerate_fetch_errors = tolerate_fetch_errors
+        self._fetch_semaphore = fetch_semaphore or asyncio.Semaphore(fetch_concurrency)
 
     async def acquire(self, request: AcquisitionRequest) -> AcquisitionResult:
         search_result = await self._search.search(
@@ -184,25 +195,30 @@ class SourceAcquisitionService:
         return AcquisitionResult(query=request.query, sources=tuple(outcomes))
 
     async def prepare(
-        self, request: AcquisitionRequest, *, logical_step_key: str
+        self,
+        request: AcquisitionRequest,
+        *,
+        logical_step_key: str,
+        search_result: SearchResult | None = None,
     ) -> PreparedAcquisition:
-        """Fetch and parse without DB writes; Harness commits returned outputs atomically."""
-        search_result = await self._search.search(
-            SearchRequest(
-                query=request.query,
-                max_results=request.max_results,
-                schema_version=request.search_schema_version,
-                config_version=request.config_version,
+        """Fetch outside transactions; preserve input order regardless of completion order."""
+        if search_result is None:
+            search_result = await self._search.search(
+                SearchRequest(
+                    query=request.query,
+                    max_results=request.max_results,
+                    schema_version=request.search_schema_version,
+                    config_version=request.config_version,
+                )
             )
-        )
-        outcomes: list[AcquiredSource] = []
-        outputs: list[PersistedEntity] = []
-        seen_urls: set[str] = set()
-        for item in search_result.items:
+        provider = search_result.provider
+        retrieved_at = search_result.retrieved_at
+        items = list({str(item.url): item for item in reversed(search_result.items)}.values())[::-1]
+
+        async def prepare_item(
+            item: SearchResultItem,
+        ) -> tuple[AcquiredSource, tuple[PersistedEntity, ...]]:
             canonical_url = str(item.url)
-            if canonical_url in seen_urls:
-                continue
-            seen_urls.add(canonical_url)
             existing = self._repository.source_by_url(request.investigation_id, canonical_url)
             source = existing or Source(
                 source_id=_stable_id("S", request.investigation_id, canonical_url),
@@ -224,23 +240,61 @@ class SourceAcquisitionService:
                     if item.is_first_hand is not None
                     else item.source_type_hint == "official"
                 ),
-                discovered_at=search_result.retrieved_at,
+                discovered_at=retrieved_at,
             )
-            if existing is None:
-                outputs.append(source)
-            outcome, snapshot, artifacts, gaps = await self._fetch_parse(
-                request=request,
-                source=source,
-                url=canonical_url,
-                search_provider=search_result.provider,
-                quality_metadata=item.quality_metadata,
-                id_factory=_stable_factory(request.run_id, logical_step_key, canonical_url),
-            )
-            outcomes.append(outcome)
-            outputs.extend((snapshot, *artifacts, *gaps))
+            outputs: list[PersistedEntity] = [source] if existing is None else []
+            try:
+                outcome, snapshot, artifacts, gaps = await self._fetch_parse(
+                    request=request,
+                    source=source,
+                    url=canonical_url,
+                    search_provider=provider,
+                    quality_metadata=item.quality_metadata,
+                    id_factory=_stable_factory(request.run_id, logical_step_key, canonical_url),
+                )
+            except (ProviderCallError, SecurityBlockedError, TimeoutError) as error:
+                if not self._tolerate_fetch_errors:
+                    raise
+                gap = ResearchGap(
+                    gap_id=_stable_id(
+                        "G", request.run_id, logical_step_key, canonical_url, "fetch-failed"
+                    ),
+                    investigation_id=request.investigation_id,
+                    run_id=request.run_id,
+                    gap_type=ResearchGapType.UNREADABLE_SOURCE,
+                    source_id=source.source_id,
+                    reason=getattr(error, "code", "FETCH_TIMEOUT"),
+                    severity=GapSeverity.MEDIUM,
+                    status=GapStatus.OPEN,
+                    suggested_actions=(
+                        "Find an accessible public alternative; "
+                        "retain the failed source as a coverage limitation.",
+                    ),
+                    created_at=self._clock(),
+                )
+                return AcquiredSource(
+                    source_id=source.source_id,
+                    discovered=True,
+                    fetched=False,
+                    parsed=False,
+                    evidence_eligible=False,
+                    valid_for_statistics=False,
+                    gap_ids=(gap.gap_id,),
+                ), (*outputs, gap)
+            return outcome, (tuple(outputs) + (snapshot, *artifacts, *gaps))
+
+        async def limited(
+            item: SearchResultItem,
+        ) -> tuple[AcquiredSource, tuple[PersistedEntity, ...]]:
+            async with self._fetch_semaphore:
+                return await prepare_item(item)
+
+        results = await bounded_map(items, limited, self._fetch_concurrency)
         return PreparedAcquisition(
-            result=AcquisitionResult(query=request.query, sources=tuple(outcomes)),
-            business_outputs=tuple(outputs),
+            result=AcquisitionResult(
+                query=request.query, sources=tuple(item[0] for item in results)
+            ),
+            business_outputs=tuple(entity for item in results for entity in item[1]),
         )
 
     async def _fetch_parse(

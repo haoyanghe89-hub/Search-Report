@@ -9,19 +9,25 @@ from __future__ import annotations
 import hashlib
 from datetime import datetime
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from marketpulse.investigation.domain.claims import Claim, ClaimEvidenceRelation, ValidationResult
 from marketpulse.investigation.domain.enums import (
     ConflictStatus,
+    EntailmentStatus,
     FindingSeverity,
     GapStatus,
+    RelationStance,
     ReportType,
     ReportValidatorKind,
     ValidationStatus,
 )
 from marketpulse.investigation.domain.reports import Report
 from marketpulse.investigation.domain.sources import DocumentArtifact, Evidence, SourceSnapshot
+from marketpulse.investigation.persistence.models import ClaimEvidenceRelationRow
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from marketpulse.investigation.reporting.assembler import _validation_semantic_hash
 from marketpulse.investigation.reporting.models import (
     Citation,
     ReportInputSnapshot,
@@ -33,6 +39,7 @@ from marketpulse.investigation.reporting.writer import (
     SectionStatus,
     required_sections,
 )
+from marketpulse.investigation.validation.relations import validated_relation
 
 REPORT_VALIDATOR_VERSION = "report-validator-v1"
 
@@ -106,6 +113,34 @@ class CitationValidator:
             return "CITATION_SNAPSHOT_BINDING", "citation not bound to current snapshot"
         if citation.semantic_identity().semantic_hash != citation.citation_hash:
             return "CITATION_HASH_MISMATCH", "citation semantic hash does not recompute"
+        claim = self._repository.get_in_session(session, Claim, citation.claim_id)
+        if claim.latest_validation_id is None:
+            return "CITATION_VALIDATION_MISSING", "claim has no current validation"
+        validation = self._repository.get_in_session(
+            session, ValidationResult, claim.latest_validation_id
+        )
+        if _validation_semantic_hash(validation) != citation.validation_semantic_hash:
+            return "CITATION_VALIDATION_DRIFT", "claim validation changed after citation assembly"
+        row = session.scalar(
+            select(ClaimEvidenceRelationRow).where(
+                ClaimEvidenceRelationRow.claim_id == citation.claim_id,
+                ClaimEvidenceRelationRow.evidence_id == citation.evidence_id,
+            )
+        )
+        if row is None:
+            return "CITATION_NO_ENTAILED_RELATION", "supporting relationship is absent"
+        relation = validated_relation(
+            self._repository.get_in_session(session, ClaimEvidenceRelation, row.relation_id),
+            validation,
+        )
+        if (
+            relation.stance is not RelationStance.SUPPORTS
+            or relation.entailment_status is not EntailmentStatus.ENTAILED
+        ):
+            return (
+                "CITATION_NO_ENTAILED_RELATION",
+                "latest validation does not entail this evidence",
+            )
         try:
             evidence = self._repository.get_in_session(session, Evidence, citation.evidence_id)
         except KeyError:
@@ -113,7 +148,7 @@ class CitationValidator:
         locator = evidence.locator
         if locator.model_dump(mode="json") != citation.canonical_locator:
             return "CITATION_LOCATOR_MISMATCH", "locator drifted from citation"
-        quote = evidence.content[locator.start : locator.end]
+        quote = evidence.content
         if hashlib.sha256(quote.encode("utf-8")).hexdigest() != citation.resolved_quote_hash:
             return "CITATION_QUOTE_MISMATCH", "resolved quote hash mismatch"
         snapshot_row = self._repository.get_in_session(

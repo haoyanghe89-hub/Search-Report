@@ -89,6 +89,7 @@ class ReportPipeline:
             run_id=run_id,
             snapshot_id=f"SNAP-{uuid.uuid4().hex[:12]}",
             assembled_at=now,
+            report_type=report_type,
         )
         with self._sessions() as session:
             run = self._repository.get_in_session(session, InvestigationRun, run_id)

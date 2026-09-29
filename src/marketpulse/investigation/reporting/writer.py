@@ -9,6 +9,7 @@ emits typed ``NarrativeUnit`` objects. Every factual unit must carry
 
 from __future__ import annotations
 
+import json
 from enum import StrEnum
 from typing import Protocol
 
@@ -108,6 +109,7 @@ class ProjectionClaim(DomainModel):
     confidence: float
     importance: ClaimImportance
     is_critical: bool
+    report_section: str | None = None
 
 
 class ProjectionConflict(DomainModel):
@@ -116,6 +118,9 @@ class ProjectionConflict(DomainModel):
     severity: ConflictSeverity
     status: ConflictStatus
     claim_refs: tuple[NonEmptyText, ...]
+    resolution_summary: str | None = None
+    possible_explanations: tuple[str, ...] = ()
+    observations: tuple[str, ...] = ()
 
 
 class ProjectionGap(DomainModel):
@@ -129,6 +134,7 @@ class ProjectionTimelineEvent(DomainModel):
     time_precision: TimePrecision
     description: NonEmptyText
     validation_status: ValidationStatus
+    claim_refs: tuple[NonEmptyText, ...] = ()
 
 
 class SourceStatisticsView(DomainModel):
@@ -142,6 +148,7 @@ class WriterProjection(DomainModel):
     report_type: ReportType
     schema_version: NonEmptyText
     investigation_title: NonEmptyText
+    terminal_run_status: str = "UNKNOWN"
     investigation_goal: NonEmptyText
     questions: tuple[NonEmptyText, ...]
     claims: tuple[ProjectionClaim, ...]
@@ -150,6 +157,7 @@ class WriterProjection(DomainModel):
     timeline: tuple[ProjectionTimelineEvent, ...]
     limitations: tuple[NonEmptyText, ...]
     source_statistics: SourceStatisticsView
+    execution_provenance: str = "PROVIDER_WORKFLOW"
 
     @classmethod
     def build(
@@ -164,8 +172,10 @@ class WriterProjection(DomainModel):
         families = {source.family_key for source in payload.sources}
         return cls(
             report_type=report_type,
+            execution_provenance=payload.execution_provenance,
             schema_version=payload.schema_version,
             investigation_title=investigation_title,
+            terminal_run_status=payload.terminal_run_status,
             investigation_goal=investigation_goal,
             questions=payload.questions,
             claims=tuple(
@@ -177,6 +187,7 @@ class WriterProjection(DomainModel):
                     confidence=claim.confidence,
                     importance=claim.importance,
                     is_critical=claim.is_critical,
+                    report_section=claim.report_section,
                 )
                 for claim in payload.claims
             ),
@@ -187,6 +198,12 @@ class WriterProjection(DomainModel):
                     severity=conflict.severity,
                     status=conflict.status,
                     claim_refs=conflict.claim_stable_keys,
+                    resolution_summary=conflict.resolution_summary,
+                    possible_explanations=conflict.possible_explanations,
+                    observations=tuple(
+                        json.dumps(value, ensure_ascii=False, sort_keys=True)
+                        for value in conflict.competing_values
+                    ),
                 )
                 for conflict in payload.conflicts
             ),
@@ -204,6 +221,12 @@ class WriterProjection(DomainModel):
                     time_precision=event.time_precision,
                     description=event.description,
                     validation_status=event.validation_status,
+                    claim_refs=tuple(
+                        claim.stable_key
+                        for claim in payload.claims
+                        if claim.statement == event.description
+                        and claim.validation_status is ValidationStatus.VERIFIED
+                    ),
                 )
                 for event in payload.timeline_events
             ),
@@ -332,8 +355,14 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
                 _unit(
                     "METHODOLOGY",
                     "pipeline",
-                    "Multi-agent collection, analysis and independent validation; "
-                    "every factual statement traces to validated claims and located evidence.",
+                    (
+                        "Offline replay of archived sources and manually reviewed statement/quote "
+                        "pairs. This demonstrates the validation and citation pipeline; it is not "
+                        "a live model run or an independent assessment of model accuracy."
+                        if p.execution_provenance == "CURATED_OFFLINE"
+                        else "Role-based collection, analysis and semantic verification; "
+                        "factual assertions require validated claims and located evidence."
+                    ),
                     ContentClass.PRESENTATIONAL,
                 ),
             ),
@@ -363,8 +392,13 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
                     _unit(
                         "TIMELINE",
                         f"event-{index}",
-                        f"[{event.event_time or event.time_precision}] {event.description}",
-                        ContentClass.ANALYTICAL_SYNTHESIS,
+                        event.description
+                        if event.claim_refs
+                        else f"Unverified timeline candidate: {event.description}",
+                        ContentClass.FACTUAL_ASSERTION
+                        if event.claim_refs
+                        else ContentClass.GOVERNANCE_DISCLOSURE,
+                        event.claim_refs,
                     )
                     for index, event in enumerate(p.timeline, start=1)
                 ),
@@ -384,9 +418,18 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
     sections.append(_claims_section("QUANTITATIVE_FINDINGS", quantitative))
     impact = [c for c in p.claims if c.claim_type is ClaimType.IMPACT]
     sections.append(_claims_section("IMPACT_SCOPE_AND_ANALYSIS", impact))
-    causal = [c for c in p.claims if c.claim_type is ClaimType.CAUSAL]
+    causal = [
+        c
+        for c in p.claims
+        if c.claim_type is ClaimType.CAUSAL or c.report_section == "CAUSAL_AND_MECHANISM_ANALYSIS"
+    ]
     sections.append(_claims_section("CAUSAL_AND_MECHANISM_ANALYSIS", causal))
-    attribution = [c for c in p.claims if c.claim_type is ClaimType.ATTRIBUTION]
+    attribution = [
+        c
+        for c in p.claims
+        if c.claim_type is ClaimType.ATTRIBUTION
+        or c.report_section == "ACTOR_AND_ATTRIBUTION_ASSESSMENT"
+    ]
     sections.append(_claims_section("ACTOR_AND_ATTRIBUTION_ASSESSMENT", attribution))
 
     if p.conflicts:
@@ -398,14 +441,27 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
                     _unit(
                         "CONFLICT_ANALYSIS",
                         conflict.stable_key.rsplit(":", 1)[-1],
-                        f"A {conflict.conflict_type} conflict ({conflict.severity}) remains "
+                        f"A {conflict.conflict_type} conflict ({conflict.severity}) is "
                         f"{conflict.status}: conflicting accounts span "
-                        f"{len(conflict.claim_refs)} claims and are not settled here.",
+                        f"{len(conflict.claim_refs)} claims. "
+                        + (conflict.resolution_summary or "No resolution established.")
+                        + " "
+                        + " ".join(conflict.possible_explanations)
+                        + " Recorded observations: "
+                        + "; ".join(conflict.observations),
                         ContentClass.ANALYTICAL_SYNTHESIS,
                         conflict.claim_refs,
                     )
                     for conflict in p.conflicts
-                ),
+                )
+                + _claims_section(
+                    "CONFLICT_ANALYSIS",
+                    [
+                        claim
+                        for claim in p.claims
+                        if any(claim.stable_key in conflict.claim_refs for conflict in p.conflicts)
+                    ],
+                ).units,
             )
         )
     else:
@@ -413,7 +469,12 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
             DraftSection(section_key="CONFLICT_ANALYSIS", status=SectionStatus.NOT_APPLICABLE)
         )
 
-    remediation = [c for c in p.claims if c.claim_type is ClaimType.INSTITUTIONAL_ACTION]
+    remediation = [
+        c
+        for c in p.claims
+        if c.claim_type is ClaimType.INSTITUTIONAL_ACTION
+        or c.report_section == "REMEDIATION_AND_FOLLOW_UP"
+    ]
     sections.append(_claims_section("REMEDIATION_AND_FOLLOW_UP", remediation))
 
     limitation_units = tuple(
@@ -425,6 +486,22 @@ def _full_draft(p: WriterProjection) -> ReportDraft:
         )
         for index, limitation in enumerate(p.limitations, start=1)
     )
+    if p.execution_provenance == "CURATED_OFFLINE":
+        limitation_units += (
+            _unit(
+                "LIMITATIONS_AND_RESEARCH_GAPS",
+                "curated-case",
+                "This curated case covers selected archived passages, not an exhaustive search. "
+                "Verified means the bounded statement matches its reviewed passage; it does not "
+                "establish broad causal truth or long-term health outcomes. Source diversity does "
+                "not imply independent corroboration of every claim.",
+                ContentClass.GOVERNANCE_DISCLOSURE,
+            ),
+        )
+    limitation_units += _claims_section(
+        "LIMITATIONS_AND_RESEARCH_GAPS",
+        [c for c in p.claims if c.report_section == "LIMITATIONS_AND_RESEARCH_GAPS"],
+    ).units
     gap_units = tuple(
         _unit(
             "LIMITATIONS_AND_RESEARCH_GAPS",
@@ -487,7 +564,7 @@ def _status_draft(p: WriterProjection) -> ReportDraft:
                 _unit(
                     "EXECUTIVE_STATUS",
                     "status",
-                    f"Investigation '{p.investigation_title}' is in progress: "
+                    f"Investigation '{p.investigation_title}' status is {p.terminal_run_status}: "
                     f"{len(p.claims)} claims tracked, {len(blocking)} open blocking gaps.",
                     ContentClass.GOVERNANCE_DISCLOSURE,
                 ),

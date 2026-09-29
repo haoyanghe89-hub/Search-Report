@@ -1,5 +1,8 @@
 <script setup>
 defineProps({
+  loading: Boolean,
+  replaying: Boolean,
+  busy: Boolean,
   cases: {
     type: Array,
     required: true
@@ -10,7 +13,7 @@ defineProps({
   }
 })
 
-const emit = defineEmits(['select', 'new-investigation'])
+const emit = defineEmits(['select', 'new-investigation', 'refresh', 'replay'])
 
 function statusColor(status) {
   const colors = {
@@ -25,12 +28,18 @@ function statusColor(status) {
 
 <template>
   <aside class="sidebar">
-    <div class="sidebar-title">调查档案</div>
+    <div class="sidebar-title">调查档案 <button class="refresh-archive" :disabled="loading" @click="emit('refresh')">刷新</button></div><p v-if="loading" role="status" class="sidebar-note">正在读取档案…</p><p v-else-if="!cases.length" class="sidebar-note">暂无调查档案</p>
 
     <div class="case-list">
       <div
         v-for="item in cases"
         :key="item.id"
+        role="button"
+        :tabindex="busy || replaying ? -1 : 0"
+        :aria-disabled="busy || replaying"
+        :aria-current="item.id === activeCaseId ? 'page' : undefined"
+        @keydown.enter="emit('select', item.id)"
+        @keydown.space.prevent="emit('select', item.id)"
         class="case-card"
         :class="{ active: item.id === activeCaseId }"
         @click="emit('select', item.id)"
@@ -51,9 +60,10 @@ function statusColor(status) {
       </div>
     </div>
 
-    <button class="new-case-btn" @click="emit('new-investigation')">
+    <div class="sidebar-replay"><span class="eyebrow">内置案例 · 离线回放</span><p>东巴勒斯坦列车脱轨事故</p><button :disabled="replaying || busy" @click="emit('replay')">{{ replaying ? '正在回放…' : '运行案例回放 →' }}</button><small>使用归档来源与人工整理的证据关系。</small></div>
+    <button class="new-case-btn" :disabled="replaying || busy" @click="emit('new-investigation')">
       <span class="plus">+</span>
-      新建调查
+      调查新主题
     </button>
   </aside>
 </template>

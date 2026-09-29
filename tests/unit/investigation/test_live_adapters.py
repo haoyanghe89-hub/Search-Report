@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import socket
 from collections.abc import AsyncIterator
 from types import SimpleNamespace
 
@@ -9,7 +10,7 @@ from pydantic import BaseModel, ConfigDict
 
 from marketpulse.adapters.investigation_search import PublicSearchPortAdapter
 from marketpulse.domain.research import SearchCandidate, SearchQuery
-from marketpulse.investigation.adapters.fetch import HttpxFetchAdapter
+from marketpulse.investigation.adapters.fetch import HttpxFetchAdapter, is_public_host
 from marketpulse.investigation.adapters.model import OpenAICompatibleModelAdapter
 from marketpulse.investigation.ports.external import (
     FetchRequest,
@@ -23,6 +24,40 @@ from marketpulse.investigation.recording.errors import SecurityBlockedError
 class Answer(BaseModel):
     model_config = ConfigDict(extra="forbid")
     value: str
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "address,allowed",
+    [
+        ("198.18.0.42", True),
+        ("198.19.1.2", True),
+        ("10.0.0.1", False),
+        ("127.0.0.1", False),
+        ("169.254.169.254", False),
+    ],
+)
+async def test_trusted_proxy_dns_only_allows_fake_ip_range(
+    monkeypatch: pytest.MonkeyPatch, address: str, allowed: bool
+) -> None:
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *_: [(socket.AF_INET, socket.SOCK_STREAM, 6, "", (address, 443))],
+    )
+    assert not await is_public_host("public.example")
+    assert await is_public_host("public.example", allow_proxy_dns=True) is allowed
+
+
+@pytest.mark.asyncio
+async def test_proxy_mode_still_blocks_literal_fake_ip_urls() -> None:
+    async with httpx.AsyncClient(
+        transport=httpx.MockTransport(lambda _: httpx.Response(200))
+    ) as client:
+        with pytest.raises(SecurityBlockedError):
+            await HttpxFetchAdapter(client, allow_proxy_dns=True).fetch(
+                FetchRequest(url="http://198.18.0.42/")
+            )
 
 
 class LegacySearchFixture:
@@ -46,7 +81,39 @@ async def test_public_search_bridge_does_not_expose_legacy_types() -> None:
         SearchRequest(query="East Palestine", max_results=3)
     )
     assert result.items[0].source_type_hint == "official"
+    assert result.items[0].is_official is True
+    assert result.items[0].is_first_hand is False
     assert result.provider == "public-search"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://crowdstrike-news.example.org/story",
+        "https://agency.gov.evil.org/story",
+        "https://gov.example.org/story",
+    ],
+)
+async def test_search_keyword_domain_match_does_not_establish_primary_provenance(url: str) -> None:
+    class MisleadingSearch:
+        async def search(self, query: SearchQuery, *, limit: int = 8) -> list[SearchCandidate]:
+            return [
+                SearchCandidate(
+                    query_id=query.id,
+                    title="CrowdStrike news",
+                    rank=1,
+                    url=url,
+                    source_hint="official",
+                )
+            ]
+
+    result = await PublicSearchPortAdapter(MisleadingSearch()).search(
+        SearchRequest(query="CrowdStrike outage")
+    )
+    assert result.items[0].source_type_hint == "web"
+    assert result.items[0].is_official is False
+    assert result.items[0].is_first_hand is False
 
 
 @pytest.mark.asyncio

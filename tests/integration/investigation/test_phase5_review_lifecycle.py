@@ -45,7 +45,7 @@ from marketpulse.investigation.review.sessions import (
     hash_session_token,
 )
 
-NOW = datetime(2026, 9, 22, 12, tzinfo=UTC)
+NOW = datetime.now(UTC).replace(microsecond=0)
 LATER = NOW + timedelta(days=1)
 HASH_A = "a" * 64
 HASH_B = "b" * 64
@@ -341,6 +341,10 @@ def test_review_api_login_me_decide_logout(
     bad = client.post("/api/review/login", json={"password": "wrong"}, headers=headers)
     assert bad.status_code == 401
     assert "mp_review" not in bad.cookies
+
+    bypass = client.post("/api/review/login", json={"password": "123"}, headers=headers)
+    assert bypass.status_code == 401
+    assert "mp_review" not in bypass.cookies
 
     ok = client.post("/api/review/login", json={"password": REVIEWER_PASSWORD}, headers=headers)
     assert ok.status_code == 200

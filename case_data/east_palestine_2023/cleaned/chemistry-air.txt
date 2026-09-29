@@ -1,0 +1,422 @@
+Mobile mass spec provides new insight into pollutants released by East Palestine train derailment | News | Chemistry World
+
+Skip to main content
+Skip to navigation
+
+Extras
+Newsletters
+Jobs
+Reading room
+Puzzles
+
+Publishing
+
+Education
+
+Membership
+
+Mast navigation
+Sign In
+Register
+Subscribe
+
+Search our site
+
+Search our site
+
+Search
+
+Menu
+
+Close
+menu
+
+Home
+
+News
+
+Research
+
+Industry
+
+Opinion
+
+Features
+
+Culture
+
+Careers
+
+Podcasts
+
+Webinars
+
+Collections
+
+Back
+to parent navigation item
+
+Collections
+
+Energy storage and batteries
+
+Framing the future: policies to catalyse India's innovation ecosystem
+
+2025 in review
+
+Women's health
+
+Solutions for India's sustainability challenge
+
+The future of analytical chemistry
+
+Chemistry of the brain
+
+Water and the environment
+
+Chemical bonding
+
+Antimicrobial resistance
+
+AI and automation
+
+Sustainability
+
+Research culture
+
+Nobel prize
+
+Food science and cookery
+
+Plastics and polymers
+
+Periodic table
+
+Coronavirus
+
+Members
+
+Home
+News
+Research
+Industry
+Opinion
+Features
+Culture
+Careers
+Podcasts
+Webinars
+Collections
+Energy storage and batteries
+Framing the future: policies to catalyse India's innovation ecosystem
+2025 in review
+Women's health
+Solutions for India's sustainability challenge
+The future of analytical chemistry
+Chemistry of the brain
+Water and the environment
+Chemical bonding
+Antimicrobial resistance
+AI and automation
+Sustainability
+Research culture
+Nobel prize
+Food science and cookery
+Plastics and polymers
+Periodic table
+Coronavirus
+Members
+
+More
+navigation items
+
+News
+
+Mobile mass spec provides new insight into pollutants released by East Palestine train derailment
+
+By
+Rebecca Trager
+2023-07-31T09:30:00+01:00
+
+Prefer Chemistry World
+in Google search
+
+No comments
+
+Ever since a train carrying tonnes of industrial chemicals
+derailed in the Ohio town of East Palestine on 3 February
+and began leaking its contents, questions have been raised about the health effects of the disaster. In the aftermath of the incident, officials from the US Environmental Protection Agency (EPA)
+announced that air and water testing did not pick up chemicals
+like vinyl chloride, which were carried on the ill-fated train, at levels that were a cause for concern. Now, months later, research is shedding new light on exactly what residents and emergency workers were exposed to.
+
+The
+new analysis
+by researchers at Carnegie Mellon University and Texas A&M University has found that some substances, including acrolein, reached levels that could be hazardous but the technology the EPA relied on wasn’t sensitive enough to pick that up. The team concludes that if ambient levels of these chemicals persisted they could pose health concerns.
+
+Source: © Associated Press/Alamy Stock Photo
+Nearby residents were evacuated following the derailment because of the risk from volatile organic compounds and particulates in the air
+
+About 20 of the train’s 50 derailed cars contained hazardous materials – not only vinyl chloride, but also ethylene glycol, ethylhexyl acrylate, butyl acrylate and isobutylene,
+according to the EPA
+. The US National Transportation Safety Board (NTSB)
+confirmed that five of the derailed tank cars were carrying more than 115,000 gallons of vinyl chloride
+, used to make PVC, that when exposed to heat can undergo a rapid polymerisation reaction that is potentially explosive.
+
+Some of the derailed trucks caught fire, and some spilled their loads into an adjacent ditch that feeds a stream that eventually empties into the Ohio River, the EPA said.
+
+The situation was complicated by the fact that after the derailment some of the chemicals were burned to avoid the risk of an explosion. The subsequent release of volatile organic compounds (VOCs) triggered evacuation orders. Once residents were cleared to return to their homes, about five days later, many reported chemical exposure symptoms like headache and cough. This amplified concerns about potential short- and long-term public health impacts of the disaster.
+
+The new Carnegie Mellon and Texas A&M research sought to independently monitor air quality and identify health risks in and around East Palestine. The team downloaded air-quality monitoring data from two EPA stations at fixed locations, and mapped patterns of airborne compounds by driving a van outfitted with a mass spectrometer around the area on 20 and 21 February. The scientists determined that the levels of nine of the 50 chemicals that were measured rose above their normal baselines, and if they had remained at those levels could have been harmful to people in the area.
+
+Perhaps most notably, they found that acrolein levels near the derailment site a couple of weeks after the incident were as much as six times higher than the local rural background. Acrolein can severely irritate and burn the eyes, skin and mucous membranes. The train cars contained no acrolein and is most likely a byproduct of the chemicals released or burned at the scene.
+
+However, the Carnegie Mellon and Texas A&M scientists confirmed that environmental levels of these substances decreased significantly throughout February, with vinyl chloride readings falling to levels regarded as safe. During the two days of sampling in February, the team’s equipment detected levels of benzene, toluene, xylenes and vinyl chloride that were below the minimal risk levels for exposures between 15 days and one year.
+
+‘It’s not clear that such a short exposure is relevant to people’s health,’ Preston states. ‘But ... the 90th percentile of our data is often well below the minimum risk level.’
+
+While these findings largely corroborated the data collected by the EPA, the new mobile monitoring picked up subtleties that the agency’s monitoring stations could not. For example, acrolein and butyl acrylate were up to six times higher near the accident site during the day compared with background levels, but at night they fell below this threshold.
+
+Mobile monitoring
+
+‘When we take data nearest to where the EPA was measuring, our data are pretty similar,’ explains the study’s corresponding author
+Albert Presto
+, a mechanical engineer at Carnegie Mellon with expertise in pollutant emissions. ‘But we also found some other species that were elevated in concentration that the EPA wasn’t measuring because they were doing a targeted analysis looking only at certain species.’
+
+The EPA measured the levels of 59 chemicals in the air in East Palestine after the derailment, which may seem like a lot, but Presto points out that that there are almost 200 substances on
+the agency’s list of toxic air pollutants
+. Non-targeted approaches can pick up more chemicals of concern because the agency can’t quantify what it isn’t looking for, he adds.
+
+Presto and colleagues took their measurements back in February, shortly after the derailment. Some of the Texas A&M scientists have since returned to the site to take new readings, but they are not ready to disclose that data yet, he says. ‘We can’t say much about the current situation in East Palestine, although I would be surprised if the levels of these substances were still above health relevant levels – it was a one-time source of contamination,’ he states.
+
+Source:
+© Oladayo Oladeji et al, Environ. Sci. Technol. Lett. 2023
+A spatial distribution map of high acrolein levels detected during a four-hour period on 20 February, 2023
+
+The EPA welcomed the new analysis. Agency spokesperson Ashford Kellen notes that none of the derailed train cars were carrying acrolein, suggesting it was produced by the controlled burns. ‘EPA continued to be diligent and tested for acrolein long after it was would have broken down in the atmosphere, even when it was not a contaminant of concern and concentrations were below levels of concern,’ Kellen says.
+
+Independent measurements
+
+Besides acrolein, the EPA sampled a long list of other chemicals including VOCs, semi-VOCs, benzene, phosgene and hydrogen chloride, and has not detected any significant and sustained levels of them since the evacuation order was lifted on 9 February, Kellen confirms.
+
+Andrew Whelton
+, an environmental and engineering professor at Purdue University in Indiana who was not involved in the study, says he was surprised that the acrolein concentrations were so elevated. He notes that the additional data these researchers are collecting should help understand why it was high.
+
+The ambient air testing data is helpful and one piece of ‘the larger chemical disaster puzzle’, Whelton states, describing it as ‘a snapshot’ after the disaster. ‘We know people experienced adverse health impacts during the immediate aftermath by being outdoors, before these researchers arrived,’ he tells
+Chemistry World
+. But Whelton points out that his own testing indicates that chemical exposure took place inside buildings for at least four months, and the new ambient air study did not focus on indoor air quality.
+
+These new findings advance the conversation about disaster assessment and cleanup in important ways, according to
+Peter DeCarlo
+and
+Keeve Nachman
+, who are both associate professors of environmental health and engineering at the Johns Hopkins University in Maryland. ‘What these authors did was really important in terms of getting in there and making independent measurements,’ DeCarlo states. ‘When we have disasters like this one in East Palestine, it’s imperative that we understand early on what potential chemical risks exist, and it’s also important that we track those through time.’
+
+DeCarlo points out, however, that the compounds quantified in this study – either by the EPA or by the independent researchers – are limited to what can be measured in real-time on the ground. Therefore, he says, these latest findings are ‘probably an underestimate of the overall risk if there are other chemicals in the environment that people are being exposed to that we don’t have a good handle on’.
+
+Whatever chemicals were onboard the train became irrelevant as soon as they were lit on fire because that creates a host of new, unknown compounds that may have been introduced to the soil, water and air, according to DeCarlo. ‘Clearly, that black plume of smoke was made of the particulate matter of many different compounds, but it was black so we know that there were probably PAHs [polycyclic aromatic hydrocarbons] and black carbon, and because it was vinyl chloride burning, there’s probably chlorine embedded in all those molecules as well.’
+
+Nachman suggests the new work is not intended to criticise the EPA, but rather represents ‘a call for resources and infrastructure’ so that public health agencies are prepared to address similar catastrophes in the future. That would enable them to generate the data needed to make judgments about the safety of first responders and the long-term potential community exposures.
+
+‘We have been systematically underfunding our environmental agencies at the local, state and national levels,’ DeCarlo says. ‘If you want the most sensitive methods for detecting compounds and understanding the exposures and the risks that people face in incidents like this, then the EPA needs the resources to have them.’
+References
+O Oladeji
+et al
+,
+Environ. Sci. Technol.
+, 2023, DOI:
+10.1021/acs.estlett.3c00324
+Rebecca Trager
+
+Follow
+
+Rebecca became the US Correspondent for Chemistry World in September 2014, based out of Washington, DC, after writing for the magazine on a freelance basis since 2007.
+View full profile
+More Rebecca Trager
+Doctoral student who fatally shot his UNC Chapel Hill adviser found not guilty due to insanity
+PFAS chemicals represent a human rights threat, UN told
+US appeals court strikes down risk management rule for DCM
+
+Topics
+Contamination
+disaster
+Environmental
+Environmental monitoring
+North America
+Pollution
+United States of America
+
+Prefer Chemistry World
+in Google search
+
+No comments
+
+Related articles
+
+News
+
+US EPA accused of skewing soil testing data after East Palestine disaster
+
+2025-08-05T10:12:00Z
+
+By
+Rebecca Trager
+
+Research
+
+Failings in response to East Palestine train derailment compounded human and environmental impact
+
+2024-11-11T14:04:00Z
+
+By
+Rosie Rothwell
+
+Business
+
+Rail company will pay $600 million to settle East Palestine lawsuits
+
+2024-04-12T13:30:00Z
+
+By
+Rebecca Trager
+
+Business
+
+US derailment highlights continuing chemical rail freight concerns
+
+2024-03-08T13:00:00Z
+
+By
+Rebecca Trager
+
+News
+
+Plastic pellets spill pollutes north Spanish coast
+
+2024-01-18T14:30:00Z
+
+By
+Fernando Gomollón-Bel
+
+News
+
+Two year clean-up of Scottish beach clears radioactive material from second world war planes
+
+2023-09-22T08:30:00Z
+
+By
+Angeli Mehta
+
+Load more articles
+
+No comments yet
+
+You're not signed in. To link your comment to your profile, sign in now.
+
+Only registered users can comment on this article.
+
+Sign in
+
+Register
+
+More News
+
+News
+
+Simple organic catalyst walks phosphate groups along sugar backbones
+
+2026-09-25T09:59:00Z
+
+By
+Mason Wakley
+
+News
+
+Elsevier teams up with AI firm to extract chemical structure data from papers
+
+2026-09-25T08:30:00Z
+
+By
+Maria Burke
+
+Opinion
+
+Ineos temporarily closes UK acetyls plants
+
+2026-09-25T08:13:00Z
+
+By
+Phillip Broadwith
+
+News
+
+Google DeepMind’s mutation Atlas shines a light on our dark DNA
+
+2026-09-24T13:30:00Z
+
+By
+Anthony King
+
+Research
+
+Meet diamondiyne, the new diamond-like carbon allotrope predicted 35 years ago
+
+2026-09-24T08:30:00Z
+
+By
+Victoria Atkinson
+
+Business
+
+Screening therapeutic peptides for ‘undruggable’ proteins
+
+2026-09-23T14:38:00Z
+
+By
+Mason Wakley
+
+Load more articles
+
+Subscribe
+Advertise
+Topics
+Issues
+Contributors
+RSS
+
+Help
+Contact
+Privacy
+Cookies
+Terms of use
+Accessibility
+Permissions
+
+Our mission
+
+News and events
+
+Campaigns
+
+Awards and funding
+
+Global challenges
+
+Support our work
+
+© Royal Society of Chemistry
+Registered charity number: 207890
+
+This website collects cookies to deliver a better user experience. See how this site uses
+cookies
+.
+
+This website collects cookies to deliver a better user experience.
+Do not sell my personal data
+.
+
+Este site coleta cookies para oferecer uma melhor experiência ao usuário. Veja como este site usa
+cookies
+.
+
+Site powered by
+Webvision Cloud

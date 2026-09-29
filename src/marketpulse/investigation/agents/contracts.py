@@ -455,6 +455,14 @@ def validate_agent_proposal(request: AgentContract, proposal: AgentContract) -> 
     elif isinstance(request, VerificationInput) and isinstance(proposal, VerificationProposal):
         claims = {item.claim_key for item in request.claims}
         evidence = {item.evidence_key for item in request.evidence}
+        for interpretation in proposal.contradiction_interpretations:
+            if (
+                interpretation.claim_key not in claims
+                or set(interpretation.evidence_keys) - evidence
+            ):
+                raise ValueError(
+                    "contradiction interpretation references an unknown claim or evidence"
+                )
         for item in proposal.judgments:
             if item.claim_key not in claims or item.evidence_key not in evidence:
                 raise ValueError("verification references an unknown claim or evidence")

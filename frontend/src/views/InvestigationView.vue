@@ -1,490 +1,144 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
-
-import TopBar from '@/components/TopBar.vue'
-import SectionHeading from '@/components/SectionHeading.vue'
-import AgentFlow from '@/components/AgentFlow.vue'
-import EvidenceChain from '@/components/EvidenceChain.vue'
-import MetricsRow from '@/components/MetricsRow.vue'
-import Timeline from '@/components/Timeline.vue'
-import ClaimList from '@/components/ClaimList.vue'
-import ReportPreview from '@/components/ReportPreview.vue'
-import SourceList from '@/components/SourceList.vue'
-import EvidenceList from '@/components/EvidenceList.vue'
-import ConflictGapPanel from '@/components/ConflictGapPanel.vue'
-import ReviewPanel from '@/components/ReviewPanel.vue'
-import ReportDetail from '@/components/ReportDetail.vue'
-import RunProgress from '@/components/RunProgress.vue'
-
-import { runEastPalestineReplay, startInvestigationRun, fetchRunDetail, fetchReportDetail, fetchRunReports } from '@/api/index.js'
-
-const props = defineProps({
-  caseData: {
-    type: Object,
-    required: true
-  }
-})
-
-const emit = defineEmits(['open-search', 'run-started', 'run-completed'])
-
-// Tab 定义
-const tabs = [
-  { id: 'overview', label: '概览', count: null },
-  { id: 'agents', label: '智能体流程', count: 5 },
-  { id: 'sources', label: '来源', count: 10 },
-  { id: 'evidence', label: '证据', count: 13 },
-  { id: 'claims', label: '声明', count: 8 },
-  { id: 'conflicts', label: '冲突与缺口', count: 1 },
-  { id: 'report', label: '报告', count: null },
-  { id: 'review', label: '审核', count: null }
-]
-
-const activeTab = ref('overview')
-const runLoading = ref(false)
-const runError = ref(null)
-const runResult = ref(null)
-const activeRunId = ref(null)
-const runCompleted = ref(false)
-const realReport = ref(null) // 后端真实报告数据
-
-const caseName = computed(() => props.caseData.name || props.caseData.title)
-const category = computed(() => props.caseData.category || '公共安全')
-
-// 是否为内置案例（有回放功能）
-const isBuiltinCase = computed(() => {
-  return props.caseData.isBuiltin || props.caseData.id === 'EP-2023-001'
-})
-
-// 是否有运行记录
-const hasRuns = computed(() => {
-  return (props.caseData.run_count && props.caseData.run_count > 0) ||
-         (props.caseData.metrics && props.caseData.metrics.sources > 0)
-})
-
-// 是否为新调查（无数据）
-const isNewInvestigation = computed(() => {
-  return !isBuiltinCase.value && !hasRuns.value
-})
-
-// 切换调查时重置运行状态
-watch(() => props.caseData.id, () => {
-  activeRunId.value = null
-  runCompleted.value = false
-  runLoading.value = false
-  runError.value = null
-  runResult.value = null
-  realReport.value = null
-  activeTab.value = 'overview'
-})
-
-// 运行回放调查（内置 East Palestine 案例）
-// 注意：回放是同步执行的，后端会完整运行后才返回
-// 所以前端需要模拟思考过程，让用户看到进度
-async function handleReplay() {
-  runLoading.value = true
-  runError.value = null
-  runResult.value = null
-  runCompleted.value = false
-
-  // 用一个假的 runId 触发 RunProgress 的模拟模式
-  activeRunId.value = 'replay-pending'
-
-  try {
-    const result = await runEastPalestineReplay()
-    runResult.value = result
-    activeRunId.value = result.run_id
-    emit('run-started', result)
-  } catch (e) {
-    runError.value = e.message || '回放启动失败'
-    runLoading.value = false
-    activeRunId.value = null
-  }
-  // 注意：回放是同步返回的（后端同步执行），返回时已经完成
-  // runLoading 不立即设为 false，让 RunProgress 显示完成状态
-}
-
-// 新建调查运行
-async function handleStartRun() {
-  const invId = props.caseData.investigation_id || props.caseData.id
-  if (!invId) {
-    runError.value = '当前调查没有 investigation_id，无法启动运行'
-    return
-  }
-  runLoading.value = true
-  runError.value = null
-  runResult.value = null
-  runCompleted.value = false
-  try {
-    const result = await startInvestigationRun(invId)
-    runResult.value = result
-    activeRunId.value = result.run_id
-    emit('run-started', result)
-  } catch (e) {
-    runError.value = e.message || '运行启动失败'
-    runLoading.value = false
-  }
-}
-
-// 运行完成回调
-async function onRunCompleted(data) {
-  runCompleted.value = true
-  runLoading.value = false
-  // 尝试获取运行的报告
-  try {
-    const reports = await fetchRunReports(data.run_id)
-    if (reports && reports.length > 0) {
-      const reportDetail = await fetchReportDetail(reports[0].report_id)
-      realReport.value = reportDetail
-    }
-  } catch (e) {
-    console.warn('获取报告失败:', e)
-  }
-  // 通知父组件刷新数据
-  emit('run-completed', data)
-}
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { useInvestigation } from '../composables/useInvestigation.js'
+import RunProgress from '../components/RunProgress.vue'
+import RunHistory from '../components/RunHistory.vue'
+import TopBar from '../components/TopBar.vue'
+import AgentFlow from '../components/AgentFlow.vue'
+import EvidenceChain from '../components/EvidenceChain.vue'
+import SectionHeading from '../components/SectionHeading.vue'
+import Timeline from '../components/Timeline.vue'
+import ReviewPanel from '../components/ReviewPanel.vue'
+import { projectAgents, verificationSummary, resultsPending, runModeLabel, runStatusLabel, runFailureLabel } from '../composables/presentation.js'
+import ReportDetail from '../components/ReportDetail.vue'
+const props = defineProps({ investigationId: { type: String, required: true }, replaying: Boolean })
+const emit = defineEmits(['updated', 'replay', 'new-investigation'])
+const { detail, runs, runId, run, budget, workers, data, loading, starting, error, running, load, loadRun, start, cancel } = useInvestigation(props.investigationId)
+const pending = computed(() => resultsPending({ replaying: props.replaying, starting: starting.value, running: running.value, loading: loading.value }))
+const tab = ref('overview')
+const tabs = [['overview', '概览'], ['agents', '智能体流程'], ['sources', '来源'], ['evidence', '证据'], ['claims', '声明'], ['conflicts', '冲突与缺口'], ['timeline', '时间线'], ['report', '报告'], ['review', '审核']]
+const query = ref('')
+const selectedEvidence = ref('')
+const filtered = computed(() => Object.fromEntries(['sources', 'evidence', 'claims'].map(key => [key, data.value[key].filter(x => JSON.stringify(x).toLowerCase().includes(query.value.toLowerCase()))])))
+const source = id => data.value.sources.find(x => x.source_id === id)
+const claim = id => data.value.claims.find(x => x.claim_id === id)
+const date = value => value ? new Date(value).toLocaleString('zh-CN') : '未记录'
+const modeLabel = runModeLabel
+const snapshotUrl = id => '/api/snapshots/' + encodeURIComponent(id) + '?format=cleaned'
+const safeUrl = value => /^https?:\/\//i.test(value || '') ? value : undefined
+function viewEvidence(id) { selectedEvidence.value = id; query.value = ''; tab.value = 'evidence' }
+async function launch() { await start(); emit('updated') }
+const agents = computed(() => projectAgents(data.value.steps))
+const verification = computed(() => verificationSummary(data.value.claims))
+const chain = computed(() => [
+  { number: data.value.sources.length, label: '信息来源', sub: 'Sources' },
+  { number: data.value.evidence.length, label: '证据摘录', sub: 'Evidence' },
+  { number: data.value.claims.length, label: '调查声明', sub: `${verification.value.verified} 条已验证` },
+  { number: data.value.reports.length, label: '调查报告', sub: 'Reports' },
+])
+const timelinePreview = computed(() => data.value.timeline.slice(0, 5).map(e => ({ date: date(e.event_time), event: e.description, description: e.validation_status })))
+const exportUrl = computed(() => !pending.value && data.value.reports[0] ? '/api/reports/' + encodeURIComponent(data.value.reports[0].report_id) + '/export?format=markdown' : '')
+const searchDialog = ref(null)
+const searchQuery = ref('')
+const searchResults = computed(() => searchQuery.value.trim() ? ['sources', 'evidence', 'claims'].flatMap(key => data.value[key].map(x => ({ key, id: x.source_id || x.evidence_id || x.claim_id, text: x.statement || x.content || x.title }))).filter(x => x.text?.toLowerCase().includes(searchQuery.value.trim().toLowerCase())).slice(0, 40) : [])
+function openSearch() { if (!pending.value) searchDialog.value.showModal() }
+function selectResult(result) { tab.value = result.key; query.value = searchQuery.value; selectedEvidence.value = ''; searchDialog.value.close() }
+function shortcut(event) { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch() } }
+watch(pending, value => { if (value) { searchDialog.value?.close(); tab.value = 'overview'; query.value = ''; selectedEvidence.value = '' } })
+onMounted(() => window.addEventListener('keydown', shortcut))
+onUnmounted(() => window.removeEventListener('keydown', shortcut))
 </script>
-
 <template>
   <div class="investigation-view">
-    <TopBar :case-name="caseName" :category="category" @open-search="emit('open-search')" />
-
+    <TopBar :case-name="detail?.title || '读取中'" :category="run ? modeLabel(run) : '新建事件'" :export-url="exportUrl" :search-disabled="pending" @open-search="openSearch" />
     <div class="content-area">
-
-      <!-- Hero 区 -->
-      <section class="hero fade-in-up">
-        <div class="hero-tag">
-          <template v-if="isBuiltinCase">案例档案 · {{ caseData.tag }} · 内置回放</template>
-          <template v-else-if="hasRuns">调查档案 · {{ caseData.run_count || 0 }}次运行</template>
-          <template v-else>新建调查 · 待开始</template>
-        </div>
-        <h1 class="hero-title">
-          {{ caseData.title }}
-        </h1>
-        <p class="hero-lede">{{ caseData.subtitle || caseData.description || '点击下方按钮开始调查，系统将自动搜索全网信息并生成结构化调查报告。' }}</p>
-
-        <div class="hero-meta-row" v-if="isBuiltinCase || hasRuns">
-          <div class="meta-block">
-            <span class="meta-label">档案编号</span>
-            <span class="meta-value">{{ caseData.id }}</span>
-          </div>
-          <div class="meta-block" v-if="caseData.completionDate">
-            <span class="meta-label">完成日期</span>
-            <span class="meta-value">{{ caseData.completionDate }}</span>
-          </div>
-          <div class="meta-block">
-            <span class="meta-label">验证状态</span>
-            <span class="meta-value" :class="hasRuns ? 'verified' : ''">
-              {{ hasRuns ? '● 已验证' : '○ 未开始' }}
-            </span>
-          </div>
-          <div class="meta-block">
-            <span class="meta-label">信息来源</span>
-            <span class="meta-value">{{ caseData.metrics?.sources || caseData.sources?.length || 0 }}个有效来源</span>
-          </div>
-        </div>
-
-        <!-- 新调查空状态的元信息 -->
-        <div class="hero-meta-row" v-else>
-          <div class="meta-block">
-            <span class="meta-label">调查编号</span>
-            <span class="meta-value">{{ caseData.id }}</span>
-          </div>
-          <div class="meta-block">
-            <span class="meta-label">状态</span>
-            <span class="meta-value">○ 待开始</span>
-          </div>
-          <div class="meta-block">
-            <span class="meta-label">类型</span>
-            <span class="meta-value">{{ caseData.category || '调查' }}</span>
-          </div>
-          <div class="meta-block">
-            <span class="meta-label">运行次数</span>
-            <span class="meta-value">0 次</span>
-          </div>
-        </div>
-
-        <div class="hero-actions">
-          <!-- 内置案例：显示回放按钮 -->
-          <template v-if="isBuiltinCase">
-            <button
-              class="btn btn-primary"
-              :disabled="runLoading || (activeRunId && !runCompleted)"
-              @click="handleReplay"
-            >
-              <template v-if="runLoading || (activeRunId && !runCompleted)">运行中…</template>
-              <template v-else>
-                运行回放调查
-                <span class="btn-arrow">→</span>
-              </template>
-            </button>
-            <button
-              class="btn btn-ghost"
-              :disabled="runLoading || (activeRunId && !runCompleted)"
-              @click="handleStartRun"
-            >
-              新建调查运行
-            </button>
-          </template>
-
-          <!-- 新调查/有运行记录：显示开始调查按钮 -->
-          <template v-else>
-            <button
-              class="btn btn-primary"
-              :disabled="runLoading || (activeRunId && !runCompleted)"
-              @click="handleStartRun"
-            >
-              <template v-if="runLoading || (activeRunId && !runCompleted)">
-                {{ runCompleted ? '运行完成' : '调查运行中…' }}
-              </template>
-              <template v-else>
-                {{ hasRuns ? '再次运行调查' : '开始调查' }}
-                <span class="btn-arrow">→</span>
-              </template>
-            </button>
-            <button
-              v-if="hasRuns"
-              class="btn btn-ghost"
-              @click="activeTab = 'report'"
-            >
-              查看报告
-            </button>
-          </template>
-        </div>
-
-        <!-- 运行结果反馈 -->
-        <div v-if="runResult" class="run-feedback success">
-          ✓ 调查运行已启动 — 运行编号 {{ runResult.run_id }}，状态：{{ runResult.run_status }}
-        </div>
-        <div v-if="runError" class="run-feedback error">
-          ✗ {{ runError }}（请确认后端服务已启动：uv run marketpulse-api）
-        </div>
-      </section>
-
-      <!-- 运行进度展示（运行中时显示，替代 Tab 内容） -->
-      <RunProgress
-        v-if="(activeRunId && !runCompleted) || runLoading"
-        :run-id="activeRunId || ''"
-        :starting="runLoading && !activeRunId"
-        @completed="onRunCompleted"
-        class="run-progress-wrap fade-in-up"
-      />
-
-      <!-- 章节导航 Tabs + Tab 内容（运行完成或未运行时显示） -->
-      <template v-else>
-        <!-- 新调查空状态 -->
-        <div v-if="isNewInvestigation" class="empty-investigation fade-in-up">
-          <div class="empty-icon">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
-              <circle cx="32" cy="32" r="18" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M32 14v36M14 32h36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <h2 class="empty-title">开始你的调查</h2>
-          <p class="empty-desc">
-            点击上方「开始调查」按钮，系统将自动：
-          </p>
-          <div class="empty-steps">
-            <div class="empty-step">
-              <span class="step-num">1</span>
-              <div>
-                <div class="step-title">全网搜索</div>
-                <div class="step-desc">在 DuckDuckGo、Bing、Yahoo 等引擎检索相关信息</div>
-              </div>
-            </div>
-            <div class="empty-step">
-              <span class="step-num">2</span>
-              <div>
-                <div class="step-title">采集证据</div>
-                <div class="step-desc">抓取权威来源页面，提取事实证据片段</div>
-              </div>
-            </div>
-            <div class="empty-step">
-              <span class="step-num">3</span>
-              <div>
-                <div class="step-title">验证分析</div>
-                <div class="step-desc">交叉验证声明，识别冲突与研究缺口</div>
-              </div>
-            </div>
-            <div class="empty-step">
-              <span class="step-num">4</span>
-              <div>
-                <div class="step-title">生成报告</div>
-                <div class="step-desc">输出 17 章节结构化调查报告，附完整引用溯源</div>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-primary empty-cta" @click="handleStartRun">
-            开始调查
-            <span class="btn-arrow">→</span>
-          </button>
-        </div>
-
-        <!-- 有数据时显示 Tab 内容 -->
-        <template v-else>
-        <!-- 章节导航 Tabs -->
-        <nav class="section-nav">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          class="nav-tab"
-          :class="{ active: activeTab === tab.id }"
-          @click="activeTab = tab.id"
-        >
-          {{ tab.label }}
-          <span v-if="tab.count" class="tab-count">{{ tab.count }}</span>
-        </button>
-      </nav>
-
-      <!-- 概览内容 -->
-      <template v-if="activeTab === 'overview'">
-        <!-- 智能体流程 -->
-        <AgentFlow :agents="caseData.agents" class="fade-in-up" style="animation-delay: 0.1s;">
-          <template #heading>
-            <SectionHeading
-              section-num="§ 01"
-              section-name="多智能体协作流程"
-              section-desc="Planner · Researcher · Analyst · Verifier · Writer"
-            />
-          </template>
-        </AgentFlow>
-
-        <!-- 证据链 -->
-        <EvidenceChain :chain="caseData.evidenceChain" class="fade-in-up" style="animation-delay: 0.15s;">
-          <template #heading>
-            <SectionHeading
-              section-num="§ 02"
-              section-name="证据链路"
-              section-desc="从原始来源到验证结论的完整追溯"
-            />
-          </template>
-        </EvidenceChain>
-
-        <!-- 指标行 -->
-        <MetricsRow :metrics="caseData.metrics" class="fade-in-up" style="animation-delay: 0.2s;" />
-
-        <!-- 两列：时间线 + 声明 -->
-        <div class="two-column fade-in-up" style="animation-delay: 0.25s;">
-          <div>
-            <SectionHeading
-              section-num="§ 03"
-              section-name="事件时间线"
-            />
-            <Timeline :items="caseData.timeline" />
-          </div>
-          <div>
-            <SectionHeading
-              section-num="§ 04"
-              section-name="已验证声明"
-            />
-            <ClaimList :claims="caseData.claims.slice(0, 3)" />
-          </div>
-        </div>
-
-        <!-- 报告预览 -->
-        <ReportPreview :findings="caseData.reportFindings" class="fade-in-up" style="animation-delay: 0.3s;">
-          <template #heading>
-            <SectionHeading
-              section-num="§ 05"
-              section-name="报告摘选"
-              section-desc="点击上标引用可溯源至原始证据"
-            />
-          </template>
-        </ReportPreview>
-
-        <!-- 来源列表 -->
-        <SourceList :sources="caseData.sources" class="fade-in-up" style="animation-delay: 0.35s;">
-          <template #heading>
-            <SectionHeading
-              section-num="§ 06"
-              section-name="参考文献与来源"
-              :section-desc="`${caseData.metrics.sources}个有效来源 · 7个官方一手 · 3种类型`"
-            />
-          </template>
-        </SourceList>
-      </template>
-
-      <!-- 智能体流程 Tab -->
-      <template v-else-if="activeTab === 'agents'">
-        <AgentFlow :agents="caseData.agents">
-          <template #heading>
-            <SectionHeading
-              section-num="§ 01"
-              section-name="多智能体协作流程"
-              section-desc="5个智能体协同完成调查"
-            />
-          </template>
-        </AgentFlow>
-      </template>
-
-      <!-- 来源 Tab -->
-      <template v-else-if="activeTab === 'sources'">
-        <SourceList :sources="caseData.sources">
-          <template #heading>
-            <SectionHeading
-              section-num="§ 02"
-              section-name="参考文献与来源"
-              :section-desc="`${caseData.metrics.sources}个有效来源`"
-            />
-          </template>
-        </SourceList>
-      </template>
-
-      <!-- 证据 Tab -->
-      <template v-else-if="activeTab === 'evidence'">
-        <SectionHeading
-          section-num="§ 03"
-          section-name="证据片段"
-          :section-desc="`${caseData.evidence?.length || 0}条证据 · 全部可定位溯源`"
-        />
-        <EvidenceList :evidence="caseData.evidence || []" />
-      </template>
-
-      <!-- 声明 Tab -->
-      <template v-else-if="activeTab === 'claims'">
-        <SectionHeading
-          section-num="§ 04"
-          section-name="已验证声明"
-          :section-desc="`${caseData.claims.length}项事实声明`"
-        />
-        <ClaimList :claims="caseData.claims" />
-      </template>
-
-      <!-- 冲突与缺口 Tab -->
-      <template v-else-if="activeTab === 'conflicts'">
-        <SectionHeading
-          section-num="§ 05"
-          section-name="冲突与研究缺口"
-          :section-desc="`${caseData.conflicts?.length || 0}个冲突 · ${caseData.gaps?.length || 0}个缺口`"
-        />
-        <ConflictGapPanel
-          :conflicts="caseData.conflicts || []"
-          :gaps="caseData.gaps || []"
-        />
-      </template>
-
-      <!-- 报告 Tab -->
-      <template v-else-if="activeTab === 'report'">
-        <ReportDetail :report-data="realReport || caseData" />
-      </template>
-
-      <!-- 审核 Tab -->
-      <template v-else-if="activeTab === 'review'">
-        <SectionHeading
-          section-num="§ 07"
-          section-name="审核与发布"
-          :section-desc="caseData.review?.policy_version ? `政策版本 ${caseData.review.policy_version}` : ''"
-        />
-        <ReviewPanel :review="caseData.review || {}" />
-      </template>
-
-      <div class="page-footer">
-        <span>Folio Investigation Journal</span>
-        <span>第 1 页 / 共 17 节</span>
+    <header class="hero">
+      <div class="hero-tag">事件调查 · {{ run ? modeLabel(run) : '等待调查' }}</div>
+      <h1 class="hero-title">{{ detail?.title || '正在读取调查…' }}</h1>
+      <p class="hero-lede">{{ detail?.investigation_goal || '重建事件经过，追溯证据与结论之间的联系。' }}</p>
+      <div class="hero-meta-row">
+        <div class="meta-block"><span class="meta-label">档案编号</span><span class="meta-value archive-id" :title="investigationId">{{ investigationId }}</span></div>
+        <div class="meta-block"><span class="meta-label">运行状态</span><span class="meta-value">{{ replaying ? '正在回放' : starting ? '正在启动' : loading && !run ? '正在读取' : runStatusLabel(run?.status) || '尚未运行' }}</span></div>
+        <div class="meta-block"><span class="meta-label">声明验证</span><span class="meta-value">{{ pending ? '等待本次结果' : verification.label }}</span></div>
+        <div class="meta-block"><span class="meta-label">信息来源</span><span class="meta-value">{{ pending ? '收集与整理中' : data.sources.length + ' 个来源' }}</span></div>
       </div>
-      </template>
-      </template>
+      <div class="hero-actions">
+        <button v-if="investigationId === 'INV-EAST-PALESTINE-2023'" class="btn btn-primary" :disabled="pending" @click="emit('replay')">{{ replaying ? '正在回放…' : '运行回放调查' }} <span>→</span></button>
+        <button v-else class="btn btn-primary" :disabled="starting || running || loading" @click="launch">{{ starting ? '正在启动…' : '启动联网调查' }} <span>→</span></button>
+        <button class="btn btn-ghost" @click="emit('new-investigation')">调查新主题</button>
+        <button v-if="running" class="btn btn-ghost" @click="cancel">取消运行</button>
+        <button class="quiet-button" :disabled="pending" @click="load">刷新</button>
+      </div>
+    </header>
+    <p v-if="error" class="notice error" role="alert">{{ error }} <button @click="load">重新加载</button></p>
+    <p class="muted">联网调查使用服务端模型配置，可能产生调用费用。离线案例请使用左侧回放入口。</p>
+    <div class="run-bar" v-if="runs.length"><RunHistory :runs="runs" :model-value="runId" :disabled="pending" @update:model-value="loadRun" /></div>
+    <RunProgress v-if="pending" :replaying="replaying" :starting="starting" :running="running" :phase="run?.current_phase" :workers="workers" :budget="budget" :steps="data.steps" />
+    <template v-else>
+    <p v-if="run?.interruption_reason" class="notice">运行说明：{{ runFailureLabel(run.interruption_reason) }}</p>
+    <nav class="section-nav" aria-label="调查内容"><button v-for="[key, label] in tabs" :key="key" class="nav-tab" :class="{ active: tab === key }" :aria-current="tab === key ? 'page' : undefined" @click="tab = key">{{ label }} <span class="tab-count" v-if="Array.isArray(data[key])">{{ data[key].length }}</span></button></nav>
+    <section v-if="tab === 'overview'">
+      <AgentFlow :agents="agents"><template #heading><SectionHeading section-num="01" section-name="智能体协作" section-desc="执行记录驱动" /></template></AgentFlow>
+      <EvidenceChain :chain="chain"><template #heading><SectionHeading section-num="02" section-name="证据链概览" section-desc="由来源到结论" /></template></EvidenceChain>
+      <div v-if="run" class="overview-columns">
+        <section><SectionHeading section-num="03" section-name="事件时间线" /><Timeline :items="timelinePreview" /><p v-if="!timelinePreview.length" class="empty">尚无有证据关联的事件。</p><button class="quiet-button" @click="tab = 'timeline'">查看完整时间线 →</button></section>
+        <section><SectionHeading section-num="04" section-name="关键声明" /><article v-for="c in data.claims.slice(0, 4)" :key="c.claim_id" class="claim-preview"><span class="badge" :class="c.validation_status.toLowerCase()">{{ c.validation_status }}</span><p>{{ c.statement }}</p></article><p v-if="!data.claims.length" class="empty">尚无调查声明。</p><button class="quiet-button" @click="tab = 'claims'">查看声明与验证依据 →</button></section>
+      </div>
+      <SectionHeading section-num="05" section-name="调查范围" /><p class="prose">{{ detail?.event_description }}</p>
+      <ul class="questions"><li v-for="q in detail?.questions" :key="q.question_id">{{ q.text }}</li></ul>
+      <p v-if="!run" class="empty">尚无运行记录。启动联网调查后，这里会显示实际执行步骤。</p>
+    </section>
+    <section v-if="tab === 'agents'">
+      <AgentFlow :agents="agents"><template #heading><SectionHeading section-num="01" section-name="智能体流程" section-desc="实际持久化步骤" /></template></AgentFlow>
+        <h2>执行记录 <small>{{ run?.current_phase }}</small></h2>
+        <div class="table-wrap"><table><thead><tr><th>角色 / 阶段</th><th>步骤</th><th>状态</th><th>耗时</th></tr></thead><tbody><tr v-for="s in data.steps" :key="s.step_id"><td>{{ s.agent_role }}<small>{{ s.phase }}</small></td><td>{{ s.logical_step_key }}<small v-if="s.error_code">{{ s.error_code }}</small></td><td>{{ s.status }}</td><td>{{ (s.active_elapsed_ms / 1000).toFixed(1) }} 秒</td></tr></tbody></table></div>
+        <p v-if="!data.steps.length" class="empty">尚无持久化执行步骤。</p>
+        <p v-if="budget" class="notice">已用预算：搜索 {{ budget.search_calls_used }}/{{ budget.max_search_calls }}，抓取 {{ budget.fetch_calls_used }}/{{ budget.max_fetch_calls }}，模型 {{ budget.model_calls_used }}/{{ budget.max_model_calls }}，Token {{ budget.tokens_used }}/{{ budget.max_tokens }}。</p>
+    </section>
+    <label v-if="['sources','evidence','claims'].includes(tab)" class="filter">筛选当前记录<input v-model="query" type="search" placeholder="输入关键词" /></label>
+    <section v-if="tab === 'sources'">
+      <p v-if="!filtered.sources.length" class="empty">暂无匹配来源。</p>
+      <article v-for="s in filtered.sources" :key="s.source_id" class="record">
+        <div class="row"><h2><a :href="safeUrl(s.canonical_url)" target="_blank" rel="noopener noreferrer">{{ s.title }}</a></h2><span class="badge">{{ s.evidence_eligible === true ? '可用于取证' : s.evidence_eligible === false ? '不可用于取证' : '待检查' }}</span></div>
+        <p>{{ s.publisher || s.organization || '发布机构未知' }} · {{ s.source_type }} · {{ s.parse_status || '尚未解析' }}</p>
+        <p class="muted">发布时间：{{ date(s.published_at) }}；采集时间：{{ date(s.retrieved_at) }}</p>
+        <p class="muted">来源家族：{{ s.family_id || '尚未确认' }}</p>
+        <a v-if="s.snapshot_id" :href="snapshotUrl(s.snapshot_id)" target="_blank" rel="noopener">打开归档正文</a>
+      </article>
+    </section>
+    <section v-if="tab === 'evidence'">
+      <p v-if="!filtered.evidence.length" class="empty">暂无匹配证据。</p>
+      <button v-if="selectedEvidence" @click="selectedEvidence = ''">显示全部证据</button>
+      <article v-for="e in filtered.evidence.filter(x => !selectedEvidence || x.evidence_id === selectedEvidence)" :key="e.evidence_id" class="record">
+        <h2>{{ source(e.source_id)?.title || e.evidence_id }}</h2><blockquote>{{ e.content }}</blockquote>
+        <p class="muted">{{ e.evidence_id }} · {{ e.locator_type }} · 提取于 {{ date(e.extracted_at) }}</p>
+        <a :href="snapshotUrl(e.snapshot_id)" target="_blank" rel="noopener">查看归档正文与定位上下文</a>
+        <details><summary>精确定位数据</summary><pre>{{ JSON.stringify(e.locator_payload, null, 2) }}</pre></details>
+        <ul><li v-for="r in e.relations" :key="r.claim_id">{{ r.stance }} / {{ r.entailment_status }}：{{ claim(r.claim_id)?.statement || r.claim_id }}</li></ul>
+      </article>
+    </section>
+    <section v-if="tab === 'claims'">
+      <p v-if="!filtered.claims.length" class="empty">暂无匹配声明。</p>
+      <article v-for="c in filtered.claims" :key="c.claim_id" class="record">
+        <div class="row"><span class="badge" :class="c.validation_status.toLowerCase()">{{ c.validation_status }}</span><small>{{ c.claim_type }} / {{ c.importance }}</small></div>
+        <h2>{{ c.statement }}</h2><p>{{ c.validation_basis || '尚无验证依据' }}</p><p class="muted">置信度：{{ c.confidence === null ? '未评估' : c.confidence }}；{{ c.confidence_basis || '未记录置信度说明' }}</p>
+        <div class="actions"><button v-for="id in c.supporting_evidence_ids" :key="id" @click="viewEvidence(id)">支持证据 {{ data.evidence.findIndex(e => e.evidence_id === id) + 1 }}</button><button v-for="id in c.contradicting_evidence_ids" :key="id" @click="viewEvidence(id)">反证 {{ data.evidence.findIndex(e => e.evidence_id === id) + 1 }}</button></div>
+      </article>
+    </section>
+    <section v-if="tab === 'conflicts'">
+      <h2>冲突</h2><p v-if="!data.conflicts.length" class="empty">当前记录未发现冲突；这不代表已经排除所有矛盾。</p>
+      <article v-for="c in data.conflicts" :key="c.conflict_id" class="record"><h3>{{ c.conflict_type }} · {{ c.severity }} · {{ c.status }}</h3><ul><li v-for="id in c.claim_ids" :key="id">{{ claim(id)?.statement || id }}</li></ul><p>{{ c.resolution_summary || '尚无解决结论' }}</p><p>{{ c.resolution_basis }}</p><p v-for="reason in c.possible_explanations" :key="reason">{{ reason }}</p><details><summary>冲突值与可能原因</summary><pre>{{ JSON.stringify({ values: c.competing_values, causes: c.possible_causes }, null, 2) }}</pre></details></article>
+      <h2>研究缺口</h2><p v-if="!data.gaps.length" class="empty">暂无记录。</p><article v-for="g in data.gaps" :key="g.gap_id" class="record"><h3>{{ g.gap_type }} · {{ g.severity }} · {{ g.status }}</h3><p>{{ g.reason }}</p><p>{{ g.suggested_action }}</p><ul><li v-for="action in g.suggested_actions" :key="action">{{ action }}</li></ul></article>
+    </section>
+    <section v-if="tab === 'timeline'">
+      <p v-if="!data.timeline.length" class="empty">暂无有证据关联的时间线记录。</p>
+      <article v-for="event in data.timeline" :key="event.timeline_event_id" class="record"><time>{{ date(event.event_time) }}</time><h2>{{ event.description }}</h2><p>{{ event.time_precision }} · {{ event.validation_status }}</p><button v-for="id in event.evidence_ids" :key="id" @click="viewEvidence(id)">查看事件证据</button></article>
+    </section>
+    <ReportDetail v-if="tab === 'report'" :reports="data.reports" :evidence="data.evidence" :show-review="false" />
+    <section v-if="tab === 'review'"><ReviewPanel v-if="data.reports.length" :key="data.reports[0].report_id" :report-id="data.reports[0].report_id" @updated="loadRun()" /><p v-else class="empty">当前运行尚未生成报告。</p></section>
+    </template>
     </div>
+    <dialog ref="searchDialog" class="search-dialog" aria-labelledby="search-title"><div class="row"><h2 id="search-title">搜索当前调查</h2><button @click="searchDialog.close()">关闭</button></div><label>来源、证据与声明<input v-model="searchQuery" type="search" placeholder="输入关键词" autofocus /></label><p v-if="!searchQuery.trim()" class="muted">在当前运行的真实记录中检索。</p><p v-else-if="!searchResults.length" class="empty">没有匹配记录。</p><button v-for="(result, index) in searchResults" :key="index" class="search-result" @click="selectResult(result)"><small>{{ {sources: '来源', evidence: '证据', claims: '声明'}[result.key] }}</small>{{ result.text }}</button></dialog>
   </div>
 </template>
 

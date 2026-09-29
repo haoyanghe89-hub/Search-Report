@@ -65,6 +65,64 @@ NOW = datetime(2026, 9, 22, 8, tzinfo=UTC)
 INVESTIGATION_ID = "I-phase43-feedback"
 
 
+@pytest.mark.asyncio
+async def test_live_partial_extraction_reaches_verification_and_preserves_rejected_gap(
+    investigation_store: tuple[InvestigationRepository, Engine, str],
+    tmp_path: Path,
+) -> None:
+    class PartialModel(TwoRoundModel):
+        async def generate(self, request: ModelRequest[Any]) -> StructuredModelResult[Any]:
+            result = await super().generate(request)
+            if request.response_model.__name__ == "AnalysisProposal":
+                proposal = result.output
+                rejected = proposal.evidence[0].model_copy(
+                    update={
+                        "evidence_key": "invented",
+                        "quote": "This sentence is absent from the source.",
+                    }
+                )
+                result = result.model_copy(
+                    update={
+                        "output": proposal.model_copy(
+                            update={
+                                "evidence": (*proposal.evidence, rejected),
+                            }
+                        )
+                    }
+                )
+            return result
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "partial-blobs")
+    sessions = create_session_factory(engine)
+    run_id = "RUN-live-partial-extraction"
+    store = _seed_run(repository, engine, run_id=run_id, mode=RunMode.LIVE, max_sources=1)
+    result = await _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        BoundExternalCalls(
+            sessions=sessions,
+            repository=repository,
+            recordings=RepositoryRecordedCallStore(repository, blobs),
+            live_search=TwoRoundSearch(),
+            live_fetch=TwoRoundFetch(),
+            live_model=PartialModel(),
+        ),
+        owner="partial-worker",
+        config=FeedbackLoopConfig(ground_model_quotes=True),
+    ).run(run_id)
+    state = FeedbackStore(sessions, repository).state(run_id)
+    assert "VERIFY" in result.phase_trace
+    assert result.phase_trace.count("ANALYZE") == 1
+    assert len(state.evidence) == 1
+    assert all("absent from the source" not in item.content for item in state.evidence)
+    assert any(g.gap_type is ResearchGapType.ANALYSIS_ERROR for g in state.gaps)
+    assert result.termination == "BLOCKED"
+
+
 class TwoRoundSearch:
     def __init__(self) -> None:
         self.calls = 0

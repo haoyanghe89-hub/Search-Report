@@ -1,63 +1,32 @@
-/**
- * API 请求封装
- * 统一处理请求、错误、超时
- */
-
-const BASE_URL = '/api'
-
-/**
- * 通用请求方法
- */
-async function request(url, options = {}) {
-  const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`
-  
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers
-    },
-    ...options
-  }
-
-  try {
-    const response = await fetch(fullUrl, config)
-    
-    if (!response.ok) {
-      let errorData = null
-      try {
-        errorData = await response.json()
-      } catch {
-        // 忽略 JSON 解析错误
-      }
-      
-      const message = errorData?.detail?.message || errorData?.detail || response.statusText
-      const code = errorData?.detail?.code || errorData?.code || `HTTP_${response.status}`
-      
-      throw new ApiError(response.status, code, message, errorData)
-    }
-    
-    return await response.json()
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw error
-    }
-    // 网络错误
-    throw new ApiError(0, 'NETWORK_ERROR', error.message || '网络连接失败')
-  }
-}
-
-/**
- * API 错误类
- */
-class ApiError extends Error {
-  constructor(status, code, message, data = null) {
+export class ApiError extends Error {
+  constructor(status, code, message) {
     super(message)
-    this.name = 'ApiError'
     this.status = status
     this.code = code
-    this.data = data
   }
 }
-
-export { request, ApiError }
+export async function request(path, options = {}) {
+  const { timeoutMs = 30000, ...init } = options
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const response = await fetch('/api' + path, {
+      ...init,
+      credentials: 'same-origin',
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json', ...init.headers },
+    })
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}))
+      const detail = data.detail
+      const message = typeof detail === 'string' ? detail : detail?.message || (Array.isArray(detail) ? detail.map(x => x.msg).join('；') : response.statusText)
+      throw new ApiError(response.status, detail?.code || 'HTTP_' + response.status, message || '请求失败')
+    }
+    if (response.status === 204) return null
+    return await response.json()
+  } catch (error) {
+    if (error instanceof ApiError) throw error
+    throw new ApiError(0, 'NETWORK_ERROR', error.name === 'AbortError' ? '请求超时。可刷新调查列表检查后端运行状态。' : '无法连接服务：' + error.message)
+  } finally { clearTimeout(timer) }
+}
 export default request

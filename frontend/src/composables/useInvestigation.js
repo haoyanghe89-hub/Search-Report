@@ -1,134 +1,88 @@
-/**
- * 调查数据组合式函数
- */
-import { ref, onMounted } from 'vue'
-import {
-  fetchInvestigations,
-  fetchInvestigationDetail,
-  fetchInvestigationRuns,
-  fetchRunDetail,
-  fetchRunSources,
-  fetchRunEvidence,
-  fetchRunClaims,
-  fetchRunConflicts,
-  fetchRunTimeline,
-  fetchRunReports
-} from '@/api/index.js'
-
-/**
- * 使用调查列表
- */
-export function useInvestigations() {
-  const investigations = ref([])
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import request from '../api/request.js'
+export const runningStatuses = new Set(['CREATED', 'PENDING', 'WAITING_FOR_EXECUTION', 'RUNNING', 'VERIFYING'])
+const collections = ['steps', 'sources', 'evidence', 'claims', 'conflicts', 'gaps', 'timeline', 'reports']
+const emptyData = () => Object.fromEntries(collections.map(key => [key, []]))
+export function useInvestigation(id, { api = request, mount = onMounted, unmount = onUnmounted, schedule = setTimeout, unschedule = clearTimeout } = {}) {
+  const detail = ref(null)
+  const runs = ref([])
+  const runId = ref('')
+  const run = ref(null)
+  const budget = ref(null)
+  const workers = ref({})
+  const data = ref(emptyData())
   const loading = ref(false)
-  const error = ref(null)
-
+  const starting = ref(false)
+  const error = ref('')
+  const running = computed(() => runningStatuses.has(run.value?.status))
+  let timer
+  let generation = 0
+  let disposed = false
+  let pollFailures = 0
+  async function loadRun(selectedId = runId.value) {
+    unschedule(timer)
+    const ticket = ++generation
+    if (!selectedId) return
+    const changed = runId.value !== selectedId
+    runId.value = selectedId
+    if (changed) { data.value = emptyData(); run.value = null; budget.value = null; workers.value = {} }
+    loading.value = true
+    error.value = ''
+    try {
+      const [info, ...results] = await Promise.all([
+        api('/runs/' + selectedId), ...collections.map(key => api('/runs/' + selectedId + '/' + key)),
+      ])
+      if (disposed || ticket !== generation) return
+      run.value = info.run
+      runs.value = runs.value.map(item => item.run_id === info.run.run_id ? { ...item, ...info.run } : item)
+      budget.value = info.budget
+      workers.value = info.workers || {}
+      data.value = Object.fromEntries(collections.map((key, index) => [key, results[index]]))
+      pollFailures = 0
+      if (runningStatuses.has(info.run.status)) timer = schedule(() => loadRun(selectedId), 2000)
+    } catch (e) {
+      if (!disposed && ticket === generation) {
+        error.value = e.message
+        timer = schedule(() => loadRun(selectedId), Math.min(15000, 2000 * 2 ** Math.min(pollFailures++, 3)))
+      }
+    } finally {
+      if (!disposed && ticket === generation) loading.value = false
+    }
+  }
   async function load() {
     loading.value = true
-    error.value = null
+    error.value = ''
     try {
-      const data = await fetchInvestigations()
-      investigations.value = data
-    } catch (e) {
-      error.value = e
-      console.error('加载调查列表失败:', e)
-    } finally {
-      loading.value = false
-    }
+      const [investigation, history] = await Promise.all([api('/investigations/' + id), api('/investigations/' + id + '/runs')])
+      if (disposed) return
+      detail.value = investigation
+      runs.value = history
+      const selected = history.find(r => r.run_id === runId.value) || history[0]
+      if (selected) await loadRun(selected.run_id)
+    } catch (e) { if (!disposed) error.value = e.message }
+    finally { if (!disposed) loading.value = false }
   }
-
-  onMounted(load)
-
-  return { investigations, loading, error, reload: load }
-}
-
-/**
- * 使用调查详情
- */
-export function useInvestigationDetail(investigationId) {
-  const detail = ref(null)
-  const loading = ref(false)
-  const error = ref(null)
-
-  async function load(id = investigationId.value) {
-    if (!id) return
-    loading.value = true
-    error.value = null
+  async function start() {
+    if (starting.value || running.value) return
+    starting.value = true
+    error.value = ''
     try {
-      const data = await fetchInvestigationDetail(id)
-      detail.value = data
-    } catch (e) {
-      error.value = e
-      console.error('加载调查详情失败:', e)
-    } finally {
-      loading.value = false
-    }
+      const result = await api('/investigations/' + id + '/runs', { method: 'POST' })
+      if (disposed) return
+      runId.value = result.run_id
+      data.value = emptyData()
+      run.value = null
+      await load()
+    } catch (e) { if (!disposed) error.value = e.message }
+    finally { if (!disposed) starting.value = false }
   }
-
-  return { detail, loading, error, reload: load }
-}
-
-/**
- * 使用运行数据
- */
-export function useRunData(runId) {
-  const run = ref(null)
-  const sources = ref([])
-  const evidence = ref([])
-  const claims = ref([])
-  const conflicts = ref([])
-  const timeline = ref([])
-  const reports = ref([])
-  const loading = ref(false)
-  const error = ref(null)
-
-  async function loadAll(id = runId.value) {
-    if (!id) return
-    loading.value = true
-    error.value = null
+  async function cancel() {
     try {
-      const [
-        runData,
-        sourcesData,
-        evidenceData,
-        claimsData,
-        conflictsData,
-        timelineData,
-        reportsData
-      ] = await Promise.all([
-        fetchRunDetail(id),
-        fetchRunSources(id),
-        fetchRunEvidence(id),
-        fetchRunClaims(id),
-        fetchRunConflicts(id),
-        fetchRunTimeline(id),
-        fetchRunReports(id)
-      ])
-      run.value = runData
-      sources.value = sourcesData
-      evidence.value = evidenceData
-      claims.value = claimsData
-      conflicts.value = conflictsData
-      timeline.value = timelineData
-      reports.value = reportsData
-    } catch (e) {
-      error.value = e
-      console.error('加载运行数据失败:', e)
-    } finally {
-      loading.value = false
-    }
+      await api('/runs/' + runId.value + '/cancel', { method: 'POST' })
+      await loadRun()
+    } catch (e) { error.value = e.message }
   }
-
-  return {
-    run,
-    sources,
-    evidence,
-    claims,
-    conflicts,
-    timeline,
-    reports,
-    loading,
-    error,
-    reload: loadAll
-  }
+  mount(load)
+  unmount(() => { disposed = true; generation++; unschedule(timer) })
+  return { detail, runs, runId, run, budget, workers, data, loading, starting, error, running, load, loadRun, start, cancel }
 }

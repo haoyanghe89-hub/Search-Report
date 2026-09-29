@@ -3,5 +3,6 @@ import App from './App.vue'
 
 import './styles/variables.css'
 import './styles/base.css'
+import './styles/folio-ui.css'
 
 createApp(App).mount('#app')

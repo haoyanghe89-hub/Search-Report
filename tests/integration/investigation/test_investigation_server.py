@@ -8,6 +8,7 @@ from pytest import MonkeyPatch
 
 from marketpulse.config import Settings
 from marketpulse.investigation.api import ReplayCaseOut
+from marketpulse.investigation.case_replay import RECORDING_RUN_ID
 from marketpulse.investigation.server import create_app
 
 
@@ -103,17 +104,29 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         run_id = replay["run_id"]
         run = client.get(f"/api/runs/{run_id}").json()["run"]
         assert run["mode"] == "REPLAY"
-        assert run["origin_run_id"] == "RUN-EP-RECORDING-V1"
+        assert run["execution_provenance"] == "CURATED_OFFLINE"
+        assert run["origin_run_id"] == RECORDING_RUN_ID
+        assert "CURATED" in RECORDING_RUN_ID
 
         sources = client.get(f"/api/runs/{run_id}/sources").json()
         assert len(sources) >= 10
         assert sum(source["is_official"] for source in sources) >= 3
         assert len({source["source_type"] for source in sources}) >= 3
+        secondary = [
+            source
+            for source in sources
+            if not source["is_official"] and not source["is_first_hand"]
+        ]
+        assert len({source["publisher"] for source in secondary}) >= 3
+        assert not any("ASPECT response" in source["title"] for source in sources)
 
         claims = client.get(f"/api/runs/{run_id}/claims").json()
         assert claims
         assert all(claim["latest_validation_id"] for claim in claims)
         assert all(claim["supporting_evidence_ids"] for claim in claims)
+        assert all(len(claim["supporting_evidence_ids"]) == 1 for claim in claims)
+        assert any("NTSB identified an overheated" in claim["statement"] for claim in claims)
+        assert any("16:37" in claim["statement"] for claim in claims)
 
         conflicts = client.get(f"/api/runs/{run_id}/conflicts").json()
         assert any(
@@ -126,6 +139,12 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         report = client.get(f"/api/reports/{report_id}").json()
         assert report["report"]["report_type"] == "FULL_INVESTIGATION"
         assert len(report["sections"]) == 17
+        sections = {section["section_type"]: section["content"] for section in report["sections"]}
+        assert sections["REMEDIATION_AND_FOLLOW_UP"]["units"]
+        assert sections["LIMITATIONS_AND_RESEARCH_GAPS"]["units"]
+        assert "manually reviewed" in sections["METHODOLOGY"]["units"][0]["text"]
+        detail = client.get(f"/api/investigations/{replay['investigation_id']}").json()
+        assert len(detail["questions"]) == 8
 
         citations = client.get(f"/api/reports/{report_id}/citations").json()
         assert citations
@@ -133,7 +152,32 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         assert citation["claim"] is not None
         assert citation["evidence"]["exact_quote"]
         assert citation["source"] is not None
+        # Evidence.content is already the exact slice. A non-zero locator must not
+        # slice it again, nor return the old whole-document excerpt.
+        assert citation["evidence"]["locator_payload"]["start"] > 0
+        assert len(citation["evidence"]["exact_quote"]) < 1500
+        snapshot = client.get(
+            f"/api/snapshots/{citation['evidence']['snapshot_id']}?format=cleaned"
+        )
+        assert snapshot.status_code == 200
+        assert citation["evidence"]["exact_quote"] in snapshot.text
+        exported = client.get(f"/api/reports/{report_id}/export?format=markdown")
+        assert exported.status_code == 200
+        assert citation["source"]["canonical_url"] in exported.text
+        assert citation["evidence"]["exact_quote"].splitlines()[0] in exported.text
+        assert "REVIEW_REQUIRED" in exported.text
 
         review = client.get(f"/api/reports/{report_id}/review").json()
         assert review["evaluation"]["hard_finding_count"] == 0
         assert review["pending_request"] is not None
+
+        repeated = client.post("/api/cases/east-palestine-2023/replay")
+        assert repeated.status_code == 202
+        second = repeated.json()
+        assert second["run_id"] != run_id
+        second_evidence = {
+            item["evidence_id"]
+            for item in client.get(f"/api/runs/{second['run_id']}/evidence").json()
+        }
+        second_citations = client.get(f"/api/reports/{second['report_id']}/citations").json()
+        assert all(item["evidence_id"] in second_evidence for item in second_citations)

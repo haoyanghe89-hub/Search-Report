@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 from datetime import UTC, datetime, timedelta
 
+import pytest
 from sqlalchemy import Engine, text
 
 from marketpulse.infrastructure.storage.models import BlobRef
@@ -55,7 +56,9 @@ CONTENT = "The agency confirmed the derailment on the record at 9pm."
 CONTENT_HASH = hashlib.sha256(CONTENT.encode()).hexdigest()
 
 
-def _seed(repository: InvestigationRepository) -> None:
+def _seed(
+    repository: InvestigationRepository, *, judgment: str = "ENTAILS", offset: int = 0
+) -> None:
     repository.add(
         Investigation(
             investigation_id="I-001",
@@ -140,7 +143,9 @@ def _seed(repository: InvestigationRepository) -> None:
             artifact_id="A-001",
             content=CONTENT,
             content_hash=CONTENT_HASH,
-            locator=TextRangeLocator(start=0, end=len(CONTENT), quote_hash=CONTENT_HASH),
+            locator=TextRangeLocator(
+                start=offset, end=offset + len(CONTENT), quote_hash=CONTENT_HASH
+            ),
             extracted_at=NOW,
             extractor_name="fixture",
             extractor_version="1",
@@ -189,6 +194,10 @@ def _seed(repository: InvestigationRepository) -> None:
             status=ValidationStatus.VERIFIED,
             confidence=0.97,
             validation_basis="Direct institutional record.",
+            validation_basis_payload={
+                "integrity_valid_evidence_ids": ["E-001"],
+                "semantic_judgments": {"E-001": judgment},
+            },
             created_at=NOW,
         )
     )
@@ -283,6 +292,36 @@ async def test_pipeline_generates_cited_report(
     assert result2.report.claim_set_hash == result.report.claim_set_hash
     assert result2.report.citation_set_hash == result.report.citation_set_hash
     assert result2.snapshot.snapshot_hash == result.snapshot.snapshot_hash
+
+
+@pytest.mark.parametrize("judgment", ["PENDING", "UNCERTAIN", "NOT_RELEVANT", "CONTRADICTS"])
+async def test_unverified_relation_cannot_fallback_to_citation(
+    investigation_store: tuple[InvestigationRepository, Engine, str], judgment: str
+) -> None:
+    repository, engine, _ = investigation_store
+    _seed(repository, judgment=judgment)
+    result = await _pipeline(engine).generate(
+        run_id="RUN-001", report_type=ReportType.FULL_INVESTIGATION, now=NOW
+    )
+    assert not result.citations
+    assert "CITATION_NO_ENTAILED_RELATION" in {finding.code for finding in result.findings}
+    with engine.connect() as connection:
+        assert (
+            connection.scalar(text("SELECT release_status FROM inv_report_projections"))
+            != "PUBLISHED"
+        )
+
+
+async def test_nonzero_document_offset_preserves_exact_quote(
+    investigation_store: tuple[InvestigationRepository, Engine, str],
+) -> None:
+    repository, engine, _ = investigation_store
+    _seed(repository, offset=137)
+    result = await _pipeline(engine).generate(
+        run_id="RUN-001", report_type=ReportType.FULL_INVESTIGATION, now=NOW
+    )
+    assert result.hard_finding_count == 0
+    assert result.citations[0].resolved_quote_hash == CONTENT_HASH
 
 
 async def test_pipeline_fails_closed_on_claim_drift(

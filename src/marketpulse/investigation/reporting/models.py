@@ -63,6 +63,7 @@ class SnapshotClaim(DomainModel):
     validation_semantic_hash: Sha256
     importance: ClaimImportance
     is_critical: bool
+    report_section: str | None = None
 
 
 class SnapshotEvidence(DomainModel):
@@ -93,6 +94,9 @@ class SnapshotConflict(DomainModel):
     status: ConflictStatus
     claim_stable_keys: tuple[NonEmptyText, ...]
     semantic_hash: Sha256
+    resolution_summary: str | None = None
+    possible_explanations: tuple[str, ...] = ()
+    competing_values: tuple[JsonValue, ...] = ()
 
 
 class SnapshotResearchGap(DomainModel):
@@ -132,6 +136,7 @@ class ReportInputSemanticPayload(DomainModel):
     validation_policy_version: NonEmptyText
     investigation_key: NonEmptyText
     terminal_run_status: NonEmptyText
+    execution_provenance: str = "PROVIDER_WORKFLOW"
     questions: tuple[NonEmptyText, ...]
     claims: tuple[SnapshotClaim, ...]
     evidence: tuple[SnapshotEvidence, ...]

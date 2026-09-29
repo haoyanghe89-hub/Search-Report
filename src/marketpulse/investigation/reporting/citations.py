@@ -46,6 +46,7 @@ from marketpulse.investigation.reporting.models import (
     ReportValidationFinding,
 )
 from marketpulse.investigation.reporting.writer import ContentClass, ReportDraft
+from marketpulse.investigation.validation.relations import validated_relation
 
 CITATION_SCHEMA_VERSION = "citation-v1"
 ENTAILMENT_VERSION = "semantic-entailment-v1"
@@ -159,7 +160,7 @@ class CitationFactory:
                 f"validation for claim {claim_id} drifted since snapshot",
             )
 
-        relation = self._best_relation(session, claim_id)
+        relation = self._best_relation(session, claim_id, validation)
         if relation is None:
             return None, (
                 "CITATION_NO_ENTAILED_RELATION",
@@ -176,9 +177,9 @@ class CitationFactory:
             )
 
         locator = evidence.locator
-        quote = evidence.content[locator.start : locator.end]
+        quote = evidence.content
         quote_hash = hashlib.sha256(quote.encode("utf-8")).hexdigest()
-        if quote_hash != locator.quote_hash:
+        if quote_hash != locator.quote_hash or len(quote) != locator.end - locator.start:
             return None, (
                 "CITATION_QUOTE_MISMATCH",
                 f"evidence {evidence.evidence_id} quote hash mismatch",
@@ -216,23 +217,26 @@ class CitationFactory:
         )
         return citation, None
 
-    def _best_relation(self, session: Session, claim_id: str) -> ClaimEvidenceRelation | None:
+    def _best_relation(
+        self, session: Session, claim_id: str, validation: ValidationResult
+    ) -> ClaimEvidenceRelation | None:
         rows = session.scalars(
             select(ClaimEvidenceRelationRow)
             .where(ClaimEvidenceRelationRow.claim_id == claim_id)
             .order_by(ClaimEvidenceRelationRow.relation_id)
         ).all()
-        best: ClaimEvidenceRelation | None = None
+        candidates: list[tuple[str, ClaimEvidenceRelation]] = []
         for row in rows:
             relation = self._repository.get_in_session(
                 session, ClaimEvidenceRelation, row.relation_id
             )
+            relation = validated_relation(relation, validation)
             if relation.stance is not RelationStance.SUPPORTS:
                 continue
             if relation.entailment_status is EntailmentStatus.ENTAILED:
-                return relation
-            best = best or relation
-        return best
+                evidence = self._repository.get_in_session(session, Evidence, relation.evidence_id)
+                candidates.append((evidence.content_hash, relation))
+        return min(candidates, key=lambda item: item[0])[1] if candidates else None
 
 
 def _finding(

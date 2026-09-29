@@ -8,6 +8,7 @@ operator) — review authentication lives in the review router.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import uuid
@@ -15,12 +16,13 @@ from datetime import UTC, datetime
 from typing import Any, Literal, Protocol, cast
 
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import Response
 from pydantic import BaseModel, Field
-from sqlalchemy import func, select, text
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
+from marketpulse.investigation.domain.claims import ClaimEvidenceRelation, ValidationResult
 from marketpulse.investigation.domain.enums import (
-    RunMode,
     GapStatus,
     RelationStance,
     ReportType,
@@ -63,6 +65,7 @@ from marketpulse.investigation.persistence.repositories import InvestigationRepo
 from marketpulse.investigation.reporting.persistence import ReportGovernanceRepository
 from marketpulse.investigation.reporting.pipeline import ReportPipeline
 from marketpulse.investigation.reporting.writer import DeterministicWriter
+from marketpulse.investigation.validation.relations import validated_relation
 
 router = APIRouter(prefix="/api")
 
@@ -136,6 +139,11 @@ class ReplayCaseRunner(Protocol):
     async def run(self) -> ReplayCaseOut: ...
 
 
+class RunStartOut(BaseModel):
+    run_id: str
+    status: str
+
+
 class InvestigationCountsOut(BaseModel):
     sources: int
     evidence: int
@@ -160,6 +168,7 @@ class RunOut(BaseModel):
     run_id: str
     investigation_id: str
     mode: str
+    execution_provenance: str
     status: str
     current_phase: str
     workflow_version: str
@@ -193,6 +202,7 @@ class BudgetOut(BaseModel):
 
 
 class RunDetailOut(BaseModel):
+    workers: dict[str, str] = Field(default_factory=dict)
     run: RunOut
     budget: BudgetOut | None
 
@@ -373,6 +383,8 @@ class CitationClaimOut(BaseModel):
 
 class CitationEvidenceOut(BaseModel):
     evidence_id: str
+    snapshot_id: str
+    artifact_id: str | None
     excerpt: str
     exact_quote: str | None
     locator_type: str
@@ -467,6 +479,12 @@ def _run_out(row: InvestigationRunRow) -> RunOut:
         run_id=row.run_id,
         investigation_id=row.investigation_id,
         mode=row.mode.value,
+        execution_provenance=(
+            "CURATED_OFFLINE"
+            if row.workflow_version.startswith("curated-offline")
+            or row.run_id.startswith("RUN-EP-CURATED")
+            else row.mode.value
+        ),
         status=row.status.value,
         current_phase=row.current_phase.value,
         workflow_version=row.workflow_version,
@@ -576,9 +594,11 @@ def _exact_quote(content: str, locator_payload: dict[str, Any]) -> str | None:
         locator = deserialize_locator(json.dumps(locator_payload))
     except ValueError:
         return None
-    if locator.start >= len(content):
+    if len(content) != locator.end - locator.start:
         return None
-    return content[locator.start : min(locator.end, len(content))]
+    if hashlib.sha256(content.encode("utf-8")).hexdigest() != locator.quote_hash:
+        return None
+    return content
 
 
 def _excerpt(content: str) -> str:
@@ -694,21 +714,6 @@ def list_investigations(request: Request) -> list[InvestigationSummaryOut]:
         )
         for investigation_id, count in count_rows:
             run_counts[investigation_id] = int(count)
-        # Include live-research blackboard runs so the sidebar reflects real research.
-        try:
-            dialect = session.bind.dialect.name if session.bind is not None else ""
-            live_sql = (
-                "SELECT json_extract(snapshot, '$.investigation_id') AS iid, COUNT(*) "
-                "FROM mp_runs GROUP BY iid"
-                if dialect == "sqlite"
-                else "SELECT snapshot->>'investigation_id' AS iid, COUNT(*) "
-                "FROM mp_runs GROUP BY iid"
-            )
-            for iid, live_count in session.execute(text(live_sql)).all():
-                if iid:
-                    run_counts[str(iid)] = run_counts.get(str(iid), 0) + int(live_count)
-        except Exception:
-            pass
         return [
             InvestigationSummaryOut(
                 investigation_id=row.investigation_id,
@@ -728,10 +733,19 @@ def create_investigation(
 ) -> InvestigationDetailOut:
     repository = _repository(request)
     now = _utcnow()
+    question_texts = [value.strip() for value in payload.questions if value.strip()] or [
+        "What happened, where and when?",
+        "What causes are established and what remains uncertain?",
+        "How did the event propagate and who was affected?",
+        "What primary and independent sources support the findings?",
+        "Which accounts conflict and do their time or measurement scopes differ?",
+        "Which claims are verified, probable, disputed or unsupported?",
+        "What remediation and institutional actions followed?",
+        "What lessons and unresolved research questions remain?",
+    ]
     questions = tuple(
-        InvestigationQuestion(question_id=f"Q-{uuid.uuid4().hex}", text=text, is_critical=False)
-        for text in payload.questions
-        if text.strip()
+        InvestigationQuestion(question_id=f"Q-{uuid.uuid4().hex}", text=value, is_critical=True)
+        for value in question_texts
     )
     investigation = Investigation(
         investigation_id=f"INV-{uuid.uuid4().hex}",
@@ -740,7 +754,7 @@ def create_investigation(
         investigation_goal=payload.investigation_goal,
         scope=InvestigationScope(summary=payload.event_description),
         questions=questions,
-        critical_question_ids=(),
+        critical_question_ids=tuple(question.question_id for question in questions),
         created_at=now,
         updated_at=now,
     )
@@ -767,30 +781,44 @@ def create_investigation(
 
 @router.post(
     "/investigations/{investigation_id}/runs",
-    response_model=ReplayCaseOut,
+    response_model=RunStartOut,
     status_code=202,
 )
-async def start_investigation_run(
-    investigation_id: str, request: Request
-) -> ReplayCaseOut:
-    """Start a replay run for the given investigation.
+async def start_investigation_run(investigation_id: str, request: Request) -> RunStartOut:
+    """Start an owned background LIVE run; explicit case replay has its own route."""
+    from marketpulse.investigation.live_runtime import (
+        LiveInvestigationService,
+        LiveNotConfiguredError,
+    )
 
-    Uses the bundled East Palestine fixture so the full pipeline can be
-    exercised without live model/search access.
-    """
     sessions = _sessions(request)
     with sessions() as session:
         _get_investigation_row(session, investigation_id)
     runner = cast(
-        "ReplayCaseRunner | None",
-        getattr(request.app.state, "east_palestine_replay", None),
+        "LiveInvestigationService | None",
+        getattr(request.app.state, "live_investigation", None),
     )
     if runner is None:
-        raise _error(503, "REPLAY_NOT_CONFIGURED", "replay runner is not configured")
-    run_for_investigation = getattr(runner, "run_for_investigation", None)
-    if run_for_investigation is None:
-        raise _error(501, "RUN_NOT_SUPPORTED", "runner does not support arbitrary investigations")
-    return await run_for_investigation(investigation_id)
+        raise _error(503, "LIVE_NOT_CONFIGURED", "live runner is not configured")
+    try:
+        run_id = runner.start(investigation_id)
+    except LiveNotConfiguredError as error:
+        raise _error(503, "LIVE_NOT_CONFIGURED", str(error)) from error
+    return RunStartOut(run_id=run_id, status=RunStatus.CREATED.value)
+
+
+@router.post("/runs/{run_id}/cancel", response_model=RunStartOut)
+async def cancel_investigation_run(run_id: str, request: Request) -> RunStartOut:
+    from marketpulse.investigation.live_runtime import LiveInvestigationService
+
+    with _sessions(request)() as session:
+        _get_run_row(session, run_id)
+    runner = cast(
+        "LiveInvestigationService | None", getattr(request.app.state, "live_investigation", None)
+    )
+    if runner is None or not await runner.cancel(run_id):
+        raise _error(409, "RUN_NOT_ACTIVE", "run is no longer active on this server")
+    return RunStartOut(run_id=run_id, status=RunStatus.CANCELLED.value)
 
 
 @router.get("/investigations/{investigation_id}", response_model=InvestigationDetailOut)
@@ -875,8 +903,11 @@ def get_run(run_id: str, request: Request) -> RunDetailOut:
     with sessions() as session:
         row = _get_run_row(session, run_id)
         budget = session.get(RunBudgetRow, run_id)
+        live = getattr(request.app.state, "live_investigation", None)
         return RunDetailOut(
-            run=_run_out(row), budget=_budget_out(budget) if budget is not None else None
+            run=_run_out(row),
+            budget=_budget_out(budget) if budget is not None else None,
+            workers=dict(live.worker_activity.get(run_id, {})) if live is not None else {},
         )
 
 
@@ -967,11 +998,24 @@ def list_run_evidence(run_id: str, request: Request) -> list[EvidenceOut]:
                 )
             ).all()
             for relation in relations:
+                status = "PENDING"
+                claim = session.get(ClaimRow, relation.claim_id)
+                if claim is not None and claim.latest_validation_id:
+                    repository = _repository(request)
+                    projected = validated_relation(
+                        repository.get_in_session(
+                            session, ClaimEvidenceRelation, relation.relation_id
+                        ),
+                        repository.get_in_session(
+                            session, ValidationResult, claim.latest_validation_id
+                        ),
+                    )
+                    status = projected.entailment_status.value
                 relations_by_evidence.setdefault(relation.evidence_id, []).append(
                     EvidenceRelationOut(
                         claim_id=relation.claim_id,
                         stance=relation.stance.value,
-                        entailment_status=relation.entailment_status.value,
+                        entailment_status=status,
                     )
                 )
         snapshot_ids = list({row.snapshot_id for row in rows})
@@ -1311,6 +1355,110 @@ def get_report_review(report_id: str, request: Request) -> ReviewDetailOut:
         )
 
 
+@router.get("/snapshots/{snapshot_id}")
+def get_snapshot_content(
+    snapshot_id: str, request: Request, format: Literal["cleaned"] = "cleaned"
+) -> Response:
+    """Serve hash-verified archived text, never executable remote HTML."""
+    from marketpulse.infrastructure.storage.local import LocalContentAddressedBlobStorage
+    from marketpulse.infrastructure.storage.models import (
+        BlobIntegrityError,
+        BlobNotFoundError,
+        BlobRef,
+    )
+    from marketpulse.investigation.case_replay import default_blob_root
+
+    with _sessions(request)() as session:
+        snapshot = session.get(SourceSnapshotRow, snapshot_id)
+        if snapshot is None or snapshot.cleaned_blob_ref is None:
+            raise _error(404, "SNAPSHOT_TEXT_NOT_FOUND", "No cleaned text for this snapshot")
+        ref = BlobRef.from_uri(snapshot.cleaned_blob_ref)
+    try:
+        content = LocalContentAddressedBlobStorage(default_blob_root()).get_bytes(ref)
+    except BlobNotFoundError:
+        raise _error(404, "SNAPSHOT_BLOB_NOT_FOUND", "Archived text is unavailable") from None
+    except BlobIntegrityError:
+        raise _error(
+            409, "SNAPSHOT_INTEGRITY_FAILURE", "Archived text hash does not match"
+        ) from None
+    return Response(
+        content=content,
+        media_type="text/plain; charset=utf-8",
+        headers={"X-Content-Type-Options": "nosniff"},
+    )
+
+
+@router.get("/reports/{report_id}/export")
+def export_report(
+    report_id: str, request: Request, format: Literal["markdown"] = "markdown"
+) -> Response:
+    """Export persisted narrative and resolvable evidence provenance."""
+    with _sessions(request)() as session:
+        report = session.get(ReportRow, report_id)
+        if report is None:
+            raise _error(404, "REPORT_NOT_FOUND", "Report not found")
+        projection = session.get(ReportProjectionRow, report_id)
+        lines = [
+            f"# Investigation report {report.version}",
+            "",
+            f"Type: {report.report_type.value}",
+            f"Release: {projection.release_status.value if projection else 'UNAVAILABLE'}",
+            f"Review: {projection.review_status.value if projection else 'UNAVAILABLE'}",
+            "",
+        ]
+        citations = session.scalars(
+            select(CitationRow)
+            .where(CitationRow.report_id == report_id)
+            .order_by(CitationRow.display_ordinal)
+        ).all()
+        sections = session.scalars(
+            select(ReportSectionRow)
+            .where(ReportSectionRow.report_id == report_id)
+            .order_by(ReportSectionRow.order_index)
+        ).all()
+        for section in sections:
+            content = section.structured_content or {}
+            lines.extend([f"## {section.section_type}", "", str(content.get("status", "")), ""])
+            for unit in content.get("units", []):
+                refs = [
+                    c
+                    for c in citations
+                    if c.section_key == section.section_type and c.unit_key == unit.get("unit_key")
+                ]
+                suffix = "".join(f" [{c.display_ordinal + 1}]" for c in refs)
+                lines.extend([str(unit.get("text", "")) + suffix, ""])
+        lines.extend(["## Evidence references", ""])
+        for citation in citations:
+            evidence = session.get(EvidenceRow, citation.evidence_id)
+            snapshot = session.get(SourceSnapshotRow, evidence.snapshot_id) if evidence else None
+            source = session.get(SourceRow, snapshot.source_id) if snapshot else None
+            if evidence is None or snapshot is None or source is None:
+                lines.extend([f"[{citation.display_ordinal + 1}] Evidence unavailable.", ""])
+                continue
+            lines.extend(
+                [
+                    f"[{citation.display_ordinal + 1}] {source.title}",
+                    f"URL: {source.canonical_url}",
+                    f"Published: {source.published_at or 'unknown'}; "
+                    f"retrieved: {snapshot.retrieved_at}",
+                    f"Snapshot: {snapshot.snapshot_id}; "
+                    f"SHA256: {snapshot.cleaned_sha256 or snapshot.raw_sha256}",
+                    "Locator: " + json.dumps(evidence.locator_payload, ensure_ascii=False),
+                    "Quote: "
+                    + (
+                        _exact_quote(evidence.content, evidence.locator_payload)
+                        or "[integrity failure]"
+                    ),
+                    "",
+                ]
+            )
+    return Response(
+        "\n".join(lines),
+        media_type="text/markdown; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="investigation-report.md"'},
+    )
+
+
 # -- citation endpoints --------------------------------------------------------
 
 
@@ -1347,6 +1495,8 @@ def get_citation(citation_id: str, request: Request) -> CitationDetailOut:
                 evidence_id=evidence_row.evidence_id,
                 excerpt=_excerpt(evidence_row.content),
                 exact_quote=_exact_quote(evidence_row.content, evidence_row.locator_payload),
+                snapshot_id=evidence_row.snapshot_id,
+                artifact_id=evidence_row.artifact_id,
                 locator_type=evidence_row.locator_type.value,
                 locator_payload=dict(evidence_row.locator_payload),
             )

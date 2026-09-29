@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+
 
 defineProps({
+  exportUrl: String,
+  searchDisabled: Boolean,
   category: {
     type: String,
     default: '公共安全'
@@ -14,7 +16,7 @@ defineProps({
 
 const emit = defineEmits(['open-search'])
 
-const mode = ref('read')
+
 </script>
 
 <template>
@@ -27,31 +29,18 @@ const mode = ref('read')
       <span class="breadcrumb-item current">{{ caseName }}</span>
     </div>
     <div class="topbar-actions">
-      <button class="search-btn" @click="emit('open-search')">
+      <button class="search-btn" :disabled="searchDisabled" @click="emit('open-search')">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
         </svg>
         <span class="search-text">搜索</span>
-        <kbd class="search-kbd">⌘K</kbd>
+        <kbd class="search-kbd">Ctrl K</kbd>
       </button>
       <div class="topbar-divider"></div>
-      <div class="mode-toggle">
-        <button
-          class="mode-btn"
-          :class="{ active: mode === 'read' }"
-          @click="mode = 'read'"
-        >阅读</button>
-        <button
-          class="mode-btn"
-          :class="{ active: mode === 'edit' }"
-          @click="mode = 'edit'"
-        >编辑</button>
-      </div>
-      <button class="export-btn">
-        导出报告
-        <span class="export-arrow">↗</span>
-      </button>
+      <span class="reading-label">阅读</span>
+      <a v-if="exportUrl" class="export-btn" :href="exportUrl" download>导出报告 <span class="export-arrow">↗</span></a>
+      <span v-else class="reading-label">尚无报告</span>
     </div>
   </header>
 </template>

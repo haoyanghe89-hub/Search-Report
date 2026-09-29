@@ -20,6 +20,11 @@ class FeedbackModel(BaseModel):
 
 
 class FeedbackLoopConfig(FeedbackModel):
+    ground_model_quotes: bool = False
+    research_workers: int = Field(default=1, ge=1, le=4)
+    search_concurrency: int = Field(default=1, ge=1, le=16)
+    fetch_concurrency: int = Field(default=1, ge=1, le=32)
+    queries_per_researcher: int = Field(default=3, ge=1, le=10)
     workflow_version: str = "agent-feedback-v1"
     max_artifacts: int = Field(default=12, ge=1, le=100)
     max_excerpts: int = Field(default=24, ge=1, le=200)
@@ -38,6 +43,7 @@ class PhaseTransition(FeedbackModel):
 
 
 class ResearchExecutionResult(FeedbackModel):
+    researcher_errors: tuple[str, ...] = ()
     proposal: ResearchProposal
     acquired_source_ids: tuple[str, ...] = ()
     artifact_ids: tuple[str, ...] = ()

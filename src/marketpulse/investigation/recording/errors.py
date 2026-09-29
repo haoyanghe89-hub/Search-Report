@@ -16,6 +16,14 @@ class RateLimitedError(ExternalCallError):
 class InvalidProviderResponseError(ExternalCallError):
     code = "INVALID_RESPONSE"
 
+    def __init__(self, message: str, *, validation_issues: tuple[str, ...] = ()) -> None:
+        super().__init__(message)
+        self.validation_issues = validation_issues
+
+
+class ModelOutputTruncatedError(InvalidProviderResponseError):
+    code = "MODEL_OUTPUT_TRUNCATED"
+
 
 class SecurityBlockedError(ExternalCallError):
     code = "SECURITY_BLOCKED"

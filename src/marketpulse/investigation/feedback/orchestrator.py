@@ -50,6 +50,7 @@ from marketpulse.investigation.domain.enums import (
 )
 from marketpulse.investigation.domain.runtime import ResearchTask
 from marketpulse.investigation.domain.sources import Evidence
+from marketpulse.investigation.feedback.acquisition_batch import acquisition_batch
 from marketpulse.investigation.feedback.context import AgentContextBuilder, claim_key
 from marketpulse.investigation.feedback.guards import (
     ClaimGuard,
@@ -74,6 +75,7 @@ from marketpulse.investigation.feedback.models import (
     RoundSnapshot,
     VerificationExecutionResult,
 )
+from marketpulse.investigation.feedback.research_team import research_team
 from marketpulse.investigation.feedback.store import (
     CompleteResearchTaskOperation,
     FeedbackState,
@@ -81,6 +83,7 @@ from marketpulse.investigation.feedback.store import (
     ReserveSourcesOperation,
     ResolveGapsOperation,
 )
+from marketpulse.investigation.feedback.verification_team import verification_team
 from marketpulse.investigation.harness.calls import BoundExternalCalls
 from marketpulse.investigation.harness.persistence import RunBudgetExceededError
 from marketpulse.investigation.harness.runtime import InvestigationHarness, StepOutcome
@@ -95,6 +98,7 @@ from marketpulse.investigation.persistence.repositories import (
 from marketpulse.investigation.recording.errors import InvalidProviderResponseError
 from marketpulse.investigation.services.source_acquisition import (
     AcquisitionRequest,
+    PreparedAcquisition,
     SourceAcquisitionService,
 )
 from marketpulse.investigation.validation.integrity import EvidenceIntegrityValidator
@@ -131,6 +135,7 @@ class AgentFeedbackOrchestrator:
         owner_instance_id: str,
         config: FeedbackLoopConfig | None = None,
         clock: Clock = _now,
+        progress: Callable[[str, str], None] | None = None,
     ) -> None:
         self.harness = harness
         self.calls = calls
@@ -145,6 +150,7 @@ class AgentFeedbackOrchestrator:
         self.clock = clock
         self.context = AgentContextBuilder(store, blobs, self.config)
         self.gain = InformationGainCalculator()
+        self.progress = progress
 
     async def run(self, run_id: str) -> FeedbackLoopResult:
         trace: list[str] = []
@@ -374,9 +380,19 @@ class AgentFeedbackOrchestrator:
         logical_key = f"research:{task.title}:round-{task.round}"
 
         async def handler() -> StepOutcome:
-            proposal = await ModelResearcherAgent(scope.model("researcher.propose")).research(
-                request
-            )
+            researcher_errors: tuple[str, ...] = ()
+            if self.config.research_workers > 1:
+                proposal, researcher_errors = await research_team(
+                    request,
+                    scope.model,
+                    workers=self.config.research_workers,
+                    max_queries=self.config.queries_per_researcher,
+                    progress=self.progress,
+                )
+            else:
+                proposal = await ModelResearcherAgent(scope.model("researcher.propose")).research(
+                    request
+                )
             guard = QueryGuard(max_length=self.config.max_query_length)
             executed = {
                 normalize_query(query) for prior in state.tasks for query in prior.query_hints
@@ -431,16 +447,44 @@ class AgentFeedbackOrchestrator:
                     request.budget.fetch_calls_remaining,
                 ),
             )
-            for intent, _normalized in accepted:
-                prepared = await acquisition.prepare(
-                    AcquisitionRequest(
-                        investigation_id=state.investigation.investigation_id,
-                        run_id=state.run.run_id,
-                        query=intent.query,
-                        max_results=min(intent.max_results, max_results),
+            prepared_queries: list[PreparedAcquisition] = []
+            if self.config.search_concurrency > 1 or self.config.fetch_concurrency > 1:
+                prepared_queries, acquisition_errors = await acquisition_batch(
+                    [intent for intent, _ in accepted],
+                    search=scope.search,
+                    service=lambda key, semaphore: SourceAcquisitionService(
+                        repository=self.repository,
+                        blobs=self.blobs,
+                        search=scope.search("research.unused"),
+                        fetch=scope.fetch(key),
+                        parsers=self.parsers,
+                        clock=self.clock,
+                        fetch_concurrency=self.config.fetch_concurrency,
+                        tolerate_fetch_errors=True,
+                        fetch_semaphore=semaphore,
                     ),
-                    logical_step_key=logical_key,
+                    investigation_id=state.investigation.investigation_id,
+                    run_id=state.run.run_id,
+                    logical_key=logical_key,
+                    search_limit=self.config.search_concurrency,
+                    fetch_limit=self.config.fetch_concurrency,
+                    page_budget=min(max_results, self.config.max_artifacts),
                 )
+                researcher_errors += acquisition_errors
+            else:
+                for intent, _normalized in accepted:
+                    prepared_queries.append(
+                        await acquisition.prepare(
+                            AcquisitionRequest(
+                                investigation_id=state.investigation.investigation_id,
+                                run_id=state.run.run_id,
+                                query=intent.query,
+                                max_results=min(intent.max_results, max_results),
+                            ),
+                            logical_step_key=logical_key,
+                        )
+                    )
+            for prepared in prepared_queries:
                 valid_count += prepared.result.valid_source_count
                 for item in prepared.result.sources:
                     source_ids.append(item.source_id)
@@ -452,10 +496,26 @@ class AgentFeedbackOrchestrator:
                         continue
                     seen_entity_ids.add(identity)
                     outputs.append(entity)
+            if researcher_errors or not source_ids:
+                gap = ResearchGap(
+                    gap_id=stable_id("G", state.run.run_id, logical_key, "discovery-limitation"),
+                    investigation_id=state.investigation.investigation_id,
+                    run_id=state.run.run_id,
+                    gap_type=ResearchGapType.UNREADABLE_SOURCE,
+                    target_question_id=task.target_question_id,
+                    reason="; ".join(researcher_errors) or "NO_NEW_ACCESSIBLE_SOURCE",
+                    severity=GapSeverity.MEDIUM,
+                    status=GapStatus.OPEN,
+                    suggested_actions=("Search additional independent and accessible sources.",),
+                    created_at=self.clock(),
+                )
+                outputs.append(gap)
+                gap_ids.append(gap.gap_id)
             prior_source_ids = {item.source_id for item in state.sources}
             new_sources = len(set(source_ids) - prior_source_ids)
             result = ResearchExecutionResult(
                 proposal=proposal,
+                researcher_errors=researcher_errors,
                 acquired_source_ids=tuple(dict.fromkeys(source_ids)),
                 artifact_ids=tuple(dict.fromkeys(artifact_ids)),
                 acquisition_gap_ids=tuple(dict.fromkeys(gap_ids)),
@@ -464,7 +524,7 @@ class AgentFeedbackOrchestrator:
             )
             return StepOutcome(
                 proposal=result,
-                route=Route.ANALYZE,
+                route=Route.ANALYZE if artifact_ids else Route.COLLECT,
                 business_outputs=tuple(outputs),
                 transaction_operations=(
                     CompleteResearchTaskOperation(
@@ -537,7 +597,9 @@ class AgentFeedbackOrchestrator:
 
         async def handler() -> StepOutcome:
             analyst = ModelAnalystAgent(scope.model("analyst.extract"))
-            proposal = await analyst.analyze(bundle.request)
+            proposal = await analyst.analyze(
+                bundle.request, ground_quotes=self.config.ground_model_quotes
+            )
             evidence_by_key: dict[str, Evidence] = {}
             evidence_outputs: list[Evidence] = []
             existing_evidence = {item.evidence_id: item for item in state.evidence}
@@ -766,7 +828,13 @@ class AgentFeedbackOrchestrator:
                 )
             return StepOutcome(
                 proposal=result,
-                route=Route.ANALYZE if analysis_gaps else Route.VERIFY,
+                # Verify retained LIVE claims even if some quotes were rejected. The
+                # gaps remain open and drive further collection after verification.
+                route=(
+                    Route.ANALYZE
+                    if analysis_gaps and not (self.config.ground_model_quotes and claim_by_key)
+                    else Route.VERIFY
+                ),
                 business_outputs=business,
                 transaction_operations=operations,
             )
@@ -851,9 +919,19 @@ class AgentFeedbackOrchestrator:
         assert dependency_key is not None
 
         async def handler() -> StepOutcome:
-            proposal = await ModelVerifierAgent(scope.model("verifier.entailment")).verify(
-                bundle.request
-            )
+            if self.config.research_workers > 1:
+                proposal = await verification_team(
+                    bundle.request,
+                    scope.model,
+                    workers=min(
+                        self.config.research_workers,
+                        max(1, state.budget.max_model_calls - state.budget.model_calls_used),
+                    ),
+                )
+            else:
+                proposal = await ModelVerifierAgent(scope.model("verifier.entailment")).verify(
+                    bundle.request
+                )
             observations = self._all_observations(state)
             summaries = []
             operations: list[TransactionOperation] = []

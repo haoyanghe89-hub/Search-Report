@@ -24,6 +24,7 @@ from sqlalchemy import Engine, text
 from marketpulse.config import Settings
 from marketpulse.investigation.api import ReplayCaseRunner
 from marketpulse.investigation.api import router as investigation_router
+from marketpulse.investigation.live_runtime import LiveInvestigationService, LivePorts
 from marketpulse.investigation.persistence.base import (
     create_investigation_engine,
     create_session_factory,
@@ -54,6 +55,7 @@ def create_app(
     *,
     settings: Settings | None = None,
     east_palestine_replay: ReplayCaseRunner | None = None,
+    live_ports: LivePorts | None = None,
 ) -> FastAPI:
     runtime_settings = settings or Settings.from_env(require_api_key=False)
     database_url = runtime_settings.database_url.get_secret_value()
@@ -69,6 +71,15 @@ def create_app(
         app.state.inv_repository = repository
         app.state.review_session_factory = sessions
         app.state.settings = runtime_settings
+        live_runner = LiveInvestigationService(
+            sessions=sessions,
+            repository=repository,
+            settings=runtime_settings,
+            blob_root=Path(os.getenv("INVESTIGATION_BLOB_ROOT", "data/investigation-blobs")),
+            ports=live_ports,
+        )
+        live_runner.recover_interrupted()
+        app.state.live_investigation = live_runner
         replay_runner = east_palestine_replay
         if replay_runner is None:
             from marketpulse.investigation.case_replay import (
@@ -87,6 +98,7 @@ def create_app(
         try:
             yield
         finally:
+            await live_runner.shutdown()
             engine.dispose()
 
     app = FastAPI(
@@ -122,7 +134,7 @@ def create_app(
         "true",
         "yes",
     }:
-        frontend_root = Path(__file__).resolve().parents[3] / "frontend"
+        frontend_root = Path(__file__).resolve().parents[3] / "frontend" / "dist"
         if frontend_root.is_dir():
             app.mount("/", StaticFiles(directory=frontend_root, html=True), name="console")
 
