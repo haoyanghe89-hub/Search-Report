@@ -44,6 +44,9 @@ from marketpulse.investigation.validation.relations import validated_relation
 REPORT_VALIDATOR_VERSION = "report-validator-v1"
 
 _PROBABLE_MARKERS = (
+    "可能",
+    "不充分",
+    "不确定",
     "suggest",
     "likely",
     "probable",
@@ -53,6 +56,9 @@ _PROBABLE_MARKERS = (
     "uncertain",
 )
 _DISPUTED_MARKERS = (
+    "争议",
+    "冲突",
+    "分歧",
     "disputed",
     "conflict",
     "conflicting",
@@ -61,6 +67,9 @@ _DISPUTED_MARKERS = (
     "disagree",
 )
 _UNVERIFIED_MARKERS = (
+    "尚未证实",
+    "证据不足",
+    "未验证",
     "not established",
     "could not establish",
     "could not be established",

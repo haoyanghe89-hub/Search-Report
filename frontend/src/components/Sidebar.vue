@@ -1,4 +1,5 @@
 <script setup>
+import { chineseText } from '../composables/chinese.js'
 defineProps({
   loading: Boolean,
   replaying: Boolean,
@@ -45,7 +46,7 @@ function statusColor(status) {
         @click="emit('select', item.id)"
       >
         <div class="case-id">{{ item.id }}</div>
-        <div class="case-name">{{ item.name }}</div>
+        <div class="case-name">{{ chineseText(item.name) }}</div>
         <div class="case-meta">
           <div class="case-status">
             <span

@@ -1,6 +1,7 @@
+import { label } from './chinese.js'
 // Display summaries never infer verification from the presence of a run or report.
 export const runModeLabel = run => run.execution_provenance === 'CURATED_OFFLINE' ? (run.mode === 'REPLAY' ? '离线案例回放' : '离线案例录制') : run.mode === 'REPLAY' ? '历史回放' : '联网研究'
-export const runStatusLabel = status => ({ CREATED: '已创建', PENDING: '等待执行', WAITING_FOR_EXECUTION: '等待执行', RUNNING: '调查中', VERIFYING: '验证中', READY_FOR_REPORT: '调查完成', COMPLETED: '已完成', FAILED: '运行失败', CANCELLED: '已取消', TIMED_OUT: '已超时' })[status] || status
+export const runStatusLabel = status => ({ CREATED: '已创建', PENDING: '等待执行', WAITING_FOR_EXECUTION: '等待执行', RUNNING: '调查中', VERIFYING: '验证中', READY_FOR_REPORT: '调查完成', COMPLETED: '已完成', FAILED: '运行失败', CANCELLED: '已取消', TIMED_OUT: '已超时' })[status] || (status ? label(status) : status)
 export function resultsPending({ replaying, starting, running, loading }) { return Boolean(replaying || starting || running || loading) }
 
 export function runFailureLabel(reason) {

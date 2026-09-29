@@ -142,7 +142,7 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         sections = {section["section_type"]: section["content"] for section in report["sections"]}
         assert sections["REMEDIATION_AND_FOLLOW_UP"]["units"]
         assert sections["LIMITATIONS_AND_RESEARCH_GAPS"]["units"]
-        assert "manually reviewed" in sections["METHODOLOGY"]["units"][0]["text"]
+        assert "人工整理" in sections["METHODOLOGY"]["units"][0]["text"]
         detail = client.get(f"/api/investigations/{replay['investigation_id']}").json()
         assert len(detail["questions"]) == 8
 
@@ -165,11 +165,21 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         assert exported.status_code == 200
         assert citation["source"]["canonical_url"] in exported.text
         assert citation["evidence"]["exact_quote"].splitlines()[0] in exported.text
-        assert "REVIEW_REQUIRED" in exported.text
+        assert "待人工审核" in exported.text
+        assert "## 执行摘要" in exported.text
+        assert "原文" in exported.text
 
         review = client.get(f"/api/reports/{report_id}/review").json()
         assert review["evaluation"]["hard_finding_count"] == 0
         assert review["pending_request"] is not None
+
+        regenerated = client.post(
+            f"/api/runs/{run_id}/reports", json={"report_type": "FULL_INVESTIGATION"}
+        )
+        assert regenerated.status_code == 201
+        assert regenerated.json()["report"]["report_id"] != report_id
+        assert client.get(f"/api/reports/{report_id}").json() == report
+        assert len(sections["EXECUTIVE_SUMMARY"]["units"]) >= 4
 
         repeated = client.post("/api/cases/east-palestine-2023/replay")
         assert repeated.status_code == 202

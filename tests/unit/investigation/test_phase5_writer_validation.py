@@ -140,13 +140,11 @@ async def test_deterministic_writer_full_schema_and_status_wording() -> None:
     units = {unit.unit_key: unit for section in draft.sections for unit in section.units}
 
     probable_unit = next(u for u in units.values() if "claim:p" in u.claim_refs)
-    assert any(
-        marker in probable_unit.text.lower() for marker in ("suggest", "incomplete", "uncertain")
-    )
+    assert any(marker in probable_unit.text.lower() for marker in ("可能", "不充分", "不确定"))
     disputed_unit = next(u for u in units.values() if "claim:d" in u.claim_refs)
-    assert "disputed" in disputed_unit.text.lower()
+    assert "争议" in disputed_unit.text
     unverified_unit = next(u for u in units.values() if "claim:u" in u.claim_refs)
-    assert "could not be established" in unverified_unit.text.lower()
+    assert "尚未证实" in unverified_unit.text
     for unit in units.values():
         if unit.content_class is ContentClass.FACTUAL_ASSERTION:
             assert unit.claim_refs
@@ -168,6 +166,46 @@ async def test_deterministic_writer_status_report_is_compact() -> None:
         draft=draft, snapshot=snapshot, citations=[], report=_report(draft.report_type), now=NOW
     )
     assert {finding.code for finding in findings} <= {"CITATION_INCOMPLETE"}
+
+
+async def test_chinese_report_preserves_claims_and_uncertainty_without_numeric_confidence() -> None:
+    snapshot = _snapshot(
+        (
+            _claim("claim:v", "机构记录了该事件。", ValidationStatus.VERIFIED, ClaimType.STATEMENT),
+            _claim("claim:u", "尚待核实的原因。", ValidationStatus.UNVERIFIED, critical=True),
+        )
+    )
+    before = snapshot.model_dump_json()
+    draft = await DeterministicWriter().draft(
+        _projection(snapshot, ReportType.INVESTIGATION_STATUS)
+    )
+    assert snapshot.model_dump_json() == before
+    units = [u for section in draft.sections for u in section.units]
+    unverified = next(u for u in units if "claim:u" in u.claim_refs)
+    assert "尚未证实" in unverified.text
+    assert unverified.content_class is ContentClass.GOVERNANCE_DISCLOSURE
+    assert not any("0.9" in u.text or "90%" in u.text for u in units)
+    assert draft.schema_version == "report-writer-zh-v2"
+
+
+def test_reviewed_chinese_translation_preserves_limit_and_catalogs_match() -> None:
+    import json
+    from pathlib import Path
+
+    from marketpulse.investigation.agents.prompts import COMMON_BOUNDARY
+    from marketpulse.investigation.localization import chinese_text
+
+    root = Path(__file__).resolve().parents[3]
+    server = json.loads(
+        (root / "src/marketpulse/investigation/zh_CN.json").read_text(encoding="utf-8")
+    )
+    browser = json.loads((root / "frontend/src/locales/zh-CN.json").read_text(encoding="utf-8"))
+    assert server == browser
+    statement = next(text for text in server["texts"] if "not a sixfold exceedance" in text)
+    assert "不等于超过健康限值六倍" in chinese_text(statement)
+    assert chinese_text("An unknown archived statement.") == "An unknown archived statement."
+    assert "Simplified Chinese" in COMMON_BOUNDARY
+    assert "verbatim evidence quotes unchanged" in COMMON_BOUNDARY
 
 
 def _draft_with_unit(unit: NarrativeUnit, claim_keys: tuple[str, ...]) -> ReportDraft:

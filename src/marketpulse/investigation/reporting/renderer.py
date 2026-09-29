@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from marketpulse.investigation.localization import label
 from marketpulse.investigation.reporting.hashing import canonical_hash
 from marketpulse.investigation.reporting.models import Citation
 from marketpulse.investigation.reporting.writer import ReportDraft, SectionStatus
@@ -51,10 +52,10 @@ def render_markdown(draft: ReportDraft, citations: list[Citation]) -> str:
 
     lines: list[str] = []
     for section in draft.sections:
-        lines.append(f"## {section.section_key.replace('_', ' ').title()}")
+        lines.append(f"## {label(section.section_key)}")
         lines.append("")
         if section.status is not SectionStatus.CONTENT:
-            lines.append(f"_{section.status.replace('_', ' ').title()}_")
+            lines.append(f"_{label(section.status)}_")
             lines.append("")
             continue
         for unit in section.units:
@@ -63,13 +64,13 @@ def render_markdown(draft: ReportDraft, citations: list[Citation]) -> str:
             lines.append(f"{unit.text}{suffix}")
             lines.append("")
     if citations:
-        lines.append("## Citations")
+        lines.append("## 引用索引")
         lines.append("")
         for citation in sorted(citations, key=lambda item: item.display_ordinal):
             lines.append(
-                f"[{citation.display_ordinal + 1}] claim `{citation.claim_semantic_hash[:12]}` "
-                f"evidence `{citation.evidence_semantic_hash[:12]}` "
-                f"locator `{citation.canonical_locator.get('locator_type', 'TEXT_RANGE')}`"
+                f"[{citation.display_ordinal + 1}] 声明 `{citation.claim_semantic_hash[:12]}` "
+                f"证据 `{citation.evidence_semantic_hash[:12]}` "
+                f"定位 `{citation.canonical_locator.get('locator_type', 'TEXT_RANGE')}`"
             )
             lines.append("")
     return chr(10).join(lines).strip() + chr(10)

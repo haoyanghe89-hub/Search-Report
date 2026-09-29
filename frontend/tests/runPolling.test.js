@@ -60,3 +60,35 @@ test('model schema failures explain what failed without claiming a configuration
   assert.match(label, /模型返回/)
   assert.doesNotMatch(label, /inspect configuration/)
 })
+
+test('refreshing report versions keeps results visible and never restarts the run', async () => {
+  const calls = []
+  let resolveReports
+  const model = useInvestigation('I1', {
+    mount: () => {}, unmount: () => {}, schedule: () => 1, unschedule: () => {},
+    api: url => { calls.push(url); return new Promise(resolve => { resolveReports = resolve }) },
+  })
+  model.runId.value = 'R1'
+  model.data.value.claims = [{ claim_id: 'C1' }]
+  const refreshing = model.refreshReports()
+  assert.equal(model.loading.value, false)
+  assert.equal(model.data.value.claims.length, 1)
+  resolveReports([{ report_id: 'P2' }])
+  await refreshing
+  assert.deepEqual(calls, ['/runs/R1/reports'])
+  assert.equal(model.data.value.reports[0].report_id, 'P2')
+})
+
+test('a late report response cannot overwrite a different selected run', async () => {
+  let finish
+  const model = useInvestigation('I1', {
+    mount: () => {}, unmount: () => {}, schedule: () => 1, unschedule: () => {},
+    api: () => new Promise(resolve => { finish = resolve }),
+  })
+  model.runId.value = 'R1'
+  const pending = model.refreshReports()
+  model.runId.value = 'R2'
+  finish([{ report_id: 'P1' }])
+  await pending
+  assert.deepEqual(model.data.value.reports, [])
+})

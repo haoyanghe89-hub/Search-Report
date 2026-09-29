@@ -131,7 +131,9 @@ class ReportInputAssembler:
         run = self._get(session, InvestigationRun, run_id)
         allowed = {RunStatus.READY_FOR_REPORT}
         if report_type is ReportType.INVESTIGATION_STATUS:
-            allowed.update({RunStatus.BLOCKED, RunStatus.FAILED, RunStatus.CANCELLED})
+            allowed.update(
+                {RunStatus.BLOCKED, RunStatus.FAILED, RunStatus.CANCELLED, RunStatus.INTERRUPTED}
+            )
         if run.status not in allowed:
             raise AssemblyError(f"run {run_id} is {run.status}, not READY_FOR_REPORT")
         investigation = self._get(session, Investigation, run.investigation_id)

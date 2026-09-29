@@ -62,6 +62,17 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
     } catch (e) { if (!disposed) error.value = e.message }
     finally { if (!disposed) loading.value = false }
   }
+  async function refreshReports() {
+    const ticket = generation
+    const selectedId = runId.value
+    if (!selectedId) return
+    try {
+      const reports = await api('/runs/' + selectedId + '/reports')
+      if (!disposed && ticket === generation && selectedId === runId.value) {
+        data.value = { ...data.value, reports }
+      }
+    } catch (e) { if (!disposed && ticket === generation) error.value = e.message }
+  }
   async function start() {
     if (starting.value || running.value) return
     starting.value = true
@@ -84,5 +95,5 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
   }
   mount(load)
   unmount(() => { disposed = true; generation++; unschedule(timer) })
-  return { detail, runs, runId, run, budget, workers, data, loading, starting, error, running, load, loadRun, start, cancel }
+  return { detail, runs, runId, run, budget, workers, data, loading, starting, error, running, load, loadRun, refreshReports, start, cancel }
 }

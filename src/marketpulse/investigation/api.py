@@ -35,6 +35,7 @@ from marketpulse.investigation.domain.runtime import (
     InvestigationQuestion,
     InvestigationScope,
 )
+from marketpulse.investigation.localization import chinese_text, label
 from marketpulse.investigation.persistence.models import (
     CitationRow,
     ClaimEvidenceRelationRow,
@@ -744,7 +745,9 @@ def create_investigation(
         "What lessons and unresolved research questions remain?",
     ]
     questions = tuple(
-        InvestigationQuestion(question_id=f"Q-{uuid.uuid4().hex}", text=value, is_critical=True)
+        InvestigationQuestion(
+            question_id=f"Q-{uuid.uuid4().hex}", text=chinese_text(value), is_critical=True
+        )
         for value in question_texts
     )
     investigation = Investigation(
@@ -1232,7 +1235,12 @@ async def generate_run_report(
     sessions = _sessions(request)
     with sessions() as session:
         run = _get_run_row(session, run_id)
-        if run.status is not RunStatus.READY_FOR_REPORT:
+        allowed = {RunStatus.READY_FOR_REPORT}
+        if payload.report_type == ReportType.INVESTIGATION_STATUS.value:
+            allowed.update(
+                {RunStatus.BLOCKED, RunStatus.FAILED, RunStatus.CANCELLED, RunStatus.INTERRUPTED}
+            )
+        if run.status not in allowed:
             raise _error(
                 409,
                 "RUN_NOT_READY_FOR_REPORT",
@@ -1399,11 +1407,11 @@ def export_report(
             raise _error(404, "REPORT_NOT_FOUND", "Report not found")
         projection = session.get(ReportProjectionRow, report_id)
         lines = [
-            f"# Investigation report {report.version}",
+            f"# 事件调查报告 · 第 {report.version} 版",
             "",
-            f"Type: {report.report_type.value}",
-            f"Release: {projection.release_status.value if projection else 'UNAVAILABLE'}",
-            f"Review: {projection.review_status.value if projection else 'UNAVAILABLE'}",
+            f"报告类型：{label(report.report_type.value)}",
+            f"发布状态：{label(projection.release_status.value) if projection else '未评估'}",
+            f"审核状态：{label(projection.review_status.value) if projection else '未评估'}",
             "",
         ]
         citations = session.scalars(
@@ -1418,7 +1426,9 @@ def export_report(
         ).all()
         for section in sections:
             content = section.structured_content or {}
-            lines.extend([f"## {section.section_type}", "", str(content.get("status", "")), ""])
+            lines.extend(
+                [f"## {label(section.section_type)}", "", label(content.get("status", "")), ""]
+            )
             for unit in content.get("units", []):
                 refs = [
                     c
@@ -1427,27 +1437,27 @@ def export_report(
                 ]
                 suffix = "".join(f" [{c.display_ordinal + 1}]" for c in refs)
                 lines.extend([str(unit.get("text", "")) + suffix, ""])
-        lines.extend(["## Evidence references", ""])
+        lines.extend(["## 证据引用（保留原文）", ""])
         for citation in citations:
             evidence = session.get(EvidenceRow, citation.evidence_id)
             snapshot = session.get(SourceSnapshotRow, evidence.snapshot_id) if evidence else None
             source = session.get(SourceRow, snapshot.source_id) if snapshot else None
             if evidence is None or snapshot is None or source is None:
-                lines.extend([f"[{citation.display_ordinal + 1}] Evidence unavailable.", ""])
+                lines.extend([f"[{citation.display_ordinal + 1}] 证据不可用。", ""])
                 continue
             lines.extend(
                 [
                     f"[{citation.display_ordinal + 1}] {source.title}",
-                    f"URL: {source.canonical_url}",
-                    f"Published: {source.published_at or 'unknown'}; "
-                    f"retrieved: {snapshot.retrieved_at}",
-                    f"Snapshot: {snapshot.snapshot_id}; "
+                    f"来源地址：{source.canonical_url}",
+                    f"发布时间：{source.published_at or '未记录'}；"
+                    f"采集时间：{snapshot.retrieved_at}",
+                    f"归档标识：{snapshot.snapshot_id}；"
                     f"SHA256: {snapshot.cleaned_sha256 or snapshot.raw_sha256}",
-                    "Locator: " + json.dumps(evidence.locator_payload, ensure_ascii=False),
-                    "Quote: "
+                    "原文定位：" + json.dumps(evidence.locator_payload, ensure_ascii=False),
+                    "引用原文："
                     + (
                         _exact_quote(evidence.content, evidence.locator_payload)
-                        or "[integrity failure]"
+                        or "[原文完整性校验失败]"
                     ),
                     "",
                 ]

@@ -1,4 +1,5 @@
 <script setup>
+import { label } from '../composables/chinese.js'
 import { ref, onMounted, onUnmounted } from 'vue'
 defineProps({ replaying: Boolean, starting: Boolean, running: Boolean, phase: String, workers: { type: Object, default: () => ({}) }, budget: Object, steps: { type: Array, default: () => [] } })
 const elapsed = ref(0)
@@ -8,15 +9,15 @@ onUnmounted(() => clearInterval(timer))
 </script>
 <template>
   <section class="run-progress" aria-busy="true" aria-label="调查加载过程">
-    <div class="progress-heading"><span class="progress-orbit" aria-hidden="true"></span><span class="eyebrow">{{ replaying ? 'ARCHIVE REPLAY' : running || starting ? 'INVESTIGATION IN PROGRESS' : 'LOADING ARCHIVE' }}</span><span class="elapsed">已等待 {{ elapsed }} 秒</span></div>
+    <div class="progress-heading"><span class="progress-orbit" aria-hidden="true"></span><span class="eyebrow">{{ replaying ? '档案回放' : running || starting ? '调查进行中' : '读取档案' }}</span><span class="elapsed">已等待 {{ elapsed }} 秒</span></div>
     <h2 role="status">{{ replaying ? '正在回放调查档案' : starting ? '正在启动调查' : running ? '调查正在进行' : '正在读取调查记录' }}</h2>
     <p>{{ replaying ? '正在读取归档来源并重建证据与引用，完成后展示本次结果。' : starting ? '正在提交调查任务，等待服务端确认。' : running ? '正在收集与验证材料，调查结束后展示证据链与报告。' : '正在加载所选运行的来源、证据和报告。' }}</p>
     <ul v-if="running && !replaying && Object.keys(workers).length" class="worker-grid"><li v-for="(status, name) in workers" :key="name"><span>{{ {official:'官方资料研究员',independent:'独立报道研究员',technical:'技术研究员',counterevidence:'反证研究员'}[name] || name }}</span><strong>{{ {RUNNING:'研究中',COMPLETED:'查询已提出',FAILED:'本轮调用失败',BUDGET_EXHAUSTED:'预算已用尽'}[status] || status }}</strong></li></ul>
     <p v-if="running && !replaying && budget" class="progress-budget">搜索 {{ budget.search_calls_used }} / {{ budget.max_search_calls }} · 抓取 {{ budget.fetch_calls_used }} / {{ budget.max_fetch_calls }} · 模型调用 {{ budget.model_calls_used }} / {{ budget.max_model_calls }}</p>
     <div class="progress-rule" aria-hidden="true"><span></span></div>
     <template v-if="running && !replaying && !starting">
-      <p class="progress-phase">当前阶段：{{ phase || '等待执行' }}</p>
-      <ol v-if="steps.length" class="progress-steps"><li v-for="step in steps" :key="step.step_id"><span>{{ step.agent_role }} · {{ step.logical_step_key }}</span><span>{{ step.status }}</span></li></ol>
+      <p class="progress-phase">当前阶段：{{ phase ? label(phase) : '等待执行' }}</p>
+      <ol v-if="steps.length" class="progress-steps"><li v-for="step in steps" :key="step.step_id"><span>{{ label(step.agent_role) }} · {{ label(step.step_type) }}</span><span>{{ label(step.status) }}</span></li></ol>
     </template>
     <small>结果将在本次运行结束后自动更新。</small>
   </section>

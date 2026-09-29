@@ -110,6 +110,8 @@ class ProjectionClaim(DomainModel):
     importance: ClaimImportance
     is_critical: bool
     report_section: str | None = None
+    supporting_relations: int = 0
+    contradicting_relations: int = 0
 
 
 class ProjectionConflict(DomainModel):
@@ -124,6 +126,7 @@ class ProjectionConflict(DomainModel):
 
 
 class ProjectionGap(DomainModel):
+    gap_type: str = "OTHER"
     reason: NonEmptyText
     severity: NonEmptyText
     status: NonEmptyText
@@ -139,6 +142,7 @@ class ProjectionTimelineEvent(DomainModel):
 
 class SourceStatisticsView(DomainModel):
     total_sources: int = Field(ge=0)
+    evidence_count: int = Field(default=0, ge=0)
     independent_families: int = Field(ge=0)
 
 
@@ -188,6 +192,14 @@ class WriterProjection(DomainModel):
                     importance=claim.importance,
                     is_critical=claim.is_critical,
                     report_section=claim.report_section,
+                    supporting_relations=sum(
+                        r.claim_stable_key == claim.stable_key and r.stance == "SUPPORTS"
+                        for r in payload.relations
+                    ),
+                    contradicting_relations=sum(
+                        r.claim_stable_key == claim.stable_key and r.stance == "CONTRADICTS"
+                        for r in payload.relations
+                    ),
                 )
                 for claim in payload.claims
             ),
@@ -209,6 +221,7 @@ class WriterProjection(DomainModel):
             ),
             gaps=tuple(
                 ProjectionGap(
+                    gap_type=str(gap.gap_type),
                     reason=gap.reason,
                     severity=str(gap.severity),
                     status=str(gap.status),
@@ -233,6 +246,7 @@ class WriterProjection(DomainModel):
             limitations=payload.limitations,
             source_statistics=SourceStatisticsView(
                 total_sources=len(payload.sources),
+                evidence_count=len(payload.evidence),
                 independent_families=len(families - {"UNGROUPED"}),
             ),
         )
@@ -251,390 +265,6 @@ class DeterministicWriter:
     """
 
     async def draft(self, projection: WriterProjection) -> ReportDraft:
-        if projection.report_type is ReportType.INVESTIGATION_STATUS:
-            return _status_draft(projection)
-        return _full_draft(projection)
+        from marketpulse.investigation.reporting.chinese_writer import chinese_draft
 
-
-def _unit(
-    section: str, key: str, text: str, content_class: ContentClass, claim_refs: tuple[str, ...] = ()
-) -> NarrativeUnit:
-    return NarrativeUnit(
-        unit_key=f"{section.lower().replace('_', '-')}-{key}",
-        section_key=section,
-        text=text,
-        content_class=content_class,
-        claim_refs=claim_refs,
-    )
-
-
-def _claim_sentence(claim: ProjectionClaim) -> str:
-    if claim.validation_status is ValidationStatus.VERIFIED:
-        return claim.statement
-    if claim.validation_status is ValidationStatus.PROBABLE:
-        return (
-            f"Available evidence suggests, with incomplete certainty, that "
-            f"{claim.statement[0].lower() + claim.statement[1:]}"
-        )
-    if claim.validation_status is ValidationStatus.DISPUTED:
-        return f"Remains disputed amid conflicting evidence: {claim.statement}"
-    return f"Could not be established on current evidence: {claim.statement}"
-
-
-def _claims_section(section: str, claims: list[ProjectionClaim]) -> DraftSection:
-    if not claims:
-        return DraftSection(
-            section_key=section, status=SectionStatus.INSUFFICIENT_SUPPORTED_MATERIAL
-        )
-    units = tuple(
-        _unit(
-            section,
-            claim.stable_key.rsplit(":", 1)[-1],
-            _claim_sentence(claim),
-            ContentClass.FACTUAL_ASSERTION,
-            (claim.stable_key,),
-        )
-        for claim in claims
-    )
-    return DraftSection(section_key=section, status=SectionStatus.CONTENT, units=units)
-
-
-def _full_draft(p: WriterProjection) -> ReportDraft:
-    by_status: dict[ValidationStatus, list[ProjectionClaim]] = {}
-    for claim in p.claims:
-        by_status.setdefault(claim.validation_status, []).append(claim)
-    verified = by_status.get(ValidationStatus.VERIFIED, [])
-    probable = by_status.get(ValidationStatus.PROBABLE, [])
-    disputed = by_status.get(ValidationStatus.DISPUTED, [])
-    unverified = by_status.get(ValidationStatus.UNVERIFIED, [])
-
-    sections: list[DraftSection] = []
-    sections.append(
-        DraftSection(
-            section_key="EXECUTIVE_SUMMARY",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "EXECUTIVE_SUMMARY",
-                    "overview",
-                    f"Investigation '{p.investigation_title}' reached "
-                    f"{len(verified)} verified, {len(probable)} probable, "
-                    f"{len(disputed)} disputed and {len(unverified)} unestablished claims "
-                    f"across {p.source_statistics.total_sources} sources.",
-                    ContentClass.ANALYTICAL_SYNTHESIS,
-                ),
-            ),
-        )
-    )
-    sections.append(
-        DraftSection(
-            section_key="SCOPE_AND_MANDATE",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "SCOPE_AND_MANDATE", "goal", p.investigation_goal, ContentClass.PRESENTATIONAL
-                ),
-            ),
-        )
-    )
-    sections.append(
-        DraftSection(
-            section_key="INVESTIGATION_QUESTIONS",
-            status=SectionStatus.CONTENT,
-            units=tuple(
-                _unit("INVESTIGATION_QUESTIONS", f"q{index}", question, ContentClass.PRESENTATIONAL)
-                for index, question in enumerate(p.questions, start=1)
-            ),
-        )
-    )
-    sections.append(
-        DraftSection(
-            section_key="METHODOLOGY",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "METHODOLOGY",
-                    "pipeline",
-                    (
-                        "Offline replay of archived sources and manually reviewed statement/quote "
-                        "pairs. This demonstrates the validation and citation pipeline; it is not "
-                        "a live model run or an independent assessment of model accuracy."
-                        if p.execution_provenance == "CURATED_OFFLINE"
-                        else "Role-based collection, analysis and semantic verification; "
-                        "factual assertions require validated claims and located evidence."
-                    ),
-                    ContentClass.PRESENTATIONAL,
-                ),
-            ),
-        )
-    )
-    sections.append(
-        DraftSection(
-            section_key="SOURCE_COVERAGE",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "SOURCE_COVERAGE",
-                    "stats",
-                    f"The investigation draws on {p.source_statistics.total_sources} sources "
-                    f"across {p.source_statistics.independent_families} independent families.",
-                    ContentClass.GOVERNANCE_DISCLOSURE,
-                ),
-            ),
-        )
-    )
-    if p.timeline:
-        sections.append(
-            DraftSection(
-                section_key="TIMELINE",
-                status=SectionStatus.CONTENT,
-                units=tuple(
-                    _unit(
-                        "TIMELINE",
-                        f"event-{index}",
-                        event.description
-                        if event.claim_refs
-                        else f"Unverified timeline candidate: {event.description}",
-                        ContentClass.FACTUAL_ASSERTION
-                        if event.claim_refs
-                        else ContentClass.GOVERNANCE_DISCLOSURE,
-                        event.claim_refs,
-                    )
-                    for index, event in enumerate(p.timeline, start=1)
-                ),
-            )
-        )
-    else:
-        sections.append(
-            DraftSection(
-                section_key="TIMELINE", status=SectionStatus.INSUFFICIENT_SUPPORTED_MATERIAL
-            )
-        )
-    sections.append(_claims_section("VERIFIED_FINDINGS", verified))
-    sections.append(_claims_section("PROBABLE_FINDINGS", probable))
-    sections.append(_claims_section("DISPUTED_FINDINGS", disputed))
-
-    quantitative = [c for c in p.claims if c.claim_type is ClaimType.QUANTITATIVE]
-    sections.append(_claims_section("QUANTITATIVE_FINDINGS", quantitative))
-    impact = [c for c in p.claims if c.claim_type is ClaimType.IMPACT]
-    sections.append(_claims_section("IMPACT_SCOPE_AND_ANALYSIS", impact))
-    causal = [
-        c
-        for c in p.claims
-        if c.claim_type is ClaimType.CAUSAL or c.report_section == "CAUSAL_AND_MECHANISM_ANALYSIS"
-    ]
-    sections.append(_claims_section("CAUSAL_AND_MECHANISM_ANALYSIS", causal))
-    attribution = [
-        c
-        for c in p.claims
-        if c.claim_type is ClaimType.ATTRIBUTION
-        or c.report_section == "ACTOR_AND_ATTRIBUTION_ASSESSMENT"
-    ]
-    sections.append(_claims_section("ACTOR_AND_ATTRIBUTION_ASSESSMENT", attribution))
-
-    if p.conflicts:
-        sections.append(
-            DraftSection(
-                section_key="CONFLICT_ANALYSIS",
-                status=SectionStatus.CONTENT,
-                units=tuple(
-                    _unit(
-                        "CONFLICT_ANALYSIS",
-                        conflict.stable_key.rsplit(":", 1)[-1],
-                        f"A {conflict.conflict_type} conflict ({conflict.severity}) is "
-                        f"{conflict.status}: conflicting accounts span "
-                        f"{len(conflict.claim_refs)} claims. "
-                        + (conflict.resolution_summary or "No resolution established.")
-                        + " "
-                        + " ".join(conflict.possible_explanations)
-                        + " Recorded observations: "
-                        + "; ".join(conflict.observations),
-                        ContentClass.ANALYTICAL_SYNTHESIS,
-                        conflict.claim_refs,
-                    )
-                    for conflict in p.conflicts
-                )
-                + _claims_section(
-                    "CONFLICT_ANALYSIS",
-                    [
-                        claim
-                        for claim in p.claims
-                        if any(claim.stable_key in conflict.claim_refs for conflict in p.conflicts)
-                    ],
-                ).units,
-            )
-        )
-    else:
-        sections.append(
-            DraftSection(section_key="CONFLICT_ANALYSIS", status=SectionStatus.NOT_APPLICABLE)
-        )
-
-    remediation = [
-        c
-        for c in p.claims
-        if c.claim_type is ClaimType.INSTITUTIONAL_ACTION
-        or c.report_section == "REMEDIATION_AND_FOLLOW_UP"
-    ]
-    sections.append(_claims_section("REMEDIATION_AND_FOLLOW_UP", remediation))
-
-    limitation_units = tuple(
-        _unit(
-            "LIMITATIONS_AND_RESEARCH_GAPS",
-            f"limitation-{index}",
-            limitation,
-            ContentClass.GOVERNANCE_DISCLOSURE,
-        )
-        for index, limitation in enumerate(p.limitations, start=1)
-    )
-    if p.execution_provenance == "CURATED_OFFLINE":
-        limitation_units += (
-            _unit(
-                "LIMITATIONS_AND_RESEARCH_GAPS",
-                "curated-case",
-                "This curated case covers selected archived passages, not an exhaustive search. "
-                "Verified means the bounded statement matches its reviewed passage; it does not "
-                "establish broad causal truth or long-term health outcomes. Source diversity does "
-                "not imply independent corroboration of every claim.",
-                ContentClass.GOVERNANCE_DISCLOSURE,
-            ),
-        )
-    limitation_units += _claims_section(
-        "LIMITATIONS_AND_RESEARCH_GAPS",
-        [c for c in p.claims if c.report_section == "LIMITATIONS_AND_RESEARCH_GAPS"],
-    ).units
-    gap_units = tuple(
-        _unit(
-            "LIMITATIONS_AND_RESEARCH_GAPS",
-            f"gap-{index}",
-            f"Open research gap ({gap.severity}): {gap.reason}",
-            ContentClass.GOVERNANCE_DISCLOSURE,
-        )
-        for index, gap in enumerate(p.gaps, start=1)
-        if gap.status == "OPEN"
-    )
-    # UNVERIFIED claims may only be disclosed as not established.
-    unverified_units = tuple(
-        _unit(
-            "LIMITATIONS_AND_RESEARCH_GAPS",
-            f"unverified-{claim.stable_key.rsplit(':', 1)[-1]}",
-            _claim_sentence(claim),
-            ContentClass.GOVERNANCE_DISCLOSURE,
-            (claim.stable_key,),
-        )
-        for claim in unverified
-    )
-    units = limitation_units + gap_units + unverified_units
-    sections.append(
-        DraftSection(
-            section_key="LIMITATIONS_AND_RESEARCH_GAPS",
-            status=SectionStatus.CONTENT if units else SectionStatus.NOT_APPLICABLE,
-            units=units,
-        )
-    )
-    sections.append(
-        DraftSection(
-            section_key="CONCLUSIONS_AND_NEXT_STEPS",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "CONCLUSIONS_AND_NEXT_STEPS",
-                    "next",
-                    "Conclusions follow strictly from validated claims; open gaps require "
-                    "the follow-up research actions listed above.",
-                    ContentClass.ANALYTICAL_SYNTHESIS,
-                ),
-            ),
-        )
-    )
-    return ReportDraft(report_type=p.report_type, sections=tuple(sections))
-
-
-def _status_draft(p: WriterProjection) -> ReportDraft:
-    available = [
-        claim
-        for claim in p.claims
-        if claim.validation_status in (ValidationStatus.VERIFIED, ValidationStatus.PROBABLE)
-    ]
-    blocking = [gap for gap in p.gaps if gap.status == "OPEN"]
-    sections = (
-        DraftSection(
-            section_key="EXECUTIVE_STATUS",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "EXECUTIVE_STATUS",
-                    "status",
-                    f"Investigation '{p.investigation_title}' status is {p.terminal_run_status}: "
-                    f"{len(p.claims)} claims tracked, {len(blocking)} open blocking gaps.",
-                    ContentClass.GOVERNANCE_DISCLOSURE,
-                ),
-            ),
-        ),
-        DraftSection(
-            section_key="SCOPE_AND_MANDATE",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "SCOPE_AND_MANDATE", "goal", p.investigation_goal, ContentClass.PRESENTATIONAL
-                ),
-            ),
-        ),
-        DraftSection(
-            section_key="INVESTIGATION_QUESTIONS",
-            status=SectionStatus.CONTENT,
-            units=tuple(
-                _unit("INVESTIGATION_QUESTIONS", f"q{index}", question, ContentClass.PRESENTATIONAL)
-                for index, question in enumerate(p.questions, start=1)
-            ),
-        ),
-        DraftSection(
-            section_key="SEARCH_AND_SOURCE_SUMMARY",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "SEARCH_AND_SOURCE_SUMMARY",
-                    "sources",
-                    f"{p.source_statistics.total_sources} sources acquired.",
-                    ContentClass.GOVERNANCE_DISCLOSURE,
-                ),
-            ),
-        ),
-        _claims_section("AVAILABLE_FINDINGS", available),
-        DraftSection(
-            section_key="BLOCKING_GAPS_AND_LIMITATIONS",
-            status=SectionStatus.CONTENT
-            if blocking or p.limitations
-            else SectionStatus.NOT_APPLICABLE,
-            units=tuple(
-                _unit(
-                    "BLOCKING_GAPS_AND_LIMITATIONS",
-                    f"gap-{index}",
-                    gap.reason,
-                    ContentClass.GOVERNANCE_DISCLOSURE,
-                )
-                for index, gap in enumerate(blocking, start=1)
-            )
-            + tuple(
-                _unit(
-                    "BLOCKING_GAPS_AND_LIMITATIONS",
-                    f"limit-{index}",
-                    limitation,
-                    ContentClass.GOVERNANCE_DISCLOSURE,
-                )
-                for index, limitation in enumerate(p.limitations, start=1)
-            ),
-        ),
-        DraftSection(
-            section_key="NEXT_STEPS",
-            status=SectionStatus.CONTENT,
-            units=(
-                _unit(
-                    "NEXT_STEPS",
-                    "next",
-                    "Continue evidence collection against open gaps before any full report.",
-                    ContentClass.PRESENTATIONAL,
-                ),
-            ),
-        ),
-    )
-    return ReportDraft(report_type=p.report_type, sections=sections)
+        return chinese_draft(projection)

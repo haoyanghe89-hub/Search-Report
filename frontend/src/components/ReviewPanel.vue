@@ -1,4 +1,5 @@
 <script setup>
+import { label } from '../composables/chinese.js'
 import { ref, onMounted } from 'vue'
 import FolioSelect from './FolioSelect.vue'
 import request from '../api/request.js'
@@ -49,9 +50,9 @@ onMounted(async () => {
 </script>
 <template>
   <section class="review-panel"><h2>发布门禁与人工审核</h2><p v-if="error" role="alert" class="notice error">{{ error }}</p>
-    <template v-if="review"><p>发布：{{ review.release_status }}；审核：{{ review.review_status }}</p><ul><li v-for="f in review.findings" :key="f.finding_id">{{ f.severity }} / {{ f.code }}：{{ f.detail }}</li></ul><p v-if="!review.pending_request" class="muted">当前没有可提交的审核请求。硬门禁问题需要先修复证据或报告。</p></template>
+    <template v-if="review"><p>发布：{{ label(review.release_status) }}；审核：{{ label(review.review_status) }}</p><ul><li v-for="f in review.findings" :key="f.finding_id">{{ label(f.severity) }} / {{ label(f.code) }}<details><summary>详细检查记录</summary>{{ f.detail }}</details></li></ul><p v-if="!review.pending_request" class="muted">当前没有可提交的审核请求。硬门禁问题需要先修复证据或报告。</p></template>
     <form v-if="!reviewer" @submit.prevent="login"><p class="muted">使用服务端配置的审核员密码登录；未配置审核员时此功能不可用。</p><label>审核员密码<input v-model="password" type="password" autocomplete="current-password" required /></label><button :disabled="busy" type="submit">登录审核</button></form>
     <template v-else><div class="row"><p>已登录：{{ reviewer.display_name }}</p><button :disabled="busy" @click="logout">退出登录</button></div><form v-if="review?.pending_request" @submit.prevent="submit"><FolioSelect v-model="decision" label="审核决定" :options="decisionOptions" :disabled="busy" /><label>审核理由<textarea v-model="reason" required maxlength="2000" rows="3" /></label><button :disabled="busy || !reason.trim()" class="primary">提交审核决定</button></form></template>
-    <details v-if="review?.history.length"><summary>审核历史</summary><article v-for="item in review.history" :key="item.review_id" class="record"><p>{{ item.decision }} · {{ item.reviewer_id }} · {{ item.created_at }}</p><p>{{ item.reason }}</p></article></details>
+    <details v-if="review?.history.length"><summary>审核历史</summary><article v-for="item in review.history" :key="item.review_id" class="record"><p>{{ label(item.decision) }} · {{ item.reviewer_id }} · {{ item.created_at }}</p><p>{{ item.reason }}</p></article></details>
   </section>
 </template>

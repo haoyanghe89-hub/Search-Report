@@ -65,7 +65,7 @@ from marketpulse.investigation.validation.policy import ValidationPolicy
 
 CASE_ID = "east-palestine-2023"
 INVESTIGATION_ID = "INV-EAST-PALESTINE-2023"
-RECORDING_RUN_ID = "RUN-EP-CURATED-RECORDING-V2"
+RECORDING_RUN_ID = "RUN-EP-CURATED-RECORDING-V3"
 FIXTURE_TIME = datetime(2026, 9, 28, tzinfo=UTC)  # case assembly date, not publication date
 HTTP_URL_ADAPTER = TypeAdapter(AnyHttpUrl)
 

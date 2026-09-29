@@ -246,7 +246,7 @@ async def test_pipeline_generates_cited_report(
     assert result.hard_finding_count == 0
     assert result.report.version == 1
     assert result.report.report_input_snapshot_hash == result.snapshot.snapshot_hash
-    assert len(result.citations) == 2
+    assert len(result.citations) == 3  # Summary, findings and timeline each retain a citation.
     citation = result.citations[0]
     assert citation.claim_id == "C-001"
     assert citation.evidence_id == "E-001"
@@ -273,7 +273,7 @@ async def test_pipeline_generates_cited_report(
                 text("SELECT count(*) FROM inv_citations WHERE report_id=:r"),
                 {"r": result.report.report_id},
             )
-            == 2
+            == 3
         )
         assert (
             connection.scalar(
