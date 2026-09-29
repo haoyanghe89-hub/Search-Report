@@ -16,16 +16,16 @@ class Settings(BaseModel):
     deepseek_base_url: str = "https://api.deepseek.com"
     model: str = "deepseek-flash"
     model_thinking_enabled: bool = False
-    total_timeout_seconds: float = Field(default=1800, gt=0, le=7200)
-    max_search_queries: int = Field(default=120, ge=1, le=1000)
+    total_timeout_seconds: float = Field(default=3600, gt=0, le=7200)
+    max_search_queries: int = Field(default=240, ge=1, le=1000)
     max_initial_queries: int = Field(default=8, ge=1, le=12)
-    max_pages: int = Field(default=300, ge=1, le=2000)
+    max_pages: int = Field(default=600, ge=1, le=2000)
     page_timeout_seconds: float = Field(default=15, gt=0, le=60)
     max_page_bytes: int = Field(default=2 * 1024 * 1024, ge=1024)
     research_workers: int = Field(default=4, ge=1, le=4)
     max_search_concurrency: int = Field(default=4, ge=1, le=16)
-    max_model_calls: int = Field(default=240, ge=1, le=2000)
-    max_tokens: int = Field(default=1000000, ge=1000, le=10000000)
+    max_model_calls: int = Field(default=480, ge=1, le=2000)
+    max_tokens: int = Field(default=2000000, ge=1000, le=10000000)
     max_queries_per_researcher: int = Field(default=3, ge=1, le=10)
     max_fetch_concurrency: int = Field(default=8, ge=1, le=32)
     max_retries: int = Field(default=2, ge=0, le=5)
@@ -80,14 +80,14 @@ class Settings(BaseModel):
             model=values.get("MARKETPULSE_MODEL") or "deepseek-flash",
             model_thinking_enabled=(values.get("MARKETPULSE_THINKING_ENABLED") or "false").lower()
             in {"1", "true", "yes"},
-            total_timeout_seconds=float(values.get("MARKETPULSE_TOTAL_TIMEOUT_SECONDS") or "1800"),
-            max_search_queries=int(values.get("MARKETPULSE_MAX_SEARCH_QUERIES") or "120"),
-            max_pages=int(values.get("MARKETPULSE_MAX_PAGES") or "300"),
+            total_timeout_seconds=float(values.get("MARKETPULSE_TOTAL_TIMEOUT_SECONDS") or "3600"),
+            max_search_queries=int(values.get("MARKETPULSE_MAX_SEARCH_QUERIES") or "240"),
+            max_pages=int(values.get("MARKETPULSE_MAX_PAGES") or "600"),
             research_workers=int(values.get("MARKETPULSE_RESEARCH_WORKERS") or "4"),
             max_search_concurrency=int(values.get("MARKETPULSE_SEARCH_CONCURRENCY") or "4"),
             max_fetch_concurrency=int(values.get("MARKETPULSE_FETCH_CONCURRENCY") or "8"),
-            max_model_calls=int(values.get("MARKETPULSE_MAX_MODEL_CALLS") or "240"),
-            max_tokens=int(values.get("MARKETPULSE_MAX_TOKENS") or "1000000"),
+            max_model_calls=int(values.get("MARKETPULSE_MAX_MODEL_CALLS") or "480"),
+            max_tokens=int(values.get("MARKETPULSE_MAX_TOKENS") or "2000000"),
             max_queries_per_researcher=int(values.get("MARKETPULSE_QUERIES_PER_RESEARCHER") or "3"),
             page_timeout_seconds=float(values.get("MARKETPULSE_PAGE_TIMEOUT_SECONDS") or "15"),
             allow_proxy_dns=(values.get("MARKETPULSE_ALLOW_PROXY_DNS") or "false").lower()

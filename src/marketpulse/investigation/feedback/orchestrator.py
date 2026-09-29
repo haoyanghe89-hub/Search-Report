@@ -168,8 +168,10 @@ class AgentFeedbackOrchestrator:
                 return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
             try:
                 await self._plan(state)
-            except RunBudgetExceededError:
-                return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
+            except RunBudgetExceededError as error:
+                return await self._blocked(
+                    run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                )
             state = self.store.state(run_id)
 
         while state.run.current_phase is not WorkflowPhase.REPORT:
@@ -186,8 +188,10 @@ class AgentFeedbackOrchestrator:
                         return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
                     try:
                         await self._route_followup(state)
-                    except RunBudgetExceededError:
-                        return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
+                    except RunBudgetExceededError as error:
+                        return await self._blocked(
+                            run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                        )
                     state = self.store.state(run_id)
                     continue
                 task = sorted(pending, key=lambda item: (-item.priority, item.task_id))[0]
@@ -196,8 +200,10 @@ class AgentFeedbackOrchestrator:
                 before_round.setdefault(task.round, self.gain.snapshot(self.store, state))
                 try:
                     await self._research(state, task)
-                except RunBudgetExceededError:
-                    return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
+                except RunBudgetExceededError as error:
+                    return await self._blocked(
+                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                    )
                 trace.append("COLLECT")
                 state = self.store.state(run_id)
                 continue
@@ -214,8 +220,10 @@ class AgentFeedbackOrchestrator:
                 )
                 try:
                     await self._analyze(state, task, research)
-                except RunBudgetExceededError:
-                    return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
+                except RunBudgetExceededError as error:
+                    return await self._blocked(
+                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                    )
                 trace.append("ANALYZE")
                 state = self.store.state(run_id)
                 continue
@@ -226,8 +234,10 @@ class AgentFeedbackOrchestrator:
                 task = self._latest_completed_task(state)
                 try:
                     await self._verify(state, task)
-                except RunBudgetExceededError:
-                    return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
+                except RunBudgetExceededError as error:
+                    return await self._blocked(
+                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                    )
                 trace.append("VERIFY")
                 state = self.store.state(run_id)
                 before = before_round.get(task.round)
@@ -795,6 +805,7 @@ class AgentFeedbackOrchestrator:
                     )
                 )
             result = AnalysisExecutionResult(
+                grounding_diagnostics=analyst.grounding_diagnostics,
                 proposal=proposal,
                 evidence_ids=tuple(item.evidence_id for item in evidence_outputs),
                 claim_ids=tuple(item.claim_id for item in claim_outputs),
@@ -1072,8 +1083,28 @@ class AgentFeedbackOrchestrator:
         trace: list[str],
         gains: list[InformationGainSummary],
         reason: str,
+        *,
+        rejection: str | None = None,
     ) -> FeedbackLoopResult:
         state = self.store.state(run_id)
+        detail = reason
+        if reason == "BUDGET_EXHAUSTED" and self.config.retrieval_strategy == "bm25-passages-v1":
+            from marketpulse.investigation.feedback.budget_diagnostics import (
+                describe_budget_exhaustion,
+            )
+
+            detail = describe_budget_exhaustion(
+                state.budget,
+                rejected_dimension=rejection,
+                requested_round=max(
+                    (
+                        task.round
+                        for task in state.tasks
+                        if task.status is ResearchTaskStatus.PENDING
+                    ),
+                    default=None,
+                ),
+            )
         if state.run.current_phase is not WorkflowPhase.REPORT:
             transition = PhaseTransition(action="BLOCK", reason=reason)
 
@@ -1081,12 +1112,13 @@ class AgentFeedbackOrchestrator:
                 return StepOutcome(
                     proposal=transition,
                     route=Route.BLOCKED,
-                    business_outputs=self._termination_gap(state, reason),
+                    business_outputs=self._termination_gap(state, detail),
                 )
 
             await self.harness.run_step(
                 run_id=run_id,
                 logical_step_key=f"workflow:block:{reason.casefold()}",
+                terminal_transition=True,
                 workflow_version=self.config.workflow_version,
                 phase=state.run.current_phase,
                 step_type=StepType.OTHER,
@@ -1105,7 +1137,7 @@ class AgentFeedbackOrchestrator:
             rounds_completed=final.budget.research_rounds_used,
             phase_trace=tuple(trace),
             information_gain=tuple(gains),
-            report_input=ReportInput(summary=self.context.summary(final, reason)),
+            report_input=ReportInput(summary=self.context.summary(final, detail)),
         )
 
     def _materialize_tasks(
@@ -1254,7 +1286,11 @@ class AgentFeedbackOrchestrator:
 
     def _can_dispatch_model(self, state: FeedbackState) -> bool:
         budget = self.context.budget(state)
-        return budget.model_calls_remaining > 0 and budget.active_time_ms_remaining > 0
+        return (
+            budget.model_calls_remaining > 0
+            and budget.tokens_remaining > 0
+            and budget.active_time_ms_remaining > 0
+        )
 
     def _can_research(self, state: FeedbackState, task: ResearchTask) -> bool:
         budget = self.context.budget(state)

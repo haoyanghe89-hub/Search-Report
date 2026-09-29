@@ -166,6 +166,7 @@ class ModelAnalystAgent(StructuredAgent):
     async def analyze(
         self, request: AnalysisInput, *, ground_quotes: bool = False
     ) -> AnalysisProposal:
+        self.grounding_diagnostics: dict[str, str] = {}
         system = ANALYST_SYSTEM
         if ground_quotes:
             request = request.model_copy(
@@ -199,8 +200,30 @@ class ModelAnalystAgent(StructuredAgent):
             # Never fuzzy-match words or join disjoint passages.
             pattern = r"\s+".join(re.escape(part) for part in re.split(r"\s+", candidate.quote))
             matches = list(re.finditer(pattern, artifact.excerpt))
-            if len(matches) == 1:
-                match = matches[0]
+            resolved = matches[0] if len(matches) == 1 else None
+            if len(matches) > 1:
+                positioned = [
+                    match
+                    for match in matches
+                    if candidate.locator.locator_type == artifact.locator.locator_type
+                    and getattr(candidate.locator, "page", None)
+                    == getattr(artifact.locator, "page", None)
+                    and candidate.locator.start == artifact.locator.start + match.start()
+                    and candidate.locator.end == artifact.locator.start + match.end()
+                ]
+                if len(positioned) == 1:
+                    resolved = positioned[0]
+            self.grounding_diagnostics[candidate.evidence_key] = (
+                "QUOTE_NOT_FOUND"
+                if not matches
+                else "QUOTE_MULTIPLE_MATCHES"
+                if resolved is None
+                else "QUOTE_POSITION_RESOLVED"
+                if len(matches) > 1
+                else "QUOTE_UNIQUE_MATCH"
+            )
+            if resolved is not None:
+                match = resolved
                 quote = match.group()
                 digest = hashlib.sha256(quote.encode("utf-8")).hexdigest()
                 locator = artifact.locator.model_copy(

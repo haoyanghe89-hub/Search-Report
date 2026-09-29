@@ -1,0 +1,157 @@
+{
+  "purpose": "Ten-event pilot shortlist, not a completed benchmark or statistical maturity sample.",
+  "events": [
+    {
+      "id": "east-palestine",
+      "event": "East Palestine train derailment",
+      "language": "en",
+      "tags": [
+        "long-document",
+        "PDF",
+        "conflicting-claims"
+      ],
+      "question": "哪些结论可由事故调查报告支持，哪些仍属推测？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "crowdstrike",
+      "event": "CrowdStrike July 2024 outage",
+      "language": "en",
+      "tags": [
+        "technical",
+        "long-document"
+      ],
+      "question": "故障触发机制与影响范围分别有哪些直接证据？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "baltimore-bridge",
+      "event": "Baltimore Francis Scott Key Bridge collapse",
+      "language": "en",
+      "tags": [
+        "PDF",
+        "investigation"
+      ],
+      "question": "初步调查与最终调查的结论有何区别？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "boeing-door-plug",
+      "event": "Alaska Airlines Flight 1282 door plug event",
+      "language": "en",
+      "tags": [
+        "PDF",
+        "technical"
+      ],
+      "question": "哪些事实得到原始调查材料支持？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "lk99",
+      "event": "LK-99 superconductivity claims",
+      "language": "en/zh",
+      "tags": [
+        "controversy",
+        "counterevidence"
+      ],
+      "question": "原始主张及复现实验分别支持或反驳什么？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "titan",
+      "event": "Titan submersible loss",
+      "language": "en",
+      "tags": [
+        "long-document",
+        "insufficient-evidence"
+      ],
+      "question": "哪些因果主张在指定归档日期仍缺乏证据？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "zhengzhou-rainfall",
+      "event": "郑州特大暴雨调查",
+      "language": "zh",
+      "tags": [
+        "long-document",
+        "PDF"
+      ],
+      "question": "调查报告如何界定事件经过与责任依据？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "tianjin-explosion",
+      "event": "天津港爆炸事故调查",
+      "language": "zh",
+      "tags": [
+        "PDF",
+        "technical"
+      ],
+      "question": "报告对直接原因与管理问题分别给出什么证据？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "chang-e6",
+      "event": "嫦娥六号任务公开记录",
+      "language": "zh",
+      "tags": [
+        "official",
+        "timeline"
+      ],
+      "question": "哪些时间节点能够通过原始公告交叉核对？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    },
+    {
+      "id": "fukushima-water",
+      "event": "福岛处理水排放监测争议",
+      "language": "zh/en",
+      "tags": [
+        "controversy",
+        "PDF",
+        "insufficient-evidence"
+      ],
+      "question": "监测数据支持哪些范围内的结论，哪些外推缺少证据？",
+      "status": "pending_archival_annotation",
+      "archive_cutoff": null,
+      "documents": [],
+      "labels": [],
+      "live_run_id": null
+    }
+  ]
+}

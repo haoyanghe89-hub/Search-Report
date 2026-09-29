@@ -11,7 +11,9 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session, sessionmaker
 
 from marketpulse.investigation.domain.recordings import RecordedModelCall, RecordedToolCall
+from marketpulse.investigation.domain.reports import AuditEvent
 from marketpulse.investigation.domain.runtime import CallBinding
+from marketpulse.investigation.harness.model_call_journal import prepare_model_intent
 from marketpulse.investigation.harness.persistence import RunBudgetExceededError
 from marketpulse.investigation.harness.uow import UnitOfWork
 from marketpulse.investigation.persistence.models import RunBudgetRow
@@ -154,7 +156,7 @@ class BoundExternalCalls:
             raise ReplayCacheMissError(operation=operation, request_fingerprint=fingerprint)
         return self.recordings.read_payload(call.response_blob_ref)
 
-    def _reserve(self, run_id: str, operation: str) -> None:
+    def _reserve(self, run_id: str, operation: str, *, intent: AuditEvent | None = None) -> None:
         field = {
             "search": ("search_calls_used", "max_search_calls"),
             "fetch": ("fetch_calls_used", "max_fetch_calls"),
@@ -170,6 +172,8 @@ class BoundExternalCalls:
             )
             if getattr(result, "rowcount", None) != 1:
                 raise RunBudgetExceededError(f"{operation} call budget exhausted")
+            if intent is not None:
+                work.add(intent)
             work.commit()
 
     def _bind(
@@ -386,7 +390,13 @@ class BoundExternalCalls:
         )
         return result
 
-    async def model(self, site: StepCallSite, request: ModelRequest[T]) -> StructuredModelResult[T]:
+    async def model(
+        self,
+        site: StepCallSite,
+        request: ModelRequest[T],
+        *,
+        retry_unknown_outcome: bool = False,
+    ) -> StructuredModelResult[T]:
         operation = "model.generate"
         call, payload, fingerprint = self._resolve(
             site=site,
@@ -400,7 +410,19 @@ class BoundExternalCalls:
         if call is None:
             if self.live_model is None:
                 raise ReplayCacheMissError(operation=operation, request_fingerprint=fingerprint)
-            self._reserve(site.run_id, operation)
+            intent, attempt = prepare_model_intent(
+                self.sessions,
+                run_id=site.run_id,
+                logical_step_key=site.logical_step_key,
+                call_site_key=site.call_site_key,
+                call_ordinal=site.call_ordinal,
+                fingerprint=fingerprint,
+                next_record_attempt=self.repository.recorded_call_count(
+                    run_id=site.run_id, operation=operation, fingerprint=fingerprint, kind="MODEL"
+                ) + 1,
+                retry_unknown_outcome=retry_unknown_outcome,
+            )
+            self._reserve(site.run_id, operation, intent=intent)
             adapter = RecordingModelAdapter(
                 self.live_model,
                 self.recordings,
@@ -410,13 +432,7 @@ class BoundExternalCalls:
                     logical_step_key=site.logical_step_key,
                     call_site_key=site.call_site_key,
                     call_ordinal=site.call_ordinal,
-                    record_attempt=self.repository.recorded_call_count(
-                        run_id=site.run_id,
-                        operation=operation,
-                        fingerprint=fingerprint,
-                        kind="MODEL",
-                    )
-                    + 1,
+                    record_attempt=attempt,
                 ),
             )
             await adapter.generate(request)

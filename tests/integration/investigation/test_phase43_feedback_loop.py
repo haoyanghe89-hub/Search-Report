@@ -905,6 +905,49 @@ async def test_mid_step_fetch_budget_exhaustion_becomes_explainable_block(
     assert repository.get(InvestigationRun, run_id).status is RunStatus.BLOCKED
 
 
+@pytest.mark.asyncio
+async def test_exhausted_time_can_persist_local_block_with_diagnostics(
+    investigation_store, tmp_path
+):
+    from sqlalchemy import update
+
+    from marketpulse.investigation.persistence.models import RunBudgetRow
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    run_id = "RUN-time-exhausted"
+    store = _seed_run(repository, engine, run_id=run_id, mode=RunMode.LIVE)
+    sessions = create_session_factory(engine)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "time-blobs")
+    orchestrator = _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        BoundExternalCalls(
+            sessions=sessions,
+            repository=repository,
+            recordings=RepositoryRecordedCallStore(repository, blobs),
+        ),
+        owner="time-worker",
+        config=FeedbackLoopConfig(retrieval_strategy="bm25-passages-v1"),
+    )
+    await orchestrator._bootstrap(orchestrator.store.state(run_id))
+    with sessions.begin() as session:
+        session.execute(
+            update(RunBudgetRow)
+            .where(RunBudgetRow.run_id == run_id)
+            .values(
+                consumed_wall_time_ms=RunBudgetRow.max_wall_time_ms,
+            )
+        )
+    result = await orchestrator.run(run_id)
+    assert result.termination == "BLOCKED"
+    assert "wall_time_ms" in result.summary.termination_reason
+    assert "已用/上限" in result.summary.termination_reason
+    assert repository.get(InvestigationRun, run_id).status is RunStatus.BLOCKED
+
+
 class ConflictSearch:
     def __init__(self) -> None:
         self.calls = 0

@@ -137,7 +137,7 @@ class LiveInvestigationService:
                 current_phase=WorkflowPhase.CREATED,
                 checkpoint_version=0,
                 state_version=0,
-                workflow_version="parallel-research-v2",
+                workflow_version="evidence-retrieval-v3",
                 created_at=now,
                 started_at=now,
                 updated_at=now,
@@ -196,7 +196,8 @@ class LiveInvestigationService:
                             api_key=key.get_secret_value(),
                             base_url=self.settings.deepseek_base_url,
                             timeout=self.settings.total_timeout_seconds,
-                            max_retries=self.settings.max_retries,
+                            # Avoid hidden SDK retries after ambiguous provider outcomes.
+                            max_retries=0,
                         )
                     )
                     ports = LivePorts(
@@ -231,7 +232,9 @@ class LiveInvestigationService:
                     self._finish(
                         run_id,
                         RunStatus(outcome.termination),
-                        None if outcome.termination == "READY_FOR_REPORT" else outcome.reason,
+                        None
+                        if outcome.termination == "READY_FOR_REPORT"
+                        else outcome.summary.termination_reason,
                     )
         except asyncio.CancelledError:
             self._finish(
@@ -312,7 +315,8 @@ class LiveInvestigationService:
             ),
             config=FeedbackLoopConfig(
                 ground_model_quotes=True,
-                workflow_version="parallel-research-v2",
+                workflow_version="evidence-retrieval-v3",
+                retrieval_strategy="bm25-passages-v1",
                 research_workers=self.settings.research_workers,
                 search_concurrency=self.settings.max_search_concurrency,
                 fetch_concurrency=self.settings.max_fetch_concurrency,

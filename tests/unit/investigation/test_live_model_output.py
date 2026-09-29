@@ -307,3 +307,84 @@ async def test_whitespace_binding_stores_original_text_instead_of_model_quote():
     assert evidence.locator.start == 8
     assert evidence.locator.end == len(excerpt)
     assert evidence.quote_hash == hashlib.sha256(excerpt[8:].encode()).hexdigest()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("positioned", [True, False])
+async def test_repeated_quote_diagnostic_and_precise_position(positioned):
+    excerpt = "same sentence. Context. same sentence."
+    quote = "same sentence."
+    start = excerpt.rindex(quote)
+    locator = PdfTextRangeLocator(page=3, start=100, end=100 + len(excerpt), quote_hash="a" * 64)
+    candidate_locator = (
+        locator.model_copy(update={"start": 100 + start, "end": 100 + start + len(quote)})
+        if positioned
+        else locator
+    )
+    candidate = EvidenceCandidate(
+        evidence_key="E",
+        artifact_key="A",
+        quote=quote,
+        locator=candidate_locator,
+    )
+    agent = ModelAnalystAgent(
+        SimpleNamespace(
+            generate=AsyncMock(
+                return_value=SimpleNamespace(output=AnalysisProposal(evidence=(candidate,))),
+            )
+        )
+    )
+    result = await agent.analyze(
+        AnalysisInput(
+            artifacts=(
+                ArtifactView(
+                    artifact_key="A",
+                    snapshot_key="S",
+                    content_hash="b" * 64,
+                    excerpt=excerpt,
+                    locator=locator,
+                ),
+            )
+        ),
+        ground_quotes=True,
+    )
+    assert agent.grounding_diagnostics["E"] == (
+        "QUOTE_POSITION_RESOLVED" if positioned else "QUOTE_MULTIPLE_MATCHES"
+    )
+    if positioned:
+        assert result.evidence[0].locator.start == 100 + start
+        assert result.evidence[0].locator.page == 3
+        assert result.evidence[0].quote_hash == hashlib.sha256(quote.encode()).hexdigest()
+    else:
+        assert result.evidence[0] == candidate
+
+
+@pytest.mark.asyncio
+async def test_missing_quote_records_reason_without_overriding_candidate():
+    locator = TextRangeLocator(start=0, end=8, quote_hash="a" * 64)
+    candidate = EvidenceCandidate(
+        evidence_key="E", artifact_key="A", quote="absent", locator=locator
+    )
+    agent = ModelAnalystAgent(
+        SimpleNamespace(
+            generate=AsyncMock(
+                return_value=SimpleNamespace(output=AnalysisProposal(evidence=(candidate,))),
+            )
+        )
+    )
+    result = await agent.analyze(
+        AnalysisInput(
+            artifacts=(
+                ArtifactView(
+                    artifact_key="A",
+                    snapshot_key="S",
+                    content_hash="b" * 64,
+                    excerpt="original",
+                    locator=locator,
+                ),
+            )
+        ),
+        ground_quotes=True,
+    )
+    assert agent.grounding_diagnostics == {"E": "QUOTE_NOT_FOUND"}
+    assert result.evidence[0] == candidate

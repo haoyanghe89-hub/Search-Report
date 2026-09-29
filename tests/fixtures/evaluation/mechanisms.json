@@ -1,0 +1,76 @@
+{
+  "dataset_kind": "synthetic",
+  "documents": [
+    {
+      "id": "english-long",
+      "text": "Routine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nRoutine background information.\nThe sensor overheated and triggered the shutdown.",
+      "title": "Synthetic English mechanism"
+    },
+    {
+      "id": "chinese-long",
+      "text": "历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n历史背景与无关信息。\n检查记录显示故障原因是传感器过热。",
+      "title": "合成中文机制案例"
+    },
+    {
+      "id": "pdf-page",
+      "text": "Technical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nTechnical background.\nThe review contradicts the initial claim: the valve remained closed.",
+      "title": "Synthetic PDF page text",
+      "page": 7
+    },
+    {
+      "id": "insufficient",
+      "text": "No measurements were available. The cause remains unknown.",
+      "title": "Synthetic insufficient evidence"
+    }
+  ],
+  "cases": [
+    {
+      "id": "mechanism-1",
+      "question": "The sensor overheated and triggered the shutdown.",
+      "category": "long-text",
+      "labels": [
+        {
+          "document_id": "english-long",
+          "start": 3200,
+          "end": 3249,
+          "quote": "The sensor overheated and triggered the shutdown.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "mechanism-2",
+      "question": "检查记录显示故障原因是传感器过热。",
+      "category": "long-text",
+      "labels": [
+        {
+          "document_id": "chinese-long",
+          "start": 3300,
+          "end": 3317,
+          "quote": "检查记录显示故障原因是传感器过热。",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "id": "mechanism-3",
+      "question": "The review contradicts the initial claim: the valve remained closed.",
+      "category": "contradictory-pdf",
+      "labels": [
+        {
+          "document_id": "pdf-page",
+          "start": 2200,
+          "end": 2268,
+          "quote": "The review contradicts the initial claim: the valve remained closed.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "id": "insufficient",
+      "question": "What evidence proves the cause of the failure?",
+      "category": "insufficient",
+      "labels": []
+    }
+  ]
+}

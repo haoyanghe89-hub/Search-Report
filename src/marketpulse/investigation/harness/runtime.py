@@ -100,7 +100,14 @@ class InvestigationHarness:
         dependency_keys: tuple[str, ...] = (),
         research_round: int = 0,
         timeout_seconds: float = 120.0,
+        terminal_transition: bool = False,
     ) -> OutputT:
+        if terminal_transition and (
+            agent_role is not AgentRole.HARNESS
+            or step_type is not StepType.OTHER
+            or getattr(semantic_input, "action", None) != "BLOCK"
+        ):
+            raise ValueError("budget exemption is only for a local blocking transition")
         if timeout_seconds <= 0:
             raise ValueError("Step timeout must be positive")
         fingerprint = semantic_fingerprint(semantic_input, workflow_version=workflow_version)
@@ -115,6 +122,7 @@ class InvestigationHarness:
             owner_instance_id=owner_instance_id,
             dependency_keys=dependency_keys,
             research_round=research_round,
+            terminal_transition=terminal_transition,
         )
         if step.status is ExecutionStepStatus.COMPLETED:
             if step.output_schema_version != output_model.__name__ or not step.output_refs:
@@ -128,11 +136,17 @@ class InvestigationHarness:
 
         budget = self.store.read_budget(run_id)
         remaining_ms = max(1, budget.max_wall_time_ms - budget.consumed_wall_time_ms)
-        effective_timeout = min(timeout_seconds, remaining_ms / 1000)
+        effective_timeout = (
+            min(timeout_seconds, 30.0)
+            if terminal_transition
+            else min(timeout_seconds, remaining_ms / 1000)
+        )
         started = self.monotonic()
         pulse = asyncio.create_task(self._pulse(step.step_id, owner_instance_id, started))
         try:
             outcome = await asyncio.wait_for(handler(), timeout=effective_timeout)
+            if terminal_transition and outcome.route is not Route.BLOCKED:
+                raise ValueError("terminal transition must block")
             proposal = output_model.model_validate(outcome.proposal)
             if isinstance(semantic_input, AgentContract) and isinstance(proposal, AgentContract):
                 validate_agent_proposal(semantic_input, proposal)

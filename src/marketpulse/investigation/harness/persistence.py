@@ -88,7 +88,14 @@ class HarnessStore:
         owner_instance_id: str,
         dependency_keys: tuple[str, ...] = (),
         research_round: int = 0,
+        terminal_transition: bool = False,
     ) -> ExecutionStep:
+        if terminal_transition and (
+            agent_role is not AgentRole.HARNESS
+            or step_type is not StepType.OTHER
+            or research_round != 0
+        ):
+            raise ValueError("only local terminal bookkeeping may exceed time budget")
         now = self.clock()
         with UnitOfWork(self.sessions, self.repository) as work:
             session = work.session
@@ -146,7 +153,7 @@ class HarnessStore:
                 )
                 if heartbeat_utc is None or now - heartbeat_utc < self.stale_after:
                     raise HarnessConflictError("Run has an active owner")
-            if budget.consumed_wall_time_ms >= budget.max_wall_time_ms:
+            if not terminal_transition and budget.consumed_wall_time_ms >= budget.max_wall_time_ms:
                 raise RunBudgetExceededError("Run active-time budget exhausted")
             if research_round > budget.research_rounds_used:
                 if research_round > budget.max_research_rounds:

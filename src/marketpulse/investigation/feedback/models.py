@@ -20,6 +20,7 @@ class FeedbackModel(BaseModel):
 
 
 class FeedbackLoopConfig(FeedbackModel):
+    retrieval_strategy: Literal["prefix-v1", "bm25-passages-v1"] = "prefix-v1"
     ground_model_quotes: bool = False
     research_workers: int = Field(default=1, ge=1, le=4)
     search_concurrency: int = Field(default=1, ge=1, le=16)
@@ -53,6 +54,7 @@ class ResearchExecutionResult(FeedbackModel):
 
 
 class AnalysisExecutionResult(FeedbackModel):
+    grounding_diagnostics: dict[str, str] = Field(default_factory=dict)
     proposal: AnalysisProposal
     evidence_ids: tuple[str, ...] = ()
     claim_ids: tuple[str, ...] = ()

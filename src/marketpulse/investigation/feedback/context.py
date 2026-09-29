@@ -37,6 +37,7 @@ from marketpulse.investigation.domain.enums import (
 )
 from marketpulse.investigation.domain.runtime import ResearchTask
 from marketpulse.investigation.feedback.models import FeedbackLoopConfig
+from marketpulse.investigation.feedback.retrieval import BM25ArtifactSelector
 from marketpulse.investigation.feedback.selection import ArtifactCandidate, ArtifactSelector
 from marketpulse.investigation.feedback.store import FeedbackState, FeedbackStore
 from marketpulse.investigation.validation.lineage import SourceLineageResolver
@@ -200,18 +201,46 @@ class AgentContextBuilder:
                     related_to_gap=task.origin_gap_id is not None,
                 )
             )
-        views = ArtifactSelector(
+        selector_type = (
+            BM25ArtifactSelector
+            if self.config.retrieval_strategy == "bm25-passages-v1"
+            else ArtifactSelector
+        )
+        selector = selector_type(
             self.blobs,
             max_artifacts=self.config.max_artifacts,
             max_excerpts=self.config.max_excerpts,
             max_chars=self.config.max_context_chars,
-        ).select(tuple(candidates))
+        )
+        if isinstance(selector, BM25ArtifactSelector):
+            query = " ".join(
+                [task.objective, task.purpose or ""]
+                + [
+                    q.text
+                    for q in state.investigation.questions
+                    if q.question_id == task.target_question_id
+                ]
+                + [gap.reason for gap in state.gaps if gap.gap_id == task.origin_gap_id]
+            )
+            views = selector.select(tuple(candidates), query=query)
+        else:
+            views = selector.select(tuple(candidates))
         artifact_by_hash = {item.sha256: item for item in state.artifacts}
         artifact_ids: dict[str, str] = {}
         snapshot_ids: dict[str, str] = {}
         source_ids: dict[str, str] = {}
         for view in views:
-            artifact = artifact_by_hash[view.content_hash]
+            if self.config.retrieval_strategy == "bm25-passages-v1":
+                artifact = next(
+                    c.artifact
+                    for c in candidates
+                    if c.artifact.sha256 == view.content_hash
+                    and f"SNAP-{c.snapshot.raw_sha256[:24]}" == view.snapshot_key
+                    and c.source.source_id == view.source_key
+                    and (c.artifact.page_number or None) == getattr(view.locator, "page", None)
+                )
+            else:
+                artifact = artifact_by_hash[view.content_hash]
             snapshot = snapshots[artifact.snapshot_id]
             artifact_ids[view.artifact_key] = artifact.artifact_id
             snapshot_ids[view.snapshot_key] = snapshot.snapshot_id
