@@ -1,3 +1,4 @@
+from click import unstyle
 from typer.testing import CliRunner
 
 from marketpulse.cli import app
@@ -8,7 +9,7 @@ runner = CliRunner()
 def test_cli_help() -> None:
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
-    assert "--competitors" in result.stdout
+    assert "--competitors" in unstyle(result.stdout)
     assert "产品方向" in result.stdout
 
 
