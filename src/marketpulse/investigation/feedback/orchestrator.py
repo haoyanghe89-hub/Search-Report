@@ -848,11 +848,27 @@ class AgentFeedbackOrchestrator:
                     for key in timeline_candidate.evidence_keys
                     if key in evidence_by_key
                 )
-                event_time = (
-                    datetime.fromisoformat(timeline_candidate.event_time.replace("Z", "+00:00"))
-                    if timeline_candidate.event_time is not None
-                    else None
-                )
+                try:
+                    event_time = (
+                        datetime.fromisoformat(timeline_candidate.event_time.replace("Z", "+00:00"))
+                        if timeline_candidate.event_time is not None
+                        else None
+                    )
+                except ValueError as error:
+                    # A free-form model date (including a range) is not one timestamp.
+                    # Keep the recorded proposal, reject only this candidate, and validate
+                    # the remaining evidence instead of rolling back the entire analysis.
+                    rejected.append(timeline_candidate.timeline_key)
+                    analysis_gaps.append(
+                        self._analysis_error_gap(
+                            state,
+                            task,
+                            candidate_key=timeline_candidate.timeline_key,
+                            stage="timeline event_time (expected a single ISO-8601 date/time)",
+                            error=error,
+                        )
+                    )
+                    continue
                 timeline_event = TimelineEvent(
                     timeline_event_id=stable_id(
                         "TE", state.run.run_id, timeline_candidate.timeline_key
@@ -874,6 +890,29 @@ class AgentFeedbackOrchestrator:
                 observation_evidence = evidence_by_key.get(observation_candidate.evidence_key)
                 if claim is None or observation_evidence is None:
                     continue
+                try:
+                    report_time = (
+                        datetime.fromisoformat(
+                            observation_candidate.report_time.replace("Z", "+00:00")
+                        )
+                        if observation_candidate.report_time is not None
+                        else None
+                    )
+                except ValueError as error:
+                    candidate_key = (
+                        f"{observation_candidate.claim_key}:{observation_candidate.evidence_key}"
+                    )
+                    rejected.append(candidate_key)
+                    analysis_gaps.append(
+                        self._analysis_error_gap(
+                            state,
+                            task,
+                            candidate_key=candidate_key,
+                            stage="conflict report_time (expected a single ISO-8601 date/time)",
+                            error=error,
+                        )
+                    )
+                    continue
                 observations.append(
                     ConflictObservation(
                         claim_id=claim.claim_id,
@@ -882,13 +921,7 @@ class AgentFeedbackOrchestrator:
                         conflict_type=observation_candidate.conflict_type,
                         numeric_value=observation_candidate.numeric_value,
                         unit=observation_candidate.unit,
-                        report_time=(
-                            datetime.fromisoformat(
-                                observation_candidate.report_time.replace("Z", "+00:00")
-                            )
-                            if observation_candidate.report_time is not None
-                            else None
-                        ),
+                        report_time=report_time,
                         scope=observation_candidate.scope,
                         definition=observation_candidate.definition,
                         methodology=observation_candidate.methodology,
