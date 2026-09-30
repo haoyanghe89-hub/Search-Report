@@ -59,4 +59,5 @@ Blob 配套切换并重启。未经核对的恢复卷也不允许重新备份，
 
 本轮已实测 SQLite 真实快照、CLI 恢复演练、调用意图/检查点/预算保留、损坏与不完整备份拒绝。
 Windows 不承诺目录 fsync，断电/存储损坏仍需基础设施保障。Docker/PostgreSQL 本机不可用，
-提供实现与演练入口，但未宣称已完成 PostgreSQL 或容器运行验收。
+已在 GitHub CI 的 Linux/Compose 环境完成离线案例、配套备份、校验与实际 PostgreSQL 恢复演练。
+演练报告作为 CI artifact 保留；目标部署环境仍须验证自身权限、卷和工具版本。

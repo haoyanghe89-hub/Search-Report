@@ -67,6 +67,7 @@ exclude = ["/.uv-cache/**", "/.phase3-*/**", "/.pytest-work/**"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --basetemp=.pytest-work"
+pythonpath = ["."]
 asyncio_mode = "auto"
 markers = [
   "live: requires real network access and DEEPSEEK_API_KEY",

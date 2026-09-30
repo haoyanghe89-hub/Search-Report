@@ -53,10 +53,10 @@ Docker 管理容器退出；健康检查不健康本身不会触发 Docker resta
 守护健康失败和备份恢复测试。不调用付费模型，不等同于供应商端 exactly-once 或长期 SLA 验收。
 
 自动恢复提升“有记录可用时”的可用性。供应商已计费但本地结果不明时仍暂停；这是有意保留的费用边界。
-Docker/Linux/PostgreSQL 部署需按所提供命令在目标环境演练；本机验证覆盖 Windows、SQLite 和真实子进程。
-CI 已加入离线案例入库后的 PostgreSQL/Blob 备份、校验和隔离恢复，并保存恢复报告；以 CI 实际结果为准。
+本机验证覆盖 Windows、SQLite 和真实子进程。GitHub CI 的 Linux/Compose 环境已完成离线案例入库后的
+PostgreSQL/Blob 备份、校验和隔离恢复，并保存恢复报告；部署到目标机器仍应重复演练。
 
-2026-09-30 本地验收：离线 pytest 361 passed、3 skipped、7 deselected；前端 30 项通过；
+2026-09-30 本地验收：离线 pytest 362 passed、3 skipped、7 deselected；前端 30 项通过；
 Ruff、mypy（148 个源文件）及前端生产构建通过。3 项跳过是 Windows 符号链接权限和 POSIX 信号测试，
 未运行项为真实联网/基础设施测试。Windows 仓库路径较长时使用短的 pytest 临时目录，避免 MAX_PATH 限制。
 
