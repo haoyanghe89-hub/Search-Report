@@ -5,6 +5,10 @@ export const runStatusLabel = status => ({ CREATED: '已创建', PENDING: '等�
 export function resultsPending({ replaying, starting, running, loading }) { return Boolean(replaying || starting || running || loading) }
 
 export function runFailureLabel(reason) {
+  if (/^(ModelCallOutcomeUnknownError|MODEL_CALL_OUTCOME_UNKNOWN)/.test(reason || '')) return '有模型调用的执行结果不明，已暂停。请在下方核对恢复条件，并逐项确认重试可能产生的重复费用。'
+  if (/^SERVER_(RESTARTED|SHUTDOWN)/.test(reason || '')) return '服务中断，已保存的结果保留。请查看下方恢复条件。'
+  if (/^USER_CANCELLED/.test(reason || '')) return '调查已取消，已保存的结果保留。可在下方检查恢复条件。'
+
   if (/^(InvalidProviderResponseError|MODEL_RESPONSE_INVALID|INVALID_RESPONSE)/.test(reason || '')) return '模型返回的数据格式或引用编号未通过校验，自动修复后仍不合格。已有资料已保留，可重新发起调查。'
   if (/^ModelOutputTruncatedError/.test(reason || '')) return '模型输出超过长度限制，重试后仍未返回完整结果。已有资料已保留。'
   if (/^RUN_TIMEOUT/.test(reason || '')) return '调查达到时间上限，已有资料已保留。'

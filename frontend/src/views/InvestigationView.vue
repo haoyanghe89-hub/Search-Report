@@ -4,6 +4,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useInvestigation } from '../composables/useInvestigation.js'
 import RunProgress from '../components/RunProgress.vue'
 import RunHistory from '../components/RunHistory.vue'
+import RunRecovery from '../components/RunRecovery.vue'
 import TopBar from '../components/TopBar.vue'
 import AgentFlow from '../components/AgentFlow.vue'
 import EvidenceChain from '../components/EvidenceChain.vue'
@@ -16,6 +17,9 @@ const props = defineProps({ investigationId: { type: String, required: true }, r
 const emit = defineEmits(['updated', 'replay', 'new-investigation'])
 const { detail, runs, runId, run, budget, workers, data, loading, starting, error, running, load, loadRun, refreshReports, start, cancel } = useInvestigation(props.investigationId)
 const pending = computed(() => resultsPending({ replaying: props.replaying, starting: starting.value, running: running.value, loading: loading.value }))
+const recoveryBusy = ref(false)
+const showRecovery = computed(() => run.value?.mode === 'LIVE' && ['INTERRUPTED', 'CANCELLED', 'FAILED', 'BLOCKED', 'TIMED_OUT'].includes(run.value?.status))
+async function resumed() { await loadRun(); emit('updated') }
 const tab = ref('overview')
 const tabs = [['overview', '概览'], ['agents', '智能体流程'], ['sources', '来源'], ['evidence', '证据'], ['claims', '声明'], ['conflicts', '冲突与缺口'], ['timeline', '时间线'], ['report', '报告'], ['review', '审核']]
 const query = ref('')
@@ -65,18 +69,19 @@ onUnmounted(() => window.removeEventListener('keydown', shortcut))
       </div>
       <div class="hero-actions">
         <button v-if="investigationId === 'INV-EAST-PALESTINE-2023'" class="btn btn-primary" :disabled="pending" @click="emit('replay')">{{ replaying ? '正在回放…' : '运行回放调查' }} <span>→</span></button>
-        <button v-else class="btn btn-primary" :disabled="starting || running || loading" @click="launch">{{ starting ? '正在启动…' : '启动联网调查' }} <span>→</span></button>
+        <button v-else class="btn btn-primary" :disabled="starting || running || loading || recoveryBusy" @click="launch">{{ starting ? '正在启动…' : '启动联网调查' }} <span>→</span></button>
         <button class="btn btn-ghost" @click="emit('new-investigation')">调查新主题</button>
         <button v-if="running" class="btn btn-ghost" @click="cancel">取消运行</button>
-        <button class="quiet-button" :disabled="pending" @click="load">刷新</button>
+        <button class="quiet-button" :disabled="pending || recoveryBusy" @click="load">刷新</button>
       </div>
     </header>
     <p v-if="error" class="notice error" role="alert">{{ error }} <button @click="load">重新加载</button></p>
     <p class="muted">联网调查使用服务端模型配置，可能产生调用费用。离线案例请使用左侧回放入口。</p>
-    <div class="run-bar" v-if="runs.length"><RunHistory :runs="runs" :model-value="runId" :disabled="pending" @update:model-value="loadRun" /></div>
+    <div class="run-bar" v-if="runs.length"><RunHistory :runs="runs" :model-value="runId" :disabled="pending || recoveryBusy" @update:model-value="loadRun" /></div>
     <RunProgress v-if="pending" :replaying="replaying" :starting="starting" :running="running" :phase="run?.current_phase" :workers="workers" :budget="budget" :steps="data.steps" />
     <template v-else>
     <p v-if="run?.interruption_reason" class="notice">运行说明：{{ runFailureLabel(run.interruption_reason) }}</p>
+    <RunRecovery v-if="showRecovery" :run-id="runId" :busy="pending" @busy="recoveryBusy = $event" @resumed="resumed" />
     <nav class="section-nav" aria-label="调查内容"><button v-for="[key, label] in tabs" :key="key" class="nav-tab" :class="{ active: tab === key }" :aria-current="tab === key ? 'page' : undefined" @click="tab = key">{{ label }} <span class="tab-count" v-if="Array.isArray(data[key])">{{ data[key].length }}</span></button></nav>
     <section v-if="tab === 'overview'">
       <AgentFlow :agents="agents"><template #heading><SectionHeading section-num="01" section-name="智能体协作" section-desc="执行记录驱动" /></template></AgentFlow>

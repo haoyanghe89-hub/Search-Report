@@ -9,6 +9,7 @@ from marketpulse.investigation.agents.contracts import QueryIntent, ResearchInpu
 from marketpulse.investigation.agents.model_agents import ModelResearcherAgent
 from marketpulse.investigation.feedback.guards import normalize_query
 from marketpulse.investigation.feedback.parallel import bounded_map
+from marketpulse.investigation.harness.model_call_journal import ModelCallOutcomeUnknownError
 from marketpulse.investigation.harness.persistence import RunBudgetExceededError
 from marketpulse.investigation.ports.external import ModelPort
 
@@ -77,9 +78,9 @@ async def research_team(
             if progress:
                 progress(name, "COMPLETED")
             return name, result, None
-        except RunBudgetExceededError:
+        except (RunBudgetExceededError, ModelCallOutcomeUnknownError) as error:
             if progress:
-                progress(name, "BUDGET_EXHAUSTED")
+                progress(name, error.code)
             raise
         except Exception as error:
             if progress:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import replace
 from datetime import UTC, datetime
 from typing import Literal, TypeVar
 
@@ -35,6 +36,7 @@ from marketpulse.investigation.domain.claims import (
 )
 from marketpulse.investigation.domain.enums import (
     AgentRole,
+    AuditActorType,
     EntailmentStatus,
     ExecutionStepStatus,
     GapSeverity,
@@ -48,6 +50,7 @@ from marketpulse.investigation.domain.enums import (
     ValidationStatus,
     WorkflowPhase,
 )
+from marketpulse.investigation.domain.reports import AuditEvent
 from marketpulse.investigation.domain.runtime import ResearchTask
 from marketpulse.investigation.domain.sources import Evidence
 from marketpulse.investigation.feedback.acquisition_batch import acquisition_batch
@@ -85,6 +88,11 @@ from marketpulse.investigation.feedback.store import (
 )
 from marketpulse.investigation.feedback.verification_team import verification_team
 from marketpulse.investigation.harness.calls import BoundExternalCalls
+from marketpulse.investigation.harness.checkpoints import (
+    RESUMABLE_WORKFLOW_VERSION,
+    StepInputCheckpoints,
+    WorkerCheckpoint,
+)
 from marketpulse.investigation.harness.persistence import RunBudgetExceededError
 from marketpulse.investigation.harness.runtime import InvestigationHarness, StepOutcome
 from marketpulse.investigation.harness.scoped_ports import StepPortScope
@@ -151,6 +159,14 @@ class AgentFeedbackOrchestrator:
         self.context = AgentContextBuilder(store, blobs, self.config)
         self.gain = InformationGainCalculator()
         self.progress = progress
+        self.checkpoints = StepInputCheckpoints(repository, blobs)
+
+    def _pinned_input(self, run_id: str, logical_key: str, request: OutputT) -> OutputT:
+        if self.config.workflow_version != RESUMABLE_WORKFLOW_VERSION:
+            return request
+        return self.checkpoints.pinned_input(
+            run_id, logical_key, self.config.workflow_version, request
+        )
 
     async def run(self, run_id: str) -> FeedbackLoopResult:
         trace: list[str] = []
@@ -159,6 +175,53 @@ class AgentFeedbackOrchestrator:
         before_round: dict[int, RoundSnapshot] = {}
 
         state = self.store.state(run_id)
+        if self.config.workflow_version == RESUMABLE_WORKFLOW_VERSION:
+            before_round = {
+                int(key.rsplit(":", 1)[-1]): value
+                for key, value in self.checkpoints.saved_inputs(
+                    self.store.sessions, run_id, RoundSnapshot
+                ).items()
+            }
+            gains = sorted(
+                self.checkpoints.saved_inputs(
+                    self.store.sessions, run_id, InformationGainSummary
+                ).values(),
+                key=lambda g: g.round,
+            )
+            # Recover the small window between a committed verification and gain bookkeeping.
+            if state.run.current_phase is not WorkflowPhase.VERIFY and any(
+                step.logical_step_key == state.run.last_completed_step_key
+                and step.step_type is StepType.VALIDATION
+                for step in state.steps
+            ):
+                task = self._latest_completed_task(state)
+                if (
+                    task.round in before_round
+                    and not any(g.round == task.round for g in gains)
+                    and not any(
+                        t.status is ResearchTaskStatus.PENDING and t.round == task.round
+                        for t in state.tasks
+                    )
+                ):
+                    gains.append(
+                        self._pinned_input(
+                            run_id,
+                            f"round:gain:{task.round}",
+                            self.gain.compare(
+                                before_round[task.round],
+                                self.gain.snapshot(self.store, state),
+                                round_number=task.round,
+                            ),
+                        )
+                    )
+            for gain in gains:
+                no_progress.observe(gain)
+                before_round.pop(gain.round, None)
+            if (
+                state.run.current_phase is not WorkflowPhase.REPORT
+                and no_progress.consecutive >= self.config.no_progress_rounds
+            ):
+                return await self._blocked(run_id, trace, gains, "NO_INFORMATION_GAIN")
         if state.run.current_phase is WorkflowPhase.CREATED:
             await self._bootstrap(state)
             trace.append("PLAN")
@@ -197,7 +260,12 @@ class AgentFeedbackOrchestrator:
                 task = sorted(pending, key=lambda item: (-item.priority, item.task_id))[0]
                 if not self._can_research(state, task):
                     return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
-                before_round.setdefault(task.round, self.gain.snapshot(self.store, state))
+                before_round.setdefault(
+                    task.round,
+                    self._pinned_input(
+                        run_id, f"round:before:{task.round}", self.gain.snapshot(self.store, state)
+                    ),
+                )
                 try:
                     await self._research(state, task)
                 except RunBudgetExceededError as error:
@@ -255,6 +323,7 @@ class AgentFeedbackOrchestrator:
                         self.gain.snapshot(self.store, state),
                         round_number=task.round,
                     )
+                    round_gain = self._pinned_input(run_id, f"round:gain:{task.round}", round_gain)
                     gains.append(round_gain)
                     before_round.pop(task.round, None)
                     if state.run.current_phase is not WorkflowPhase.REPORT and no_progress.observe(
@@ -305,7 +374,9 @@ class AgentFeedbackOrchestrator:
         )
 
     async def _plan(self, state: FeedbackState) -> PlanProposal:
-        request = self.context.planner(state)
+        request = self._pinned_input(
+            state.run.run_id, "planning:initial", self.context.planner(state)
+        )
         scope = StepPortScope(self.calls)
 
         async def handler() -> StepOutcome:
@@ -345,6 +416,23 @@ class AgentFeedbackOrchestrator:
             budget=plan.budget,
         )
         round_number = state.budget.research_rounds_used + 1
+        if self.config.workflow_version == RESUMABLE_WORKFLOW_VERSION:
+            interrupted = next(
+                (
+                    step
+                    for step in reversed(state.steps)
+                    if step.logical_step_key == state.run.current_step_key
+                    and step.logical_step_key is not None
+                    and step.logical_step_key.startswith("planning:feedback:round-")
+                    and step.status is not ExecutionStepStatus.COMPLETED
+                ),
+                None,
+            )
+            if interrupted is not None:
+                assert interrupted.logical_step_key is not None
+                round_number = int(interrupted.logical_step_key.rsplit("-", 1)[1])
+        logical_key = f"planning:feedback:round-{round_number}"
+        request = self._pinned_input(state.run.run_id, logical_key, request)
         scope = StepPortScope(self.calls)
 
         async def handler() -> StepOutcome:
@@ -366,7 +454,7 @@ class AgentFeedbackOrchestrator:
 
         return await self.harness.run_step(
             run_id=state.run.run_id,
-            logical_step_key=f"planning:feedback:round-{round_number}",
+            logical_step_key=logical_key,
             workflow_version=self.config.workflow_version,
             phase=WorkflowPhase.COLLECT,
             step_type=StepType.PLANNING,
@@ -388,6 +476,7 @@ class AgentFeedbackOrchestrator:
         request = self.context.researcher(state, task)
         scope = StepPortScope(self.calls)
         logical_key = f"research:{task.title}:round-{task.round}"
+        request = self._pinned_input(state.run.run_id, logical_key, request)
 
         async def handler() -> StepOutcome:
             researcher_errors: tuple[str, ...] = ()
@@ -604,6 +693,10 @@ class AgentFeedbackOrchestrator:
             else prior_attempts[-1].logical_step_key
         )
         assert dependency_key is not None
+
+        bundle = replace(
+            bundle, request=self._pinned_input(state.run.run_id, logical_key, bundle.request)
+        )
 
         async def handler() -> StepOutcome:
             analyst = ModelAnalystAgent(scope.model("analyst.extract"))
@@ -929,15 +1022,26 @@ class AgentFeedbackOrchestrator:
         )
         assert dependency_key is not None
 
+        bundle = replace(
+            bundle, request=self._pinned_input(state.run.run_id, logical_key, bundle.request)
+        )
+        workers = self._pinned_input(
+            state.run.run_id,
+            logical_key + ":workers",
+            WorkerCheckpoint(
+                workers=min(
+                    self.config.research_workers,
+                    max(1, state.budget.max_model_calls - state.budget.model_calls_used),
+                )
+            ),
+        ).workers
+
         async def handler() -> StepOutcome:
             if self.config.research_workers > 1:
                 proposal = await verification_team(
                     bundle.request,
                     scope.model,
-                    workers=min(
-                        self.config.research_workers,
-                        max(1, state.budget.max_model_calls - state.budget.model_calls_used),
-                    ),
+                    workers=workers,
                 )
             else:
                 proposal = await ModelVerifierAgent(scope.model("verifier.entailment")).verify(
@@ -1107,17 +1211,42 @@ class AgentFeedbackOrchestrator:
             )
         if state.run.current_phase is not WorkflowPhase.REPORT:
             transition = PhaseTransition(action="BLOCK", reason=reason)
+            logical_key = f"workflow:block:{reason.casefold()}"
+            pause_events: tuple[PersistedEntity, ...] = ()
+            if (
+                reason == "BUDGET_EXHAUSTED"
+                and self.config.workflow_version == RESUMABLE_WORKFLOW_VERSION
+            ):
+                logical_key += f":{state.run.checkpoint_version}"
+                pause_events = (
+                    AuditEvent(
+                        audit_event_id=stable_id("BUDGET-PAUSE", run_id, logical_key),
+                        investigation_id=state.investigation.investigation_id,
+                        run_id=run_id,
+                        actor_type=AuditActorType.SYSTEM,
+                        event_type="RUN_BUDGET_BLOCKED",
+                        target_type="InvestigationRun",
+                        target_id=run_id,
+                        metadata={
+                            "resume_phase": state.run.current_phase.value,
+                            "resume_step_key": state.run.current_step_key,
+                            "blocking_step_key": logical_key,
+                            "gap_ids": [self._termination_gap_id(state, detail)],
+                        },
+                        created_at=self.clock(),
+                    ),
+                )
 
             async def handler() -> StepOutcome:
                 return StepOutcome(
                     proposal=transition,
                     route=Route.BLOCKED,
-                    business_outputs=self._termination_gap(state, detail),
+                    business_outputs=(*self._termination_gap(state, detail), *pause_events),
                 )
 
             await self.harness.run_step(
                 run_id=run_id,
-                logical_step_key=f"workflow:block:{reason.casefold()}",
+                logical_step_key=logical_key,
                 terminal_transition=True,
                 workflow_version=self.config.workflow_version,
                 phase=state.run.current_phase,
@@ -1302,13 +1431,18 @@ class AgentFeedbackOrchestrator:
             and budget.sources_remaining > 0
         )
 
+    def _termination_gap_id(self, state: FeedbackState, reason: str) -> str:
+        if self.config.workflow_version == RESUMABLE_WORKFLOW_VERSION:
+            return stable_id("GAP", state.run.run_id, reason, str(state.run.checkpoint_version))
+        return stable_id("GAP", state.run.run_id, reason)
+
     def _termination_gap(self, state: FeedbackState, reason: str) -> tuple[PersistedEntity, ...]:
         if any(item.reason == reason for item in self.store.open_gaps(state)):
             return ()
         now = self.clock()
         return (
             ResearchGap(
-                gap_id=stable_id("GAP", state.run.run_id, reason),
+                gap_id=self._termination_gap_id(state, reason),
                 investigation_id=state.investigation.investigation_id,
                 run_id=state.run.run_id,
                 gap_type=ResearchGapType.OTHER,

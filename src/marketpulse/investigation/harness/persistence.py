@@ -9,11 +9,13 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from marketpulse.investigation.domain.enums import (
     AgentRole,
+    AuditActorType,
     ExecutionStepStatus,
     RunStatus,
     StepType,
     WorkflowPhase,
 )
+from marketpulse.investigation.domain.reports import AuditEvent
 from marketpulse.investigation.domain.runtime import ExecutionStep, RunBudget
 from marketpulse.investigation.harness.state_machine import (
     Route,
@@ -273,6 +275,26 @@ class HarnessStore:
             ):
                 raise HarnessConflictError("Step completion lost ownership")
             require_route(run.current_phase, route)
+            if (
+                run.workflow_version == "resumable-retrieval-v4"
+                and phase_for(route) is WorkflowPhase.REPORT
+            ):
+                work.add(
+                    AuditEvent(
+                        audit_event_id=f"REPORT-READY-{step.step_id}",
+                        investigation_id=run.investigation_id,
+                        run_id=run.run_id,
+                        actor_type=AuditActorType.SYSTEM,
+                        event_type="RUN_REPORT_READY",
+                        target_type="InvestigationRun",
+                        target_id=run.run_id,
+                        metadata={
+                            "logical_step_key": step.logical_step_key,
+                            "status": status_for(route).value,
+                        },
+                        created_at=now,
+                    )
+                )
             self._accrue(session, step, elapsed_ms, now)
             for entity in business_outputs:
                 work.add(entity)

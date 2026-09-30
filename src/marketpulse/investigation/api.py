@@ -63,6 +63,7 @@ from marketpulse.investigation.persistence.models import (
     ValidationResultRow,
 )
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
+from marketpulse.investigation.recovery import RecoveryConflict, ResumeRequest
 from marketpulse.investigation.reporting.persistence import ReportGovernanceRepository
 from marketpulse.investigation.reporting.pipeline import ReportPipeline
 from marketpulse.investigation.reporting.writer import DeterministicWriter
@@ -808,6 +809,30 @@ async def start_investigation_run(investigation_id: str, request: Request) -> Ru
     except LiveNotConfiguredError as error:
         raise _error(503, "LIVE_NOT_CONFIGURED", str(error)) from error
     return RunStartOut(run_id=run_id, status=RunStatus.CREATED.value)
+
+
+@router.get("/runs/{run_id}/recovery")
+def inspect_run_recovery(run_id: str, request: Request) -> dict[str, Any]:
+    with _sessions(request)() as session:
+        _get_run_row(session, run_id)
+    return cast("dict[str, Any]", request.app.state.live_investigation.recovery.inspect(run_id))
+
+
+@router.post("/runs/{run_id}/resume", response_model=RunStartOut, status_code=202)
+async def resume_investigation_run(
+    run_id: str, body: ResumeRequest, request: Request
+) -> RunStartOut:
+    from marketpulse.investigation.live_runtime import LiveNotConfiguredError
+
+    with _sessions(request)() as session:
+        _get_run_row(session, run_id)
+    try:
+        request.app.state.live_investigation.resume(run_id, body)
+    except RecoveryConflict as error:
+        raise _error(409, error.code, str(error)) from error
+    except LiveNotConfiguredError as error:
+        raise _error(503, "LIVE_NOT_CONFIGURED", str(error)) from error
+    return RunStartOut(run_id=run_id, status=RunStatus.PENDING.value)
 
 
 @router.post("/runs/{run_id}/cancel", response_model=RunStartOut)

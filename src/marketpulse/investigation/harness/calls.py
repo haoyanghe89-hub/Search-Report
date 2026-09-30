@@ -70,6 +70,8 @@ class BoundExternalCalls:
         live_search: SearchPort | None = None,
         live_fetch: FetchPort | None = None,
         live_model: ModelPort | None = None,
+        authorized_unknown_intent_ids: frozenset[str] = frozenset(),
+        pause_on_unknown_outcome: bool = False,
     ) -> None:
         self.sessions = sessions
         self.repository = repository
@@ -78,6 +80,8 @@ class BoundExternalCalls:
         self.live_search = live_search
         self.live_fetch = live_fetch
         self.live_model = live_model
+        self.authorized_unknown_intent_ids = authorized_unknown_intent_ids
+        self.pause_on_unknown_outcome = pause_on_unknown_outcome
 
     def _binding(self, site: StepCallSite) -> CallBinding | None:
         with self.sessions() as session:
@@ -419,8 +423,10 @@ class BoundExternalCalls:
                 fingerprint=fingerprint,
                 next_record_attempt=self.repository.recorded_call_count(
                     run_id=site.run_id, operation=operation, fingerprint=fingerprint, kind="MODEL"
-                ) + 1,
+                )
+                + 1,
                 retry_unknown_outcome=retry_unknown_outcome,
+                authorized_unknown_intent_ids=self.authorized_unknown_intent_ids,
             )
             self._reserve(site.run_id, operation, intent=intent)
             adapter = RecordingModelAdapter(
@@ -435,7 +441,23 @@ class BoundExternalCalls:
                     record_attempt=attempt,
                 ),
             )
-            await adapter.generate(request)
+            try:
+                await adapter.generate(request)
+            except Exception:
+                if self.pause_on_unknown_outcome:
+                    # Reinspect the durable intent after the adapter records the failure.
+                    # Prior consent never authorizes a new, ambiguous dispatch attempt.
+                    prepare_model_intent(
+                        self.sessions,
+                        run_id=site.run_id,
+                        logical_step_key=site.logical_step_key,
+                        call_site_key=site.call_site_key,
+                        call_ordinal=site.call_ordinal,
+                        fingerprint=fingerprint,
+                        next_record_attempt=attempt + 1,
+                        retry_unknown_outcome=False,
+                    )
+                raise
             call, payload, _ = self._resolve(
                 site=site,
                 operation=operation,

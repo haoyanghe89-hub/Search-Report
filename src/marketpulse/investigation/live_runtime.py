@@ -12,7 +12,7 @@ from pathlib import Path
 
 import httpx
 from openai import AsyncOpenAI
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from marketpulse.adapters.investigation_search import PublicSearchPortAdapter
@@ -30,7 +30,6 @@ from marketpulse.investigation.domain.enums import (
     WorkflowPhase,
 )
 from marketpulse.investigation.domain.runtime import Investigation, InvestigationRun, RunBudget
-from marketpulse.investigation.feedback.models import FeedbackLoopConfig
 from marketpulse.investigation.feedback.orchestrator import AgentFeedbackOrchestrator
 from marketpulse.investigation.feedback.store import FeedbackStore
 from marketpulse.investigation.harness.calls import BoundExternalCalls
@@ -41,6 +40,13 @@ from marketpulse.investigation.persistence.models import ExecutionStepRow, Inves
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
 from marketpulse.investigation.ports.external import FetchPort, ModelPort, SearchPort
 from marketpulse.investigation.recording.store import RepositoryRecordedCallStore
+from marketpulse.investigation.recovery import (
+    WORKFLOW_VERSION,
+    RecoveryConflict,
+    ResumeRequest,
+    RunRecovery,
+    live_feedback_config,
+)
 from marketpulse.investigation.reporting.pipeline import ReportPipeline
 from marketpulse.investigation.reporting.writer import DeterministicWriter
 from marketpulse.investigation.validation.integrity import EvidenceIntegrityValidator
@@ -85,6 +91,7 @@ class LiveInvestigationService:
         self.settings = settings
         self.blobs = LocalContentAddressedBlobStorage(blob_root)
         self.ports = ports
+        self.recovery = RunRecovery(sessions, repository, self.blobs, settings)
         self.tasks: dict[str, asyncio.Task[None]] = {}
         self._closing = False
         self.worker_activity: dict[str, dict[str, str]] = {}
@@ -95,12 +102,19 @@ class LiveInvestigationService:
             rows = session.scalars(
                 select(InvestigationRunRow).where(
                     InvestigationRunRow.mode == RunMode.LIVE,
-                    InvestigationRunRow.status.in_(_ACTIVE),
+                    or_(
+                        InvestigationRunRow.status.in_(_ACTIVE),
+                        and_(
+                            InvestigationRunRow.status == RunStatus.READY_FOR_REPORT,
+                            InvestigationRunRow.completed_at.is_(None),
+                        ),
+                    ),
                 )
             ).all()
             for row in rows:
                 row.status = RunStatus.INTERRUPTED
-                row.interruption_reason = "SERVER_RESTARTED: start a new run to retry"
+                row.state_version += 1
+                row.interruption_reason = "SERVER_RESTARTED: inspect recovery options"
                 row.updated_at = datetime.now(UTC)
                 row.completed_at = row.updated_at
                 row.owner_instance_id = None
@@ -116,7 +130,7 @@ class LiveInvestigationService:
                     step.error_code = "SERVER_RESTARTED"
                     step.completed_at = row.updated_at
 
-    def start(self, investigation_id: str) -> str:
+    def _ensure_available(self) -> None:
         if self._closing:
             raise LiveNotConfiguredError("服务正在关闭，请稍后重试。")
         key = self.settings.deepseek_api_key
@@ -125,43 +139,61 @@ class LiveInvestigationService:
                 "实时调查需要模型凭据：请配置 DEEPSEEK_API_KEY 后重启服务；"
                 "DEEPSEEK_BASE_URL 和 MARKETPULSE_MODEL 可用于兼容的模型服务。"
             )
+
+    def start(self, investigation_id: str) -> str:
+        self._ensure_available()
         self.repository.get(Investigation, investigation_id)
         run_id = f"RUN-LIVE-{uuid.uuid4().hex[:16]}"
         now = datetime.now(UTC)
-        self.repository.add(
-            InvestigationRun(
-                run_id=run_id,
-                investigation_id=investigation_id,
-                mode=RunMode.LIVE,
-                status=RunStatus.CREATED,
-                current_phase=WorkflowPhase.CREATED,
-                checkpoint_version=0,
-                state_version=0,
-                workflow_version="evidence-retrieval-v3",
-                created_at=now,
-                started_at=now,
-                updated_at=now,
-            )
+        run = InvestigationRun(
+            run_id=run_id,
+            investigation_id=investigation_id,
+            mode=RunMode.LIVE,
+            status=RunStatus.CREATED,
+            current_phase=WorkflowPhase.CREATED,
+            checkpoint_version=0,
+            state_version=0,
+            workflow_version=WORKFLOW_VERSION,
+            created_at=now,
+            started_at=now,
+            updated_at=now,
         )
-        HarnessStore(self.sessions, self.repository).install_budget(
-            RunBudget(
-                run_id=run_id,
-                max_research_rounds=self.settings.max_research_rounds,
-                max_search_calls=self.settings.max_search_queries,
-                max_fetch_calls=self.settings.max_pages,
-                max_model_calls=self.settings.max_model_calls,
-                max_tokens=self.settings.max_tokens,
-                max_wall_time_ms=int(self.settings.total_timeout_seconds * 1000),
-                max_sources=self.settings.max_pages,
-                updated_at=now,
-            )
+        budget = RunBudget(
+            run_id=run_id,
+            max_research_rounds=self.settings.max_research_rounds,
+            max_search_calls=self.settings.max_search_queries,
+            max_fetch_calls=self.settings.max_pages,
+            max_model_calls=self.settings.max_model_calls,
+            max_tokens=self.settings.max_tokens,
+            max_wall_time_ms=int(self.settings.total_timeout_seconds * 1000),
+            max_sources=self.settings.max_pages,
+            updated_at=now,
         )
-        self.worker_activity[run_id] = {}
-        task = asyncio.create_task(self._execute(run_id), name=run_id)
-        self.tasks[run_id] = task
-        task.add_done_callback(lambda _: self.tasks.pop(run_id, None))
-        task.add_done_callback(lambda _: self.worker_activity.pop(run_id, None))
+        with self.sessions.begin() as session:
+            for entity in (run, budget, self.recovery.config_event(run_id, investigation_id)):
+                self.repository.add_in_session(session, entity)
+        self._schedule(run_id)
         return run_id
+
+    def resume(self, run_id: str, request: ResumeRequest) -> None:
+        self._ensure_available()
+        task = self.tasks.get(run_id)
+        if task is not None and not task.done():
+            raise RecoveryConflict("RUN_STILL_ACTIVE", "任务仍在执行，请等待停止后恢复。")
+        authorized = self.recovery.prepare(run_id, request)
+        self._schedule(run_id, authorized)
+
+    def _schedule(self, run_id: str, authorized: frozenset[str] = frozenset()) -> None:
+        self.worker_activity[run_id] = {}
+        task = asyncio.create_task(self._execute(run_id, authorized), name=run_id)
+        self.tasks[run_id] = task
+
+        def cleanup(completed: asyncio.Task[None]) -> None:
+            if self.tasks.get(run_id) is completed:
+                self.tasks.pop(run_id, None)
+                self.worker_activity.pop(run_id, None)
+
+        task.add_done_callback(cleanup)
 
     async def cancel(self, run_id: str) -> bool:
         task = self.tasks.get(run_id)
@@ -179,10 +211,35 @@ class LiveInvestigationService:
             task.cancel()
         await asyncio.gather(*(task for _, task in pending), return_exceptions=True)
         for run_id, _ in pending:
-            self._finish(run_id, RunStatus.INTERRUPTED, "SERVER_SHUTDOWN: start a new run to retry")
+            self._finish(run_id, RunStatus.INTERRUPTED, "SERVER_SHUTDOWN: inspect recovery options")
 
-    async def _execute(self, run_id: str) -> None:
+    async def _execute(self, run_id: str, authorized: frozenset[str] = frozenset()) -> None:
         try:
+            run = self.repository.get(InvestigationRun, run_id)
+            if run.current_phase is WorkflowPhase.REPORT:
+                # Report regeneration is local and does not need external-call budget.
+                async with asyncio.timeout(30):
+                    await self._report(
+                        run_id,
+                        ReportType.FULL_INVESTIGATION
+                        if run.status is RunStatus.READY_FOR_REPORT
+                        else ReportType.INVESTIGATION_STATUS,
+                    )
+                self._finish(run_id, run.status, run.interruption_reason)
+                return
+            budget = HarnessStore(self.sessions, self.repository).read_budget(run_id)
+            remaining_seconds = max(
+                0.001, (budget.max_wall_time_ms - budget.consumed_wall_time_ms) / 1000
+            )
+            search_settings = self.settings.model_copy(
+                update={
+                    "total_timeout_seconds": remaining_seconds,
+                    "max_search_queries": max(
+                        0, budget.max_search_calls - budget.search_calls_used
+                    ),
+                    "max_pages": max(0, budget.max_fetch_calls - budget.fetch_calls_used),
+                }
+            )
             async with AsyncExitStack() as stack:
                 ports = self.ports
                 if ports is None:
@@ -205,7 +262,7 @@ class LiveInvestigationService:
                             PublicSearchClient(
                                 http,
                                 self.settings,
-                                SearchBudget.start(self.settings),
+                                SearchBudget.start(search_settings),
                             )
                         ),
                         fetch=HttpxFetchAdapter(
@@ -221,8 +278,8 @@ class LiveInvestigationService:
                             thinking_enabled=self.settings.model_thinking_enabled,
                         ),
                     )
-                async with asyncio.timeout(self.settings.total_timeout_seconds):
-                    outcome = await self._orchestrator(run_id, ports).run(run_id)
+                async with asyncio.timeout(remaining_seconds):
+                    outcome = await self._orchestrator(run_id, ports, authorized).run(run_id)
                     await self._report(
                         run_id,
                         ReportType.FULL_INVESTIGATION
@@ -260,6 +317,7 @@ class LiveInvestigationService:
             row = session.get(InvestigationRunRow, run_id)
             if row is not None:
                 row.status = status
+                row.state_version += 1
                 row.interruption_reason = reason
                 row.updated_at = datetime.now(UTC)
                 row.completed_at = row.updated_at
@@ -273,7 +331,12 @@ class LiveInvestigationService:
             now=datetime.now(UTC),
         )
 
-    def _orchestrator(self, run_id: str, ports: LivePorts) -> AgentFeedbackOrchestrator:
+    def _orchestrator(
+        self,
+        run_id: str,
+        ports: LivePorts,
+        authorized: frozenset[str] = frozenset(),
+    ) -> AgentFeedbackOrchestrator:
         integrity = EvidenceIntegrityValidator(
             blobs=self.blobs,
             recognized_versions=RecognizedArtifactVersions(
@@ -302,6 +365,8 @@ class LiveInvestigationService:
                 live_search=ports.search,
                 live_fetch=ports.fetch,
                 live_model=ports.model,
+                authorized_unknown_intent_ids=authorized,
+                pause_on_unknown_outcome=True,
             ),
             store=FeedbackStore(self.sessions, self.repository),
             repository=self.repository,
@@ -313,18 +378,5 @@ class LiveInvestigationService:
             progress=lambda name, status: self.worker_activity.setdefault(run_id, {}).__setitem__(
                 name, status
             ),
-            config=FeedbackLoopConfig(
-                ground_model_quotes=True,
-                workflow_version="evidence-retrieval-v3",
-                retrieval_strategy="bm25-passages-v1",
-                research_workers=self.settings.research_workers,
-                search_concurrency=self.settings.max_search_concurrency,
-                fetch_concurrency=self.settings.max_fetch_concurrency,
-                queries_per_researcher=self.settings.max_queries_per_researcher,
-                step_timeout_seconds=min(600, self.settings.total_timeout_seconds),
-                max_artifacts=30,
-                max_excerpts=60,
-                max_context_chars=100_000,
-                max_verification_evidence=200,
-            ),
+            config=live_feedback_config(self.settings),
         )

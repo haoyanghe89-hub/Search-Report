@@ -41,6 +41,7 @@ def prepare_model_intent(
     fingerprint: str,
     next_record_attempt: int,
     retry_unknown_outcome: bool,
+    authorized_unknown_intent_ids: frozenset[str] = frozenset(),
 ) -> tuple[AuditEvent, int]:
     """Prepare intent; caller MUST commit it with budget reservation before dispatch.
 
@@ -88,7 +89,10 @@ def prepare_model_intent(
                 ExternalCallStatus.PROVIDER_ERROR,
             }:
                 unknown_intent = previous.audit_event_id
-                if not retry_unknown_outcome:
+                if (
+                    not retry_unknown_outcome
+                    and unknown_intent not in authorized_unknown_intent_ids
+                ):
                     raise ModelCallOutcomeUnknownError(unknown_intent)
         sequence = int(previous.metadata_payload["sequence"]) + 1 if previous else 1
         prior_attempts = [
