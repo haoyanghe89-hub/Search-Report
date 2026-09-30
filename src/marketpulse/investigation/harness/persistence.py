@@ -360,11 +360,15 @@ class HarnessStore:
             step.completed_at = now
             step.error_code = error_code
             step.retryable = retryable
-            run.status = RunStatus.INTERRUPTED if interrupted else RunStatus.FAILED
+            user_cancelled = (
+                run.status is RunStatus.CANCELLED and run.interruption_reason == "USER_CANCELLED"
+            )
+            if not user_cancelled:
+                run.status = RunStatus.INTERRUPTED if interrupted else RunStatus.FAILED
+                run.interruption_reason = error_code
             run.owner_instance_id = None
             run.owner_heartbeat_at = None
             run.current_step_key = step.logical_step_key
-            run.interruption_reason = error_code
             run.checkpoint_version += 1
             run.state_version += 1
             run.updated_at = now

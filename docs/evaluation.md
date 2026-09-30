@@ -63,7 +63,7 @@ python -m marketpulse.investigation.evaluation.live --database-url sqlite:///dat
   决定是否接受，不把重复句直接当作无效证据或既有引用漏洞。
 - 模型恢复政策见 [model-call-recovery.md](model-call-recovery.md)：复用已落盘结果；
   结果不明调用默认停止，明确接受可能重复费用后才能重试。没有供应商幂等/结果查询时，
-  不承诺严格避免重复计费。LIVE 服务重启仍标记 interrupted；v4 可经检查和明确授权继续原运行，不自动重新付费运行。
+  不承诺严格避免重复计费。LIVE 服务重启仍标记 interrupted；v4 在原数据库完整且无未知调用时可安全自动继续原运行；未知调用需明确确认，不自动补额度。
 
 ## 新 LIVE 默认总预算
 

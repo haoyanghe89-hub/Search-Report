@@ -91,9 +91,16 @@ class LiveInvestigationService:
         self.settings = settings
         self.blobs = LocalContentAddressedBlobStorage(blob_root)
         self.ports = ports
-        self.recovery = RunRecovery(sessions, repository, self.blobs, settings)
+        self.recovery = RunRecovery(
+            sessions,
+            repository,
+            self.blobs,
+            settings,
+            restore_quarantine=(blob_root / ".restore-quarantine.json").exists(),
+        )
         self.tasks: dict[str, asyncio.Task[None]] = {}
         self._closing = False
+        self._stalled: set[str] = set()
         self.worker_activity: dict[str, dict[str, str]] = {}
 
     def recover_interrupted(self) -> None:
@@ -175,12 +182,18 @@ class LiveInvestigationService:
         self._schedule(run_id)
         return run_id
 
-    def resume(self, run_id: str, request: ResumeRequest) -> None:
+    def resume(self, run_id: str, request: ResumeRequest, *, automatic: bool = False) -> None:
         self._ensure_available()
         task = self.tasks.get(run_id)
         if task is not None and not task.done():
             raise RecoveryConflict("RUN_STILL_ACTIVE", "任务仍在执行，请等待停止后恢复。")
-        authorized = self.recovery.prepare(run_id, request)
+        authorized = self.recovery.prepare(
+            run_id,
+            request,
+            automatic=automatic,
+            max_auto_attempts=self.settings.auto_resume_max_attempts,
+            backoff_seconds=self.settings.auto_resume_backoff_seconds,
+        )
         self._schedule(run_id, authorized)
 
     def _schedule(self, run_id: str, authorized: frozenset[str] = frozenset()) -> None:
@@ -192,6 +205,7 @@ class LiveInvestigationService:
             if self.tasks.get(run_id) is completed:
                 self.tasks.pop(run_id, None)
                 self.worker_activity.pop(run_id, None)
+                self._stalled.discard(run_id)
 
         task.add_done_callback(cleanup)
 
@@ -199,9 +213,37 @@ class LiveInvestigationService:
         task = self.tasks.get(run_id)
         if task is None or task.done():
             return False
+        # Persist the user's stop intent before waiting, including a process-kill window.
+        with self.sessions.begin() as session:
+            row = session.get(InvestigationRunRow, run_id)
+            if row is not None:
+                row.status = RunStatus.CANCELLED
+                row.interruption_reason = "USER_CANCELLED"
+                row.state_version += 1
+                row.updated_at = datetime.now(UTC)
+                row.completed_at = row.updated_at
+                # Keep ownership until the cancelled step records its final checkpoint.
         task.cancel()
         await asyncio.gather(task, return_exceptions=True)
         self._finish(run_id, RunStatus.CANCELLED, "USER_CANCELLED")
+        return True
+
+    async def interrupt_stalled(self, run_id: str) -> bool:
+        task = self.tasks.get(run_id)
+        self._stalled.add(run_id)
+        if task is not None and not task.done():
+            task.cancel()
+            done, _ = await asyncio.wait({task}, timeout=5)
+            if not done:
+                return False
+        current = self.repository.get(InvestigationRun, run_id)
+        if (
+            current.status is RunStatus.CANCELLED
+            and current.interruption_reason == "USER_CANCELLED"
+        ):
+            # Cancellation initiated by the watchdog uses a distinct reason below.
+            return True
+        self._finish(run_id, RunStatus.INTERRUPTED, "WATCHDOG_STALLED")
         return True
 
     async def shutdown(self) -> None:
@@ -296,8 +338,14 @@ class LiveInvestigationService:
         except asyncio.CancelledError:
             self._finish(
                 run_id,
-                RunStatus.INTERRUPTED if self._closing else RunStatus.CANCELLED,
-                "SERVER_SHUTDOWN" if self._closing else "USER_CANCELLED",
+                RunStatus.INTERRUPTED
+                if self._closing or run_id in self._stalled
+                else RunStatus.CANCELLED,
+                "SERVER_SHUTDOWN"
+                if self._closing
+                else "WATCHDOG_STALLED"
+                if run_id in self._stalled
+                else "USER_CANCELLED",
             )
             raise
         except Exception as error:
@@ -316,6 +364,12 @@ class LiveInvestigationService:
         with self.sessions.begin() as session:
             row = session.get(InvestigationRunRow, run_id)
             if row is not None:
+                if (
+                    row.status is RunStatus.CANCELLED
+                    and row.interruption_reason == "USER_CANCELLED"
+                    and status is not RunStatus.CANCELLED
+                ):
+                    return
                 row.status = status
                 row.state_version += 1
                 row.interruption_reason = reason

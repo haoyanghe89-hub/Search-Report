@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:17-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_DB: marketpulse
       POSTGRES_USER: marketpulse
@@ -14,6 +15,10 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   backend:
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 45s
+    command: ["python", "-m", "marketpulse.investigation.operations.supervisor"]
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,6 +27,12 @@ services:
       INVESTIGATION_API_HOST: 0.0.0.0
       INVESTIGATION_API_PORT: 8000
       INVESTIGATION_BLOB_ROOT: /data/blobs
+      INVESTIGATION_AUTO_RESUME: ${INVESTIGATION_AUTO_RESUME:-true}
+      INVESTIGATION_RECOVERY_SCAN_SECONDS: ${INVESTIGATION_RECOVERY_SCAN_SECONDS:-15}
+      INVESTIGATION_AUTO_RESUME_MAX_ATTEMPTS: ${INVESTIGATION_AUTO_RESUME_MAX_ATTEMPTS:-3}
+      INVESTIGATION_AUTO_RESUME_BACKOFF_SECONDS: ${INVESTIGATION_AUTO_RESUME_BACKOFF_SECONDS:-15}
+      INVESTIGATION_STALL_HEARTBEAT_SECONDS: ${INVESTIGATION_STALL_HEARTBEAT_SECONDS:-90}
+      INVESTIGATION_STALL_STEP_SECONDS: ${INVESTIGATION_STALL_STEP_SECONDS:-900}
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
       MARKETPULSE_MODEL: ${MARKETPULSE_MODEL:-deepseek-flash}
@@ -60,6 +71,7 @@ services:
       - blob-data:/data/blobs
 
   frontend:
+    restart: unless-stopped
     build:
       context: frontend
       dockerfile: Dockerfile
@@ -68,6 +80,22 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:3000:80"
+
+  ops:
+    profiles: ["ops"]
+    build:
+      context: .
+      dockerfile: Dockerfile.ops
+    environment:
+      MARKETPULSE_DATABASE_URL: postgresql+psycopg://marketpulse:${MARKETPULSE_PG_PASSWORD:-marketpulse-local}@postgres:5432/marketpulse
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - blob-data:/data/blobs:ro
+      - ./backups:/backups
+      - ./restore-drills:/restore-drills
+    command: ["--help"]
 
 volumes:
   postgres-data:

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import RunProgress from './components/RunProgress.vue'
+import OperationsNotice from './components/OperationsNotice.vue'
 import Sidebar from './components/Sidebar.vue'
 import request from './api/request.js'
 import InvestigationView from './views/InvestigationView.vue'
@@ -64,6 +65,7 @@ const cases = computed(() => investigations.value.map(i => ({ id: i.investigatio
   <div class="app-wrapper">
     <Sidebar :cases="cases" :active-case-id="activeId" :loading="loading" :replaying="replaying" :busy="startingTopic" @select="selectArchive" @new-investigation="newTopic" @refresh="load" @replay="replay" />
     <main class="main-content">
+      <OperationsNotice @open-investigation="selectArchive" />
       <div v-if="error" class="notice error" role="alert">{{ error }} <button @click="load">重试连接</button></div>
       <section :class="activeId ? 'topic-strip' : 'welcome'">
         <template v-if="!activeId"><p class="eyebrow">FOLIO · 事件调查与证据验证</p><h1>从一个问题出发，<br>追溯事实与证据。</h1><p>输入你关心的主题，调查从这里开始。</p></template>

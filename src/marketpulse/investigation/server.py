@@ -10,13 +10,13 @@ from __future__ import annotations
 import logging
 import os
 from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
+from contextlib import ExitStack, asynccontextmanager
 from pathlib import Path
 
 import uvicorn
 from alembic import command
 from alembic.config import Config
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import Engine, text
@@ -25,6 +25,8 @@ from marketpulse.config import Settings
 from marketpulse.investigation.api import ReplayCaseRunner
 from marketpulse.investigation.api import router as investigation_router
 from marketpulse.investigation.live_runtime import LiveInvestigationService, LivePorts
+from marketpulse.investigation.operations.ownership import ServerOwnership
+from marketpulse.investigation.operations.watchdog import RecoveryWatchdog
 from marketpulse.investigation.persistence.base import (
     create_investigation_engine,
     create_session_factory,
@@ -62,44 +64,53 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        _upgrade_database(database_url)
         engine = create_investigation_engine(database_url)
-        sessions = create_session_factory(engine)
-        repository = InvestigationRepository(sessions)
-        app.state.inv_engine = engine
-        app.state.inv_sessions = sessions
-        app.state.inv_repository = repository
-        app.state.review_session_factory = sessions
-        app.state.settings = runtime_settings
-        live_runner = LiveInvestigationService(
-            sessions=sessions,
-            repository=repository,
-            settings=runtime_settings,
-            blob_root=Path(os.getenv("INVESTIGATION_BLOB_ROOT", "data/investigation-blobs")),
-            ports=live_ports,
-        )
-        live_runner.recover_interrupted()
-        app.state.live_investigation = live_runner
-        replay_runner = east_palestine_replay
-        if replay_runner is None:
-            from marketpulse.investigation.case_replay import (
-                EastPalestineReplayService,
-                default_blob_root,
-                default_case_root,
-            )
-
-            replay_runner = EastPalestineReplayService(
+        with ExitStack() as resources:
+            resources.callback(engine.dispose)
+            ownership = ServerOwnership(engine, database_url)
+            ownership.acquire()
+            resources.callback(ownership.release)
+            _upgrade_database(database_url)
+            app.state.server_ownership = ownership
+            sessions = create_session_factory(engine)
+            repository = InvestigationRepository(sessions)
+            app.state.inv_engine = engine
+            app.state.inv_sessions = sessions
+            app.state.inv_repository = repository
+            app.state.review_session_factory = sessions
+            app.state.settings = runtime_settings
+            live_runner = LiveInvestigationService(
                 sessions=sessions,
                 repository=repository,
-                case_root=default_case_root(),
-                blob_root=default_blob_root(),
+                settings=runtime_settings,
+                blob_root=Path(os.getenv("INVESTIGATION_BLOB_ROOT", "data/investigation-blobs")),
+                ports=live_ports,
             )
-        app.state.east_palestine_replay = replay_runner
-        try:
-            yield
-        finally:
-            await live_runner.shutdown()
-            engine.dispose()
+            live_runner.recover_interrupted()
+            app.state.live_investigation = live_runner
+            replay_runner = east_palestine_replay
+            if replay_runner is None:
+                from marketpulse.investigation.case_replay import (
+                    EastPalestineReplayService,
+                    default_blob_root,
+                    default_case_root,
+                )
+
+                replay_runner = EastPalestineReplayService(
+                    sessions=sessions,
+                    repository=repository,
+                    case_root=default_case_root(),
+                    blob_root=default_blob_root(),
+                )
+            app.state.east_palestine_replay = replay_runner
+            watchdog = RecoveryWatchdog(live_runner, ownership)
+            app.state.recovery_watchdog = watchdog
+            watchdog.start()
+            try:
+                yield
+            finally:
+                await watchdog.close()
+                await live_runner.shutdown()
 
     app = FastAPI(
         title="Search Report Investigation API",
@@ -119,6 +130,11 @@ def create_app(
 
     @app.get("/api/health")
     def health(request: Request) -> dict[str, str]:
+        if (
+            not request.app.state.server_ownership.healthy()
+            or not request.app.state.recovery_watchdog.healthy()
+        ):
+            raise HTTPException(status_code=503, detail="recovery supervisor is unhealthy")
         engine = request.app.state.inv_engine
         assert isinstance(engine, Engine)
         with engine.connect() as connection:
@@ -128,6 +144,10 @@ def create_app(
             "service": "search-report-investigation",
             "database": "ok",
         }
+
+    @app.get("/api/ops/status")
+    def operations_status(request: Request) -> dict[str, object]:
+        return dict(request.app.state.recovery_watchdog.status())
 
     if os.getenv("INVESTIGATION_SERVE_FRONTEND", "false").lower() in {
         "1",

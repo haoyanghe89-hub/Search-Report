@@ -98,3 +98,5 @@ npm run build
 `.github/workflows/frontend-delivery.yml` 在干净检出后安装依赖、测试、构建，并启动 Compose 检查前端和 API 代理。联网模型质量需另行进行真实事件评测；离线测试通过不能替代该评测。
 
 完整边界见 [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md)，设计记录见 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/](docs/)。旧阶段文档属于历史记录，启动方式与当前能力以本 README 和实际测试为准。
+
+新版本支持[进程守护、安全自动恢复与停滞告警](docs/automatic-recovery.md)，以及[数据库与 Blob 配套备份和隔离恢复演练](docs/paired-backup.md)。本机可用 `python -m marketpulse.investigation.operations.supervisor` 启动；Compose 已接入守护入口。未知调用、人工取消和预算耗尽不会被自动重试。

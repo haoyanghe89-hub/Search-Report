@@ -44,6 +44,8 @@ server = [
 marketpulse = "marketpulse.cli:app"
 marketpulse-api = "marketpulse.web_api:main"
 search-report-api = "marketpulse.investigation.server:main"
+search-report-supervisor = "marketpulse.investigation.operations.supervisor:main"
+search-report-backup = "marketpulse.investigation.operations.backup_cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/marketpulse"]

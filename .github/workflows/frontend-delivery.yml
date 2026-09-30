@@ -39,5 +39,18 @@ jobs:
           curl --fail http://localhost:3000/healthz
           curl --fail http://localhost:3000/api/health
           curl --fail http://localhost:3000/
+      - name: Verify paired PostgreSQL and Blob recovery with offline evidence
+        run: |
+          curl --fail --max-time 300 -X POST http://localhost:3000/api/cases/east-palestine-2023/replay
+          docker compose --profile ops build ops
+          docker compose --profile ops run --rm ops backup --blob-root /data/blobs --destination /backups/ci-paired
+          docker compose --profile ops run --rm ops verify --archive /backups/ci-paired
+          docker compose --profile ops run --rm ops drill --archive /backups/ci-paired --destination /restore-drills/ci-paired --postgres-admin-url-env MARKETPULSE_DATABASE_URL
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: paired-recovery-drill
+          path: restore-drills/ci-paired/restore-report.json
+          if-no-files-found: ignore
       - if: always()
         run: docker compose logs --no-color && docker compose down

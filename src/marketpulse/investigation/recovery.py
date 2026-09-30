@@ -174,9 +174,12 @@ class RunRecovery:
         repository: InvestigationRepository,
         blobs: BlobStoragePort,
         settings: Settings,
+        *,
+        restore_quarantine: bool = False,
     ) -> None:
         self.sessions, self.repository, self.blobs = sessions, repository, blobs
         self.profile = execution_profile(settings)
+        self.restore_quarantine = restore_quarantine
 
     def config_event(self, run_id: str, investigation_id: str) -> AuditEvent:
         return AuditEvent(
@@ -244,7 +247,12 @@ class RunRecovery:
             else None,
         }
         reason = None
-        if run.mode is not RunMode.LIVE:
+        if self.restore_quarantine:
+            reason = (
+                "此数据库由历史备份恢复，可能缺少备份后已计费的调用。"
+                "请先核对供应商记录，再由运维解除恢复隔离。"
+            )
+        elif run.mode is not RunMode.LIVE:
             reason = "回放任务不能通过恢复接口转为联网运行。"
         elif run.workflow_version != WORKFLOW_VERSION:
             reason = "旧版本缺少兼容的恢复检查点，请使用对应版本或另建运行。"
@@ -345,7 +353,15 @@ class RunRecovery:
                 raise KeyError(run_id)
             return self._inspect(session, run)
 
-    def prepare(self, run_id: str, request: ResumeRequest) -> frozenset[str]:
+    def prepare(
+        self,
+        run_id: str,
+        request: ResumeRequest,
+        *,
+        automatic: bool = False,
+        max_auto_attempts: int = 3,
+        backoff_seconds: float = 15,
+    ) -> frozenset[str]:
         now = datetime.now(UTC)
         with self.sessions.begin() as session:
             run = session.get(InvestigationRunRow, run_id)
@@ -353,6 +369,40 @@ class RunRecovery:
                 raise KeyError(run_id)
             if run.state_version != request.expected_state_version:
                 raise RecoveryConflict("STALE_RUN_STATE", "任务状态已变化，请刷新后重新确认。")
+            if automatic:
+                if run.status not in {RunStatus.INTERRUPTED, RunStatus.FAILED}:
+                    raise RecoveryConflict("AUTO_RESUME_INELIGIBLE", "该运行需要手动处理。")
+                if request.retry_unknown_intent_ids or any(
+                    request.budget_increase.model_dump().values()
+                ):
+                    raise RecoveryConflict(
+                        "AUTO_RESUME_UNSAFE", "自动恢复不能授权未知调用或追加预算。"
+                    )
+                attempts = session.scalars(
+                    select(AuditEventRow).where(
+                        AuditEventRow.run_id == run_id,
+                        AuditEventRow.event_type == "RUN_RESUMED",
+                    )
+                ).all()
+                automatic_attempts = [a for a in attempts if a.metadata_payload.get("automatic")]
+                if len(automatic_attempts) >= max_auto_attempts:
+                    raise RecoveryConflict(
+                        "AUTO_RESUME_LIMIT", "自动恢复次数已达上限，请检查后手动继续。"
+                    )
+                last = max(
+                    (a.created_at for a in automatic_attempts),
+                    default=run.completed_at or run.updated_at,
+                )
+                if last.tzinfo is None:
+                    last = last.replace(tzinfo=UTC)
+                if run.completed_at is not None:
+                    completed = run.completed_at
+                    if completed.tzinfo is None:
+                        completed = completed.replace(tzinfo=UTC)
+                    last = max(last, completed)
+                delay = min(3600, backoff_seconds * 2 ** len(automatic_attempts))
+                if (now - last).total_seconds() < delay:
+                    raise RecoveryConflict("AUTO_RESUME_BACKOFF", "正在等待自动恢复退避时间。")
             info = self._inspect(session, run)
             if not info["can_resume"]:
                 raise RecoveryConflict("RUN_NOT_RESUMABLE", info["reason"])
@@ -466,11 +516,12 @@ class RunRecovery:
                     audit_event_id=f"RESUME-{uuid.uuid4().hex}",
                     investigation_id=run.investigation_id,
                     run_id=run_id,
-                    actor_type=AuditActorType.HUMAN,
+                    actor_type=AuditActorType.SYSTEM if automatic else AuditActorType.HUMAN,
                     event_type="RUN_RESUMED",
                     target_type="InvestigationRun",
                     target_id=run_id,
                     metadata={
+                        "automatic": automatic,
                         "expected_state_version": request.expected_state_version,
                         "authorized_unknown_intent_ids": sorted(unknown),
                         "budget_increase": request.budget_increase.model_dump(mode="json"),

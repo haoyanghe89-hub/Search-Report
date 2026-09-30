@@ -19,3 +19,6 @@ build/
 /reports/
 logs/
 *.tmp
+
+/backups/
+/restore-drills/

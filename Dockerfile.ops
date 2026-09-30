@@ -1,0 +1,10 @@
+FROM postgres:17-bookworm
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY pyproject.toml README.md alembic.ini ./
+COPY src ./src
+COPY migrations ./migrations
+RUN python3 -m venv /opt/ops && /opt/ops/bin/pip install --no-cache-dir ".[web,server]"
+ENTRYPOINT ["/opt/ops/bin/python", "-m", "marketpulse.investigation.operations.backup_cli"]
+CMD ["--help"]

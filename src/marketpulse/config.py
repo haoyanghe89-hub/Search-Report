@@ -39,6 +39,12 @@ class Settings(BaseModel):
     database_url: SecretStr = SecretStr("sqlite:///data/blackboard.db")
     redis_url: SecretStr | None = None
     max_research_rounds: int = Field(default=6, ge=1, le=20)
+    auto_resume_enabled: bool = True
+    recovery_scan_seconds: float = Field(default=15, ge=0.1, le=300)
+    auto_resume_max_attempts: int = Field(default=3, ge=0, le=20)
+    auto_resume_backoff_seconds: float = Field(default=15, ge=0, le=3600)
+    stall_heartbeat_seconds: float = Field(default=90, ge=10, le=3600)
+    stall_step_seconds: float = Field(default=900, ge=30, le=14400)
     reviewer_id: str | None = None
     reviewer_display_name: str | None = None
     reviewer_password_hash: SecretStr | None = None
@@ -100,6 +106,19 @@ class Settings(BaseModel):
             if values.get("MARKETPULSE_REDIS_URL")
             else None,
             max_research_rounds=int(values.get("MARKETPULSE_MAX_RESEARCH_ROUNDS") or "6"),
+            auto_resume_enabled=(values.get("INVESTIGATION_AUTO_RESUME") or "true").lower()
+            in {"1", "true", "yes"},
+            recovery_scan_seconds=float(values.get("INVESTIGATION_RECOVERY_SCAN_SECONDS") or "15"),
+            auto_resume_max_attempts=int(
+                values.get("INVESTIGATION_AUTO_RESUME_MAX_ATTEMPTS") or "3"
+            ),
+            auto_resume_backoff_seconds=float(
+                values.get("INVESTIGATION_AUTO_RESUME_BACKOFF_SECONDS") or "15"
+            ),
+            stall_heartbeat_seconds=float(
+                values.get("INVESTIGATION_STALL_HEARTBEAT_SECONDS") or "90"
+            ),
+            stall_step_seconds=float(values.get("INVESTIGATION_STALL_STEP_SECONDS") or "900"),
             reviewer_id=values.get("REVIEWER_ID") or None,
             reviewer_display_name=values.get("REVIEWER_DISPLAY_NAME") or "本地审核员",
             reviewer_password_hash=SecretStr(str(values["REVIEWER_PASSWORD_HASH"]))

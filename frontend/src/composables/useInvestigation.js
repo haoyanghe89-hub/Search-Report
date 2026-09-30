@@ -19,6 +19,22 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
   let generation = 0
   let disposed = false
   let pollFailures = 0
+  async function checkRecovery(selectedId, ticket) {
+    if (disposed || ticket !== generation) return
+    try {
+      const info = await api('/runs/' + selectedId)
+      if (disposed || ticket !== generation) return
+      error.value = ''
+      if (info.run.status !== run.value?.status || info.run.state_version !== run.value?.state_version) {
+        await loadRun(selectedId)
+        return
+      }
+    } catch (e) {
+      if (disposed || ticket !== generation) return
+      error.value = e.message
+    }
+    timer = schedule(() => checkRecovery(selectedId, ticket), 15000)
+  }
   async function loadRun(selectedId = runId.value) {
     unschedule(timer)
     const ticket = ++generation
@@ -40,6 +56,10 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
       data.value = Object.fromEntries(collections.map((key, index) => [key, results[index]]))
       pollFailures = 0
       if (runningStatuses.has(info.run.status)) timer = schedule(() => loadRun(selectedId), 2000)
+      else if (info.run.mode === 'LIVE' && ['FAILED', 'INTERRUPTED'].includes(info.run.status)) {
+        // Observe server-side recovery without flashing old reports or clearing consent inputs.
+        timer = schedule(() => checkRecovery(selectedId, ticket), 15000)
+      }
     } catch (e) {
       if (!disposed && ticket === generation) {
         error.value = e.message

@@ -15,7 +15,7 @@ function harness() {
       if (fail) throw new Error('network unavailable')
       if (url === '/investigations/I1') return { title: 'test' }
       if (url === '/investigations/I1/runs') return [{ run_id: 'R1', status: 'RUNNING' }]
-      if (url === '/runs/R1') return { run: { run_id: 'R1', status }, budget: {}, workers: {} }
+      if (url === '/runs/R1') return { run: { run_id: 'R1', mode: 'LIVE', status }, budget: {}, workers: {} }
       return []
     },
   })
@@ -26,11 +26,39 @@ test('terminal poll updates both detail and run-history label', async () => {
   const h = harness()
   await h.model.load()
   assert.equal(h.model.runs.value[0].status, 'RUNNING')
-  h.setStatus('FAILED')
+  h.setStatus('BLOCKED')
   await h.tick()
-  assert.equal(h.model.run.value.status, 'FAILED')
-  assert.equal(h.model.runs.value[0].status, 'FAILED')
+  assert.equal(h.model.run.value.status, 'BLOCKED')
+  assert.equal(h.model.runs.value[0].status, 'BLOCKED')
   assert.equal(h.model.running.value, false)
+  assert.equal(h.pending(), false)
+})
+
+test('interrupted run observes automatic recovery without a page refresh', async () => {
+  const h = harness()
+  h.setStatus('INTERRUPTED')
+  await h.model.load()
+  assert.equal(h.pending(), true)
+  const checking = h.tick()
+  assert.equal(h.model.loading.value, false)
+  await checking
+  assert.equal(h.model.run.value.status, 'INTERRUPTED')
+  h.setStatus('RUNNING')
+  await h.tick()
+  assert.equal(h.model.running.value, true)
+  assert.equal(h.model.runs.value[0].status, 'RUNNING')
+  h.setStatus('BLOCKED')
+  await h.tick()
+  assert.equal(h.pending(), false)
+  h.dispose()
+})
+
+test('leaving an interrupted run stops recovery observation', async () => {
+  const h = harness()
+  h.setStatus('FAILED')
+  await h.model.load()
+  assert.equal(h.pending(), true)
+  h.dispose()
   assert.equal(h.pending(), false)
 })
 

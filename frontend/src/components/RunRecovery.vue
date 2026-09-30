@@ -13,7 +13,7 @@ function amount(value, scale = 1) { return Number.isFinite(value) ? (value / sca
 <template>
   <section class="run-recovery" aria-label="继续原调查" :aria-busy="loading || submitting">
     <h2>继续原调查</h2>
-    <p>从已保存的检查点继续，复用已落盘结果。运行编号和已消耗预算保留。</p>
+    <p>从已保存的检查点继续，复用已落盘结果。运行编号和已消耗预算保留。开启自动恢复时，符合条件的中断会自动继续；费用不明或预算不足仍需手动处理。</p>
     <p v-if="loading" role="status">正在检查恢复条件…</p>
     <p v-if="error" class="recovery-error" role="alert">{{ error }}</p>
     <p v-if="recovery?.reason" class="recovery-reason">{{ recovery.reason }}</p>
