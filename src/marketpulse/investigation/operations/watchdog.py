@@ -21,7 +21,7 @@ from marketpulse.investigation.persistence.models import (
     ExecutionStepRow,
     InvestigationRunRow,
 )
-from marketpulse.investigation.recovery import RecoveryConflict, ResumeRequest
+from marketpulse.investigation.recovery import WORKFLOW_VERSION, RecoveryConflict, ResumeRequest
 
 LOGGER = logging.getLogger(__name__)
 _ACTIVE = {
@@ -150,6 +150,10 @@ class RecoveryWatchdog:
             ).all()
         for run in runs:
             if run.status in _ACTIVE:
+                # Offline recording uses LIVE mode with a historical synthetic clock.
+                # It has a separate executor and must never be stopped by this service.
+                if run.workflow_version != WORKFLOW_VERSION:
+                    continue
                 if self._stalled(run, now):
                     self._alert(run, "RUN_STALLED", "执行心跳或步骤进度超时，正在尝试安全停止。")
                     if not await self.runner.interrupt_stalled(run.run_id):

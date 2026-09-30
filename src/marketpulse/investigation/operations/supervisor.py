@@ -6,7 +6,6 @@ import argparse
 import http.client
 import logging
 import math
-import os
 import signal
 import subprocess
 import sys
@@ -128,10 +127,13 @@ def supervise(
         while not stopped.is_set():
             started = time.monotonic()
             try:
+                creationflags = 0
+                if sys.platform == "win32":
+                    creationflags = subprocess.CREATE_NO_WINDOW
                 child = subprocess.Popen(
                     list(command),
                     shell=False,
-                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+                    creationflags=creationflags,
                 )
             except OSError:
                 # Do not expose command arguments, environment, or exception strings.

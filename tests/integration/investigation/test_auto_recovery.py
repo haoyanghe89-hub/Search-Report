@@ -255,6 +255,36 @@ def test_watchdog_task_failure_changes_readiness(tmp_path: Path) -> None:
         assert client.get("/api/ops/status").json()["healthy"] is False
 
 
+def test_watchdog_does_not_interrupt_offline_recording_with_historical_clock(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from datetime import UTC, datetime
+
+    from marketpulse.investigation.domain.enums import RunStatus
+
+    monkeypatch.setenv("INVESTIGATION_BLOB_ROOT", str(tmp_path / "blobs"))
+    ports = OutagePorts(wait=True)
+    with TestClient(
+        create_app(settings=settings(tmp_path), live_ports=LivePorts(ports, ports, ports))
+    ) as client:
+        run_id = start(client)
+        assert client.post(f"/api/runs/{run_id}/cancel").status_code == 200
+        with client.app.state.inv_sessions.begin() as session:
+            row = session.get(InvestigationRunRow, run_id)
+            row.workflow_version = "curated-offline-v2"
+            row.status = RunStatus.RUNNING
+            row.owner_instance_id = "offline-recorder"
+            row.owner_heartbeat_at = datetime(2023, 2, 3, tzinfo=UTC)
+        tick(client)
+        with client.app.state.inv_sessions() as session:
+            row = session.get(InvestigationRunRow, run_id)
+            assert row.status is RunStatus.RUNNING
+            assert row.owner_instance_id == "offline-recorder"
+            assert not session.scalars(
+                select(AuditEventRow).where(AuditEventRow.event_type == "OPS_ALERT")
+            ).all()
+
+
 def test_stalled_task_is_stopped_before_recovery_and_unknown_call_alerted(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
