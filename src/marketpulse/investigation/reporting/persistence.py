@@ -81,7 +81,14 @@ class ReportGovernanceRepository:
             .where(CitationRow.report_id == report_id)
             .order_by(CitationRow.display_ordinal)
         ).all()
-        return [Citation.model_validate(_row_dict(row)) for row in rows]
+        values = [Citation.model_validate(_row_dict(row)) for row in rows]
+        from marketpulse.quant.storage.models import QuantCitationRow
+
+        extra = session.scalars(
+            select(QuantCitationRow).where(QuantCitationRow.report_id == report_id)
+        ).all()
+        values.extend(Citation.model_validate(row.payload) for row in extra)
+        return sorted(values, key=lambda c: c.display_ordinal)
 
     def findings_for_report_in_session(
         self, session: Session, report_id: str

@@ -236,6 +236,7 @@ class RecordingFetchAdapter:
                     metadata={
                         **self._context.binding_metadata(),
                         "exception_type": type(error).__name__,
+                        **provider_diagnostics(error),
                     },
                     recorded_at=started,
                     completed_at=self._clock(),

@@ -22,6 +22,8 @@ from tests.integration.investigation.test_live_runtime import (
     _settings,
 )
 
+pytestmark = pytest.mark.usefixtures("unfinished_legacy_runs")
+
 
 def start(client: TestClient) -> str:
     return str(client.post(f"/api/investigations/{_create(client)}/runs").json()["run_id"])
@@ -191,7 +193,8 @@ def test_exhausted_budget_requires_topup_and_keeps_usage(
         _drain(client)
         info = client.get(f"/api/runs/{run_id}/recovery").json()
         assert info["can_resume"], info
-        assert info["budget"]["model_calls_used"] == 1
+        # Stage admission rejected the one-call budget before dispatch.
+        assert info["budget"]["model_calls_used"] == 0
         denied = resume(client, run_id)
         assert denied.status_code == 409
         assert denied.json()["detail"]["code"] == "BUDGET_INCREASE_REQUIRED"
@@ -326,7 +329,7 @@ def test_report_resume_retains_terminal_outcome_without_model_calls(
         reports = client.get(f"/api/runs/{run_id}/reports").json()
         assert len(reports) == 1
         assert reports[0]["report_type"] == "INVESTIGATION_STATUS"
-        assert client.get(f"/api/runs/{run_id}").json()["run"]["status"] == "BLOCKED"
+        assert client.get(f"/api/runs/{run_id}").json()["run"]["status"] == "COMPLETED"
 
 
 def test_no_progress_history_survives_failure_before_stop_transition(

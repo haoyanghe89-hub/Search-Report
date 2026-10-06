@@ -1,0 +1,57 @@
+{
+  "run_id": "RUN-LIVE-434153bec43c405f",
+  "snapshot_id": "SS-d2adf71a421818a99feeae39051667df",
+  "raw_sha256": "ff1df6bdeddc4c0f48840c09a8a7813b10ae7ad9e053892da68dabf64f09bff7",
+  "archived_raw_bytes": 352830,
+  "parser_name": "pypdf-text-layer",
+  "parser_version": "1",
+  "parse_status": "PARSED",
+  "evidence_eligible": true,
+  "current_offline_reparse_artifacts": [
+    {
+      "page": 1,
+      "chars": 71,
+      "sha256": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+      "contains_pass_at_one": false,
+      "hypothetical_stable_artifact_id": "A-549ac13169978e64323b9178c967dde4"
+    },
+    {
+      "page": 2,
+      "chars": 2337,
+      "sha256": "6b1af3083e3e71ee843020349179d5cf01551f41ba8e9203a349bc4fa2008d40",
+      "contains_pass_at_one": true,
+      "hypothetical_stable_artifact_id": "A-ebdd8e95caa8f5112b1f449cb0364f86"
+    },
+    {
+      "page": 3,
+      "chars": 2896,
+      "sha256": "59efc496acc105be799554ef7ea2c43032242d578862bcf3994cd1420ac679f9",
+      "contains_pass_at_one": false,
+      "hypothetical_stable_artifact_id": "A-b22482237b200f6d95e3a14d2c6f22d9"
+    },
+    {
+      "page": 4,
+      "chars": 1189,
+      "sha256": "3baf7917981c3aa2982c586f49d704e4fd1625d3c7b3c93f4b0f69625b6d2a8e",
+      "contains_pass_at_one": true,
+      "hypothetical_stable_artifact_id": "A-df07c93ace9c82374aafe1a7ac4685ee"
+    },
+    {
+      "page": 5,
+      "chars": 71,
+      "sha256": "507c8bc16a0d5d62bb1903770098ab53d821c8ee60fbdc39051ce7edbe234421",
+      "contains_pass_at_one": false,
+      "hypothetical_stable_artifact_id": "A-6c5eef3eb54e2c1c0a17dbd1404719d9"
+    }
+  ],
+  "persisted_artifacts": [
+    {
+      "artifact_id": "A-d2adf71a421818a99feeae39051667df",
+      "page_number": 1,
+      "sha256": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+      "processor_name": "pypdf-text-layer",
+      "processor_version": "1"
+    }
+  ],
+  "note": "Read-only archived PDF replay; no source/run mutation. Historical material loss is demonstrated but current source_acquisition implementation emits distinct IDs for all returned artifacts."
+}

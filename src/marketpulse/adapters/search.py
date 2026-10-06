@@ -5,6 +5,7 @@ import base64
 import binascii
 import ipaddress
 import re
+import time
 from collections.abc import Awaitable, Callable
 from typing import Literal, Protocol
 from urllib.parse import parse_qs, unquote, urlencode, urlparse, urlunparse
@@ -12,6 +13,7 @@ from urllib.parse import parse_qs, unquote, urlencode, urlparse, urlunparse
 import httpx
 from bs4 import BeautifulSoup
 from ddgs import DDGS
+from ddgs.engines import ENGINES
 
 from marketpulse.budget import RunBudget
 from marketpulse.config import Settings
@@ -21,6 +23,10 @@ from marketpulse.errors import SearchUnavailableError
 Sleep = Callable[[float], Awaitable[None]]
 _TRACKING_PARAMS = {"gclid", "fbclid", "mc_cid", "mc_eid", "ref", "source"}
 _SEARCH_REQUEST_TIMEOUT_SECONDS = 5.0
+_SEARCH_TOTAL_TIMEOUT_SECONDS = 25.0
+_DDGS_AWAIT_TIMEOUT_SECONDS = 7.0
+_SEARCH_CIRCUIT_SECONDS = 60.0
+_SEARCH_BACKENDS = ("ddgs:yahoo", "bing", "ddgs:brave", "duckduckgo", "ddgs:wikipedia")
 _GENERIC_QUERY_TERMS = {
     "app",
     "best",
@@ -122,81 +128,123 @@ class PublicSearchClient:
         budget: RunBudget,
         *,
         sleep: Sleep = asyncio.sleep,
+        backends: tuple[str, ...] | None = None,
+        clock: Callable[[], float] = time.monotonic,
     ) -> None:
         self.http_client = http_client
         self.settings = settings
         self.budget = budget
         self.sleep = sleep
+        self.backends = _SEARCH_BACKENDS if backends is None else backends
+        self.clock = clock
+        self._disabled_until: dict[str, float] = {}
+        self._preferred_backend: str | None = None
+        self._ddgs_tasks: set[asyncio.Task[list[SearchCandidate]]] = set()
 
     async def search(self, query: SearchQuery, *, limit: int = 8) -> list[SearchCandidate]:
         self.budget.reserve_search()
-        last_error: Exception | None = None
-        providers = (
-            (self.duckduckgo_endpoint, {"q": query.text, "kl": "us-en"}, "duckduckgo"),
-            (self.bing_endpoint, {"q": query.text, "setlang": "en-US"}, "bing"),
-            (self.yahoo_endpoint, {"p": query.text}, "yahoo"),
-        )
-        for endpoint, params, provider in providers:
-            for attempt in range(self.settings.max_retries + 1):
-                try:
-                    response = await self.http_client.get(
-                        endpoint,
-                        params=params,
-                        headers={"User-Agent": self.settings.search_user_agent},
-                        timeout=min(
-                            self.settings.page_timeout_seconds,
-                            _SEARCH_REQUEST_TIMEOUT_SECONDS,
-                        ),
-                    )
-                    if response.status_code in {202, 429, 502, 503, 504}:
-                        raise httpx.HTTPStatusError(
-                            "search provider rejected or throttled the request",
-                            request=response.request,
-                            response=response,
-                        )
-                    response.raise_for_status()
-                    if provider == "duckduckgo":
-                        results = self._parse_duckduckgo(response.text, query, limit)
-                    elif provider == "bing":
-                        results = self._parse_bing(response.text, query, limit)
-                    else:
-                        results = self._parse_yahoo(response.text, query, limit)
-                    if results:
-                        return results
-                    break
-                except (httpx.TimeoutException, httpx.TransportError, httpx.HTTPStatusError) as exc:
-                    last_error = exc
-                    if isinstance(exc, httpx.TimeoutException):
-                        break
-                    retryable = not isinstance(exc, httpx.HTTPStatusError) or (
-                        exc.response.status_code in {429, 502, 503, 504}
-                    )
-                    if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code == 202:
-                        break
-                    if attempt >= self.settings.max_retries or not retryable:
-                        break
-                    await self.sleep(float(2**attempt))
         try:
-            resilient_results = await asyncio.wait_for(
-                asyncio.to_thread(self._search_ddgs, query, limit),
-                timeout=25.0,
+            async with asyncio.timeout(
+                min(_SEARCH_TOTAL_TIMEOUT_SECONDS, self.budget.remaining_seconds)
+            ):
+                return await self._search(query, limit)
+        except TimeoutError as exc:
+            raise SearchUnavailableError("搜索后端超时；请稍后重试或补充原始来源") from exc
+
+    async def _search(self, query: SearchQuery, limit: int) -> list[SearchCandidate]:
+        last_error: Exception | None = None
+        providers = sorted(self.backends, key=lambda name: name != self._preferred_backend)
+        for provider in providers:
+            if self.clock() < self._disabled_until.get(provider, 0):
+                continue
+            # Provider fallback is internal: one query still consumes one budget reservation.
+            for attempt in range(min(self.settings.max_retries, 1) + 1):
+                try:
+                    results = await self._request_provider(provider, query, limit)
+                    if results:
+                        self._preferred_backend = provider
+                        self._disabled_until.pop(provider, None)
+                        return results
+                    # A 200 challenge page is not usable search material. Try other providers.
+                    self._disabled_until[provider] = self.clock() + _SEARCH_CIRCUIT_SECONDS
+                    break
+                except Exception as exc:
+                    last_error = exc
+                    retryable = not isinstance(exc, httpx.HTTPStatusError) or (
+                        exc.response.status_code == 429 or exc.response.status_code >= 500
+                    )
+                    cooldown = _SEARCH_CIRCUIT_SECONDS
+                    if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code == 429:
+                        cooldown *= 2
+                    self._disabled_until[provider] = self.clock() + cooldown
+                    if attempt >= min(self.settings.max_retries, 1) or not retryable:
+                        break
+                    await self.sleep(0.25 * 2**attempt)
+        category = type(last_error).__name__ if last_error else "CIRCUIT_OPEN_OR_NO_RESULTS"
+        raise SearchUnavailableError(
+            f"搜索后端暂不可用（{category}）；"
+            "请稍后重试或补充可访问的原始来源"
+        )
+
+    async def _request_provider(
+        self, provider: str, query: SearchQuery, limit: int
+    ) -> list[SearchCandidate]:
+        if provider.startswith("ddgs:"):
+            backend = provider.partition(":")[2]
+            if backend not in ENGINES.get("text", {}):
+                return []
+            # wait_for cannot kill a Python worker thread; cap outstanding work including
+            # timed-out calls, and consume eventual exceptions without spawning more threads.
+            if len(self._ddgs_tasks) >= self.settings.max_search_concurrency:
+                return []
+            task = asyncio.create_task(
+                asyncio.to_thread(self._search_ddgs, query, limit, backend=backend)
             )
-            if resilient_results:
-                return resilient_results
-        except Exception as exc:
-            last_error = exc
-        raise SearchUnavailableError(f"搜索失败: {query.text}: {type(last_error).__name__}")
+            self._ddgs_tasks.add(task)
+
+            def finished(done: asyncio.Task[list[SearchCandidate]]) -> None:
+                self._ddgs_tasks.discard(done)
+                if not done.cancelled():
+                    done.exception()
+
+            task.add_done_callback(finished)
+            return await asyncio.wait_for(asyncio.shield(task), timeout=_DDGS_AWAIT_TIMEOUT_SECONDS)
+        providers = {
+            "duckduckgo": (
+                self.duckduckgo_endpoint,
+                {"q": query.text, "kl": "us-en"},
+                self._parse_duckduckgo,
+            ),
+            "bing": (self.bing_endpoint, {"q": query.text, "setlang": "en-US"}, self._parse_bing),
+            "yahoo": (self.yahoo_endpoint, {"p": query.text}, self._parse_yahoo),
+        }
+        endpoint, params, parser = providers[provider]
+        response = await self.http_client.get(
+            endpoint,
+            params=params,
+            headers={"User-Agent": self.settings.search_user_agent},
+            timeout=min(self.settings.page_timeout_seconds, _SEARCH_REQUEST_TIMEOUT_SECONDS),
+        )
+        if response.status_code == 202:
+            raise httpx.HTTPStatusError(
+                "search challenge", request=response.request, response=response
+            )
+        response.raise_for_status()
+        return parser(response.text, query, limit)
 
     @classmethod
-    def _search_ddgs(cls, query: SearchQuery, limit: int) -> list[SearchCandidate]:
+    def _search_ddgs(
+        cls, query: SearchQuery, limit: int, *, backend: str = "yahoo"
+    ) -> list[SearchCandidate]:
+        if backend not in ENGINES.get("text", {}):
+            return []
         candidates: list[SearchCandidate] = []
         seen: set[str] = set()
         # Skip engines that reliably time out from CN networks (google, mojeek);
         # pick the region matching the query language for better recall.
         has_cjk = any("\u4e00" <= ch <= "\u9fff" for ch in query.text)
         region = "cn-zh" if has_cjk else "us-en"
-        backend = "bing,duckduckgo,yahoo,brave,wikipedia"
-        for item in DDGS(timeout=10).text(
+        for item in DDGS(timeout=5).text(
             query.text, max_results=limit, region=region, backend=backend
         ):
             href = item.get("href")

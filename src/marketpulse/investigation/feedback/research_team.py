@@ -7,7 +7,7 @@ from itertools import zip_longest
 
 from marketpulse.investigation.agents.contracts import QueryIntent, ResearchInput, ResearchProposal
 from marketpulse.investigation.agents.model_agents import ModelResearcherAgent
-from marketpulse.investigation.feedback.guards import normalize_query
+from marketpulse.investigation.feedback.guards import ProposalGuardError, normalize_query
 from marketpulse.investigation.feedback.parallel import bounded_map
 from marketpulse.investigation.harness.model_call_journal import ModelCallOutcomeUnknownError
 from marketpulse.investigation.harness.persistence import RunBudgetExceededError
@@ -101,7 +101,7 @@ async def research_team(
             seen.add(normalize_query(query.query))
             queries.append(query.model_copy(update={"query_key": name + ":" + query.query_key}))
     if not queries:
-        raise ValueError("All research specialists failed or returned no usable queries")
+        raise ProposalGuardError("All research specialists failed or returned no usable queries")
     return ResearchProposal(queries=tuple(queries)), tuple(
         name + ":" + error for name, _, error in results if error is not None
     )

@@ -119,7 +119,7 @@ uvicorn.run(app, host='127.0.0.1', port=PORT, log_level='critical')
             while time.monotonic() < deadline:
                 try:
                     runs = client.get(f"/api/investigations/{investigation}/runs").json()
-                    if runs and runs[0]["status"] == "BLOCKED":
+                    if runs and runs[0]["status"] == "COMPLETED":
                         finished = runs
                         break
                 except (httpx.HTTPError, ValueError):
@@ -130,7 +130,11 @@ uvicorn.run(app, host='127.0.0.1', port=PORT, log_level='critical')
             assert len(children) >= 2
             calls = (tmp_path / "calls.txt").read_text().splitlines()
             assert calls.count("PlanProposal") == 1
-            assert "VerificationProposal" in calls
+            # Task J recovers by locally finalizing the archived state, not by
+            # paying for more external calls after a process restart.
+            assert calls == ["PlanProposal"]
+            reports = client.get(f"/api/runs/{finished[0]['run_id']}/reports").json()
+            assert reports and reports[0]["report_type"] == "INVESTIGATION_STATUS"
     finally:
         stopped.set()
         thread.join(timeout=10)

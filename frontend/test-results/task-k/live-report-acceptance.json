@@ -1,0 +1,22 @@
+{
+  "report_id": "RPT-44cbb173ba66",
+  "metrics": {
+    "headings": [
+      "结论速览",
+      "证据基础",
+      "局限与后续建议"
+    ],
+    "bodyText": "SECTION 01\n结论速览\n\n完整度为“资料不足”；该标识描述材料覆盖与确认程度，不代表发布许可。\n\n目前尚无通过验证或达到“很可能成立”门槛的关键发现，不能据此确认相关结论。\n\n尚不能确认的内容共有 4 条，其中 0 条存在争议、4 条尚未证实；主要涉及量化信息，具体局限与补证路径见下文。\n\n本报告围绕“谷歌Gemini 4 Argon实际能力与官方宣称是否相符”整理现有材料，共评估 4 条声明：0 条已验证、0 条很可能成立、0 条存在争议、4 条尚未证实。\n\n本轮仍有 1 项开放研究缺口和 0 项未解决冲突；下文只呈现现有证据能够支持的范围。\n\nSECTION 02\n证据基础\n\n本轮记录 6 个来源、1 个已分组来源家族和 5 条证据摘录。\n\n来源家族用于识别共同出处；来源或证据条数不自动等于独立交叉验证数量，结论可信度仍取决于原文是否直接支持声明及其限定条件。\n\nSECTION 03\n局限与后续建议\n\n局限（中）：来源无法读取共记录 1 项同类缺口。当前缺口：相关来源当前缺少可读取的文本内容。后续建议：重新获取可读取的原始文档；无法读取的来源不用于形成确认结论。\n\n局限：本轮因“已到本档研究时间上限，停止扩展采集；现有材料已用于报告收尾，可选更长档位继续核查。”收尾。后续建议：如需扩大覆盖，可选择更长档位继续核查。\n\n局限：另有 4 条声明尚未证实：Google DeepMind 官方表格显示，Gemini 4 Argon 在 DeepSWE v1.1（Agentic coding）得分为 77.9%，高于 GPT-6 Astra 的 74.1%、Claude Fable 5.1 的 67.4% 和 Claude Opus 5.5 的 74.2%。；Google DeepMind 官方表格显示，Gemini 4 Argon 在 Vals Finance Agent v2（Knowledge work）得分为 65.4%，高于 GPT-6 Astra 的 53.5%、Claude Fable 5.1 的 58.9% 和 Claude Opus 5.5 的 58.6%。；Google DeepMind 官方表格显示，Gemini 4 Argon 在 Harvey's Legal Agent Benchmark（Knowledge work）得分为 19.6%，高于 GPT-6 Astra 的 5.4%、Claude Fable 5.1 的 6.7% 和 Claude Opus 5.5 的 3.8%。；Google DeepMind 官方表格显示，Gemini 4 Argon 在 Vals Index（Knowledge work）得分为 68.9%，高于 GPT-6 Astra 的 63.1%、Claude Fable 5.1 的 65.8% 和 Claude Opus 5.5 的 67.0%。。后续建议：补充直接支持材料与独立来源后重新验证。\n\n附录与技术说明\n2 项",
+    "appendixOpen": false,
+    "appendixSections": 2,
+    "emptyNotices": 0,
+    "overflow": false
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "screenshots": [
+    "frontend\\test-results\\task-k\\live-report-1440x900-closed.png",
+    "frontend\\test-results\\task-k\\live-report-1440x900-open.png"
+  ],
+  "passed": true
+}

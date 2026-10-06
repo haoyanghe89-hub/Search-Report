@@ -1,0 +1,282 @@
+{
+  "checks": [
+    {
+      "name": "new step archives with transform/opacity entry",
+      "passed": true,
+      "details": {
+        "opacity": "0.626",
+        "transform": "matrix(0.999995, 0.00326376, -0.00326376, 0.999995, 0, 6.7313)",
+        "display": "flex"
+      }
+    },
+    {
+      "name": "new step settles fully visible",
+      "passed": true,
+      "details": {
+        "opacity": "1",
+        "transform": "none",
+        "display": "flex"
+      }
+    },
+    {
+      "name": "active step scan advances",
+      "passed": true,
+      "details": {
+        "before": {
+          "opacity": "0.12",
+          "transform": "matrix(1, 0, 0, 1, -290.497, 0)",
+          "display": "block"
+        },
+        "after": {
+          "opacity": "0.12",
+          "transform": "matrix(1, 0, 0, 1, -61.0382, 0)",
+          "display": "block"
+        }
+      }
+    },
+    {
+      "name": "completion stamp has a transient transform",
+      "passed": true,
+      "details": {
+        "opacity": "0.7195",
+        "transform": "matrix(1.11172, -0.032663, 0.032663, 1.11172, 0, 0)",
+        "display": "flex"
+      }
+    },
+    {
+      "name": "completion stamp settles",
+      "passed": true,
+      "details": {
+        "opacity": "1",
+        "transform": "none",
+        "display": "flex"
+      }
+    },
+    {
+      "name": "completed step scan stops",
+      "passed": true,
+      "details": {
+        "opacity": "0",
+        "transform": "matrix(1, 0, 0, 1, -427.487, 0)",
+        "display": "block"
+      }
+    },
+    {
+      "name": "budget counter animates toward the new value",
+      "passed": true,
+      "details": {
+        "mid": "3",
+        "final": "4"
+      }
+    },
+    {
+      "name": "budget counter reaches the persisted value",
+      "passed": true,
+      "details": "4"
+    },
+    {
+      "name": "phase change reveals then settles",
+      "passed": true,
+      "details": {
+        "mid": {
+          "opacity": "0.7459",
+          "transform": "matrix(1, 0, 0, 1, 0, 2.0329)",
+          "display": "block"
+        },
+        "final": {
+          "opacity": "1",
+          "transform": "none",
+          "display": "block"
+        }
+      }
+    },
+    {
+      "name": "worker cards use stable grid geometry",
+      "passed": true,
+      "details": 2
+    },
+    {
+      "name": "desktop has no horizontal overflow",
+      "passed": true,
+      "details": {
+        "scroll": 1440,
+        "client": 1440
+      }
+    },
+    {
+      "name": "390x844 dark: no horizontal overflow",
+      "passed": true,
+      "details": {
+        "scroll": 390,
+        "client": 390,
+        "theme": "dark"
+      }
+    },
+    {
+      "name": "390x844 dark: theme applied",
+      "passed": true,
+      "details": {
+        "scroll": 390,
+        "client": 390,
+        "theme": "dark"
+      }
+    },
+    {
+      "name": "390x844 dark: touch disables ambient scan",
+      "passed": true,
+      "details": {
+        "before": {
+          "opacity": "0",
+          "transform": "none",
+          "display": "block"
+        },
+        "after": {
+          "opacity": "0",
+          "transform": "none",
+          "display": "block"
+        }
+      }
+    },
+    {
+      "name": "390x844 light: no horizontal overflow",
+      "passed": true,
+      "details": {
+        "scroll": 390,
+        "client": 390,
+        "theme": "light"
+      }
+    },
+    {
+      "name": "390x844 light: theme applied",
+      "passed": true,
+      "details": {
+        "scroll": 390,
+        "client": 390,
+        "theme": "light"
+      }
+    },
+    {
+      "name": "390x844 light: touch disables ambient scan",
+      "passed": true,
+      "details": {
+        "before": {
+          "opacity": "0",
+          "transform": "none",
+          "display": "block"
+        },
+        "after": {
+          "opacity": "0",
+          "transform": "none",
+          "display": "block"
+        }
+      }
+    },
+    {
+      "name": "reduced motion keeps new steps immediately visible",
+      "passed": true,
+      "details": {
+        "opacity": "1",
+        "transform": "none",
+        "display": "flex"
+      }
+    },
+    {
+      "name": "reduced motion keeps stamps static and visible",
+      "passed": true,
+      "details": {
+        "opacity": "1",
+        "transform": "none",
+        "display": "flex"
+      }
+    },
+    {
+      "name": "reduced motion disables scan lines",
+      "passed": true,
+      "details": {
+        "opacity": "0",
+        "transform": "none",
+        "display": "none"
+      }
+    },
+    {
+      "name": "reduced motion updates counters immediately",
+      "passed": true,
+      "details": "4"
+    },
+    {
+      "name": "mock polling renders the live progress component",
+      "passed": true,
+      "details": {
+        "seen": true,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true
+      }
+    },
+    {
+      "name": "terminal polling uses the dossier-close leave motion",
+      "passed": true,
+      "details": {
+        "seen": true,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true
+      }
+    },
+    {
+      "name": "results wait until the close motion completes",
+      "passed": true,
+      "details": {
+        "seen": true,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true
+      }
+    },
+    {
+      "name": "mock live app has no horizontal overflow",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "no console errors",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "no page errors",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "console_errors": [],
+  "page_errors": [],
+  "http_errors": [],
+  "screenshots": [
+    "frontend\\test-results\\live-motion\\live-1440x900-dark.png",
+    "frontend\\test-results\\live-motion\\live-390x844-dark.png",
+    "frontend\\test-results\\live-motion\\live-390x844-light.png",
+    "frontend\\test-results\\live-motion\\live-390x844-reduced.png",
+    "frontend\\test-results\\live-motion\\mock-live-polling.png"
+  ],
+  "samples": {
+    "entry": {
+      "opacity": "0.626",
+      "transform": "matrix(0.999995, 0.00326376, -0.00326376, 0.999995, 0, 6.7313)",
+      "display": "flex"
+    },
+    "stamp": {
+      "opacity": "0.7195",
+      "transform": "matrix(1.11172, -0.032663, 0.032663, 1.11172, 0, 0)",
+      "display": "flex"
+    },
+    "phase": {
+      "opacity": "0.7459",
+      "transform": "matrix(1, 0, 0, 1, 0, 2.0329)",
+      "display": "block"
+    },
+    "budget_mid": "3"
+  },
+  "notes": [],
+  "passed": true
+}

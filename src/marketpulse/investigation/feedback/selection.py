@@ -33,11 +33,13 @@ class ArtifactSelector:
         max_artifacts: int,
         max_excerpts: int,
         max_chars: int,
+        deduplicate: bool = False,
     ) -> None:
         self._blobs = blobs
         self._max_artifacts = max_artifacts
         self._max_excerpts = max_excerpts
         self._max_chars = max_chars
+        self._deduplicate = deduplicate
 
     def select(self, candidates: tuple[ArtifactCandidate, ...]) -> tuple[ArtifactView, ...]:
         ordered = sorted(candidates, key=self._sort_key)

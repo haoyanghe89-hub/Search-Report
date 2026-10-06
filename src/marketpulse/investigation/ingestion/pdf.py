@@ -21,7 +21,7 @@ _MIN_MEANINGFUL_PAGE_CHARS = 40
 class PdfTextLayerParser:
     media_types = frozenset({"application/pdf"})
     name = "pypdf-text-layer"
-    version = "1"
+    version = "2"
 
     def parse(self, request: DocumentParseRequest) -> NormalizedDocument:
         empty_assessment = assess_untrusted_content("")
@@ -53,9 +53,15 @@ class PdfTextLayerParser:
         extracted_chars = 0
         failed_pages: list[int] = []
         small_text_pages: list[int] = []
+        image_pages: list[int] = []
+        sparse_image_pages: list[int] = []
         for page_number, page in enumerate(reader.pages, start=1):
             try:
                 text = normalize_text(page.extract_text() or "")
+                if page.images:
+                    image_pages.append(page_number)
+                    if len(text) < 120:
+                        sparse_image_pages.append(page_number)
             except (PdfReadError, FileNotDecryptedError, ValueError, TypeError):
                 failed_pages.append(page_number)
                 continue
@@ -84,7 +90,7 @@ class PdfTextLayerParser:
             )
 
         unreadable = tuple(sorted({*failed_pages, *small_text_pages}))
-        status = ParseStatus.PARTIALLY_PARSED if unreadable else ParseStatus.PARSED
+        status = ParseStatus.PARTIALLY_PARSED if unreadable or image_pages else ParseStatus.PARSED
         aggregate = "\n\n".join(
             f"[Page {artifact.page_number}]\n{artifact.content.decode()}" for artifact in artifacts
         ).encode("utf-8")
@@ -100,6 +106,19 @@ class PdfTextLayerParser:
                 ),
             )
             warnings = (f"UNREADABLE_PDF_PAGES:{page_list}",)
+        if image_pages:
+            page_list = ", ".join(str(page) for page in image_pages)
+            warnings = (*warnings, f"PDF_IMAGE_CONTENT_NOT_EXTRACTED:{page_list}")
+        if sparse_image_pages:
+            page_list = ", ".join(str(page) for page in sparse_image_pages)
+            gaps = (
+                *gaps,
+                GapSuggestion(
+                    reason="PDF_IMAGE_CONTENT_NOT_EXTRACTED",
+                    details=f"Pages contain images not represented in text artifacts: {page_list}; "
+                    "use an accessible text/table publication or OCR before citing image cells.",
+                ),
+            )
         return NormalizedDocument(
             media_type="application/pdf",
             parse_status=status,

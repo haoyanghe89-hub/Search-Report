@@ -73,11 +73,38 @@ STATUS_SECTIONS: tuple[str, ...] = (
     "NEXT_STEPS",
 )
 
+COMPACT_FULL_SECTIONS: tuple[str, ...] = (
+    "EXECUTIVE_SUMMARY",
+    "CORE_FINDINGS",
+    "EVIDENCE_BASE",
+    "LIMITATIONS_AND_RESEARCH_GAPS",
+    "RESEARCH_APPENDIX",
+    "TECHNICAL_APPENDIX",
+)
+
+COMPACT_STATUS_SECTIONS: tuple[str, ...] = (
+    "EXECUTIVE_STATUS",
+    "CORE_FINDINGS",
+    "EVIDENCE_BASE",
+    "BLOCKING_GAPS_AND_LIMITATIONS",
+    "RESEARCH_APPENDIX",
+    "TECHNICAL_APPENDIX",
+)
+
 
 def required_sections(report_type: ReportType) -> tuple[str, ...]:
     if report_type is ReportType.INVESTIGATION_STATUS:
-        return STATUS_SECTIONS
-    return FULL_SECTIONS
+        return ("EXECUTIVE_STATUS", "EVIDENCE_BASE")
+    return ("EXECUTIVE_SUMMARY", "EVIDENCE_BASE")
+
+
+def allowed_sections(report_type: ReportType) -> tuple[str, ...]:
+    """Accept compact drafts and legacy section keys during rolling upgrades."""
+    if report_type is ReportType.INVESTIGATION_STATUS:
+        return tuple(
+            dict.fromkeys((*COMPACT_STATUS_SECTIONS, *STATUS_SECTIONS, "QUANTITATIVE_FINDINGS"))
+        )
+    return tuple(dict.fromkeys((*COMPACT_FULL_SECTIONS, *FULL_SECTIONS)))
 
 
 class NarrativeUnit(DomainModel):
@@ -130,6 +157,9 @@ class ProjectionGap(DomainModel):
     reason: NonEmptyText
     severity: NonEmptyText
     status: NonEmptyText
+    target_claim_ref: str | None = None
+    target_question_ref: str | None = None
+    suggested_actions: tuple[NonEmptyText, ...] = ()
 
 
 class ProjectionTimelineEvent(DomainModel):
@@ -150,6 +180,9 @@ class WriterProjection(DomainModel):
     """Bounded writer input: no URLs, locators, quote hashes, or blob refs."""
 
     report_type: ReportType
+    completion_level: str | None = None
+    stop_reason: str | None = None
+    unassessed_claims: int = 0
     schema_version: NonEmptyText
     investigation_title: NonEmptyText
     terminal_run_status: str = "UNKNOWN"
@@ -225,6 +258,9 @@ class WriterProjection(DomainModel):
                     reason=gap.reason,
                     severity=str(gap.severity),
                     status=str(gap.status),
+                    target_claim_ref=gap.target_claim_stable_key,
+                    target_question_ref=gap.target_question_stable_key,
+                    suggested_actions=gap.suggested_actions,
                 )
                 for gap in payload.research_gaps
             ),

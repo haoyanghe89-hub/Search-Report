@@ -16,7 +16,7 @@ from marketpulse.investigation.domain.claims import (
     TimelineEvent,
     ValidationResult,
 )
-from marketpulse.investigation.domain.enums import ExternalCallStatus, LocatorType
+from marketpulse.investigation.domain.enums import ExternalCallStatus, LocatorType, ParseStatus
 from marketpulse.investigation.domain.locators import deserialize_locator
 from marketpulse.investigation.domain.recordings import RecordedModelCall, RecordedToolCall
 from marketpulse.investigation.domain.reports import (
@@ -241,6 +241,24 @@ class InvestigationRepository:
                 .order_by(DocumentArtifactRow.page_number, DocumentArtifactRow.artifact_id)
             ).all()
             return [self._document_artifact(row) for row in rows]
+
+    def accepted_snapshot(self, run_id: str, source_id: str) -> SourceSnapshot | None:
+        """Reuse immutable, eligible material only within the same investigation run."""
+        with self._sessions() as session:
+            row = session.scalar(
+                select(SourceSnapshotRow)
+                .where(
+                    SourceSnapshotRow.run_id == run_id,
+                    SourceSnapshotRow.source_id == source_id,
+                    SourceSnapshotRow.evidence_eligible.is_(True),
+                    SourceSnapshotRow.parse_status.in_(
+                        (ParseStatus.PARSED, ParseStatus.PARTIALLY_PARSED)
+                    ),
+                )
+                .order_by(SourceSnapshotRow.retrieved_at.desc(), SourceSnapshotRow.snapshot_id)
+                .limit(1)
+            )
+            return self._get(session, SourceSnapshot, row.snapshot_id) if row else None
 
     def get(self, entity_type: type[T], entity_id: str) -> T:
         with self._sessions() as session:

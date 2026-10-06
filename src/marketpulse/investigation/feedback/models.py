@@ -22,6 +22,14 @@ class FeedbackModel(BaseModel):
 class FeedbackLoopConfig(FeedbackModel):
     retrieval_strategy: Literal["prefix-v1", "bm25-passages-v1"] = "prefix-v1"
     ground_model_quotes: bool = False
+    deduplicate_material: bool = False
+    reuse_semantic_judgments: bool = False
+    model_budget_reservations: bool = False
+    metadata_chars: int | None = Field(default=None, ge=100)
+    verify_token_reserve_fraction: float = Field(default=0.25, ge=0, le=0.8)
+    report_token_reserve_fraction: float = Field(default=0.02, ge=0, le=0.2)
+    verify_call_reserve_fraction: float = Field(default=0.15, ge=0, le=0.8)
+    report_call_reserve_fraction: float = Field(default=0.01, ge=0, le=0.2)
     research_workers: int = Field(default=1, ge=1, le=4)
     search_concurrency: int = Field(default=1, ge=1, le=16)
     fetch_concurrency: int = Field(default=1, ge=1, le=32)
@@ -35,11 +43,15 @@ class FeedbackLoopConfig(FeedbackModel):
     max_verification_evidence: int = Field(default=64, ge=1, le=500)
     max_query_length: int = Field(default=500, ge=1, le=2000)
     no_progress_rounds: int = Field(default=2, ge=1, le=10)
+    max_analysis_attempts: int = Field(default=2, ge=1, le=10)
+    max_verification_batches: int = Field(default=24, ge=1, le=100)
+    max_verification_calls: int = Field(default=64, ge=1, le=500)
+    max_verification_token_fraction: float = Field(default=0.35, gt=0, le=0.8)
     step_timeout_seconds: float = Field(default=120.0, gt=0)
 
 
 class PhaseTransition(FeedbackModel):
-    action: Literal["ENTER_PLAN", "BLOCK"]
+    action: Literal["ENTER_PLAN", "BLOCK", "FINISH_EXISTING"]
     reason: str = Field(min_length=1)
 
 
@@ -76,6 +88,7 @@ class ClaimValidationSummary(FeedbackModel):
 
 
 class VerificationExecutionResult(FeedbackModel):
+    reused_semantic_pairs: int = Field(default=0, ge=0)
     verifier_proposals: tuple[VerificationProposal, ...]
     validations: tuple[ClaimValidationSummary, ...]
     route_reason: str

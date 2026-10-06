@@ -175,3 +175,14 @@ class LocalContentAddressedBlobStorage:
     def verify_hash(self, ref: BlobRef) -> bool:
         with self.open_stream(ref):
             return True
+
+    def delete_unreferenced(self, ref: BlobRef) -> bool:
+        """Caller must hold the DB writer lock and verify global reference absence."""
+        path = self._path(ref)
+        # Resolve every parent before deleting a single validated digest, no recursion.
+        self._contained(path.parent)
+        if not path.exists():
+            return False
+        self.verify_hash(ref)
+        path.unlink()
+        return True

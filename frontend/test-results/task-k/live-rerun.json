@@ -1,0 +1,53 @@
+{
+  "topic": "谷歌Gemini 4 Argon实际能力与官方宣称是否相符",
+  "depth": "quick",
+  "investigation_id": "INV-dda64688852249f98a45524d827eebed",
+  "run_id": "RUN-LIVE-b2d124935bd54393",
+  "elapsed_seconds": 270,
+  "run_status": "COMPLETED",
+  "interruption_reason": "RUN_TIMEOUT：已到本档研究时间上限，停止扩展采集；现有材料已用于报告收尾，可选更长档位继续核查。",
+  "counts": {
+    "sources": 6,
+    "evidence": 5,
+    "claims": 4,
+    "verified": 0,
+    "probable": 0,
+    "disputed": 0,
+    "unverified": 4,
+    "gaps": 1
+  },
+  "report_id": "RPT-f72a404c6b08",
+  "completeness": "完整度为“资料不足”；该标识描述材料覆盖与确认程度，不代表发布许可。",
+  "sections": [
+    {
+      "type": "EXECUTIVE_STATUS",
+      "units": 5,
+      "presentation": "BODY",
+      "collapsed": false
+    },
+    {
+      "type": "EVIDENCE_BASE",
+      "units": 2,
+      "presentation": "BODY",
+      "collapsed": false
+    },
+    {
+      "type": "BLOCKING_GAPS_AND_LIMITATIONS",
+      "units": 3,
+      "presentation": "BODY",
+      "collapsed": false
+    },
+    {
+      "type": "RESEARCH_APPENDIX",
+      "units": 3,
+      "presentation": "APPENDIX",
+      "collapsed": true
+    },
+    {
+      "type": "TECHNICAL_APPENDIX",
+      "units": 2,
+      "presentation": "APPENDIX",
+      "collapsed": true
+    }
+  ]
+}

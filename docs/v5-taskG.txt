@@ -1,0 +1,38 @@
+执行任务 G（后端，聚焦修复）：验证环节0确认，需要补齐“声明结构化限定条件 + 来源质量评分配套 + PROBABLE分级 + 验证循环上限”。
+最新运行 RUN-LIVE-c509dea0251d4494：35来源、token约129万、80声明，validation_status 为 76 UNVERIFIED / 1 DISPUTED / 3 PENDING / 0 VERIFIED。验证已调用模型约254次仍在跑。
+已读代码确认根因：
+- validation/policy.py::_status 要求 profile_sufficient=True 且 profile_status=="VERIFIED" 才给 VERIFIED，并保留了 PROBABLE 分支；
+- 但 validation/profiles.py 各 Profile 几乎都是 status="VERIFIED" if sufficient else "UNVERIFIED"，没有任何 Profile 返回 "PROBABLE"，导致差一点点的声明全部掉到 UNVERIFIED；
+- QuantitativeProfile(High) 要求 qualifiers 齐全(value/unit/time/scope/definition)+methodology/provenance+独立族≥2+质量分≥0.6来源≥2；首个声明 independent families=3 却仍 sufficient=False，说明是 qualifiers 未带全 或 来源 normalized_score 普遍<0.6。
+
+【硬约束（不变）】
+- 对外 HTTP 接口契约不变；不牺牲严谨性、不虚构、不把无证据声明判为已验证、不对相互竞争的数值取平均。
+- 目标是让“证据确实充分”的声明能 VERIFIED、“基本充分差个别次要条件”的能 PROBABLE，形成结论主体，同时保留置信度与缺口。
+- 聚焦本问题，不做无关重构；补测试，跑后端测试（独立 --basetemp、-p no:cacheprovider）、Ruff、导入检查、git diff --check。
+
+【G1. 用真实数据定位缺失分布】
+1) 对 RUN-LIVE-c509dea0251d4494 的声明，统计 sufficient=False 的具体 missing 项分布：多少是 qualifiers 缺失（各缺哪个 value/unit/time/scope/definition/methodology/provenance）、多少是来源 normalized_score<0.6、多少是独立族不足、多少是 conflict。
+2) 区分“材料里本来就没有”与“材料里有但声明生成/评分环节没带上”，后者是必须修复的对齐问题。
+
+【G2. 补齐声明结构化限定条件】
+1) 修复声明生成（分析/提案提示与解析）：当原始材料中包含数值声明的值、单位、时间、范围、定义、测量方法/出处时，必须在生成 claim.qualifiers 时完整结构化填入，不得遗漏；提示中给出字段要求与示例。
+2) 解析层对模型返回的 qualifiers 做规整；材料确实没有的字段保持缺失并计入缺口，不得编造。
+
+【G3. 校准来源质量评分】
+1) 检查来源质量评估 normalized_score 逻辑：官方报告/官方声明/一手/权威来源在信息完整时应能达到≥0.6；若评分对这些来源系统性偏低，校准评分（依据权威性、一手性、信息完整度、可追溯性），说明改动。
+2) 不得为凑结论而给低质来源虚高分数。
+
+【G4. 增加 PROBABLE 分级（核心）】
+1) 在各 Profile 中引入客观的 PROBABLE 判定：核心支撑成立（有真实 entailment、独立/权威来源达到基础要求、无强反证、无未解决高严重度冲突），但个别次要条件欠缺（如非关键字段缺失、或质量/独立族差一档）时，给 PROBABLE 而非 UNVERIFIED；明确 VERIFIED 与 PROBABLE 的逐条客观规则并写入 basis。
+2) 报告层确认 PROBABLE 与 VERIFIED 一并作为“可支撑结论”，但在报告中明确区分确定性（已验证 / 很可能），chinese_writer 已部分支持，需打通。
+3) 证据明显不足、来源弱、或矛盾未解决的，仍 UNVERIFIED/DISPUTED。
+
+【G5. 验证循环与预算上限】
+1) 为验证阶段设置明确的轮次/调用/token 上限与收敛条件，达到上限后基于已得到的验证结果进入报告，不得无限重复验证（本次254+调用、129万token仍未收敛）。
+2) 复用任务D的阶段预算预留，确保报告阶段有保底 token。
+
+【G6. 端到端验证】
+1) 用同一话题重跑真实调查，确认：出现若干 VERIFIED 与一批 PROBABLE 声明、报告以结论为主体（Answer-first：已验证/很可能的发现 + 真实引用 + 明确缺口与不确定性）、report_type 为结论性调查报告、release_status 达到可发布或仅少量保留项。
+2) 补/更新测试（qualifiers 完整提取、质量评分校准、PROBABLE 分级规则、验证收敛上限），跑全量后端测试、Ruff、导入检查、git diff --check。
+
+报告：G1 缺失分布、G2-G5 改动与理由（含 VERIFIED/PROBABLE 客观规则）、重跑结果（VERIFIED/PROBABLE/其他各多少、报告类型与发布状态）、测试结果、仍存在的限制。完成后等待，我会重启后端做最终确认。

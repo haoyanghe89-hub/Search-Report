@@ -1,0 +1,335 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+      "quote": "在LVBench长视频理解评测中得分达91.7%",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1173,
+        "end": 1196,
+        "quote_hash": "311a0d9a9f2f80ca2ab6a010b187e6ccb81bed560abc49504151ff384e68365d"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+      "quote": "谷歌官方公布了Gemini 4 Argon在18项权威行业基准测试中的成绩,模型在12项测试中取得第一、1项并列第一,综合性能超越Claude Opus 5.5、GPT-6 Astra等主流旗舰模型",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1370,
+        "end": 1450,
+        "quote_hash": "311a0d9a9f2f80ca2ab6a010b187e6ccb81bed560abc49504151ff384e68365d"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+      "quote": "超长推理存在衰减\n:百万级生成场景下,远端细节信息仍存在轻微衰减,极致精准度仍有提升空间",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 2760,
+        "end": 2800,
+        "quote_hash": "732ac6bce3337f9d766c8f716d2a7ce438fdc423914245a9d28828f552b5599b"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+      "quote": "目前该模型\n暂未开放普通网页端与个人API调用",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 2380,
+        "end": 2400,
+        "quote_hash": "732ac6bce3337f9d766c8f716d2a7ce438fdc423914245a9d28828f552b5599b"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:12694:13835",
+      "quote": "For Gemini 4 Argon, the supplied September 30 material supports the first label only. Do not infer preview or general availability from the launch headline, demonstrations, or descriptions of capabilities.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 13300,
+        "end": 13540,
+        "quote_hash": "c6f7ae719d9a1896215169cc180d73f525e07794c905ce3839aba46a509caa08"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:8791:9981",
+      "quote": "Unspecified:\nThe excerpt gives no context-window size, so neither a numerical limit nor an “unlimited context” description is justified.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 9700,
+        "end": 9860,
+        "quote_hash": "0043d9f2c24b63fd635e8a22fefaf2bf4277dcabb88e17ed7c2c2a0fe2306aec"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "中文第三方文章称，谷歌官方公布 Gemini 4 Argon 在 18 项权威行业基准测试中取得 12 项第一、1 项并列第一，综合性能超越 Claude Opus 5.5、GPT-6 Astra 等主流旗舰模型。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark_count": 18,
+        "first_place_count": 12,
+        "tied_first_count": 1,
+        "comparison_targets": [
+          "Claude Opus 5.5",
+          "GPT-6 Astra"
+        ]
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "中文第三方文章转述谷歌官方公布成绩（vendor-reported）",
+        "scope": "18 项行业基准测试综合排名"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "中文第三方文章称，Gemini 4 Argon 在 LVBench 长视频理解评测中得分达 91.7%。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E1"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark": "LVBench",
+        "value": 91.7,
+        "unit": "%"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "中文第三方文章转述（vendor-reported）",
+        "scope": "LVBench 长视频理解评测"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "中文第三方文章在列举 Gemini 4 Argon 局限性时称，百万级生成场景下远端细节信息仍存在轻微衰减，极致精准度仍有提升空间。",
+      "claim_type": "STATEMENT",
+      "supporting_evidence_keys": [
+        "E3"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "limit_unit": "tokens",
+        "limit_value": 1000000
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "中文第三方文章自述分析",
+        "scope": "百万级 Token 生成场景下的长程信息保真度"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "中文第三方文章称，Gemini 4 Argon 目前暂未开放普通网页端与个人 API 调用，谷歌采用分层灰度开放策略，优先面向可信安全防御团队与合规企业。",
+      "claim_type": "STATEMENT",
+      "supporting_evidence_keys": [
+        "E4"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "access_scope": "仅面向专业机构，普通网页端与个人 API 未开放"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "中文第三方文章转述",
+        "scope": "开放范围与访问资格"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-bf89e0241eb80967da035555",
+      "statement": "第三方指南指出，截至 2026 年 9 月 30 日，所获谷歌公告摘录未确认 Gemini 4 Argon 的访问资格，也未确认国家限制、订阅要求、候补流程或预览条件；Google AI Studio、Gemini API、Vertex AI、Gemini 应用及第三方网关的可用状态均标注为“未确立”。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {
+        "time": "2026-09-30"
+      },
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公告摘录的核查",
+        "scope": "访问资格与分发渠道（Google AI Studio、Gemini API、Vertex AI、Gemini 应用、第三方网关）"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-7a97166e2f20c8072fd1bfe6",
+      "statement": "第三方指南指出，截至 2026 年 9 月 30 日，没有任何第一方来源定义 100 万 Token 输出上限的确切语义（流式、多轮续写或按次计费），谷歌也未公布配套的速率限制、延迟或首 Token 时间数据，且 Argon 在公开 API 文档中没有模型 ID，外部开发者无法直接测试该能力。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "limit_unit": "tokens",
+        "limit_value": 1000000
+      },
+      "time_qualifiers": {
+        "time": "2026-09-30"
+      },
+      "scope_qualifiers": {
+        "provenance": "第三方指南对第一方来源的核查",
+        "scope": "100 万 Token 输出上限的语义、速率限制与公开 API 可用性"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-bf89e0241eb80967da035555",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-7a97166e2f20c8072fd1bfe6",
+      "evidence_key": "E6",
+      "stance": "SUPPORTS"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E5",
+      "statement": "中文第三方文章称 Argon 暂未开放普通网页端与个人 API 调用并采用分层灰度开放，而英文第三方指南指出所获 9 月 30 日材料仅支持“已宣布”这一标签，不得从发布标题或演示推断预览或正式可用状态；两者对开放状态的表述口径不一致。",
+      "conflict_type": "SCOPE",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "Gemini 4 Argon 的发布/开放状态标签",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.6,
+      "specificity": 0.6
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E6",
+      "statement": "中文第三方文章给出 LVBench 91.7% 的具体数值，而英文第三方指南指出所获摘录未给出上下文窗口等规格细节，任何数值上限或“无限上下文”描述均不成立；这提示不同来源对同一模型的规格披露程度存在缺口。",
+      "conflict_type": "DEFINITION",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "Gemini 4 Argon 规格与评测数值的披露范围",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.4,
+      "specificity": 0.5
+    }
+  ]
+}

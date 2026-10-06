@@ -1,0 +1,316 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:22915:24086",
+      "quote": "Introductory pricing is $2.00 per million input tokens and $10.00 per million output tokens, with a 95% discount on cached input. After the introductory period those rates double to $4.00 and $20.00 per million tokens. None of it appears on the public pricing page yet.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 22915,
+        "end": 24086,
+        "quote_hash": "c2c0939500782b93c4e1f010b3ef507d3baad7e76bcd37c9ae4686911bdfbf84"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:15329:16499",
+      "quote": ": at $10 per million output tokens, a single 100K-token generated artifact costs about a dollar during the introductory period and about two dollars afterward. That is the arithmetic that makes the 1M output budget interesting and also the arithmetic that makes it expensive — a full 1M-token generation is roughly $10 at the promotional rate and $20 at the standard rate, before any input cost.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 15329,
+        "end": 16499,
+        "quote_hash": "b24a7c78142c1327a76ce80876635923a4428a248f5c38c4f4d019b21c4bedbf"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:4803:5810",
+      "quote": "First, no first-party source checked for this article defines the exact semantics of the 1M ceiling — whether streaming, multi-turn continuation, or per-attempt accounting applies. Second, Google has not published a rate limit, latency, or time-to-first-token figure alongside the limit. Third, because Argon has no model ID in the public API documentation as of September 30, there is currently no way for an outside developer to test the claim directly.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 4803,
+        "end": 5810,
+        "quote_hash": "e5818ec212a25ecff9018420bcf11d4683cfc084aeb8effaf3f95d9bcaf70baf"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:15329:16499",
+      "quote": "Surface\nWhat first-party sources show\nGemini API models list\nNo Argon model ID; the page was last updated September 4, 2026 — before the announcement\nGemini API pricing page\nNo Argon pricing row; last updated September 8, 2026\nDeepMind model cards index\nNo Gemini 4 Argon model card published\nSafety documentation\nNo Argon-specific evaluation report located\nOfficial demo video\nNone located on Google or DeepMind channels\nAccess channel in the announcement\nFairwind Program trusted testers",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 15329,
+        "end": 16499,
+        "quote_hash": "b24a7c78142c1327a76ce80876635923a4428a248f5c38c4f4d019b21c4bedbf"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+      "quote": "Gemini 4 Argon 采用按量计费模式,整体定价远低于同级竞品,性价比优势显著:输入Token单价为2美元/百万Token,输出Token单价为10美元/百万Token,缓存输入可享受95%折扣,大幅降低企业与开发者的高频调用成本,整体费用仅为Claude Opus 5.5的1/2左右。",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1955,
+        "end": 3118,
+        "quote_hash": "732ac6bce3337f9d766c8f716d2a7ce438fdc423914245a9d28828f552b5599b"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+      "quote": "大规模调用成本偏高\n:虽单价亲民,但百万Token级高频调用,整体成本仍高于轻量化模型。",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 2958,
+        "end": 3443,
+        "quote_hash": "36ab284b13ccdeb3f03a346ce2342d7202b993622404d8515318a7709280ca73"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "第三方指南记载，Gemini 4 Argon 的推介期定价为每百万输入 Token 2.00 美元、每百万输出 Token 10.00 美元，缓存输入享 95% 折扣；推介期结束后费率翻倍至每百万输入 4.00 美元、每百万输出 20.00 美元，且这些价格尚未出现在公开定价页面上。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E1"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "input_price_value": 2.0,
+        "input_price_unit": "USD per million tokens",
+        "output_price_value": 10.0,
+        "output_price_unit": "USD per million tokens",
+        "cached_input_discount_value": 95,
+        "cached_input_discount_unit": "%",
+        "post_intro_input_price_value": 4.0,
+        "post_intro_output_price_value": 20.0
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "推介期定价与推介期后标准费率",
+        "provenance": "第三方指南转述谷歌公布定价；未见于公开定价页面"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "第三方指南按每百万输出 Token 10 美元推算，单次生成 10 万 Token 的产物在推介期约花费 1 美元、推介期后约 2 美元；一次完整的 100 万 Token 生成在推介价下约 10 美元、标准价下约 20 美元，且不含任何输入成本。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "output_price_value": 10.0,
+        "output_price_unit": "USD per million tokens",
+        "cost_100k_intro_value": 1.0,
+        "cost_100k_post_intro_value": 2.0,
+        "cost_1m_intro_value": 10.0,
+        "cost_1m_post_intro_value": 20.0,
+        "currency": "USD"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "仅输出 Token 成本，不含输入成本",
+        "definition": "按输出单价线性推算",
+        "provenance": "第三方指南自行推算（非谷歌公布）"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "第三方指南指出，截至 2026 年 9 月 30 日，没有任何第一方来源定义 100 万 Token 输出上限的确切语义（流式、多轮续写或按次计费），谷歌也未公布配套的速率限制、延迟或首 Token 时间数据，且 Argon 在公开 API 文档中没有模型 ID，外部开发者无法直接测试该能力。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E3",
+        "E4"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "limit_value": 1000000,
+        "limit_unit": "tokens"
+      },
+      "time_qualifiers": {
+        "time": "2026-09-30"
+      },
+      "scope_qualifiers": {
+        "scope": "100 万 Token 输出上限的语义、速率限制与公开 API 可用性",
+        "provenance": "第三方指南对第一方来源的核查"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "中文第三方文章称 Gemini 4 Argon 整体定价远低于同级竞品、整体费用仅为 Claude Opus 5.5 的约 1/2，同时又称百万 Token 级高频调用下整体成本仍高于轻量化模型，两处表述对“性价比”的结论方向不一致。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E5",
+        "E6"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "comparison_target": "Claude Opus 5.5",
+        "ratio_value": 0.5
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "按量计费定价与百万 Token 级高频调用成本",
+        "provenance": "中文第三方文章自述，非谷歌官方口径"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "同一来源内对性价比给出方向不一致的两种表述，宜拆分为“相对竞品单价更低”与“高频大规模调用总成本高于轻量化模型”两条子句"
+        ],
+        "proposed_atomic_statements": [
+          "中文第三方文章称 Gemini 4 Argon 整体费用仅为 Claude Opus 5.5 的约 1/2。",
+          "中文第三方文章称百万 Token 级高频调用下，Gemini 4 Argon 整体成本仍高于轻量化模型。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "statement": "在已获取的材料中，未发现任何第三方独立实测复现谷歌公布的 Gemini 4 Argon 基准成绩，因此无法判断独立结论是否与官方一致。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "基于已获取材料范围的检索结论",
+        "scope": "谷歌公布的 Gemini 4 Argon 基准成绩"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E6",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E6",
+      "statement": "同一来源内部对性价比的表述存在张力：一处称整体费用仅为 Claude Opus 5.5 的约 1/2、性价比优势显著，另一处称百万 Token 级高频调用整体成本仍高于轻量化模型。",
+      "conflict_type": "SCOPE",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "按量计费单价对比 vs 百万 Token 级高频调用总成本",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.6,
+      "specificity": 0.5
+    }
+  ]
+}

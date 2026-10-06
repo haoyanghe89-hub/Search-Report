@@ -1,0 +1,691 @@
+{
+  "checks": [
+    {
+      "name": "1440x900-dark: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 1440,
+        "scrollWidth": 1440,
+        "theme": "dark",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1440x900-dark: theme applied",
+      "passed": true,
+      "details": "dark"
+    },
+    {
+      "name": "1440x900-dark: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 1440,
+        "scrollWidth": 1440,
+        "theme": "dark",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1440x900-light: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 1440,
+        "scrollWidth": 1440,
+        "theme": "light",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1440x900-light: theme applied",
+      "passed": true,
+      "details": "light"
+    },
+    {
+      "name": "1440x900-light: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 1440,
+        "scrollWidth": 1440,
+        "theme": "light",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1366x768-dark: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 1366,
+        "scrollWidth": 1366,
+        "theme": "dark",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1366x768-dark: theme applied",
+      "passed": true,
+      "details": "dark"
+    },
+    {
+      "name": "1366x768-dark: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 1366,
+        "scrollWidth": 1366,
+        "theme": "dark",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1366x768-light: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 1366,
+        "scrollWidth": 1366,
+        "theme": "light",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1366x768-light: theme applied",
+      "passed": true,
+      "details": "light"
+    },
+    {
+      "name": "1366x768-light: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 1366,
+        "scrollWidth": 1366,
+        "theme": "light",
+        "navOverflow": false,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1024x768-dark: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 1024,
+        "scrollWidth": 1024,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1024x768-dark: theme applied",
+      "passed": true,
+      "details": "dark"
+    },
+    {
+      "name": "1024x768-dark: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 1024,
+        "scrollWidth": 1024,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1024x768-light: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 1024,
+        "scrollWidth": 1024,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "1024x768-light: theme applied",
+      "passed": true,
+      "details": "light"
+    },
+    {
+      "name": "1024x768-light: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 1024,
+        "scrollWidth": 1024,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "768x1024-dark: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 768,
+        "scrollWidth": 768,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "768x1024-dark: theme applied",
+      "passed": true,
+      "details": "dark"
+    },
+    {
+      "name": "768x1024-dark: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 768,
+        "scrollWidth": 768,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "768x1024-light: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 768,
+        "scrollWidth": 768,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "768x1024-light: theme applied",
+      "passed": true,
+      "details": "light"
+    },
+    {
+      "name": "768x1024-light: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 768,
+        "scrollWidth": 768,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "390x844-dark: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 390,
+        "scrollWidth": 390,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "390x844-dark: theme applied",
+      "passed": true,
+      "details": "dark"
+    },
+    {
+      "name": "390x844-dark: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 390,
+        "scrollWidth": 390,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "390x844-dark: drawer remains in viewport",
+      "passed": true,
+      "details": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 844
+      }
+    },
+    {
+      "name": "390x844-dark: primary touch target >=44",
+      "passed": true,
+      "details": {
+        "x": 4,
+        "y": -0.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "name": "390x844-light: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 390,
+        "scrollWidth": 390,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "390x844-light: theme applied",
+      "passed": true,
+      "details": "light"
+    },
+    {
+      "name": "390x844-light: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 390,
+        "scrollWidth": 390,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "390x844-light: drawer remains in viewport",
+      "passed": true,
+      "details": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 844
+      }
+    },
+    {
+      "name": "390x844-light: primary touch target >=44",
+      "passed": true,
+      "details": {
+        "x": 4,
+        "y": -0.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "name": "360x640-dark: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 360,
+        "scrollWidth": 360,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "360x640-dark: theme applied",
+      "passed": true,
+      "details": "dark"
+    },
+    {
+      "name": "360x640-dark: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 360,
+        "scrollWidth": 360,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "360x640-dark: drawer remains in viewport",
+      "passed": true,
+      "details": {
+        "x": 0,
+        "y": 0,
+        "width": 312,
+        "height": 640
+      }
+    },
+    {
+      "name": "360x640-dark: primary touch target >=44",
+      "passed": true,
+      "details": {
+        "x": 4,
+        "y": -0.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "name": "360x640-light: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 360,
+        "scrollWidth": 360,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "360x640-light: theme applied",
+      "passed": true,
+      "details": "light"
+    },
+    {
+      "name": "360x640-light: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 360,
+        "scrollWidth": 360,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": true
+      }
+    },
+    {
+      "name": "360x640-light: drawer remains in viewport",
+      "passed": true,
+      "details": {
+        "x": 0,
+        "y": 0,
+        "width": 312,
+        "height": 640
+      }
+    },
+    {
+      "name": "360x640-light: primary touch target >=44",
+      "passed": true,
+      "details": {
+        "x": 4,
+        "y": -0.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "name": "844x390-dark: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 844,
+        "scrollWidth": 844,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "844x390-dark: theme applied",
+      "passed": true,
+      "details": "dark"
+    },
+    {
+      "name": "844x390-dark: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 844,
+        "scrollWidth": 844,
+        "theme": "dark",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "844x390-light: no horizontal document overflow",
+      "passed": true,
+      "details": {
+        "clientWidth": 844,
+        "scrollWidth": 844,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "844x390-light: theme applied",
+      "passed": true,
+      "details": "light"
+    },
+    {
+      "name": "844x390-light: responsive drawer boundary",
+      "passed": true,
+      "details": {
+        "clientWidth": 844,
+        "scrollWidth": 844,
+        "theme": "light",
+        "navOverflow": true,
+        "drawerVisible": false
+      }
+    },
+    {
+      "name": "all nine tabs preserved",
+      "passed": true,
+      "details": [
+        "overview",
+        "agents",
+        "sources",
+        "evidence",
+        "claims",
+        "conflicts",
+        "timeline",
+        "report",
+        "review"
+      ]
+    },
+    {
+      "name": "tab activates: overview",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: agents",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: sources",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: evidence",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: claims",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: conflicts",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: timeline",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: report",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "tab activates: review",
+      "passed": true,
+      "details": "page"
+    },
+    {
+      "name": "desktop card hover feedback",
+      "passed": true,
+      "details": {
+        "transform": "matrix(1, 0, 0, 1, 0, 12.6319)",
+        "border": "rgb(60, 60, 70)",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "name": "desktop primary CTA magnetic response",
+      "passed": true,
+      "details": "matrix(1, 0, 0, 1, 5.76, 0)"
+    },
+    {
+      "name": "report opening settles visibly",
+      "passed": true,
+      "details": {
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "name": "report version selector opens",
+      "passed": true,
+      "details": 3
+    },
+    {
+      "name": "report version switches",
+      "passed": true,
+      "details": {
+        "before": "v3 · 完整调查报告\n完整调查报告\n待人工审核\n⌄",
+        "after": "v2 · 完整调查报告\n完整调查报告\n待人工审核\n⌄"
+      }
+    },
+    {
+      "name": "report has scrollspy sections",
+      "passed": true,
+      "details": 17
+    },
+    {
+      "name": "report scrollspy follows section",
+      "passed": true,
+      "details": {
+        "expected": "report-RS-RPT-9710bc639ccd-01",
+        "active": "#report-RS-RPT-9710bc639ccd-01"
+      }
+    },
+    {
+      "name": "citation preview stays in viewport",
+      "passed": true,
+      "details": {
+        "x": 639.90625,
+        "y": 388.28125,
+        "width": 320,
+        "height": 138.5625
+      }
+    },
+    {
+      "name": "evidence stamp rendered",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "citation provenance dialog opens in viewport",
+      "passed": true,
+      "details": {
+        "x": 362,
+        "y": 89.640625,
+        "width": 716,
+        "height": 720.71875
+      }
+    },
+    {
+      "name": "citation provenance dialog closes",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "reading progress updates",
+      "passed": true,
+      "details": 100
+    },
+    {
+      "name": "reduced-motion media active",
+      "passed": true,
+      "details": {
+        "scrollBehavior": "auto",
+        "heroOpacity": "1",
+        "reportOpacity": "1",
+        "hiddenSections": 0,
+        "media": true
+      }
+    },
+    {
+      "name": "reduced-motion disables smooth scroll",
+      "passed": true,
+      "details": {
+        "scrollBehavior": "auto",
+        "heroOpacity": "1",
+        "reportOpacity": "1",
+        "hiddenSections": 0,
+        "media": true
+      }
+    },
+    {
+      "name": "reduced-motion keeps content visible",
+      "passed": true,
+      "details": {
+        "scrollBehavior": "auto",
+        "heroOpacity": "1",
+        "reportOpacity": "1",
+        "hiddenSections": 0,
+        "media": true
+      }
+    },
+    {
+      "name": "no unexpected console errors",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "no page errors",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "screenshots": [
+    "frontend\\test-results\\v3-3\\viewport-1440x900-dark.png",
+    "frontend\\test-results\\v3-3\\full-1440x900-dark.png",
+    "frontend\\test-results\\v3-3\\viewport-1440x900-light.png",
+    "frontend\\test-results\\v3-3\\viewport-1366x768-dark.png",
+    "frontend\\test-results\\v3-3\\viewport-1366x768-light.png",
+    "frontend\\test-results\\v3-3\\viewport-1024x768-dark.png",
+    "frontend\\test-results\\v3-3\\viewport-1024x768-light.png",
+    "frontend\\test-results\\v3-3\\viewport-768x1024-dark.png",
+    "frontend\\test-results\\v3-3\\viewport-768x1024-light.png",
+    "frontend\\test-results\\v3-3\\viewport-390x844-dark.png",
+    "frontend\\test-results\\v3-3\\full-390x844-dark.png",
+    "frontend\\test-results\\v3-3\\viewport-390x844-light.png",
+    "frontend\\test-results\\v3-3\\viewport-360x640-dark.png",
+    "frontend\\test-results\\v3-3\\viewport-360x640-light.png",
+    "frontend\\test-results\\v3-3\\viewport-844x390-dark.png",
+    "frontend\\test-results\\v3-3\\full-844x390-dark.png",
+    "frontend\\test-results\\v3-3\\viewport-844x390-light.png",
+    "frontend\\test-results\\v3-3\\tab-overview.png",
+    "frontend\\test-results\\v3-3\\tab-agents.png",
+    "frontend\\test-results\\v3-3\\tab-sources.png",
+    "frontend\\test-results\\v3-3\\tab-evidence.png",
+    "frontend\\test-results\\v3-3\\tab-claims.png",
+    "frontend\\test-results\\v3-3\\tab-conflicts.png",
+    "frontend\\test-results\\v3-3\\tab-timeline.png",
+    "frontend\\test-results\\v3-3\\tab-report.png",
+    "frontend\\test-results\\v3-3\\tab-review.png",
+    "frontend\\test-results\\v3-3\\report-citation-preview.png",
+    "frontend\\test-results\\v3-3\\report-citation-dialog.png",
+    "frontend\\test-results\\v3-3\\report-reader-full.png",
+    "frontend\\test-results\\v3-3\\reduced-motion-390x844.png"
+  ],
+  "console_errors": [
+    {
+      "page": "desktop-interactions",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    }
+  ],
+  "page_errors": [],
+  "notes": [
+    "The review tab intentionally probes the unauthenticated reviewer endpoint and receives the expected 401 before login."
+  ],
+  "passed": true
+}

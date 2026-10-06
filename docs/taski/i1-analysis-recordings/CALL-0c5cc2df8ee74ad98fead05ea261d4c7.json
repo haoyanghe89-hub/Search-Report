@@ -1,0 +1,315 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2052",
+      "quote": "DeepSWE v1.1\n真实世界长周期软件工程\n77.9%(刷新纪录)\nAutomationBench(Zapier)\n核心商业流程端到端执行\n51.3%(排名第一)\nLVBench\n长视频理解\n91.7%(最先进水平)\nCWE-bench v1\n安全漏洞修复能力\n68%(并列第一)",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 976,
+        "end": 1136,
+        "quote_hash": "343d27bc8268844e7a2f6814e3f1fd11501c001e932f27d448a4b613c00694ac"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2052",
+      "quote": "此外,谷歌表示 Gemini 4 Argon 在 Vals Index(按美国 GDP 贡献权重衡量金融、编程、法律、税务领域经济影响力的综合基准)上排名领先,在 Vals Finance Agent v2(多步骤金融研究)和 Harvey 的 Legal Agent Benchmark(法律研究与撰写)等垂直基准上同样表现突出。",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1136,
+        "end": 1252,
+        "quote_hash": "343d27bc8268844e7a2f6814e3f1fd11501c001e932f27d448a4b613c00694ac"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+      "quote": "谷歌官方公布了Gemini 4 Argon在18项权威行业基准测试中的成绩,模型在12项测试中取得第一、1项并列第一,综合性能超越Claude Opus 5.5、GPT-6 Astra等主流旗舰模型",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1252,
+        "end": 1345,
+        "quote_hash": "311a0d9a9f2f80ca2ab6a010b187e6ccb81bed560abc49504151ff384e68365d"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+      "quote": "在Harvey法律Agent评测、Vals Index综合评测中表现优异,擅长超长合同审查、法律案例检索、法条比对、合规风险标注、专业文书起草",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1560,
+        "end": 1640,
+        "quote_hash": "311a0d9a9f2f80ca2ab6a010b187e6ccb81bed560abc49504151ff384e68365d"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:21108:22121",
+      "quote": "Gemini 4 Argon beats Claude Opus 5.5 on legal, finance, automation and long-video benchmarks and on the Vals Index. Opus 5.5 is ahead on Terminal-Bench 4.0, FrontierSWE v2 and the Artificial Analysis Intelligence Index, where it scores 58 against Argon's 53.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 21600,
+        "end": 21870,
+        "quote_hash": "cebc3ed8eaa429d935b431e62f2e6a50573e0f671dee195020d4bcac8c208fdb"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2052",
+      "quote": "需要说明的是,谷歌给出的基准数据集中在知识工作、长视频理解和网络安全这些方向,纯编程类基准的具体对比数据相对有限,实际编程场景下的表现还需要开发者结合自身任务进一步验证。",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1252,
+        "end": 1345,
+        "quote_hash": "343d27bc8268844e7a2f6814e3f1fd11501c001e932f27d448a4b613c00694ac"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "谷歌官方公布的 Gemini 4 Argon 基准成绩中，编程方向为 DeepSWE v1.1 得分 77.9%（刷新纪录），自动化业务方向为 AutomationBench(Zapier) 得分 51.3%（排名第一），网络安全方向为 CWE-bench v1 得分 68%（并列第一），长视频理解方向为 LVBench 得分 91.7%（最先进水平）。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E1"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmarks": {
+          "DeepSWE v1.1": {
+            "value": 77.9,
+            "unit": "%",
+            "note": "刷新纪录"
+          },
+          "AutomationBench(Zapier)": {
+            "value": 51.3,
+            "unit": "%",
+            "note": "排名第一"
+          },
+          "CWE-bench v1": {
+            "value": 68,
+            "unit": "%",
+            "note": "并列第一"
+          },
+          "LVBench": {
+            "value": 91.7,
+            "unit": "%",
+            "note": "最先进水平"
+          }
+        }
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "谷歌官方公布、由第三方文章转述的基准表",
+        "scope": "DeepSWE v1.1（真实世界长周期软件工程）、AutomationBench(Zapier)（核心商业流程端到端执行）、CWE-bench v1（安全漏洞修复能力）、LVBench（长视频理解）"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "包含四个不同基准的四个数值，属复合陈述"
+        ],
+        "proposed_atomic_statements": [
+          "谷歌官方公布 Gemini 4 Argon 在 DeepSWE v1.1 得分 77.9%。",
+          "谷歌官方公布 Gemini 4 Argon 在 AutomationBench(Zapier) 得分 51.3%。",
+          "谷歌官方公布 Gemini 4 Argon 在 CWE-bench v1 得分 68%。",
+          "谷歌官方公布 Gemini 4 Argon 在 LVBench 得分 91.7%。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "谷歌表示 Gemini 4 Argon 在 Vals Index（按美国 GDP 贡献权重衡量金融、编程、法律、税务领域经济影响力的综合基准）上排名领先，并在 Vals Finance Agent v2（多步骤金融研究）和 Harvey 的 Legal Agent Benchmark（法律研究与撰写）等垂直基准上表现突出，但未给出具体分数。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attributed_source": "谷歌（经第三方文章转述）",
+        "benchmarks": [
+          "Vals Index",
+          "Vals Finance Agent v2",
+          "Harvey Legal Agent Benchmark"
+        ]
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "谷歌官方表述，由第三方文章转述",
+        "scope": "金融、法律、税务等知识工作垂直基准；未披露具体数值"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "同时涉及三个基准的定性表述"
+        ],
+        "proposed_atomic_statements": [
+          "谷歌表示 Gemini 4 Argon 在 Vals Index 上排名领先。",
+          "谷歌表示 Gemini 4 Argon 在 Vals Finance Agent v2 上表现突出。",
+          "谷歌表示 Gemini 4 Argon 在 Harvey 的 Legal Agent Benchmark 上表现突出。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "第三方文章称，谷歌官方公布 Gemini 4 Argon 在 18 项权威行业基准测试中的成绩，其中 12 项取得第一、1 项并列第一，综合性能超越 Claude Opus 5.5、GPT-6 Astra 等主流旗舰模型。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E3"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attributed_source": "谷歌官方（经第三方文章转述）",
+        "comparison_targets": [
+          "Claude Opus 5.5",
+          "GPT-6 Astra"
+        ],
+        "benchmark_count": 18,
+        "first_place_count": 12,
+        "tied_first_count": 1
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "谷歌官方公布，由第三方文章转述",
+        "scope": "18 项行业基准测试的汇总统计"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "汇总统计与对比结论合并陈述"
+        ],
+        "proposed_atomic_statements": [
+          "谷歌官方公布 Gemini 4 Argon 在 18 项基准测试中 12 项第一、1 项并列第一。",
+          "第三方文章称 Gemini 4 Argon 综合性能超越 Claude Opus 5.5、GPT-6 Astra 等旗舰模型。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "第三方文章称，Gemini 4 Argon 在法律、金融、自动化和长视频基准以及 Vals Index 上超过 Claude Opus 5.5，而 Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 和 Artificial Analysis Intelligence Index 上领先（该指数 Opus 5.5 为 58，Argon 为 53）。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E5"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "comparison_target": "Claude Opus 5.5",
+        "artificial_analysis_intelligence_index": {
+          "Argon": 53,
+          "Claude Opus 5.5": 58
+        }
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方问答文章转述的基准对比",
+        "scope": "法律、金融、自动化、长视频基准与 Vals Index；Terminal-Bench 4.0、FrontierSWE v2、Artificial Analysis Intelligence Index"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "同时包含领先与落后两个方向的多个基准对比"
+        ],
+        "proposed_atomic_statements": [
+          "第三方文章称 Gemini 4 Argon 在法律、金融、自动化和长视频基准及 Vals Index 上超过 Claude Opus 5.5。",
+          "第三方文章称 Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 和 Artificial Analysis Intelligence Index 上领先于 Gemini 4 Argon。",
+          "第三方文章称 Artificial Analysis Intelligence Index 上 Claude Opus 5.5 得 58、Gemini 4 Argon 得 53。"
+        ]
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E6",
+      "stance": "CONTEXT"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E4",
+      "stance": "CONTEXT"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E5",
+      "statement": "同一第三方来源显示，Argon 在部分基准领先 Claude Opus 5.5 的同时，在 Terminal-Bench 4.0、FrontierSWE v2 与 Artificial Analysis Intelligence Index 上落后，说明“基准领先”并非全方向成立。",
+      "conflict_type": "SCOPE",
+      "numeric_value": 53.0,
+      "unit": "index score",
+      "report_time": null,
+      "scope": "Artificial Analysis Intelligence Index",
+      "definition": "综合智能指数得分",
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.8,
+      "specificity": 0.7
+    }
+  ]
+}

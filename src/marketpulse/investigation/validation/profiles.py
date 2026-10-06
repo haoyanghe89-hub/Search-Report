@@ -74,11 +74,12 @@ class ValidationProfile(Protocol):
 
 class BaseProfile:
     claim_type: ClaimType
-    version = "validation-profiles-v1"
+    version = "validation-profiles-v2"
 
     def _result(
         self,
         *,
+        context: ProfileContext,
         sufficient: bool,
         status: str,
         missing: list[str],
@@ -86,6 +87,23 @@ class BaseProfile:
         basis: list[str],
         special: list[str] | None = None,
     ) -> ProfileSufficiency:
+        if context.strong_contradiction.triggered or context.unresolved_conflicts:
+            sufficient, status = False, "UNVERIFIED"
+        elif status == "UNVERIFIED" and self._probable(context, missing):
+            status = "PROBABLE"
+        if status in {"VERIFIED", "PROBABLE"} and not context.entailing_evidence_ids:
+            sufficient, status = False, "UNVERIFIED"
+        if not context.entailing_evidence_ids:
+            if not any("ENTAILS" in m for m in missing):
+                missing.append("an exact ENTAILS judgment for the full claim")
+            if ResearchGapType.INSUFFICIENT_ENTAILMENT not in gaps:
+                gaps.append(ResearchGapType.INSUFFICIENT_ENTAILMENT)
+        basis = [
+            *basis,
+            f"grade={status}; full profile sufficient={sufficient}",
+            "PROBABLE requires exact ENTAILS, credible independent support, no unresolved "
+            "conflict or strong counter-evidence; only enumerated secondary deficits allowed",
+        ]
         if status not in {"VERIFIED", "PROBABLE", "UNVERIFIED"}:
             raise ValueError(status)
         return ProfileSufficiency(
@@ -98,6 +116,64 @@ class BaseProfile:
             basis=tuple(basis),
             special_semantic_checks=tuple(special or ()),
         )
+
+    @staticmethod
+    def _qualifier(context: ProfileContext, key: str):
+        # The persisted wire contract keeps entity/time/scope groups. Accept a
+        # matching flat projection too, but never resolve competing values by
+        # silently choosing one representation.
+        qualifiers = context.claim.qualifiers
+        names = {"time": ("time", "as_of", "date"), "scope": ("scope", "benchmark")}
+        candidates = []
+        for mapping in (qualifiers, *(v for v in qualifiers.values() if isinstance(v, dict))):
+            for name in names.get(key, (key,)):
+                value = mapping.get(name)
+                if not isinstance(value, dict) and value not in (None, "", {}, []):
+                    candidates.append(value)
+        if not candidates or any(value != candidates[0] for value in candidates[1:]):
+            return None
+        return candidates[0]
+
+    def _probable(self, context: ProfileContext, missing: list[str]) -> bool:
+        if not context.entailing_evidence_ids or context.independence.independent_family_count < 2:
+            return False
+        if self._supporting_quality_count(context, minimum=0.5) < 2:
+            return False
+        # No missing semantic core, definition/unit, causal mechanism, direct finding,
+        # or attribution boundary can be waived by a weaker source-quality tier.
+        secondary = {
+            ClaimType.STATEMENT: {"authoritative original statement record"},
+            ClaimType.EVENT_FACT: {"adequate-quality corroborating Evidence"},
+            ClaimType.QUANTITATIVE: {
+                "methodology_or_provenance",
+                "2 adequate-quality supporting Sources",
+                "1 adequate-quality supporting Sources",
+            },
+            ClaimType.CAUSAL: {
+                "two adequate-quality causal Sources",
+            },
+            ClaimType.IMPACT: {
+                "adequate-quality direct impact report",
+                "two adequate-quality causal impact Sources",
+            },
+            ClaimType.ATTRIBUTION: {"two adequate-quality attribution Sources"},
+            ClaimType.ANALYTIC_INFERENCE: {"two adequate-quality supporting Sources"},
+            ClaimType.INSTITUTIONAL_ACTION: {"direct institutional record with ENTAILS judgment"},
+        }[self.claim_type]
+        if not missing or not set(missing) <= secondary:
+            return False
+        if self.claim_type is ClaimType.STATEMENT:
+            return (
+                bool(self._qualifier(context, "speaker") or self._qualifier(context, "publisher"))
+                and len(context.entailing_evidence_ids) >= 2
+            )
+        if self.claim_type is ClaimType.EVENT_FACT:
+            return self._has_primary_entailment(context)
+        # Missing methodology is permitted only when every numeric core field and
+        # BOTH full-quality sources meet the unchanged high-importance requirements.
+        if self.claim_type is ClaimType.QUANTITATIVE and "methodology_or_provenance" in missing:
+            return len(missing) == 1 and self._supporting_quality_count(context) >= 2
+        return True
 
     @staticmethod
     def _supporting_quality_count(
@@ -155,6 +231,7 @@ class StatementProfile(BaseProfile):
             missing.append("authoritative original statement record")
             gaps.append(ResearchGapType.MISSING_PRIMARY_SOURCE)
         return self._result(
+            context=context,
             sufficient=sufficient,
             status="VERIFIED" if sufficient else "UNVERIFIED",
             missing=missing,
@@ -171,16 +248,15 @@ class InstitutionalActionProfile(BaseProfile):
 
     def evaluate(self, context: ProfileContext) -> ProfileSufficiency:
         required = ("actor", "action", "scope")
-        missing = [
-            f"qualifier:{item}" for item in required if not context.claim.qualifiers.get(item)
-        ]
-        if not (context.claim.qualifiers.get("date") or context.claim.qualifiers.get("time")):
+        missing = [f"qualifier:{item}" for item in required if not self._qualifier(context, item)]
+        if not (self._qualifier(context, "date") or self._qualifier(context, "time")):
             missing.append("qualifier:date_or_time")
         if not self._has_primary_entailment(context):
             missing.append("direct institutional record with ENTAILS judgment")
         sufficient = not missing and not context.strong_contradiction.triggered
         gaps = [ResearchGapType.MISSING_PRIMARY_SOURCE] if missing else []
         return self._result(
+            context=context,
             sufficient=sufficient,
             status="VERIFIED" if sufficient else "UNVERIFIED",
             missing=missing,
@@ -200,7 +276,7 @@ class EventFactProfile(BaseProfile):
         if not self._has_primary_entailment(context):
             missing.append("strong first-hand Evidence")
             gaps.append(ResearchGapType.MISSING_PRIMARY_SOURCE)
-        explicit_exception = bool(context.claim.qualifiers.get("authoritative_exception_basis"))
+        explicit_exception = bool(self._qualifier(context, "authoritative_exception_basis"))
         if context.independence.independent_family_count < 2 and not explicit_exception:
             missing.append("independent corroborating family")
             gaps.append(ResearchGapType.INSUFFICIENT_INDEPENDENCE)
@@ -212,6 +288,7 @@ class EventFactProfile(BaseProfile):
             gaps.append(ResearchGapType.SOURCE_CONFLICT)
         sufficient = not missing and not context.strong_contradiction.triggered
         return self._result(
+            context=context,
             sufficient=sufficient,
             status="VERIFIED" if sufficient else "UNVERIFIED",
             missing=missing,
@@ -224,15 +301,56 @@ class EventFactProfile(BaseProfile):
 class QuantitativeProfile(BaseProfile):
     claim_type = ClaimType.QUANTITATIVE
 
+    @staticmethod
+    def evaluate_computation(validation):
+        """Additional deterministic computation gate; never relax the web profile.
+
+        Called only with the persisted/recomputed quant service result, not model
+        qualifiers. Reproducibility alone does not establish an investment claim.
+        """
+        from marketpulse.quant.validation import ComputationValidation
+
+        if not isinstance(validation, ComputationValidation):
+            raise TypeError("trusted typed computation validation required")
+        sufficient = not validation.missing and all(
+            (
+                validation.integrity,
+                validation.exact_entailment,
+                validation.sample_valid,
+                validation.calibrated,
+                validation.rights_valid,
+                validation.pit_valid,
+                validation.conflict_free,
+                validation.reproduction == "REPRODUCIBLE",
+                validation.independent_families
+                >= (2 if validation.importance in {"HIGH", "CRITICAL"} else 1),
+                validation.adequate_sources
+                >= (2 if validation.importance in {"HIGH", "CRITICAL"} else 1),
+            )
+        )
+        return ProfileSufficiency(
+            profile=ClaimType.QUANTITATIVE,
+            profile_version="quantitative-computation-v1",
+            sufficient=sufficient,
+            recommended_status="VERIFIED" if sufficient else "UNVERIFIED",
+            missing_requirements=validation.missing,
+            gap_codes=(ResearchGapType.EVIDENCE_GAP.value,) if not sufficient else (),
+            basis=(
+                "frozen inputs + exact cell + offline reproduction "
+                "+ unchanged independence threshold",
+                "no automatic PROBABLE; historical observation is not an investment recommendation",
+            ),
+            special_semantic_checks=(
+                "computation integrity/reproduction/PIT/rights are additional gates",
+            ),
+        )
+
     def evaluate(self, context: ProfileContext) -> ProfileSufficiency:
         required = ("value", "unit", "time", "scope", "definition")
         missing = [
-            f"qualifier:{item}" for item in required if context.claim.qualifiers.get(item) is None
+            f"qualifier:{item}" for item in required if self._qualifier(context, item) is None
         ]
-        if not (
-            context.claim.qualifiers.get("methodology")
-            or context.claim.qualifiers.get("provenance")
-        ):
+        if not (self._qualifier(context, "methodology") or self._qualifier(context, "provenance")):
             missing.append("methodology_or_provenance")
         gaps: list[ResearchGapType] = []
         required_families = (
@@ -257,6 +375,7 @@ class QuantitativeProfile(BaseProfile):
             and not context.strong_contradiction.triggered
         )
         return self._result(
+            context=context,
             sufficient=sufficient,
             status="VERIFIED" if sufficient else "UNVERIFIED",
             missing=missing,
@@ -279,12 +398,12 @@ class CausalProfile(BaseProfile):
         missing = [
             f"qualifier:{item}"
             for item in required_true
-            if context.claim.qualifiers.get(item) is not True
+            if self._qualifier(context, item) is not True
         ]
         gaps: list[ResearchGapType] = []
-        if context.claim.qualifiers.get("mechanism_support") is not True:
+        if self._qualifier(context, "mechanism_support") is not True:
             gaps.append(ResearchGapType.MISSING_MECHANISM)
-        if context.claim.qualifiers.get("causal_attribution_evidence") is not True:
+        if self._qualifier(context, "causal_attribution_evidence") is not True:
             gaps.append(ResearchGapType.MISSING_CAUSAL_SUPPORT)
         if context.independence.independent_family_count < 2:
             missing.append("independent causal corroboration")
@@ -299,6 +418,7 @@ class CausalProfile(BaseProfile):
             and not context.unresolved_conflicts
         )
         return self._result(
+            context=context,
             sufficient=sufficient,
             status="VERIFIED" if sufficient else "UNVERIFIED",
             missing=missing,
@@ -314,7 +434,7 @@ class ImpactProfile(BaseProfile):
     claim_type = ClaimType.IMPACT
 
     def evaluate(self, context: ProfileContext) -> ProfileSufficiency:
-        raw_subtype = context.claim.qualifiers.get("impact_subtype")
+        raw_subtype = self._qualifier(context, "impact_subtype")
         try:
             subtype = ImpactSubtype(str(raw_subtype))
         except ValueError:
@@ -326,9 +446,9 @@ class ImpactProfile(BaseProfile):
         causal = subtype in {ImpactSubtype.CAUSAL_IMPACT, ImpactSubtype.LONG_TERM_IMPACT}
         if causal:
             for key in ("temporal_ordering", "mechanism_support", "causal_attribution_evidence"):
-                if context.claim.qualifiers.get(key) is not True:
+                if self._qualifier(context, key) is not True:
                     missing.append(f"qualifier:{key}")
-            if context.claim.qualifiers.get("mechanism_support") is not True:
+            if self._qualifier(context, "mechanism_support") is not True:
                 gaps.append(ResearchGapType.MISSING_MECHANISM)
             if context.independence.independent_family_count < 2:
                 missing.append("independent causal impact corroboration")
@@ -348,6 +468,7 @@ class ImpactProfile(BaseProfile):
             "VERIFIED" if sufficient and not causal else "PROBABLE" if sufficient else "UNVERIFIED"
         )
         return self._result(
+            context=context,
             sufficient=sufficient,
             status=status,
             missing=missing,
@@ -370,9 +491,9 @@ class AttributionProfile(BaseProfile):
         }
         missing: list[str] = []
         gaps: list[ResearchGapType] = []
-        if context.claim.qualifiers.get("attribution_kind") not in kinds:
+        if self._qualifier(context, "attribution_kind") not in kinds:
             missing.append("recognized attribution_kind")
-        if context.claim.qualifiers.get("interested_party_only") is not False:
+        if self._qualifier(context, "interested_party_only") is not False:
             missing.append("support beyond interested-party assertion")
             gaps.append(ResearchGapType.ATTRIBUTION_UNDER_SUPPORTED)
         if context.independence.independent_family_count < 2:
@@ -381,7 +502,7 @@ class AttributionProfile(BaseProfile):
         if self._supporting_quality_count(context) < 2:
             missing.append("two adequate-quality attribution Sources")
             gaps.append(ResearchGapType.EVIDENCE_GAP)
-        if context.claim.qualifiers.get("direct_finding") is not True:
+        if self._qualifier(context, "direct_finding") is not True:
             missing.append("direct investigative/regulatory/legal finding")
             gaps.append(ResearchGapType.ATTRIBUTION_UNDER_SUPPORTED)
         sufficient = (
@@ -390,6 +511,7 @@ class AttributionProfile(BaseProfile):
             and not context.strong_contradiction.triggered
         )
         return self._result(
+            context=context,
             sufficient=sufficient,
             status="VERIFIED" if sufficient else "UNVERIFIED",
             missing=missing,
@@ -407,9 +529,9 @@ class AnalyticInferenceProfile(BaseProfile):
         if context.independence.independent_family_count < 2:
             missing.append("multi-family support")
             gaps.append(ResearchGapType.INSUFFICIENT_INDEPENDENCE)
-        if not context.claim.qualifiers.get("reasoning_basis"):
+        if not self._qualifier(context, "reasoning_basis"):
             missing.append("explicit reasoning_basis")
-        if not context.claim.qualifiers.get("uncertainty"):
+        if not self._qualifier(context, "uncertainty"):
             missing.append("explicit uncertainty")
         if len(context.supporting_evidence_ids) < 2:
             missing.append("multiple supporting Evidence items")
@@ -419,6 +541,7 @@ class AnalyticInferenceProfile(BaseProfile):
             gaps.append(ResearchGapType.EVIDENCE_GAP)
         sufficient = not missing and not context.strong_contradiction.triggered
         return self._result(
+            context=context,
             sufficient=sufficient,
             status="PROBABLE" if sufficient else "UNVERIFIED",
             missing=missing,

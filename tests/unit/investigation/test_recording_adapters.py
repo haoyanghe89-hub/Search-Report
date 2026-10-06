@@ -11,6 +11,7 @@ from marketpulse.infrastructure.storage.models import BlobIntegrityError, BlobRe
 from marketpulse.investigation.domain.enums import ExternalCallStatus
 from marketpulse.investigation.domain.recordings import RecordedModelCall, RecordedToolCall
 from marketpulse.investigation.ports.external import (
+    FetchRequest,
     ModelMessage,
     ModelRequest,
     ModelUsage,
@@ -21,6 +22,7 @@ from marketpulse.investigation.ports.external import (
 )
 from marketpulse.investigation.recording.adapters import (
     CallContext,
+    RecordingFetchAdapter,
     RecordingModelAdapter,
     RecordingSearchAdapter,
     ReplayModelAdapter,
@@ -29,6 +31,7 @@ from marketpulse.investigation.recording.adapters import (
 from marketpulse.investigation.recording.errors import (
     InvalidProviderResponseError,
     ReplayCacheMissError,
+    SecurityBlockedError,
 )
 
 NOW = datetime(2026, 9, 21, 12, tzinfo=UTC)
@@ -83,6 +86,31 @@ class MemoryStore:
             and call.request_fingerprint == request_fingerprint
             and call.replayable
         ]
+
+
+@pytest.mark.asyncio
+async def test_fetch_failure_records_only_allowlisted_diagnostics(tmp_path: Path) -> None:
+    class BlockedFetch:
+        async def fetch(self, request):
+            error = SecurityBlockedError("PRIVATE response body")
+            error.reason_code = "NON_PUBLIC_DNS"
+            error.diagnostics = {
+                "domain": "public.test",
+                "http_status": None,
+                "html_bytes": 0,
+                "reason": "NON_PUBLIC_DNS",
+                "authorization": "PRIVATE",
+            }
+            raise error
+
+    store = MemoryStore(tmp_path / "safe-recording")
+    fetch = RecordingFetchAdapter(BlockedFetch(), store, CallContext("RUN", "STEP"))
+    with pytest.raises(SecurityBlockedError):
+        await fetch.fetch(FetchRequest(url="https://public.test/story?token=PRIVATE"))
+    metadata = store.tool_calls[0].metadata
+    assert metadata["reason"] == "NON_PUBLIC_DNS"
+    assert metadata["domain"] == "public.test"
+    assert "PRIVATE" not in str(metadata)
 
 
 class SearchFixture:

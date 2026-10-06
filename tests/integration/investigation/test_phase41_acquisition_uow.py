@@ -71,7 +71,11 @@ class FetchFixture:
             final_url=request.url,
             status_code=200,
             content_type="text/html",
-            body=b"<html><body><p>Official finding.</p></body></html>",
+            body=(
+                b"<html><body><p>Official finding. The original public record documents "
+                b"the investigation findings and identifies the evidence used to establish "
+                b"the circumstances surrounding this public incident.</p></body></html>"
+            ),
             fetched_at=NOW,
         )
 

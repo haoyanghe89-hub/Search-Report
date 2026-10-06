@@ -120,3 +120,44 @@ test('a late report response cannot overwrite a different selected run', async (
   await pending
   assert.deepEqual(model.data.value.reports, [])
 })
+
+test('quant continues polling during durable report finalization; web ready remains terminal', async () => {
+  let status = 'READY_FOR_REPORT', workflow = 'quant-v1', next
+  const model = useInvestigation('I1', {
+    mount: () => {}, unmount: () => {},
+    schedule: fn => { next = fn; return 1 }, unschedule: () => { next = null },
+    api: async url => url === '/runs/R1'
+      ? { run: { run_id: 'R1', status, workflow_version: workflow }, budget: {} }
+      : url === '/quant/runs/R1' ? { phase: '成稿', report_id: null } : [],
+  })
+  await model.loadRun('R1')
+  assert.equal(model.running.value, true)
+  assert.equal(typeof next, 'function')
+  status = 'BLOCKED'
+  await next()
+  assert.equal(model.running.value, true)
+  status = 'COMPLETED'
+  await next()
+  assert.equal(model.running.value, false)
+  assert.equal(next, null)
+  workflow = 'web-v1'; status = 'READY_FOR_REPORT'
+  await model.loadRun('R1')
+  assert.equal(model.running.value, false)
+  assert.equal(next, null)
+})
+
+test('quant terminal status reconciles an earlier parallel report response', async () => {
+  let reads = 0
+  const model = useInvestigation('I1', {
+    mount: () => {}, unmount: () => {}, schedule: () => 1, unschedule: () => {},
+    api: async url => {
+      if (url === '/runs/R1') return { run: { run_id: 'R1', status: 'COMPLETED', workflow_version: 'quant-v1' } }
+      if (url === '/quant/runs/R1') return { report_id: 'P1', phase: '成稿' }
+      if (url === '/runs/R1/reports') return ++reads === 1 ? [] : [{ report_id: 'P1' }]
+      return []
+    },
+  })
+  await model.loadRun('R1')
+  assert.equal(model.data.value.reports[0]?.report_id, 'P1')
+  assert.equal(reads, 2)
+})

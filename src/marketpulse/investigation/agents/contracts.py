@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import Literal, Protocol
+import hashlib
+from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, model_validator
+from pydantic_core import PydanticCustomError
 
 from marketpulse.investigation.domain.enums import (
     ClaimImportance,
@@ -196,6 +198,23 @@ class EvidenceCandidate(AgentContract):
     locator: EvidenceLocator
     quote_hash: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
 
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_missing_quote_digest(cls, value: Any) -> Any:
+        # This is a digest of the candidate text, NOT a certificate of source support.
+        # Full locator/archive integrity is still required before Evidence is persisted.
+        if isinstance(value, dict) and isinstance(value.get("quote"), str):
+            locator = value.get("locator")
+            if isinstance(locator, dict) and "quote_hash" not in locator:
+                value = {
+                    **value,
+                    "locator": {
+                        **locator,
+                        "quote_hash": hashlib.sha256(value["quote"].encode("utf-8")).hexdigest(),
+                    },
+                }
+        return value
+
 
 class AtomicityProposal(AgentContract):
     is_atomic: bool
@@ -259,24 +278,32 @@ class AnalysisProposal(AgentContract):
         evidence_keys = [item.evidence_key for item in self.evidence]
         claim_keys = [item.claim_key for item in self.claims]
         if len(evidence_keys) != len(set(evidence_keys)):
-            raise ValueError("evidence keys must be unique")
+            raise PydanticCustomError("analysis_duplicate_evidence", "evidence keys must be unique")
         if len(claim_keys) != len(set(claim_keys)):
-            raise ValueError("claim keys must be unique")
+            raise PydanticCustomError("analysis_duplicate_claim", "claim keys must be unique")
         known = set(evidence_keys)
         for claim in self.claims:
             if (
                 set(claim.supporting_evidence_keys) | set(claim.contradicting_evidence_keys)
             ) - known:
-                raise ValueError("claim refers to unknown evidence candidate")
+                raise PydanticCustomError(
+                    "analysis_unknown_evidence", "claim refers to unknown evidence candidate"
+                )
         for relation in self.relations:
             if relation.claim_key not in set(claim_keys) or relation.evidence_key not in known:
-                raise ValueError("relation references an unknown claim or evidence candidate")
+                raise PydanticCustomError(
+                    "analysis_unknown_relation",
+                    "relation references an unknown claim or evidence candidate",
+                )
         for observation in self.conflict_observations:
             if (
                 observation.claim_key not in set(claim_keys)
                 or observation.evidence_key not in known
             ):
-                raise ValueError("conflict observation references an unknown candidate")
+                raise PydanticCustomError(
+                    "analysis_unknown_conflict",
+                    "conflict observation references an unknown candidate",
+                )
         return self
 
 
@@ -305,6 +332,7 @@ class VerificationInput(AgentContract):
     existing_conflict_summaries: tuple[str, ...] = ()
     profile_expectations: tuple[str, ...] = ()
     target_claim_type: ClaimType | None = None
+    evidence_provenance: dict[str, dict[str, JsonValue]] = Field(default_factory=dict)
 
 
 class SemanticJudgment(AgentContract):
@@ -338,12 +366,24 @@ class ConflictExplanation(AgentContract):
     resolution_dimension: Literal["TIME", "SCOPE", "DEFINITION", "METHODOLOGY", "UNKNOWN"]
 
 
+class QualifierSupplement(AgentContract):
+    claim_key: str
+    evidence_key: str
+    field: Literal[
+        "value", "unit", "scope", "time", "definition", "methodology", "provenance", "speaker"
+    ]
+    value: str = Field(min_length=1, max_length=500)
+    source_quote: str = Field(min_length=1, max_length=1000)
+    time_reference: Literal["EVALUATION_PERIOD", "RESULTS_AS_OF"] | None = None
+
+
 class VerificationProposal(AgentContract):
     judgments: tuple[SemanticJudgment, ...] = ()
     gaps: tuple[GapProposal, ...] = ()
     contradiction_interpretations: tuple[ContradictionInterpretation, ...] = ()
     conflict_explanations: tuple[ConflictExplanation, ...] = ()
     suggested_research_directions: tuple[str, ...] = ()
+    qualifier_supplements: tuple[QualifierSupplement, ...] = ()
 
 
 class RouteProposal(AgentContract):
@@ -437,6 +477,7 @@ def validate_agent_proposal(request: AgentContract, proposal: AgentContract) -> 
         targets = {task.target_question_key for task in proposal.tasks}
         if not targets <= questions or not critical <= targets:
             raise ValueError("plan targets unknown questions or omits a critical question")
+        _validate_new_tasks(request.prior_task_summaries, proposal.tasks)
     elif isinstance(request, ResearchInput) and isinstance(proposal, ResearchProposal):
         if len(proposal.queries) > request.remaining_search_calls:
             raise ValueError("research proposal exceeds remaining search budget")
@@ -448,10 +489,39 @@ def validate_agent_proposal(request: AgentContract, proposal: AgentContract) -> 
             for item in proposal.queries
         ):
             raise ValueError("research query targets another question")
+        executed = {
+            " ".join(item.normalized_query.casefold().split()) for item in request.executed_queries
+        }
+        if proposal.queries and all(
+            " ".join(item.query.casefold().split()) in executed for item in proposal.queries
+        ):
+            raise ValueError("research proposal contains only normalized duplicate queries")
     elif isinstance(request, AnalysisInput) and isinstance(proposal, AnalysisProposal):
         artifacts = {item.artifact_key for item in request.artifacts}
         if any(item.artifact_key not in artifacts for item in proposal.evidence):
             raise ValueError("analysis references an artifact outside its input")
+        existing = {item.claim_key: item for item in request.existing_claims}
+        for claim in proposal.claims:
+            if claim.claim_key not in existing:
+                continue
+            original = existing[claim.claim_key]
+            qualifiers = {
+                **claim.entity_qualifiers,
+                **claim.time_qualifiers,
+                **claim.scope_qualifiers,
+                "entity": claim.entity_qualifiers,
+                "time": claim.time_qualifiers,
+                "scope": claim.scope_qualifiers,
+            }
+            if (
+                claim.statement != original.statement
+                or claim.claim_type != original.claim_type
+                or claim.canonical_statement not in (None, original.statement)
+                or qualifiers != original.qualifiers
+            ):
+                raise ValueError(
+                    "analysis changes an existing claim definition; use a new claim_key"
+                )
     elif isinstance(request, VerificationInput) and isinstance(proposal, VerificationProposal):
         claims = {item.claim_key for item in request.claims}
         evidence = {item.evidence_key for item in request.evidence}
@@ -466,12 +536,16 @@ def validate_agent_proposal(request: AgentContract, proposal: AgentContract) -> 
         for item in proposal.judgments:
             if item.claim_key not in claims or item.evidence_key not in evidence:
                 raise ValueError("verification references an unknown claim or evidence")
+        from marketpulse.investigation.agents.supplements import validate_supplements
+
+        validate_supplements(request, proposal)
         if any(
             item.target_claim_key is not None and item.target_claim_key not in claims
             for item in proposal.gaps
         ):
             raise ValueError("verification gap targets an unknown claim")
     elif isinstance(request, RouteInput) and isinstance(proposal, RouteProposal):
+        _validate_new_tasks(request.prior_task_summaries, proposal.tasks)
         gaps = {item.gap_key for item in request.gaps}
         questions = {item.question_key for item in request.questions}
         if set(proposal.gap_keys) - gaps:
@@ -490,6 +564,15 @@ def validate_agent_proposal(request: AgentContract, proposal: AgentContract) -> 
             raise ValueError("section keys must be unique")
         if any(set(item.claim_keys) - claims for item in proposal.sections):
             raise ValueError("writer cites a claim outside its validated input")
+
+
+def _validate_new_tasks(
+    prior: tuple[TaskSummaryView, ...], tasks: tuple[TaskProposal, ...]
+) -> None:
+    known = {(item.task_key, item.target_question_key) for item in prior}
+    keys = [(item.task_key, item.target_question_key) for item in tasks]
+    if len(keys) != len(set(keys)) or any(key in known for key in keys):
+        raise ValueError("ResearchTask duplicates prior workflow work; use a new task key")
 
 
 def route_for_verification(proposal: VerificationProposal) -> Route:

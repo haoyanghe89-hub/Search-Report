@@ -35,7 +35,7 @@ def test_retrieves_tail_with_same_budget_and_exact_offsets(tmp_path: Path, quote
     assert view.excerpt == text[view.locator.start : view.locator.end]
     assert view.locator.quote_hash == hashlib.sha256(view.excerpt.encode()).hexdigest()
     assert len(view.excerpt) <= 160
-    assert "char-window-1200-overlap-160-v1" in view.artifact_key
+    assert "char-window-1200-overlap-160-v2" in view.artifact_key
 
 
 def test_pdf_page_identity_duplicate_content_and_permutation(tmp_path: Path):
@@ -90,3 +90,31 @@ def test_empty_and_corrupt_archives(tmp_path: Path):
     broken = replace(candidate, artifact=candidate.artifact.model_copy(update={"sha256": "a" * 64}))
     with pytest.raises(ValueError, match="hash mismatch"):
         selector.select((broken,), query="text")
+
+
+def test_segments_never_start_inside_a_table_label():
+    text = "Background\n" * 103 + "DeepSWE v1.1\nAgentic coding\n77.9%\n" + "Notes\n" * 240
+    for start, _ in segment_ranges(text):
+        assert start == 0 or text[start - 1].isspace()
+
+
+def test_material_dedup_is_opt_in_and_preserves_exact_archive_ranges(tmp_path: Path):
+    blobs = LocalContentAddressedBlobStorage(tmp_path)
+    text = "Gemini Argon supports a documented context window. " * 10
+    candidates = _candidates(
+        corpus(
+            [
+                {"id": "copy-a", "text": text},
+                {"id": "copy-b", "text": text},
+                {"id": "unrelated", "text": "Banana cultivation and gardening. " * 15},
+            ]
+        ),
+        blobs,
+    )
+    selector = BM25ArtifactSelector(
+        blobs, max_artifacts=3, max_excerpts=3, max_chars=1500, deduplicate=True
+    )
+    views = selector.select(candidates, query="Gemini Argon context")
+    assert len(views) == 1
+    assert views[0].excerpt == text[views[0].locator.start : views[0].locator.end]
+    assert views[0].locator.quote_hash == hashlib.sha256(views[0].excerpt.encode()).hexdigest()

@@ -18,12 +18,110 @@ from marketpulse.investigation.ports.external import (
     ModelRequest,
     SearchRequest,
 )
-from marketpulse.investigation.recording.errors import SecurityBlockedError
+from marketpulse.investigation.recording.errors import ProviderCallError, SecurityBlockedError
 
 
 class Answer(BaseModel):
     model_config = ConfigDict(extra="forbid")
     value: str
+
+
+@pytest.mark.asyncio
+async def test_fetch_headers_and_http_500_recovery() -> None:
+    calls = []
+    sleeps = []
+
+    async def handler(request):
+        calls.append(request)
+        if len(calls) == 1:
+            return httpx.Response(500)
+        return httpx.Response(200, headers={"content-type": "text/plain"}, content=b"record")
+
+    async def public_host(_):
+        return True
+
+    async def sleep(delay):
+        sleeps.append(delay)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        result = await HttpxFetchAdapter(
+            client,
+            host_validator=public_host,
+            accept_language="zh-CN,zh;q=0.9,en;q=0.7",
+            sleep=sleep,
+        ).fetch(FetchRequest(url="https://public.test/story"))
+    assert result.status_code == 200
+    assert "text/html" in calls[0].headers["accept"]
+    assert calls[0].headers["accept-language"].startswith("zh-CN")
+    assert sleeps == [0.25]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("status,reason", [(403, "HTTP_FORBIDDEN"), (429, "HTTP_RATE_LIMITED")])
+async def test_hard_denial_cooldown_avoids_repeat_network_work(status, reason) -> None:
+    calls = []
+
+    async def handler(request):
+        calls.append(request)
+        return httpx.Response(status)
+
+    async def public_host(_):
+        return True
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        adapter = HttpxFetchAdapter(client, host_validator=public_host, max_retries=0)
+        request = FetchRequest(url="https://public.test/denied?secret=PRIVATE")
+        for _ in range(2):
+            with pytest.raises(Exception) as failure:
+                await adapter.fetch(request)
+            assert failure.value.reason_code == reason
+            assert failure.value.diagnostics["domain"] == "public.test"
+            assert "PRIVATE" not in str(failure.value.diagnostics)
+    assert len(calls) == 1
+
+
+@pytest.mark.asyncio
+async def test_strict_fake_dns_rejection_explains_required_opt_in(monkeypatch) -> None:
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *_: [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("198.18.0.42", 443))],
+    )
+    async with httpx.AsyncClient(
+        transport=httpx.MockTransport(lambda _: httpx.Response(200))
+    ) as client:
+        with pytest.raises(SecurityBlockedError) as failure:
+            await HttpxFetchAdapter(client).fetch(FetchRequest(url="https://public.example/story"))
+    assert failure.value.reason_code == "NON_PUBLIC_DNS"
+    assert "MARKETPULSE_ALLOW_PROXY_DNS" in str(failure.value)
+
+
+@pytest.mark.asyncio
+async def test_html_challenge_is_classified_without_retrying_or_admitting_body() -> None:
+    calls = []
+
+    async def handler(request):
+        calls.append(request)
+        return httpx.Response(
+            200,
+            headers={"content-type": "text/html"},
+            content=(
+                b"<html><title>Just a moment...</title>"
+                b"<form id='challenge-form'>Verify human</form></html>"
+            ),
+        )
+
+    async def public_host(_):
+        return True
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        adapter = HttpxFetchAdapter(client, host_validator=public_host)
+        for _ in range(2):
+            with pytest.raises(ProviderCallError) as failure:
+                await adapter.fetch(FetchRequest(url="https://public.test/story"))
+            assert failure.value.reason_code == "CHALLENGE_PAGE"
+            assert failure.value.diagnostics["http_status"] == 200
+    assert len(calls) == 1
 
 
 @pytest.mark.asyncio

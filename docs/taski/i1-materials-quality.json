@@ -1,0 +1,1588 @@
+{
+  "run_id": "RUN-LIVE-434153bec43c405f",
+  "source_quality_recomputed": [
+    {
+      "source_id": "S-fbc991d62fc57303255bd9bdb5309fba",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon",
+      "score_kind": "OFFLINE_RECOMPUTATION_WITH_STORED_METADATA_NOT_A_PERSISTED_VALIDATION_SCORE",
+      "assessment": {
+        "source_id": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "family_id": "FAM-6db12e85c82c661377c6",
+        "components": [
+          {
+            "name": "first_hand",
+            "level": "WEAK",
+            "basis": "Source is not identified as first-hand",
+            "normalized_value": 0.25
+          },
+          {
+            "name": "official_direct_participant",
+            "level": "STRONG",
+            "basis": "Source is an official/direct participant record; this does not prove world truth",
+            "normalized_value": 1
+          },
+          {
+            "name": "primary_source",
+            "level": "STRONG",
+            "basis": "Source metadata identifies a primary record",
+            "normalized_value": 1
+          },
+          {
+            "name": "data_provenance",
+            "level": "STRONG",
+            "basis": "Explicit data provenance is recorded",
+            "normalized_value": 1
+          },
+          {
+            "name": "methodology_transparency",
+            "level": "UNKNOWN",
+            "basis": "No explicit methodology metadata",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "named_author_source",
+            "level": "ADEQUATE",
+            "basis": "Named author/source metadata is present",
+            "normalized_value": 0.65
+          },
+          {
+            "name": "temporal_proximity",
+            "level": "UNKNOWN",
+            "basis": "Event/reference time or publication time is unavailable",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "retransmission_depth",
+            "level": "WEAK",
+            "basis": "Source is a retransmission or syndicated member",
+            "normalized_value": 0.25
+          },
+          {
+            "name": "speculation_level",
+            "level": "UNKNOWN",
+            "basis": "No explicit speculation metadata",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "source_independence",
+            "level": "ADEQUATE",
+            "basis": "Source shares a provenance family with retransmissions or attributions",
+            "normalized_value": 0.65
+          },
+          {
+            "name": "explicit_uncertainty",
+            "level": "UNKNOWN",
+            "basis": "Explicit uncertainty metadata is absent",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "consistency_with_stronger_evidence",
+            "level": "UNKNOWN",
+            "basis": "No stronger-evidence consistency assessment is available",
+            "normalized_value": 0.5
+          }
+        ],
+        "basis": [
+          "Source is not identified as first-hand",
+          "Source is an official/direct participant record; this does not prove world truth",
+          "Source metadata identifies a primary record",
+          "Explicit data provenance is recorded",
+          "No explicit methodology metadata",
+          "Named author/source metadata is present",
+          "Event/reference time or publication time is unavailable",
+          "Source is a retransmission or syndicated member",
+          "No explicit speculation metadata",
+          "Source shares a provenance family with retransmissions or attributions",
+          "Explicit uncertainty metadata is absent",
+          "No stronger-evidence consistency assessment is available",
+          "Archived original-document provenance establishes traceability only; it does not establish first-hand authority, methodology or independence."
+        ],
+        "normalized_score": 0.61
+      }
+    },
+    {
+      "source_id": "S-ecb4c55bf181277ed4ce17799031be36",
+      "url": "https://storage.googleapis.com/deepmind-media/gemini/gemini_4_argon_model_evaluation.pdf",
+      "score_kind": "OFFLINE_RECOMPUTATION_WITH_STORED_METADATA_NOT_A_PERSISTED_VALIDATION_SCORE",
+      "assessment": {
+        "source_id": "S-ecb4c55bf181277ed4ce17799031be36",
+        "family_id": "FAM-6b991a14c675f5f7fda2",
+        "components": [
+          {
+            "name": "first_hand",
+            "level": "WEAK",
+            "basis": "Source is not identified as first-hand",
+            "normalized_value": 0.25
+          },
+          {
+            "name": "official_direct_participant",
+            "level": "UNKNOWN",
+            "basis": "No direct institutional status is established",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "primary_source",
+            "level": "WEAK",
+            "basis": "Source appears secondary",
+            "normalized_value": 0.25
+          },
+          {
+            "name": "data_provenance",
+            "level": "STRONG",
+            "basis": "Explicit data provenance is recorded",
+            "normalized_value": 1
+          },
+          {
+            "name": "methodology_transparency",
+            "level": "UNKNOWN",
+            "basis": "No explicit methodology metadata",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "named_author_source",
+            "level": "WEAK",
+            "basis": "No named author, organization, or publisher",
+            "normalized_value": 0.25
+          },
+          {
+            "name": "temporal_proximity",
+            "level": "UNKNOWN",
+            "basis": "Event/reference time or publication time is unavailable",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "retransmission_depth",
+            "level": "UNKNOWN",
+            "basis": "No retransmission link is recorded",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "speculation_level",
+            "level": "UNKNOWN",
+            "basis": "No explicit speculation metadata",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "source_independence",
+            "level": "STRONG",
+            "basis": "Source forms its own provenance family",
+            "normalized_value": 1
+          },
+          {
+            "name": "explicit_uncertainty",
+            "level": "UNKNOWN",
+            "basis": "Explicit uncertainty metadata is absent",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "consistency_with_stronger_evidence",
+            "level": "UNKNOWN",
+            "basis": "No stronger-evidence consistency assessment is available",
+            "normalized_value": 0.5
+          }
+        ],
+        "basis": [
+          "Source is not identified as first-hand",
+          "No direct institutional status is established",
+          "Source appears secondary",
+          "Explicit data provenance is recorded",
+          "No explicit methodology metadata",
+          "No named author, organization, or publisher",
+          "Event/reference time or publication time is unavailable",
+          "No retransmission link is recorded",
+          "No explicit speculation metadata",
+          "Source forms its own provenance family",
+          "Explicit uncertainty metadata is absent",
+          "No stronger-evidence consistency assessment is available",
+          "Archived original-document provenance establishes traceability only; it does not establish first-hand authority, methodology or independence."
+        ],
+        "normalized_score": 0.52
+      }
+    },
+    {
+      "source_id": "S-69fdb8a51941342a27db61ba76d5afc9",
+      "url": "https://deepmind.google/models/gemini",
+      "score_kind": "OFFLINE_RECOMPUTATION_WITH_STORED_METADATA_NOT_A_PERSISTED_VALIDATION_SCORE",
+      "assessment": {
+        "source_id": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "family_id": "FAM-6db12e85c82c661377c6",
+        "components": [
+          {
+            "name": "first_hand",
+            "level": "WEAK",
+            "basis": "Source is not identified as first-hand",
+            "normalized_value": 0.25
+          },
+          {
+            "name": "official_direct_participant",
+            "level": "STRONG",
+            "basis": "Source is an official/direct participant record; this does not prove world truth",
+            "normalized_value": 1
+          },
+          {
+            "name": "primary_source",
+            "level": "STRONG",
+            "basis": "Source metadata identifies a primary record",
+            "normalized_value": 1
+          },
+          {
+            "name": "data_provenance",
+            "level": "STRONG",
+            "basis": "Explicit data provenance is recorded",
+            "normalized_value": 1
+          },
+          {
+            "name": "methodology_transparency",
+            "level": "UNKNOWN",
+            "basis": "No explicit methodology metadata",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "named_author_source",
+            "level": "ADEQUATE",
+            "basis": "Named author/source metadata is present",
+            "normalized_value": 0.65
+          },
+          {
+            "name": "temporal_proximity",
+            "level": "UNKNOWN",
+            "basis": "Event/reference time or publication time is unavailable",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "retransmission_depth",
+            "level": "WEAK",
+            "basis": "Source is a retransmission or syndicated member",
+            "normalized_value": 0.25
+          },
+          {
+            "name": "speculation_level",
+            "level": "UNKNOWN",
+            "basis": "No explicit speculation metadata",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "source_independence",
+            "level": "ADEQUATE",
+            "basis": "Source shares a provenance family with retransmissions or attributions",
+            "normalized_value": 0.65
+          },
+          {
+            "name": "explicit_uncertainty",
+            "level": "UNKNOWN",
+            "basis": "Explicit uncertainty metadata is absent",
+            "normalized_value": 0.5
+          },
+          {
+            "name": "consistency_with_stronger_evidence",
+            "level": "UNKNOWN",
+            "basis": "No stronger-evidence consistency assessment is available",
+            "normalized_value": 0.5
+          }
+        ],
+        "basis": [
+          "Source is not identified as first-hand",
+          "Source is an official/direct participant record; this does not prove world truth",
+          "Source metadata identifies a primary record",
+          "Explicit data provenance is recorded",
+          "No explicit methodology metadata",
+          "Named author/source metadata is present",
+          "Event/reference time or publication time is unavailable",
+          "Source is a retransmission or syndicated member",
+          "No explicit speculation metadata",
+          "Source shares a provenance family with retransmissions or attributions",
+          "Explicit uncertainty metadata is absent",
+          "No stronger-evidence consistency assessment is available",
+          "Archived original-document provenance establishes traceability only; it does not establish first-hand authority, methodology or independence."
+        ],
+        "normalized_score": 0.61
+      }
+    }
+  ],
+  "analysis_artifact_exposure": {
+    "S-cb5795c1b38a6a5aa52168a4396f5436": 48,
+    "S-2e352fffc5d3d7f78fad77648327f133": 31,
+    "S-69fdb8a51941342a27db61ba76d5afc9": 8,
+    "S-258fe3d8a325e8479f4c6cb1193249e6": 4,
+    "S-fbc991d62fc57303255bd9bdb5309fba": 8,
+    "S-15554288bd019df848518bb2c2fdf794": 5,
+    "S-ecb4c55bf181277ed4ce17799031be36": 3,
+    "S-f0ae2337a716afee62d00feba2134b61": 3,
+    "S-e7b07ca57300d79226879581023cdaf2": 36,
+    "S-832053137316c9b8bb15f02f3cc1629a": 8,
+    "S-a8de72e856240e3ffa7683893542f23d": 3,
+    "S-190cc0525865d02dc604503b31642436": 6,
+    "S-fc1e2b8a55a094ec5c480a10c5fe6acc": 3,
+    "S-84b6c9b34da18df8e659aabcef77ab79": 4,
+    "S-7563b16673ecf08456c60e57f3edbe58": 2,
+    "S-40abe7ec41d29402b0fbc6b2631e9731": 3,
+    "S-cf3d7ac7194c39b09c0f3bc5371f8495": 1,
+    "S-3923e525799c789ddb675909a1161126": 1,
+    "S-e821ede7afc918042936483d187025f2": 2,
+    "S-08a4418a2817e2cc0cf76c2cbdc22a30": 8,
+    "S-342f9714f7700dbad099cac716e2c0ba": 1,
+    "S-3c85dde6b031aff0a54ebd0a5b43d46e": 1,
+    "S-8a933d9178a8afc8637f3e4260b2eb95": 2,
+    "S-98ddc109242d59a94633e12f27aa4379": 1
+  },
+  "analysis_artifact_samples": {
+    "S-cb5795c1b38a6a5aa52168a4396f5436": [
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI...",
+        "first_160_chars": "层的痛点。\n\n2. 全维度原生多模态能力\n\n延续Gemini系列原生多模态优势,Argon全面支持长视频理解、复杂图表解析、多文档交叉推理、图文联动分析。在LVBench长视频理解评测中得分达91.7%,可精准解析长时间视频内容、提取关键信息、梳理视频内逻辑脉络,适配多媒体类复杂分析任务。\n\n3. 全新安全推理机制\n\n"
+      },
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI...",
+        "first_160_chars": "谷歌Gemini 4 Argon正式发布:百万Token输出上限,重塑专业复杂任务AI能力\n\npanxdjoy\n\n2026-10-01\n\n4\n\n阅读8分钟\n\n摘要\n:2026年9月30日,Google DeepMind 正式推出全新旗舰模型\nGemini 4 Argon\n。该模型主打长流程、多步骤专业复杂任务推理,将A"
+      }
+    ],
+    "S-2e352fffc5d3d7f78fad77648327f133": [
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:8545:9736",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ...",
+        "first_160_chars": "eful part for a reader making a decision.\nGray Swan indirect prompt injection robustness (lower attack success is better). Vendor-reported.\nSource: Google blog\n"
+      },
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1081",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ...",
+        "first_160_chars": "Model Release\nGemini 4 Argon: Complete Guide to Benchmarks, Pricing and Access\nGoogle DeepMind’s new frontier model ships with a 1M-token output limit, a cyber-"
+      }
+    ],
+    "S-69fdb8a51941342a27db61ba76d5afc9": [
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2219",
+        "source_title": "Gemini — Google DeepMind",
+        "first_160_chars": "eepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%\nFrontierSWE v2\nAgentic coding\n55.0%\n65.5%\n56.3%\n62.3%\nVibe Code Bench\nAgentic coding\n91.9%\n89.6%\n90.3%\n90.3%\n"
+      },
+      {
+        "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2219",
+        "source_title": "Gemini — Google DeepMind",
+        "first_160_chars": "eepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%\nFrontierSWE v2\nAgentic coding\n55.0%\n65.5%\n56.3%\n62.3%\nVibe Code Bench\nAgentic coding\n91.9%\n89.6%\n90.3%\n90.3%\n"
+      }
+    ],
+    "S-258fe3d8a325e8479f4c6cb1193249e6": [
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-809a4a15e1c64f8aed2122ca:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1198",
+        "source_title": "Gemini 4 Argon rolls out to Fairwind cyber defenders first",
+        "first_160_chars": "Share\n\nGoogle\nannounced\nGemini 4 Argon on Sept. 30 and is giving the model first to a set of trusted cyber defenders through its Fairwind Program. Wider availab"
+      },
+      {
+        "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+        "artifact_key": "ART-809a4a15e1c64f8aed2122ca:bm25-passages-v1:char-window-1200-overlap-160-v1:3044:4220",
+        "source_title": "Gemini 4 Argon rolls out to Fairwind cyber defenders first",
+        "first_160_chars": "or evaluations begin.\n\nGoogle called a phased approach necessary for releasing capabilities at this level. The company said it is \"actively engaged in the U.S. "
+      }
+    ],
+    "S-fbc991d62fc57303255bd9bdb5309fba": [
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "first_160_chars": "Gemini 4 Argon: our next era of frontier intelligence\n\nSep 30, 2026\n\n|\n\nGemini 4 Argon delivers frontier performance in complex workflows across real-world soft"
+      },
+      {
+        "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:3849:5027",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "first_160_chars": "rise workflows.\nGoogle engineers have been using Argon for their daily tasks, from everyday debugging to large-scale codebase migrations and algorithm designs. "
+      }
+    ],
+    "S-15554288bd019df848518bb2c2fdf794": [
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-979c669ecaa8cc47aba7ce1d:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1068",
+        "source_title": "Google rolls out Gemini 4 Argon, its most advanced model - CNBC",
+        "first_160_chars": "Tech\nGoogle rolls out Gemini 4 Argon, its most advanced AI model\nPublished Wed, Sep 30 2026\n4:00 PM EDT\nUpdated Thu, Oct 1 2026\n2:52 PM EDT\nMacKenzie Sigalos\n@K"
+      },
+      {
+        "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+        "artifact_key": "ART-979c669ecaa8cc47aba7ce1d:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1068",
+        "source_title": "Google rolls out Gemini 4 Argon, its most advanced model - CNBC",
+        "first_160_chars": "Tech\nGoogle rolls out Gemini 4 Argon, its most advanced AI model\nPublished Wed, Sep 30 2026\n4:00 PM EDT\nUpdated Thu, Oct 1 2026\n2:52 PM EDT\nMacKenzie Sigalos\n@K"
+      }
+    ],
+    "S-ecb4c55bf181277ed4ce17799031be36": [
+      {
+        "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com",
+        "first_160_chars": "Gemini\n\n4\n\nArgon\n\nModel\n\nevaluation\n\nApproach,\n\nmethodology\n\n&\n\nresults"
+      },
+      {
+        "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com",
+        "first_160_chars": "Gemini\n\n4\n\nArgon\n\nModel\n\nevaluation\n\nApproach,\n\nmethodology\n\n&\n\nresults"
+      }
+    ],
+    "S-f0ae2337a716afee62d00feba2134b61": [
+      {
+        "call_id": "CALL-191af5fe2ce74a6b9a4a912054464efd",
+        "artifact_key": "ART-896925a12e7f6162ee898347:bm25-passages-v1:char-window-1200-overlap-160-v1:4079:4621",
+        "source_title": "Gemini 3.1 Pro - Google DeepMind",
+        "first_160_chars": "ind.google/models/evals-methodology/gemini-3-1-pro\nModel information\nName\n3.1 Pro\nStatus\nPreview\nInput\nText\nImage\nVideo\nAudio\nPDF\n\nOutput\nText\n\nInput tokens\n1M\n"
+      },
+      {
+        "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+        "artifact_key": "ART-896925a12e7f6162ee898347:bm25-passages-v1:char-window-1200-overlap-160-v1:2016:3205",
+        "source_title": "Gemini 3.1 Pro - Google DeepMind",
+        "first_160_chars": "cleaner web development.\nYour browser does not support the video tag.\nTranslate complex literary themes into functional code and sleek, contemporary interfaces\n"
+      }
+    ],
+    "S-e7b07ca57300d79226879581023cdaf2": [
+      {
+        "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:3883:5068",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026",
+        "first_160_chars": "torial evidence-board infographic with three broad cards arranged horizontally against an ivory background\n\nGoogle’s September 30, 2026 announcement introduces\n"
+      },
+      {
+        "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:46513:47683",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026",
+        "first_160_chars": "ore the broader infrastructure trend, consider\nCallMissed’s OpenAI-compatible developer AI API\n: as of September 2026, Google is among its catalogue providers. "
+      }
+    ],
+    "S-832053137316c9b8bb15f02f3cc1629a": [
+      {
+        "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:1019:2141",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It",
+        "first_160_chars": "Artificial Analysis scores Gemini 4 Argon\n53\non its Intelligence Index, level with GPT-6 Astra and Claude Fable 5.1, and behind Claude Opus 5.5 and Sonnet 5.5. "
+      },
+      {
+        "call_id": "CALL-a4bfb8fee2a64f7d8d3c087af546807e",
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:1019:2141",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It",
+        "first_160_chars": "Artificial Analysis scores Gemini 4 Argon\n53\non its Intelligence Index, level with GPT-6 Astra and Claude Fable 5.1, and behind Claude Opus 5.5 and Sonnet 5.5. "
+      }
+    ],
+    "S-a8de72e856240e3ffa7683893542f23d": [
+      {
+        "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+        "artifact_key": "ART-7cf60dbafb31fc4385d22e43:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2144",
+        "source_title": "Gemini 4 Argon explained: Google’s frontier AI model build ...",
+        "first_160_chars": "ch, and writing quality.\nThe model helped optimise quantum algorithms, reducing resource requirements by 40% compared with a published baseline in one example. "
+      },
+      {
+        "call_id": "CALL-e0b68810d3ee4024a13e31bc6e9e99f1",
+        "artifact_key": "ART-7cf60dbafb31fc4385d22e43:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1136",
+        "source_title": "Gemini 4 Argon explained: Google’s frontier AI model build ...",
+        "first_160_chars": "Google has officially launched its new-generation frontier AI model, Gemini 4 Argon, which Google says is built for “complex workflows across real-world softwar"
+      }
+    ],
+    "S-190cc0525865d02dc604503b31642436": [
+      {
+        "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:5053:6213",
+        "source_title": "Google Gemini - Apps on Google Play",
+        "first_160_chars": "oogle LLC\nNovember 25, 2024\nHi Charlie. Thanks for your feedback. We're always working to improve the Gemini experience and this type of feedback really helps. "
+      },
+      {
+        "call_id": "CALL-f64784907a5a42608ddcfaa69898fdaa",
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:5053:6213",
+        "source_title": "Google Gemini - Apps on Google Play",
+        "first_160_chars": "oogle LLC\nNovember 25, 2024\nHi Charlie. Thanks for your feedback. We're always working to improve the Gemini experience and this type of feedback really helps. "
+      }
+    ],
+    "S-fc1e2b8a55a094ec5c480a10c5fe6acc": [
+      {
+        "call_id": "CALL-a4bfb8fee2a64f7d8d3c087af546807e",
+        "artifact_key": "ART-44252d4a36eb6505c302fd35:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1180",
+        "source_title": "Google Announces Gemini 4 Argon Frontier Model for Coding ...",
+        "first_160_chars": "AI Models & Platforms\n\nGoogle Announces Gemini 4 Argon Frontier Model for Coding, Cyber Defense\n\nPublished\n\nSeptember 30, 2026\n\nBy\n\nJonas Reeve,\nCognitive AI & "
+      },
+      {
+        "call_id": "CALL-e0b68810d3ee4024a13e31bc6e9e99f1",
+        "artifact_key": "ART-44252d4a36eb6505c302fd35:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1180",
+        "source_title": "Google Announces Gemini 4 Argon Frontier Model for Coding ...",
+        "first_160_chars": "AI Models & Platforms\n\nGoogle Announces Gemini 4 Argon Frontier Model for Coding, Cyber Defense\n\nPublished\n\nSeptember 30, 2026\n\nBy\n\nJonas Reeve,\nCognitive AI & "
+      }
+    ],
+    "S-84b6c9b34da18df8e659aabcef77ab79": [
+      {
+        "call_id": "CALL-f64784907a5a42608ddcfaa69898fdaa",
+        "artifact_key": "ART-5e89b91783250cc98447c709:bm25-passages-v1:char-window-1200-overlap-160-v1:1911:2965",
+        "source_title": "Gemini 4 Argon: our next era of frontier intelligence",
+        "first_160_chars": "ers, freeing up over 300 TiB of memory once rolled out, with an estimated 500 TiB to 1 PiB in total savings.\nLarge Scale Codebase Migrations and Optimizations:\n"
+      },
+      {
+        "call_id": "CALL-4aeac8f38cdc47aa89d74d39048b7ec3",
+        "artifact_key": "ART-5e89b91783250cc98447c709:bm25-passages-v1:char-window-1200-overlap-160-v1:1005:2071",
+        "source_title": "Gemini 4 Argon: our next era of frontier intelligence",
+        "first_160_chars": " million input tokens and $10 per million output tokens, with cached input tokens priced at 95% off input token price.\nChanging how we work and build at Google\n"
+      }
+    ],
+    "S-7563b16673ecf08456c60e57f3edbe58": [
+      {
+        "call_id": "CALL-e0b68810d3ee4024a13e31bc6e9e99f1",
+        "artifact_key": "ART-c997419e7b40f8e7fe0f1e2a:bm25-passages-v1:char-window-1200-overlap-160-v1:5830:6356",
+        "source_title": "Google’s new Gemini 4 Argon targets complex coding, finance ...",
+        "first_160_chars": "mini new model\n\nPrime Exclusives\nInvestment Ideas\nStock Report Plus\nePaper\nWealth Edition\nSix months after oil spiked, why are markets reacting so sharply now?\n"
+      },
+      {
+        "call_id": "CALL-72ba5e2d05404054b4794adb357dd869",
+        "artifact_key": "ART-c997419e7b40f8e7fe0f1e2a:bm25-passages-v1:char-window-1200-overlap-160-v1:5830:6356",
+        "source_title": "Google’s new Gemini 4 Argon targets complex coding, finance ...",
+        "first_160_chars": "mini new model\n\nPrime Exclusives\nInvestment Ideas\nStock Report Plus\nePaper\nWealth Edition\nSix months after oil spiked, why are markets reacting so sharply now?\n"
+      }
+    ],
+    "S-40abe7ec41d29402b0fbc6b2631e9731": [
+      {
+        "call_id": "CALL-4aeac8f38cdc47aa89d74d39048b7ec3",
+        "artifact_key": "ART-ee005986ec0a5dd640527bc5:bm25-passages-v1:char-window-1200-overlap-160-v1:1000:2138",
+        "source_title": "100 things we announced at Google I/O 2026 - The Keyword",
+        "first_160_chars": "ies. It outperforms Gemini 3.1 Pro on challenging coding and agentic benchmarks like Terminal-Bench 2.1 (76.2%), GDPval-AA (1656 Elo) and MCP Atlas (83.6%).\n4.\n"
+      },
+      {
+        "call_id": "CALL-e244e5b06ed54367afc88731a3a0e271",
+        "artifact_key": "ART-ee005986ec0a5dd640527bc5:bm25-passages-v1:char-window-1200-overlap-160-v1:8748:9888",
+        "source_title": "100 things we announced at Google I/O 2026 - The Keyword",
+        "first_160_chars": "nt reasoning to anticipate your needs and help solve problems before they arise. It’ll proactively flag any product incompatibilities and suggest alternatives. "
+      }
+    ],
+    "S-cf3d7ac7194c39b09c0f3bc5371f8495": [
+      {
+        "call_id": "CALL-e244e5b06ed54367afc88731a3a0e271",
+        "artifact_key": "ART-2cbbfea47db2ed756afb02de:bm25-passages-v1:char-window-1200-overlap-160-v1:2045:3242",
+        "source_title": "Antitrust Division - United States Department of Justice",
+        "first_160_chars": "ment procurement, grant, and program funding at all levels of government—Federal, state, and local. The PCSF is comprised of the Antitrust Division of the U.S. "
+      }
+    ],
+    "S-3923e525799c789ddb675909a1161126": [
+      {
+        "call_id": "CALL-e244e5b06ed54367afc88731a3a0e271",
+        "artifact_key": "ART-3e05808c6aa9fd2053ce93c0:bm25-passages-v1:char-window-1200-overlap-160-v1:1017:2159",
+        "source_title": "Googlers Question Gemini 4 Argon Real Power - Android Headlines",
+        "first_160_chars": "e model found that while\nGemini\n4 Argon crushes standardized benchmarks, it struggles when put to work on real-world coding tasks and front-end website design. "
+      }
+    ],
+    "S-e821ede7afc918042936483d187025f2": [
+      {
+        "call_id": "CALL-72ba5e2d05404054b4794adb357dd869",
+        "artifact_key": "ART-c45551d1f406165c762599b8:bm25-passages-v1:char-window-1200-overlap-160-v1:4723:5908",
+        "source_title": "Service Degradation · Issue #28514 · google-gemini/gemini-cli",
+        "first_160_chars": "o the workday rather than an assistant—a formal evaluation is underway to immediately cancel the paid commercial subscription.\n\nWhat did you expect to happen?\n\n"
+      },
+      {
+        "call_id": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7",
+        "artifact_key": "ART-c45551d1f406165c762599b8:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1158",
+        "source_title": "Service Degradation · Issue #28514 · google-gemini/gemini-cli",
+        "first_160_chars": "google-gemini\n\n/\n\ngemini-cli\n\nPublic\n\nNotifications\n\nYou must be signed in to change notification settings\n\nFork\n\n14.7k\n\nStar\n\n107k\n\nService Degradation\n\n#28514"
+      }
+    ],
+    "S-08a4418a2817e2cc0cf76c2cbdc22a30": [
+      {
+        "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2052",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9...",
+        "first_160_chars": "mini 4 Argon 得分\nDeepSWE v1.1\n真实世界长周期软件工程\n77.9%(刷新纪录)\nAutomationBench(Zapier)\n核心商业流程端到端执行\n51.3%(排名第一)\nLVBench\n长视频理解\n91.7%(最先进水平)\nCWE-bench v1\n安全漏洞修复能力\n68%(并列第一)\n"
+      },
+      {
+        "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1136",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9...",
+        "first_160_chars": "发布日期:2026-10-01\nGemini 4 Argon 是谷歌 DeepMind 于 2026 年 9 月 30 日发布的新一代旗舰大模型,由 Google DeepMind 高级副总裁兼首席 AI 架构师 Koray Kavukcuoglu 撰文介绍,距上一代旗舰 Gemini 3 系列已近 10 个月。官方将"
+      }
+    ],
+    "S-342f9714f7700dbad099cac716e2c0ba": [
+      {
+        "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+        "artifact_key": "ART-305e6821497067b4c968ae0a:bm25-passages-v1:char-window-1200-overlap-160-v1:1951:3142",
+        "source_title": "Gemini 4 Argon ranks fifth of 73 on the legal benchmark ...",
+        "first_160_chars": "ration at 68.17%, then fifth of 54 on ProgramBench at 2.50% and seventh of eight on CUA-bench at 4.83%.\n\nThe Harvey runs were not set to a common effort level\n\n"
+      }
+    ],
+    "S-3c85dde6b031aff0a54ebd0a5b43d46e": [
+      {
+        "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+        "artifact_key": "ART-7ad2427aa9293df213ee0140:bm25-passages-v1:char-window-1200-overlap-160-v1:17975:19044",
+        "source_title": "Gemini 4 Argon Explained: Benchmarks, Coding, Cybersecurity ...",
+        "first_160_chars": "orted enterprise/knowledge-work results, selected coding and science scores, long-range GraphWalks performance, and Google’s deliberate cyber-defender rollout. "
+      }
+    ],
+    "S-8a933d9178a8afc8637f3e4260b2eb95": [
+      {
+        "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+        "artifact_key": "ART-d7958594306b64be52499490:bm25-passages-v1:char-window-1200-overlap-160-v1:4014:5211",
+        "source_title": "Gemini 4 Argon: Benchmarks, Pricing & Security (2026)",
+        "first_160_chars": "$10\n$0.10\n$4\nGemini 4 Argon (standard)\n$4\n$20\n$0.20\n$8\nClaude Opus 5.5\n$4\n$20\n$0.20\n$8\nGPT-6 Astra\n$10\n$50\nnot reported\n$20\n\nSources:\nFello AI\n(cached prices),\n"
+      },
+      {
+        "call_id": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7",
+        "artifact_key": "ART-d7958594306b64be52499490:bm25-passages-v1:char-window-1200-overlap-160-v1:16020:17215",
+        "source_title": "Gemini 4 Argon: Benchmarks, Pricing & Security (2026)",
+        "first_160_chars": "ts that the Fairwind cohort received the model without its cyber safeguards. Google's announcement links to the program page for details (\nFairwind Program\n).\n\n"
+      }
+    ],
+    "S-98ddc109242d59a94633e12f27aa4379": [
+      {
+        "call_id": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7",
+        "artifact_key": "ART-d22e072d4c6884ae31213578:bm25-passages-v1:char-window-1200-overlap-160-v1:0:553",
+        "source_title": "用AI大模型生成涉股市文章误导公众 一女子被行政处罚",
+        "first_160_chars": "用AI作文,再上传网络,女子王某某妄图以网络流量牟取私利,最终受到相应的行政处罚。\n6月19日,红星新闻记者从四川南部县警方获悉,今年5月20日,王某某在网上发布一篇文章引发广泛关注,该文围绕A股走势对证券市场行情作出误导性预测,对证券监管政策进行不实扭曲解读。中国证券监督管理委员会核查认定,该文臆测量化交易等监管政策"
+      }
+    ]
+  },
+  "decomposition_outputs": [
+    {
+      "call_id": "CALL-09473e75c9604ddebcb7c99360d50769",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C4",
+            "statement": "中文第三方文章称 Gemini 4 Argon 整体费用仅为 Claude Opus 5.5 的约 1/2。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E5"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "comparison_target": "Claude Opus 5.5",
+              "ratio_value": 0.5
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "按量计费定价",
+              "provenance": "中文第三方文章自述，非谷歌官方口径"
+            },
+            "importance": "MEDIUM",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C4",
+            "statement": "中文第三方文章称百万 Token 级高频调用下，Gemini 4 Argon 整体成本仍高于轻量化模型。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E6"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "comparison_target": "轻量化模型"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "百万 Token 级高频调用成本",
+              "provenance": "中文第三方文章自述，非谷歌官方口径"
+            },
+            "importance": "MEDIUM",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-736eade33ea54c53846ba8c1c9b5472b",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C2a",
+            "statement": "第三方报道称，Gemini 4 Argon 在 Terminal-Bench 4.0 上取得 57.4%，落后于 Claude Opus 5.5 的 66.4%。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E3"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "Terminal-Bench 4.0",
+              "value": 57.4,
+              "unit": "%",
+              "comparison_target": "Claude Opus 5.5",
+              "comparison_value": 66.4
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "第三方报道转述评测数据",
+              "scope": "Terminal-Bench 4.0 基准对比"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C2b",
+            "statement": "第三方报道称，Gemini 4 Argon 在 FrontierSWE v2 上取得 55.0%，落后于 GPT-6 Astra 的 65.5%。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E4"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "FrontierSWE v2",
+              "value": 55,
+              "unit": "%",
+              "comparison_target": "GPT-6 Astra",
+              "comparison_value": 65.5
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "第三方报道转述评测数据",
+              "scope": "FrontierSWE v2 基准对比"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C2c",
+            "statement": "彭博社报道称，部分谷歌员工认为 Gemini 4 Argon 在真实编码工作上表现吃力。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E3",
+              "E4"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "彭博社",
+              "attributed_subject": "部分谷歌员工"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "彭博社转述谷歌员工看法",
+              "scope": "真实编码工作表现"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-18695cf2ff6d4be088882fdaef56fb43",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C1.1",
+            "statement": "第三方指南转述称，谷歌报告 Gemini 4 Argon 在 Vals Index 上得分为 68.9%。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E3"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "Vals Index",
+              "value": 68.9,
+              "unit": "%"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "第三方指南转述谷歌公布数据（vendor-reported）",
+              "definition": "厂商自报基准成绩，无第三方复现"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C1.2",
+            "statement": "第三方指南转述称，谷歌报告 Gemini 4 Argon 在 Harvey 的 Legal Agent benchmark 上领先。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E3"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "Harvey Legal Agent benchmark",
+              "comparison": "领先"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "第三方指南转述谷歌公布数据（vendor-reported）",
+              "definition": "厂商自报基准成绩，无第三方复现"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C1.3",
+            "statement": "第三方指南转述称，谷歌报告 Gemini 4 Argon 在 FrontierSWE v2 与 Terminal-Bench 4.0 上落后。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E3"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "FrontierSWE v2 与 Terminal-Bench 4.0",
+              "comparison": "落后"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "第三方指南转述谷歌公布数据（vendor-reported）",
+              "definition": "厂商自报基准成绩，无第三方复现"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C1.4",
+            "statement": "第三方指南强调，发布时无第三方复现谷歌自报的 Gemini 4 Argon 基准数据。",
+            "claim_type": "STATEMENT",
+            "supporting_evidence_keys": [
+              "E3"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "subject": "厂商自报基准数据的第三方复现状态"
+            },
+            "time_qualifiers": {
+              "time": "发布时"
+            },
+            "scope_qualifiers": {
+              "provenance": "第三方指南转述",
+              "definition": "无第三方复现"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-610be60696dc4497b04a9ce502649a6b",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C2.1",
+            "statement": "中文报道转述谷歌说法称，Gemini 4 Argon 在 Vals Index 上排名领先。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E2"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "谷歌（经中文报道转述）",
+              "benchmark": "Vals Index"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "中文二手报道转述谷歌说法",
+              "scope": "Vals Index（按美国 GDP 贡献权重衡量金融、编程、法律、税务领域经济影响力的综合基准）"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C2.2",
+            "statement": "中文报道转述谷歌说法称，Gemini 4 Argon 在 Vals Finance Agent v2（多步骤金融研究）上表现突出。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E2"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "谷歌（经中文报道转述）",
+              "benchmark": "Vals Finance Agent v2"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "中文二手报道转述谷歌说法",
+              "scope": "多步骤金融研究"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C2.3",
+            "statement": "中文报道转述谷歌说法称，Gemini 4 Argon 在 Harvey 的 Legal Agent Benchmark（法律研究与撰写）上表现突出。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E2"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "谷歌（经中文报道转述）",
+              "benchmark": "Harvey Legal Agent Benchmark"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "中文二手报道转述谷歌说法",
+              "scope": "法律研究与撰写"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-d55cad7960e64bbd9a0de2f02af9a584",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C3-a",
+            "statement": "中文报道转述谷歌公布数据称，Gemini 4 Argon 在 DeepSWE v1.1（真实世界长周期软件工程）得 77.9%，刷新纪录。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "DeepSWE v1.1",
+              "value": 77.9,
+              "unit": "%",
+              "note": "刷新纪录"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "真实世界长周期软件工程",
+              "provenance": "中文二手报道转述谷歌公布数据（vendor-reported）"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C3-b",
+            "statement": "中文报道转述谷歌公布数据称，Gemini 4 Argon 在 AutomationBench(Zapier)（核心商业流程端到端执行）得 51.3%，排名第一。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "AutomationBench(Zapier)",
+              "value": 51.3,
+              "unit": "%",
+              "note": "排名第一"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "核心商业流程端到端执行",
+              "provenance": "中文二手报道转述谷歌公布数据（vendor-reported）"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C3-c",
+            "statement": "中文报道转述谷歌公布数据称，Gemini 4 Argon 在 LVBench（长视频理解）得 91.7%，达到最先进水平。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "LVBench",
+              "value": 91.7,
+              "unit": "%",
+              "note": "最先进水平"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "长视频理解",
+              "provenance": "中文二手报道转述谷歌公布数据（vendor-reported）"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C3-d",
+            "statement": "中文报道转述谷歌公布数据称，Gemini 4 Argon 在 CWE-bench v1（安全漏洞修复能力）得 68%，并列第一。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "CWE-bench v1",
+              "value": 68,
+              "unit": "%",
+              "note": "并列第一"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "安全漏洞修复能力",
+              "provenance": "中文二手报道转述谷歌公布数据（vendor-reported）"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-caec97d03ef54a0f9bff1fbc9b0cf033",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C1.1",
+            "statement": "谷歌官方公布 Gemini 4 Argon 在 DeepSWE v1.1 得分 77.9%。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "DeepSWE v1.1",
+              "value": 77.9,
+              "unit": "%",
+              "note": "刷新纪录"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "DeepSWE v1.1（真实世界长周期软件工程）",
+              "provenance": "谷歌官方公布、由第三方文章转述的基准表"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C1.2",
+            "statement": "谷歌官方公布 Gemini 4 Argon 在 AutomationBench(Zapier) 得分 51.3%。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "AutomationBench(Zapier)",
+              "value": 51.3,
+              "unit": "%",
+              "note": "排名第一"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "AutomationBench(Zapier)（核心商业流程端到端执行）",
+              "provenance": "谷歌官方公布、由第三方文章转述的基准表"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C1.3",
+            "statement": "谷歌官方公布 Gemini 4 Argon 在 CWE-bench v1 得分 68%。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "CWE-bench v1",
+              "value": 68,
+              "unit": "%",
+              "note": "并列第一"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "CWE-bench v1（安全漏洞修复能力）",
+              "provenance": "谷歌官方公布、由第三方文章转述的基准表"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C1.4",
+            "statement": "谷歌官方公布 Gemini 4 Argon 在 LVBench 得分 91.7%。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E1"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "benchmark": "LVBench",
+              "value": 91.7,
+              "unit": "%",
+              "note": "最先进水平"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "LVBench（长视频理解）",
+              "provenance": "谷歌官方公布、由第三方文章转述的基准表"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-100af0c2548c46659025af94971f0230",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C2.1",
+            "statement": "谷歌表示 Gemini 4 Argon 在 Vals Index 上排名领先。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E2"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "谷歌（经第三方文章转述）",
+              "benchmark": "Vals Index"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "谷歌官方表述，由第三方文章转述",
+              "scope": "Vals Index（按美国 GDP 贡献权重衡量金融、编程、法律、税务领域经济影响力的综合基准）；未披露具体数值"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C2.2",
+            "statement": "谷歌表示 Gemini 4 Argon 在 Vals Finance Agent v2 上表现突出。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E2"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "谷歌（经第三方文章转述）",
+              "benchmark": "Vals Finance Agent v2"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "谷歌官方表述，由第三方文章转述",
+              "scope": "Vals Finance Agent v2（多步骤金融研究）；未披露具体数值"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C2.3",
+            "statement": "谷歌表示 Gemini 4 Argon 在 Harvey 的 Legal Agent Benchmark 上表现突出。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E2"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "谷歌（经第三方文章转述）",
+              "benchmark": "Harvey Legal Agent Benchmark"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "provenance": "谷歌官方表述，由第三方文章转述",
+              "scope": "Harvey 的 Legal Agent Benchmark（法律研究与撰写）；未披露具体数值"
+            },
+            "importance": "HIGH",
+            "critical": true,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-a69878dd2b62467d895704a3ada60f90",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C3.1",
+            "statement": "第三方文章称，谷歌官方公布 Gemini 4 Argon 在 18 项行业基准测试中取得 12 项第一、1 项并列第一。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E3"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "谷歌官方（经第三方文章转述）",
+              "benchmark_count": 18,
+              "first_place_count": 12,
+              "tied_first_count": 1
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "18 项行业基准测试的汇总统计",
+              "provenance": "谷歌官方公布，由第三方文章转述"
+            },
+            "importance": "MEDIUM",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C3.2",
+            "statement": "第三方文章称，Gemini 4 Argon 的综合性能超越 Claude Opus 5.5、GPT-6 Astra 等主流旗舰模型。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E3"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "attributed_source": "第三方文章",
+              "comparison_targets": [
+                "Claude Opus 5.5",
+                "GPT-6 Astra"
+              ]
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "综合性能对比",
+              "provenance": "第三方文章转述，非独立验证"
+            },
+            "importance": "MEDIUM",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "call_id": "CALL-dfe79698c9d44fcda1e7ed11c941a2be",
+      "output_keys": [
+        "contract_version",
+        "subclaims"
+      ],
+      "complete_typed_output": {
+        "contract_version": "2",
+        "subclaims": [
+          {
+            "contract_version": "2",
+            "claim_key": "C4-a",
+            "statement": "第三方文章称，Gemini 4 Argon 在法律、金融、自动化和长视频基准以及 Vals Index 上超过 Claude Opus 5.5。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E5"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "comparison_target": "Claude Opus 5.5"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "法律、金融、自动化、长视频基准与 Vals Index",
+              "provenance": "第三方问答文章转述的基准对比"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C4-b",
+            "statement": "第三方文章称，Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 和 Artificial Analysis Intelligence Index 上领先于 Gemini 4 Argon。",
+            "claim_type": "ATTRIBUTION",
+            "supporting_evidence_keys": [
+              "E5"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Claude Opus 5.5",
+              "comparison_target": "Gemini 4 Argon"
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "Terminal-Bench 4.0、FrontierSWE v2、Artificial Analysis Intelligence Index",
+              "provenance": "第三方问答文章转述的基准对比"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          },
+          {
+            "contract_version": "2",
+            "claim_key": "C4-c",
+            "statement": "第三方文章称，Artificial Analysis Intelligence Index 上 Claude Opus 5.5 得 58、Gemini 4 Argon 得 53。",
+            "claim_type": "QUANTITATIVE",
+            "supporting_evidence_keys": [
+              "E5"
+            ],
+            "contradicting_evidence_keys": [],
+            "canonical_statement": null,
+            "entity_qualifiers": {
+              "entity": "Gemini 4 Argon",
+              "comparison_target": "Claude Opus 5.5",
+              "artificial_analysis_intelligence_index": {
+                "Claude Opus 5.5": 58,
+                "Argon": 53
+              }
+            },
+            "time_qualifiers": {},
+            "scope_qualifiers": {
+              "scope": "Artificial Analysis Intelligence Index",
+              "provenance": "第三方问答文章转述的基准对比"
+            },
+            "importance": "HIGH",
+            "critical": false,
+            "atomicity": {
+              "contract_version": "2",
+              "is_atomic": true,
+              "issues": [],
+              "proposed_atomic_statements": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -18,7 +18,7 @@ from marketpulse.investigation.domain.locators import (
 from marketpulse.investigation.feedback.selection import ArtifactCandidate, ArtifactSelector
 
 RETRIEVAL_VERSION = "bm25-passages-v1"
-SEGMENT_VERSION = "char-window-1200-overlap-160-v1"
+SEGMENT_VERSION = "char-window-1200-overlap-160-v2"
 
 
 def tokenize(text: str) -> tuple[str, ...]:
@@ -44,6 +44,11 @@ def segment_ranges(text: str) -> tuple[tuple[int, int], ...]:
         if end == len(text):
             break
         start = end - 160
+        # Overlap must not cut a word/benchmark label, e.g. DeepSWE -> eepSWE.
+        while start > 0 and not text[start - 1].isspace():
+            start -= 1
+        if start <= spans[-1][0]:
+            start = end
     return tuple(spans)
 
 
@@ -67,10 +72,15 @@ class BM25ArtifactSelector(ArtifactSelector):
             ),
         )
         passages: list[Passage] = []
+        seen_content: set[tuple[str, int | None]] = set()
         for index, candidate in enumerate(ordered):
             raw = self._blobs.get_bytes(candidate.artifact.blob_ref)
             if hashlib.sha256(raw).hexdigest() != candidate.artifact.sha256:
                 raise ValueError("archived artifact hash mismatch")
+            content_key = (candidate.artifact.sha256, candidate.artifact.page_number)
+            if self._deduplicate and content_key in seen_content:
+                continue
+            seen_content.add(content_key)
             content = raw.decode("utf-8")
             passages.extend(
                 Passage(index, start, end, content[start:end])
@@ -101,6 +111,8 @@ class BM25ArtifactSelector(ArtifactSelector):
             range(len(passages)),
             key=lambda i: (-scores[i], passages[i].document, passages[i].start),
         )
+        if self._deduplicate and any(score > 0 for score in scores):
+            ranked = [i for i in ranked if scores[i] > 0]
         documents: list[int] = []
         first: list[int] = []
         for i in ranked:
@@ -140,6 +152,15 @@ class BM25ArtifactSelector(ArtifactSelector):
                         if t in query_terms
                     ),
                 )
+            # A ranked subwindow must not start halfway through an ASCII label either.
+            while (
+                0 < offset < len(passage.text)
+                and passage.text[offset - 1].isascii()
+                and passage.text[offset - 1].isalnum()
+                and passage.text[offset].isascii()
+                and passage.text[offset].isalnum()
+            ):
+                offset += 1
             start = passage.start + offset
             excerpt = passage.text[offset : offset + width]
             end = start + len(excerpt)

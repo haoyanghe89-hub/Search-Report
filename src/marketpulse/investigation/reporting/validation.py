@@ -37,6 +37,7 @@ from marketpulse.investigation.reporting.writer import (
     ContentClass,
     ReportDraft,
     SectionStatus,
+    allowed_sections,
     required_sections,
 )
 from marketpulse.investigation.validation.relations import validated_relation
@@ -68,6 +69,7 @@ _DISPUTED_MARKERS = (
 )
 _UNVERIFIED_MARKERS = (
     "尚未证实",
+    "尚不能确认",
     "证据不足",
     "未验证",
     "not established",
@@ -82,8 +84,9 @@ _UNVERIFIED_MARKERS = (
 class CitationValidator:
     """Independently re-verifies every persisted citation chain."""
 
-    def __init__(self, repository: InvestigationRepository) -> None:
+    def __init__(self, repository: InvestigationRepository, quant_service=None) -> None:
         self._repository = repository
+        self._quant_service = quant_service
 
     def validate(
         self,
@@ -122,6 +125,40 @@ class CitationValidator:
             return "CITATION_SNAPSHOT_BINDING", "citation not bound to current snapshot"
         if citation.semantic_identity().semantic_hash != citation.citation_hash:
             return "CITATION_HASH_MISMATCH", "citation semantic hash does not recompute"
+        if citation.schema_version == "computation-citation-v2":
+            from marketpulse.quant.citations import computation_citation
+
+            try:
+                expected = computation_citation(
+                    session,
+                    self._quant_service,
+                    snapshot=snapshot,
+                    claim_key=citation.claim_id,
+                    section_key=citation.section_key,
+                    unit_key=citation.unit_key,
+                    report=Report(
+                        report_id=citation.report_id,
+                        investigation_id=snapshot.investigation_id,
+                        run_id=snapshot.run_id,
+                        version=1,
+                        report_type=ReportType.INVESTIGATION_STATUS,
+                        report_input_snapshot_hash=snapshot.snapshot_hash,
+                        report_hash="0" * 64,
+                        claim_set_hash=snapshot.claim_set_hash,
+                        citation_set_hash="0" * 64,
+                        release_policy_version="phase5-release-policy-v1",
+                        created_at=citation.created_at,
+                    ),
+                    ordinal=citation.display_ordinal,
+                )
+                if expected.citation_hash != citation.citation_hash:
+                    raise ValueError("citation drift")
+            except (ValueError, PermissionError, KeyError):
+                return (
+                    "COMPUTATION_CITATION_INTEGRITY",
+                    "computation citation is not current or intact",
+                )
+            return None
         claim = self._repository.get_in_session(session, Claim, citation.claim_id)
         if claim.latest_validation_id is None:
             return "CITATION_VALIDATION_MISSING", "claim has no current validation"
@@ -218,17 +255,39 @@ class ReportValidator:
 
         # Section completeness: every required section present exactly once.
         required = required_sections(draft.report_type)
+        allowed = allowed_sections(draft.report_type)
         present = [section.section_key for section in draft.sections]
         for key in required:
             if key not in present:
                 emit("SCHEMA_SECTION_MISSING", f"required section {key} missing")
         for key in present:
-            if key not in required:
+            if key not in allowed:
                 emit("SCHEMA_SECTION_UNKNOWN", f"section {key} not in schema", section=key)
             if present.count(key) > 1:
                 emit("SCHEMA_SECTION_DUPLICATED", f"section {key} duplicated", section=key)
 
         claim_by_key = {claim.stable_key: claim for claim in snapshot.semantic_payload.claims}
+        quant_statements = {}
+        if snapshot.semantic_payload.quantitative_material is not None:
+            from marketpulse.quant.reporting import QuantReportMaterial
+
+            material = QuantReportMaterial.model_validate_json(
+                snapshot.semantic_payload.quantitative_material
+            )
+            quant_statements = {c.claim_id: c.statement for c in material.claims}
+            if any(not c.validation.rights_valid for c in material.claims):
+                emit(
+                    "QUANT_RIGHTS_REVIEW_REQUIRED",
+                    "data entitlement is not established",
+                    severity=FindingSeverity.GOVERNANCE,
+                )
+            if draft.report_type is ReportType.FULL_INVESTIGATION and any(
+                c.validation.status != "VERIFIED" for c in material.claims
+            ):
+                emit(
+                    "QUANT_PUBLICATION_INCOMPLETE",
+                    "unverified quantitative material cannot be fully published",
+                )
         cited_units = {(citation.section_key, citation.unit_key) for citation in citations}
         covered_claims: set[str] = set()
 
@@ -264,6 +323,24 @@ class ReportValidator:
                             unit.unit_key,
                         )
                 for claim_key in unit.claim_refs:
+                    quant_status = claim_by_key.get(claim_key)
+                    prefix = (
+                        "已验证"
+                        if quant_status
+                        and quant_status.validation_status is ValidationStatus.VERIFIED
+                        else "尚未证实的可复现数值观察"
+                    )
+                    if (
+                        claim_key in quant_statements
+                        and unit.text != prefix + "：" + quant_statements[claim_key]
+                    ):
+                        emit(
+                            "QUANT_NUMERIC_WORDING_DRIFT",
+                            "quantitative wording differs from frozen read-only statement",
+                            section.section_key,
+                            unit.unit_key,
+                            claim_key,
+                        )
                     claim = claim_by_key.get(claim_key)
                     if claim is None:
                         emit(
@@ -331,7 +408,12 @@ class ReportValidator:
             and draft.report_type is not ReportType.INVESTIGATION_STATUS
         ):
             limitation_section = next(
-                (s for s in draft.sections if s.section_key == "LIMITATIONS_AND_RESEARCH_GAPS"),
+                (
+                    s
+                    for s in draft.sections
+                    if s.section_key
+                    in {"LIMITATIONS_AND_RESEARCH_GAPS", "BLOCKING_GAPS_AND_LIMITATIONS"}
+                ),
                 None,
             )
             if limitation_section is None or not limitation_section.units:

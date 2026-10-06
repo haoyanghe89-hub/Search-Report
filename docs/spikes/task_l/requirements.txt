@@ -1,0 +1,8 @@
+# Core versions actually used on Windows / Python 3.13.13, not business dependencies.
+akshare==1.19.1
+baostock==0.9.4
+pandas==3.0.6
+numpy==2.5.3
+duckdb==1.5.6
+pyarrow==25.0.1
+requests==2.34.2

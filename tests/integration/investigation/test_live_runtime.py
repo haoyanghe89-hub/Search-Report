@@ -147,7 +147,40 @@ def _settings(tmp_path: Path) -> Settings:
     return Settings(
         database_url=SecretStr(f"sqlite:///{(tmp_path / 'live.db').as_posix()}"),
         max_research_rounds=1,
+        model_auto_retry=False,  # Existing manual-consent/recovery contract tests.
     )
+
+
+def test_transient_verifier_failure_exhausts_to_blocked_preserves_sources(tmp_path, monkeypatch):
+    class TimeoutPorts(OutagePorts):
+        verify_attempts = 0
+
+        async def generate(self, request):
+            if request.response_model.__name__ == "VerificationProposal":
+                self.verify_attempts += 1
+                raise TimeoutError("transport timeout")
+            return await super().generate(request)
+
+    monkeypatch.setenv("INVESTIGATION_BLOB_ROOT", str(tmp_path / "blobs"))
+    ports = TimeoutPorts()
+    settings = _settings(tmp_path).model_copy(
+        update={
+            "model_auto_retry": True,
+            "model_retry_attempts": 2,
+            "model_retry_backoff_seconds": 0,
+        }
+    )
+    with TestClient(
+        create_app(settings=settings, live_ports=LivePorts(ports, ports, ports))
+    ) as client:
+        investigation_id = _create(client)
+        run_id = client.post(f"/api/investigations/{investigation_id}/runs").json()["run_id"]
+        _drain(client)
+        run = client.get(f"/api/runs/{run_id}").json()["run"]
+        assert run["status"] == "COMPLETED"
+        assert "MODEL_RETRY_EXHAUSTED" in run["interruption_reason"]
+        assert ports.verify_attempts == 3
+        assert len(client.get(f"/api/runs/{run_id}/sources").json()) == 1
 
 
 def _create(client: TestClient) -> str:
@@ -205,7 +238,7 @@ def test_unrelated_event_uses_live_ports_and_reports_insufficient_evidence(
         run = client.get(f"/api/runs/{run_id}").json()["run"]
         assert run["mode"] == "LIVE"
         assert run["origin_run_id"] is None
-        assert run["status"] == "BLOCKED", run
+        assert run["status"] == "COMPLETED", run
         assert run["started_at"] is not None
         assert run["completed_at"] is not None
         assert ports.queries == ["CrowdStrike July 19 2024 outage"]
@@ -233,9 +266,39 @@ def test_live_failure_persists_sanitized_reason(tmp_path: Path, monkeypatch: Mon
         run_id = client.post(f"/api/investigations/{_create(client)}/runs").json()["run_id"]
         _drain(client)
         run = client.get(f"/api/runs/{run_id}").json()["run"]
-        assert run["status"] == "FAILED"
+        assert run["status"] == "COMPLETED"
         assert run["completed_at"] is not None
         assert "secret response body" not in run["interruption_reason"]
+        reports = client.get(f"/api/runs/{run_id}/reports").json()
+        assert reports[0]["report_type"] == "INVESTIGATION_STATUS"
+
+
+def test_initial_invalid_proposal_has_actionable_failed_status_report(
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    from marketpulse.investigation.recording.errors import InvalidProviderResponseError
+
+    class InvalidPlanPorts(OutagePorts):
+        attempts = 0
+
+        async def generate(self, request):
+            self.attempts += 1
+            raise InvalidProviderResponseError("PRIVATE_MODEL_OUTPUT_MUST_NOT_LEAK")
+
+    monkeypatch.setenv("INVESTIGATION_BLOB_ROOT", str(tmp_path / "blobs"))
+    ports = InvalidPlanPorts()
+    with TestClient(
+        create_app(settings=_settings(tmp_path), live_ports=LivePorts(ports, ports, ports))
+    ) as client:
+        run_id = client.post(f"/api/investigations/{_create(client)}/runs").json()["run_id"]
+        _drain(client)
+        run = client.get(f"/api/runs/{run_id}").json()["run"]
+        assert run["status"] == "COMPLETED"
+        assert "未形成可确认结论" in run["interruption_reason"]
+        assert "重新调查" in run["interruption_reason"]
+        assert "PRIVATE_MODEL" not in run["interruption_reason"]
+        assert ports.attempts == 3
         reports = client.get(f"/api/runs/{run_id}/reports").json()
         assert reports[0]["report_type"] == "INVESTIGATION_STATUS"
 
@@ -249,12 +312,14 @@ def test_cancel_and_shutdown_are_persisted(tmp_path: Path, monkeypatch: MonkeyPa
         run_id = client.post(f"/api/investigations/{investigation_id}/runs").json()["run_id"]
         response = client.post(f"/api/runs/{run_id}/cancel")
         assert response.status_code == 200
-        assert client.get(f"/api/runs/{run_id}").json()["run"]["status"] == "CANCELLED"
+        assert response.json()["status"] == "COMPLETED"
+        assert client.get(f"/api/runs/{run_id}").json()["run"]["status"] == "COMPLETED"
+        assert client.get(f"/api/runs/{run_id}/reports").json()
         assert client.post(f"/api/runs/{run_id}/cancel").status_code == 409
         shutdown_id = client.post(f"/api/investigations/{investigation_id}/runs").json()["run_id"]
     with TestClient(create_app(settings=_settings(tmp_path))) as client:
         run = client.get(f"/api/runs/{shutdown_id}").json()["run"]
-        assert run["status"] == "INTERRUPTED"
+        assert run["status"] == "COMPLETED"
         assert run["interruption_reason"].startswith("SERVER_SHUTDOWN")
 
 
@@ -271,7 +336,7 @@ def test_wall_timeout_persists_failure_and_status_report(
         run_id = client.post(f"/api/investigations/{_create(client)}/runs").json()["run_id"]
         _drain(client)
         run = client.get(f"/api/runs/{run_id}").json()["run"]
-        assert run["status"] == "FAILED"
+        assert run["status"] == "COMPLETED"
         assert run["interruption_reason"].startswith("RUN_TIMEOUT")
         reports = client.get(f"/api/runs/{run_id}/reports").json()
         assert reports[0]["report_type"] == "INVESTIGATION_STATUS"
@@ -300,8 +365,10 @@ def test_startup_marks_abandoned_live_run_interrupted(tmp_path: Path) -> None:
             )
         )
     with TestClient(create_app(settings=_settings(tmp_path))) as client:
+        _drain(client)
         run = client.get("/api/runs/RUN-ABANDONED").json()["run"]
-        assert run["status"] == "INTERRUPTED"
+        assert run["status"] == "COMPLETED"
+        assert client.get("/api/runs/RUN-ABANDONED/reports").json()
         assert run["interruption_reason"].startswith("SERVER_RESTARTED")
 
 
@@ -334,6 +401,6 @@ def test_default_questions_support_new_event_live_planning(
         ).json()["run_id"]
         _drain(client)
         run = client.get(f"/api/runs/{run_id}").json()["run"]
-        assert run["status"] == "BLOCKED", run
+        assert run["status"] == "COMPLETED", run
         assert ports.queries == ["CrowdStrike July 19 2024 outage"]
         assert "VerificationProposal" in ports.contracts

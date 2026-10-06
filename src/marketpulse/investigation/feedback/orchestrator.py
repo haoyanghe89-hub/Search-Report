@@ -18,6 +18,9 @@ from marketpulse.investigation.agents.contracts import (
     RouteInput,
     RouteProposal,
     TaskProposal,
+    VerificationInput,
+    VerificationProposal,
+    validate_agent_proposal,
 )
 from marketpulse.investigation.agents.contracts import (
     SemanticJudgment as AgentSemanticJudgment,
@@ -28,6 +31,7 @@ from marketpulse.investigation.agents.model_agents import (
     ModelResearcherAgent,
     ModelVerifierAgent,
 )
+from marketpulse.investigation.agents.supplements import supplemented_qualifiers
 from marketpulse.investigation.domain.claims import (
     Claim,
     ClaimEvidenceRelation,
@@ -52,9 +56,18 @@ from marketpulse.investigation.domain.enums import (
 )
 from marketpulse.investigation.domain.reports import AuditEvent
 from marketpulse.investigation.domain.runtime import ResearchTask
-from marketpulse.investigation.domain.sources import Evidence
+from marketpulse.investigation.domain.sources import (
+    DocumentArtifact,
+    Evidence,
+    Source,
+    SourceSnapshot,
+)
 from marketpulse.investigation.feedback.acquisition_batch import acquisition_batch
-from marketpulse.investigation.feedback.context import AgentContextBuilder, claim_key
+from marketpulse.investigation.feedback.context import (
+    AgentContextBuilder,
+    claim_key,
+    publisher_state,
+)
 from marketpulse.investigation.feedback.guards import (
     ClaimGuard,
     EvidenceCreationGuard,
@@ -79,6 +92,7 @@ from marketpulse.investigation.feedback.models import (
     VerificationExecutionResult,
 )
 from marketpulse.investigation.feedback.research_team import research_team
+from marketpulse.investigation.feedback.semantic_reuse import reusable_judgments
 from marketpulse.investigation.feedback.store import (
     CompleteResearchTaskOperation,
     FeedbackState,
@@ -86,6 +100,7 @@ from marketpulse.investigation.feedback.store import (
     ReserveSourcesOperation,
     ResolveGapsOperation,
 )
+from marketpulse.investigation.feedback.supplements import PersistQualifierSupplementsOperation
 from marketpulse.investigation.feedback.verification_team import verification_team
 from marketpulse.investigation.harness.calls import BoundExternalCalls
 from marketpulse.investigation.harness.checkpoints import (
@@ -96,6 +111,10 @@ from marketpulse.investigation.harness.checkpoints import (
 from marketpulse.investigation.harness.persistence import RunBudgetExceededError
 from marketpulse.investigation.harness.runtime import InvestigationHarness, StepOutcome
 from marketpulse.investigation.harness.scoped_ports import StepPortScope
+from marketpulse.investigation.harness.stage_budget import (
+    StageBudgetPolicy,
+    VerificationBudgetPolicy,
+)
 from marketpulse.investigation.harness.state_machine import Route
 from marketpulse.investigation.harness.uow import TransactionOperation
 from marketpulse.investigation.ingestion.registry import DocumentParserRegistry
@@ -129,6 +148,35 @@ def _now() -> datetime:
 class AgentFeedbackOrchestrator:
     """Runs the first real persisted Agent feedback loop through Harness Steps."""
 
+    @staticmethod
+    async def run_quant(service, *, run_id, spec, inputs, instrument_id, asof, idempotency_key):
+        """Opt-in frozen compute -> validation -> persisted v2 report material.
+
+        The existing web 15-stage policy/calls/ordinals are not changed.
+        """
+        import asyncio
+
+        from marketpulse.quant.reporting import build_material, persist_material
+
+        job_id = await service.submit(
+            run_id=run_id,
+            spec=spec,
+            inputs=inputs,
+            instrument_id=instrument_id,
+            asof=asof,
+            idempotency_key=idempotency_key,
+        )
+        progress = getattr(service, "public_phase", None)
+        if progress:
+            progress(run_id, "证据核验", WorkflowPhase.VERIFY)
+        material = await build_material(service, job_id=job_id)
+        await asyncio.to_thread(
+            persist_material, service.sessions, run_id=run_id, material=material
+        )
+        if progress:
+            progress(run_id, "成稿", WorkflowPhase.REPORT)
+        return job_id
+
     def __init__(
         self,
         *,
@@ -160,6 +208,12 @@ class AgentFeedbackOrchestrator:
         self.gain = InformationGainCalculator()
         self.progress = progress
         self.checkpoints = StepInputCheckpoints(repository, blobs)
+        self.stage_budget = StageBudgetPolicy(
+            verify_tokens=self.config.verify_token_reserve_fraction,
+            report_tokens=self.config.report_token_reserve_fraction,
+            verify_calls=self.config.verify_call_reserve_fraction,
+            report_calls=self.config.report_call_reserve_fraction,
+        )
 
     def _pinned_input(self, run_id: str, logical_key: str, request: OutputT) -> OutputT:
         if self.config.workflow_version != RESUMABLE_WORKFLOW_VERSION:
@@ -170,6 +224,7 @@ class AgentFeedbackOrchestrator:
 
     async def run(self, run_id: str) -> FeedbackLoopResult:
         trace: list[str] = []
+        proposal_stop_reason: str | None = None
         gains: list[InformationGainSummary] = []
         no_progress = NoProgressDetector(self.config.no_progress_rounds)
         before_round: dict[int, RoundSnapshot] = {}
@@ -233,12 +288,20 @@ class AgentFeedbackOrchestrator:
                 await self._plan(state)
             except RunBudgetExceededError as error:
                 return await self._blocked(
-                    run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                    run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=error
                 )
             state = self.store.state(run_id)
 
         while state.run.current_phase is not WorkflowPhase.REPORT:
             if state.run.current_phase is WorkflowPhase.COLLECT:
+                if (
+                    not self._collection_headroom(state)
+                    and state.claims
+                    and any(t.status is ResearchTaskStatus.COMPLETED for t in state.tasks)
+                ):
+                    await self._finish_existing(state, Route.ANALYZE)
+                    state = self.store.state(run_id)
+                    continue
                 pending = tuple(
                     task for task in state.tasks if task.status is ResearchTaskStatus.PENDING
                 )
@@ -250,10 +313,12 @@ class AgentFeedbackOrchestrator:
                     if not self._can_dispatch_model(state):
                         return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
                     try:
-                        await self._route_followup(state)
+                        followup = await self._route_followup(state)
+                        if followup.route is Route.BLOCKED:
+                            proposal_stop_reason = followup.reason
                     except RunBudgetExceededError as error:
                         return await self._blocked(
-                            run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                            run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=error
                         )
                     state = self.store.state(run_id)
                     continue
@@ -267,16 +332,29 @@ class AgentFeedbackOrchestrator:
                     ),
                 )
                 try:
-                    await self._research(state, task)
+                    research_result = await self._research(state, task)
+                    if (
+                        research_result.researcher_errors
+                        and self.store.state(run_id).run.status is RunStatus.BLOCKED
+                    ):
+                        proposal_stop_reason = research_result.researcher_errors[0]
                 except RunBudgetExceededError as error:
+                    if str(error).startswith("stage model reservation") and state.claims:
+                        await self._finish_existing(self.store.state(run_id), Route.ANALYZE)
+                        state = self.store.state(run_id)
+                        continue
                     return await self._blocked(
-                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=error
                     )
                 trace.append("COLLECT")
                 state = self.store.state(run_id)
                 continue
 
             if state.run.current_phase is WorkflowPhase.ANALYZE:
+                if not self._collection_headroom(state) and state.claims:
+                    await self._finish_existing(state, Route.VERIFY)
+                    state = self.store.state(run_id)
+                    continue
                 if not self._can_dispatch_model(state):
                     return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
                 task = self._latest_completed_task(state)
@@ -287,16 +365,47 @@ class AgentFeedbackOrchestrator:
                     logical_step_key=f"research:{task.title}:round-{task.round}",
                 )
                 try:
-                    await self._analyze(state, task, research)
+                    analysis_result = await self._analyze(state, task, research)
+                    if analysis_result.rejected_candidate_keys == ("INVALID_ANALYSIS_PROPOSAL",):
+                        proposal_stop_reason = self._proposal_stop_detail("analysis")
+                        proposal_stop_reason += (
+                            " 校验项："
+                            + analysis_result.grounding_diagnostics.get(
+                                "proposal_error", "INVALID_RESPONSE"
+                            )
+                        )
+                    elif analysis_result.rejected_candidate_keys == ("ANALYSIS_RETRY_LIMIT",):
+                        proposal_stop_reason = self._analysis_retry_stop_detail()
                 except RunBudgetExceededError as error:
+                    if str(error).startswith("stage model reservation") and state.claims:
+                        await self._finish_existing(self.store.state(run_id), Route.VERIFY)
+                        state = self.store.state(run_id)
+                        continue
                     return await self._blocked(
-                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=error
                     )
                 trace.append("ANALYZE")
                 state = self.store.state(run_id)
                 continue
 
             if state.run.current_phase is WorkflowPhase.VERIFY:
+                if self._verification_converged(state):
+                    return await self._blocked(
+                        run_id, trace, gains, "VERIFICATION_NO_INFORMATION_GAIN"
+                    )
+                batches = sum(
+                    s.step_type is StepType.VALIDATION and s.status is ExecutionStepStatus.COMPLETED
+                    for s in state.steps
+                )
+                if batches >= self.config.max_verification_batches:
+                    return await self._blocked(run_id, trace, gains, "VERIFICATION_LIMIT_REACHED")
+                if self.config.model_budget_reservations:
+                    self.calls.verification_budget_policy = VerificationBudgetPolicy(
+                        max_calls=self.config.max_verification_calls,
+                        max_tokens=int(
+                            state.budget.max_tokens * self.config.max_verification_token_fraction
+                        ),
+                    )
                 if not self._can_dispatch_model(state):
                     return await self._blocked(run_id, trace, gains, "BUDGET_EXHAUSTED")
                 task = self._latest_completed_task(state)
@@ -304,7 +413,13 @@ class AgentFeedbackOrchestrator:
                     await self._verify(state, task)
                 except RunBudgetExceededError as error:
                     return await self._blocked(
-                        run_id, trace, gains, "BUDGET_EXHAUSTED", rejection=str(error)
+                        run_id,
+                        trace,
+                        gains,
+                        "VERIFICATION_LIMIT_REACHED"
+                        if str(error).startswith("VERIFICATION_LIMIT_REACHED")
+                        else "BUDGET_EXHAUSTED",
+                        rejection=error,
                     )
                 trace.append("VERIFY")
                 state = self.store.state(run_id)
@@ -341,7 +456,7 @@ class AgentFeedbackOrchestrator:
         reason = (
             "POLICY_SUFFICIENT"
             if termination == "READY_FOR_REPORT"
-            else final.run.interruption_reason or "BLOCKED"
+            else proposal_stop_reason or final.run.interruption_reason or "BLOCKED"
         )
         return FeedbackLoopResult(
             run_id=run_id,
@@ -364,6 +479,41 @@ class AgentFeedbackOrchestrator:
             logical_step_key="workflow:enter-plan",
             workflow_version=self.config.workflow_version,
             phase=WorkflowPhase.CREATED,
+            step_type=StepType.OTHER,
+            agent_role=AgentRole.HARNESS,
+            owner_instance_id=self.owner,
+            semantic_input=transition,
+            output_model=PhaseTransition,
+            handler=handler,
+            timeout_seconds=self.config.step_timeout_seconds,
+        )
+
+    def _collection_headroom(self, state: FeedbackState) -> bool:
+        if self.config.model_budget_reservations and any(
+            step.logical_step_key
+            and step.logical_step_key.startswith("budget:finish:")
+            and step.status is ExecutionStepStatus.COMPLETED
+            for step in state.steps
+        ):
+            return False
+        return not self.config.model_budget_reservations or self.stage_budget.admits(
+            state.budget, "researcher.research", 1
+        )
+
+    async def _finish_existing(self, state: FeedbackState, route: Route) -> None:
+        transition = PhaseTransition(
+            action="FINISH_EXISTING",
+            reason="COLLECTION_RESERVE_REACHED: finish existing material without new collection",
+        )
+
+        async def handler() -> StepOutcome:
+            return StepOutcome(proposal=transition, route=route)
+
+        await self.harness.run_step(
+            run_id=state.run.run_id,
+            logical_step_key=f"budget:finish:{state.run.current_phase.value}:{state.run.checkpoint_version}",
+            workflow_version=self.config.workflow_version,
+            phase=state.run.current_phase,
             step_type=StepType.OTHER,
             agent_role=AgentRole.HARNESS,
             owner_instance_id=self.owner,
@@ -436,16 +586,20 @@ class AgentFeedbackOrchestrator:
         scope = StepPortScope(self.calls)
 
         async def handler() -> StepOutcome:
-            proposal = await ModelPlannerAgent(scope.model("planner.route")).route(request)
-            if proposal.route is not Route.COLLECT:
-                raise ProposalGuardError("Supervisor feedback route must request COLLECT")
-            tasks = self._materialize_tasks(
-                state,
-                proposal.tasks,
-                round_number=round_number,
-            )
-            if not tasks:
-                raise ProposalGuardError("Supervisor produced no new follow-up ResearchTask")
+            try:
+                proposal = await ModelPlannerAgent(scope.model("planner.route")).route(request)
+                if proposal.route is not Route.COLLECT:
+                    raise ProposalGuardError("Supervisor feedback route must request COLLECT")
+                tasks = self._materialize_tasks(state, proposal.tasks, round_number=round_number)
+                if not tasks:
+                    raise ProposalGuardError("Supervisor produced no new follow-up ResearchTask")
+            except (ProposalGuardError, InvalidProviderResponseError):
+                reason = self._proposal_stop_detail("follow-up planning")
+                return StepOutcome(
+                    proposal=RouteProposal(route=Route.BLOCKED, reason=reason),
+                    route=Route.BLOCKED,
+                    business_outputs=self._termination_gap(state, reason),
+                )
             return StepOutcome(
                 proposal=proposal,
                 route=Route.COLLECT,
@@ -480,18 +634,21 @@ class AgentFeedbackOrchestrator:
 
         async def handler() -> StepOutcome:
             researcher_errors: tuple[str, ...] = ()
-            if self.config.research_workers > 1:
-                proposal, researcher_errors = await research_team(
-                    request,
-                    scope.model,
-                    workers=self.config.research_workers,
-                    max_queries=self.config.queries_per_researcher,
-                    progress=self.progress,
-                )
-            else:
-                proposal = await ModelResearcherAgent(scope.model("researcher.propose")).research(
-                    request
-                )
+            try:
+                if self.config.research_workers > 1:
+                    proposal, researcher_errors = await research_team(
+                        request,
+                        scope.model,
+                        workers=self.config.research_workers,
+                        max_queries=self.config.queries_per_researcher,
+                        progress=self.progress,
+                    )
+                else:
+                    proposal = await ModelResearcherAgent(
+                        scope.model("researcher.propose")
+                    ).research(request)
+            except (ProposalGuardError, InvalidProviderResponseError):
+                return self._blocked_research_outcome(state)
             guard = QueryGuard(max_length=self.config.max_query_length)
             executed = {
                 normalize_query(query) for prior in state.tasks for query in prior.query_hints
@@ -523,7 +680,7 @@ class AgentFeedbackOrchestrator:
                 task_queries.add(normalized)
                 remaining -= 1
             if not accepted:
-                raise ProposalGuardError("Researcher produced no executable query")
+                return self._blocked_research_outcome(state)
 
             acquisition = SourceAcquisitionService(
                 repository=self.repository,
@@ -532,6 +689,8 @@ class AgentFeedbackOrchestrator:
                 fetch=scope.fetch("research.fetch"),
                 parsers=self.parsers,
                 clock=self.clock,
+                tolerate_fetch_errors=True,
+                reuse_accepted_sources=self.config.deduplicate_material,
             )
             outputs: list[PersistedEntity] = []
             source_ids: list[str] = []
@@ -560,6 +719,7 @@ class AgentFeedbackOrchestrator:
                         clock=self.clock,
                         fetch_concurrency=self.config.fetch_concurrency,
                         tolerate_fetch_errors=True,
+                        reuse_accepted_sources=self.config.deduplicate_material,
                         fetch_semaphore=semaphore,
                     ),
                     investigation_id=state.investigation.investigation_id,
@@ -610,7 +770,11 @@ class AgentFeedbackOrchestrator:
                 )
                 outputs.append(gap)
                 gap_ids.append(gap.gap_id)
-            prior_source_ids = {item.source_id for item in state.sources}
+            # Failed fetches have no snapshot but their persisted gap retains source_id.
+            # Count once per run, including replay where the global Source already exists.
+            prior_source_ids = {item.source_id for item in state.sources} | {
+                gap.source_id for gap in state.gaps if gap.source_id
+            }
             new_sources = len(set(source_ids) - prior_source_ids)
             result = ResearchExecutionResult(
                 proposal=proposal,
@@ -700,9 +864,36 @@ class AgentFeedbackOrchestrator:
 
         async def handler() -> StepOutcome:
             analyst = ModelAnalystAgent(scope.model("analyst.extract"))
-            proposal = await analyst.analyze(
-                bundle.request, ground_quotes=self.config.ground_model_quotes
-            )
+            if len(prior_attempts) >= self.config.max_analysis_attempts:
+                from marketpulse.investigation.agents.contracts import AnalysisProposal
+
+                reason = self._analysis_retry_stop_detail()
+                return StepOutcome(
+                    proposal=AnalysisExecutionResult(
+                        proposal=AnalysisProposal(),
+                        rejected_candidate_keys=("ANALYSIS_RETRY_LIMIT",),
+                    ),
+                    route=Route.BLOCKED,
+                    business_outputs=self._termination_gap(state, reason),
+                )
+            try:
+                proposal = await analyst.analyze(
+                    bundle.request, ground_quotes=self.config.ground_model_quotes
+                )
+            except InvalidProviderResponseError as error:
+                from marketpulse.investigation.agents.contracts import AnalysisProposal
+
+                issues = "; ".join(error.validation_issues) or "INVALID_RESPONSE"
+                reason = self._proposal_stop_detail("analysis") + " 校验项：" + issues
+                return StepOutcome(
+                    proposal=AnalysisExecutionResult(
+                        proposal=AnalysisProposal(),
+                        rejected_candidate_keys=("INVALID_ANALYSIS_PROPOSAL",),
+                        grounding_diagnostics={"proposal_error": issues},
+                    ),
+                    route=Route.BLOCKED,
+                    business_outputs=self._termination_gap(state, reason),
+                )
             evidence_by_key: dict[str, Evidence] = {}
             evidence_outputs: list[Evidence] = []
             existing_evidence = {item.evidence_id: item for item in state.evidence}
@@ -992,11 +1183,51 @@ class AgentFeedbackOrchestrator:
             timeout_seconds=self.config.step_timeout_seconds,
         )
 
+    def _verification_converged(self, state: FeedbackState) -> bool:
+        """Two identical complete policy inputs/results with unchanged evidence stop work.
+
+        A new Claim, quote, source, relation or conflict must not be hidden by this
+        check. Exact final-input fingerprints are more conservative than status alone.
+        """
+        if not state.claims:
+            return False
+        for claim in state.claims:
+            results = sorted(
+                (v for v in state.validations if v.claim_id == claim.claim_id),
+                key=lambda v: (v.created_at, v.validation_id),
+            )
+            if len(results) < 2:
+                return False
+            last, previous = results[-1], results[-2]
+            if (
+                last.policy_version != self.validation_policy.VERSION
+                or last.input_fingerprint != previous.input_fingerprint
+                or last.status != previous.status
+            ):
+                return False
+            ids = tuple(r.evidence_id for r in state.relations if r.claim_id == claim.claim_id)
+            if last.evidence_set_hash != self.validation_policy._evidence_set_hash(
+                state.evidence, ids
+            ):
+                return False
+            if set(last.conflict_set_refs) != {
+                c.conflict_id for c in state.conflicts if claim.claim_id in c.claim_ids
+            }:
+                return False
+            if set(last.validation_basis_payload.get("unresolved_conflict_ids", [])) != {
+                c.conflict_id
+                for c in state.conflicts
+                if claim.claim_id in c.claim_ids and str(c.resolution_status) == "UNRESOLVED"
+            }:
+                return False
+        return True
+
     async def _verify(
         self,
         state: FeedbackState,
         task: ResearchTask,
     ) -> VerificationExecutionResult:
+        state = publisher_state(state, self.blobs)
         base_logical_key = f"verify:{task.title}:round-{task.round}"
         prior_batches = sorted(
             (
@@ -1025,6 +1256,13 @@ class AgentFeedbackOrchestrator:
             exclude_claim_ids=frozenset(already_validated),
         )
         if not bundle.request.claims:
+            if not self._collection_headroom(state):
+                await self._blocked(state.run.run_id, [], [], "COLLECTION_RESERVE_REACHED")
+                return VerificationExecutionResult(
+                    verifier_proposals=(),
+                    validations=(),
+                    route_reason="COLLECTION_RESERVE_REACHED",
+                )
             raise RuntimeError("Verifier batch has no remaining Claim")
         scope = StepPortScope(self.calls)
         logical_key = (
@@ -1070,16 +1308,60 @@ class AgentFeedbackOrchestrator:
         ).workers
 
         async def handler() -> StepOutcome:
-            if self.config.research_workers > 1:
+            cached = ()
+            if self.config.reuse_semantic_judgments:
+                saved = self.checkpoints.saved_inputs(
+                    self.store.sessions, state.run.run_id, VerificationInput
+                )
+                previous = []
+                for step in state.steps:
+                    if (
+                        step.step_type is not StepType.VALIDATION
+                        or step.status is not ExecutionStepStatus.COMPLETED
+                    ):
+                        continue
+                    if step.logical_step_key not in saved or not step.output_refs:
+                        continue
+                    output = VerificationExecutionResult.model_validate_json(
+                        self.blobs.get_bytes(BlobRef.from_uri(step.output_refs[0]))
+                    )
+                    previous.extend(
+                        (saved[step.logical_step_key], p) for p in output.verifier_proposals
+                    )
+                cached = reusable_judgments(bundle.request, tuple(previous))
+            cached_claims = {j.claim_key for j in cached}
+            fresh = bundle.request.model_copy(
+                update={
+                    "claims": tuple(
+                        c
+                        for c in bundle.request.claims
+                        if c.claim_key not in cached_claims
+                        and (c.supporting_evidence_keys or c.contradicting_evidence_keys)
+                    ),
+                }
+            )
+            if not fresh.claims:
+                proposal = VerificationProposal()
+            elif self.config.research_workers > 1:
+                snapshots = {s.snapshot_id: s.source_id for s in state.snapshots}
+                evidence_sources = {
+                    key: snapshots[e.snapshot_id]
+                    for key, evidence_id in bundle.evidence_ids.items()
+                    for e in state.evidence
+                    if e.evidence_id == evidence_id
+                }
                 proposal = await verification_team(
-                    bundle.request,
+                    fresh,
                     scope.model,
                     workers=workers,
+                    evidence_sources=evidence_sources if self.config.metadata_chars else None,
                 )
             else:
                 proposal = await ModelVerifierAgent(scope.model("verifier.entailment")).verify(
-                    bundle.request
+                    fresh
                 )
+            proposal = proposal.model_copy(update={"judgments": (*cached, *proposal.judgments)})
+            validate_agent_proposal(bundle.request, proposal)
             observations = self._all_observations(state)
             summaries = []
             operations: list[TransactionOperation] = []
@@ -1087,6 +1369,39 @@ class AgentFeedbackOrchestrator:
             for candidate in bundle.request.claims:
                 claim_id = bundle.claim_ids[candidate.claim_key]
                 claim = next(item for item in state.claims if item.claim_id == claim_id)
+                supplements = tuple(
+                    s for s in proposal.qualifier_supplements if s.claim_key == candidate.claim_key
+                )
+                if supplements:
+                    for supplement in supplements:
+                        proof = next(
+                            e
+                            for e in state.evidence
+                            if e.evidence_id == bundle.evidence_ids[supplement.evidence_key]
+                        )
+                        integrity = self.integrity.validate_reference(
+                            evidence_id=proof.evidence_id,
+                            evidence_by_id={e.evidence_id: e for e in state.evidence},
+                            snapshot_by_id={s.snapshot_id: s for s in state.snapshots},
+                            artifact_by_id={a.artifact_id: a for a in state.artifacts},
+                        )
+                        if not integrity.valid:
+                            raise ProposalGuardError(
+                                "qualifier supplement evidence failed integrity"
+                            )
+                    operations.append(
+                        PersistQualifierSupplementsOperation(
+                            claim=claim,
+                            supplements=supplements,
+                            evidence_ids=bundle.evidence_ids,
+                            created_at=self.clock(),
+                        )
+                    )
+                    claim = claim.model_copy(
+                        update={
+                            "qualifiers": supplemented_qualifiers(claim.qualifiers, supplements)
+                        }
+                    )
                 relations = tuple(item for item in state.relations if item.claim_id == claim_id)
                 evidence_ids = {item.evidence_id for item in relations}
                 evidence = tuple(
@@ -1177,11 +1492,16 @@ class AgentFeedbackOrchestrator:
             )
             if remaining_claim_ids:
                 route = Route.VERIFY
+            elif not self._collection_headroom(self.store.state(state.run.run_id)):
+                route = (
+                    Route.BLOCKED if policy_gaps or open_gap_elsewhere else Route.READY_FOR_REPORT
+                )
             elif policy_gaps or pending or open_gap_elsewhere:
                 route = Route.COLLECT
             else:
                 route = Route.READY_FOR_REPORT
             result = VerificationExecutionResult(
+                reused_semantic_pairs=len(cached),
                 verifier_proposals=(proposal,),
                 validations=tuple(summaries),
                 route_reason=(
@@ -1196,6 +1516,9 @@ class AgentFeedbackOrchestrator:
                 proposal=result,
                 route=route,
                 transaction_operations=tuple(operations),
+                business_outputs=self._termination_gap(state, "COLLECTION_RESERVE_REACHED")
+                if route is Route.BLOCKED
+                else (),
             )
 
         return await self.harness.run_step(
@@ -1221,10 +1544,20 @@ class AgentFeedbackOrchestrator:
         gains: list[InformationGainSummary],
         reason: str,
         *,
-        rejection: str | None = None,
+        rejection: str | RunBudgetExceededError | None = None,
     ) -> FeedbackLoopResult:
         state = self.store.state(run_id)
         detail = reason
+        if reason in {"VERIFICATION_LIMIT_REACHED", "VERIFICATION_NO_INFORMATION_GAIN"}:
+            cause = (
+                "验证已达批次/调用/token 上限"
+                if reason == "VERIFICATION_LIMIT_REACHED"
+                else "完整验证输入与结果连续两次未变化"
+            )
+            detail += (
+                f"；{cause}，停止重复验证并基于已有结果生成报告。"
+                "未完成的声明仍保持原验证状态及缺口；补充直接证据后可发起新的调查。"
+            )
         if reason == "BUDGET_EXHAUSTED" and self.config.retrieval_strategy == "bm25-passages-v1":
             from marketpulse.investigation.feedback.budget_diagnostics import (
                 describe_budget_exhaustion,
@@ -1232,7 +1565,7 @@ class AgentFeedbackOrchestrator:
 
             detail = describe_budget_exhaustion(
                 state.budget,
-                rejected_dimension=rejection,
+                rejected_dimension=str(rejection) if rejection is not None else None,
                 requested_round=max(
                     (
                         task.round
@@ -1241,6 +1574,17 @@ class AgentFeedbackOrchestrator:
                     ),
                     default=None,
                 ),
+            )
+        snapshot_sources = {snapshot.source_id for snapshot in state.snapshots}
+        if not any(snapshot.evidence_eligible for snapshot in state.snapshots) and any(
+            gap.source_id
+            and gap.source_id not in snapshot_sources
+            and gap.gap_type is ResearchGapType.UNREADABLE_SOURCE
+            for gap in state.gaps
+        ):
+            detail += (
+                "；未获得可读取的合格来源；部分来源不可访问或被限流。"
+                "请检查网络、稍后重试或提供可访问的原始材料。"
             )
         if state.run.current_phase is not WorkflowPhase.REPORT:
             transition = PhaseTransition(action="BLOCK", reason=reason)
@@ -1265,6 +1609,16 @@ class AgentFeedbackOrchestrator:
                             "resume_step_key": state.run.current_step_key,
                             "blocking_step_key": logical_key,
                             "gap_ids": [self._termination_gap_id(state, detail)],
+                            "stage_required_tokens": (
+                                rejection.required_tokens
+                                if isinstance(rejection, RunBudgetExceededError)
+                                else None
+                            ),
+                            "stage_role": (
+                                rejection.role
+                                if isinstance(rejection, RunBudgetExceededError)
+                                else None
+                            ),
                         },
                         created_at=self.clock(),
                     ),
@@ -1469,10 +1823,44 @@ class AgentFeedbackOrchestrator:
             return stable_id("GAP", state.run.run_id, reason, str(state.run.checkpoint_version))
         return stable_id("GAP", state.run.run_id, reason)
 
+    @staticmethod
+    def _analysis_retry_stop_detail() -> str:
+        return (
+            "ANALYSIS_RETRY_LIMIT：同一任务已达到分析重试上限；"
+            "已保留材料和可用提案。请检查提案引用错误或补充新的相关原始材料，"
+            "不要重复提交相同来源或仅增加预算。"
+        )
+
+    @staticmethod
+    def _proposal_stop_detail(stage: str) -> str:
+        return (
+            f"INVALID_AGENT_PROPOSAL ({stage})：未形成可确认结论。"
+            "模型未能提供通过结构、引用或去重校验的可执行提案；已保留采集来源和执行记录。"
+            "请补充可访问的原始材料或更换模型后重新调查，不应通过增加重复查询绕过质量门。"
+        )
+
+    def _blocked_research_outcome(self, state: FeedbackState) -> StepOutcome:
+        from marketpulse.investigation.agents.contracts import ResearchProposal
+
+        reason = self._proposal_stop_detail("research queries")
+        return StepOutcome(
+            proposal=ResearchExecutionResult(
+                proposal=ResearchProposal(queries=()),
+                researcher_errors=(reason,),
+            ),
+            route=Route.BLOCKED,
+            business_outputs=self._termination_gap(state, reason),
+        )
+
     def _termination_gap(self, state: FeedbackState, reason: str) -> tuple[PersistedEntity, ...]:
         if any(item.reason == reason for item in self.store.open_gaps(state)):
             return ()
         now = self.clock()
+        action = (
+            "补充可访问的原始材料，检查或更换模型后重新调查；保留证据完整性校验"
+            if reason.startswith("INVALID_AGENT_PROPOSAL")
+            else "resume with a larger budget or new evidence source"
+        )
         return (
             ResearchGap(
                 gap_id=self._termination_gap_id(state, reason),
@@ -1481,10 +1869,10 @@ class AgentFeedbackOrchestrator:
                 gap_type=ResearchGapType.OTHER,
                 reason=reason,
                 missing_requirement="additional executable investigation capacity",
-                suggested_action="resume with a larger budget or new evidence source",
+                suggested_action=action,
                 severity=GapSeverity.BLOCKING,
                 status=GapStatus.OPEN,
-                suggested_actions=("resume with a larger budget or new evidence source",),
+                suggested_actions=(action,),
                 created_at=now,
             ),
         )
@@ -1524,17 +1912,18 @@ class AgentFeedbackOrchestrator:
 
     @staticmethod
     def _entity_identity(entity: PersistedEntity) -> tuple[str, str]:
-        for field in (
-            "source_id",
-            "snapshot_id",
-            "artifact_id",
-            "gap_id",
-            "evidence_id",
-            "claim_id",
-            "relation_id",
-            "timeline_event_id",
-        ):
-            value = getattr(entity, field, None)
-            if value is not None:
-                return type(entity).__name__, str(value)
-        raise TypeError(f"unsupported feedback entity: {type(entity).__name__}")
+        # Foreign keys are not entity identity: all pages share snapshot_id, and
+        # multiple gaps can share source_id. Deduplicate only the actual primary key.
+        primary_key = {
+            Source: "source_id",
+            SourceSnapshot: "snapshot_id",
+            DocumentArtifact: "artifact_id",
+            ResearchGap: "gap_id",
+            Evidence: "evidence_id",
+            Claim: "claim_id",
+            ClaimEvidenceRelation: "relation_id",
+            TimelineEvent: "timeline_event_id",
+        }.get(type(entity))
+        if primary_key is None:
+            raise TypeError(f"unsupported feedback entity: {type(entity).__name__}")
+        return type(entity).__name__, str(getattr(entity, primary_key))

@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Callable
 from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
+from marketpulse.investigation.agents.contracts import AnalysisInput, AnalysisProposal
+from marketpulse.investigation.agents.normalization import normalize_existing_claim_references
 from marketpulse.investigation.ports.external import (
     ModelRequest,
     ModelUsage,
@@ -52,11 +55,14 @@ class OpenAICompatibleModelAdapter:
         provider: str,
         default_model: str,
         thinking_enabled: bool | None = None,
+        response_observer: Callable[[ModelRequest[Any], str], None] | None = None,
     ) -> None:
         self._client = client
         self._provider = provider
         self._default_model = default_model
         self._thinking_enabled = thinking_enabled
+        # Explicit opt-in diagnostics only; production never logs raw provider content.
+        self._response_observer = response_observer
 
     async def generate(self, request: ModelRequest[T]) -> StructuredModelResult[T]:
         model = request.model_hint or self._default_model
@@ -71,15 +77,21 @@ class OpenAICompatibleModelAdapter:
         kwargs: dict[str, Any] = {
             "model": model,
             "messages": messages,
-            "temperature": request.temperature,
             "response_format": {"type": "json_object"},
         }
+        thinking = request.thinking_enabled
+        if thinking is None:
+            thinking = self._thinking_enabled
+        if thinking is not True:
+            kwargs["temperature"] = request.temperature
         if request.max_output_tokens is not None:
             kwargs["max_tokens"] = request.max_output_tokens
-        if self._thinking_enabled is not None and model.startswith("deepseek-"):
+        if thinking is not None and model.startswith("deepseek-"):
             kwargs["extra_body"] = {
-                "thinking": {"type": "enabled" if self._thinking_enabled else "disabled"}
+                "thinking": {"type": "enabled" if thinking else "disabled"}
             }
+            if thinking and request.reasoning_effort:
+                kwargs["reasoning_effort"] = request.reasoning_effort
         try:
             response = await self._client.chat.completions.create(**kwargs)
         except Exception as error:
@@ -87,12 +99,28 @@ class OpenAICompatibleModelAdapter:
                 raise RateLimitedError("model provider rate limited the request") from error
             raise ProviderCallError("model provider request failed") from error
         try:
+            content = response.choices[0].message.content
+            if isinstance(content, str) and self._response_observer is not None:
+                self._response_observer(request, content)
             if getattr(response.choices[0], "finish_reason", None) == "length":
                 raise ModelOutputTruncatedError("model output token limit reached")
-            content = response.choices[0].message.content
             if not isinstance(content, str) or not content.strip():
                 raise ValueError("empty model content")
-            output = request.response_model.model_validate_json(_json_payload(content))
+            payload = _json_payload(content)
+            if request.response_model is AnalysisProposal:
+                for message in request.messages:
+                    if message.role != "user":
+                        continue
+                    try:
+                        context = json.loads(message.content)["bounded_context"]
+                    except (ValueError, KeyError, TypeError):
+                        continue
+                    normalized = normalize_existing_claim_references(
+                        json.loads(payload), AnalysisInput.model_validate(context)
+                    )
+                    payload = json.dumps(normalized, ensure_ascii=False)
+                    break
+            output = request.response_model.model_validate_json(payload)
         except ValidationError as error:
             # Only schema paths and error codes, never response text or rejected values.
             fields = _schema_fields(request.response_model.model_json_schema())

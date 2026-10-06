@@ -1,0 +1,409 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:40781:41921",
+      "quote": "Access eligibility is not verified in the supplied Google announcement excerpt as of September 30, 2026",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 40781,
+        "end": 41921,
+        "quote_hash": "1b7705902ba663f1c2d07e7c1a9a8715b105113b1a4e1f5d8517b0ccf3420e5f"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:11788:12854",
+      "quote": "Google AI Studio\nNot established\nNo AI Studio access details\nModel selection and eligibility\nGemini API\nNot established\nNo callable model identifier or endpoint",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 11788,
+        "end": 12854,
+        "quote_hash": "1609005851c651db1b10da3d466a01522ec6e20785815c0e9986ff7a89001fcc"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:1019:2141",
+      "quote": "Where it trails:\nClaude Opus 5.5 beats it on Terminal-Bench 4.0 (\n66.4% vs 57.4%\n) and GPT-6 Astra on FrontierSWE v2 (\n65.5% vs 55.0%\n). Bloomberg reports some Google staff think it struggles with real coding work.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1019,
+        "end": 2141,
+        "quote_hash": "5f7ec1c626d2e5f3ce317fe618fd68ff9bc3e56162b86d65b63f216bdf5495ac"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+      "quote": "FrontierSWE v2\nAgentic coding\n55.0%\n65.5%\n56.3%\n62.3%",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 0,
+        "end": 1200,
+        "quote_hash": "fe82ac7c98149f04ff9325b25b49b9c61eec0669d048970cf4ebf3a77f56e0b1"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:12605:13705",
+      "quote": "That figure covers the program as a whole, not Argon access specifically.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 12605,
+        "end": 13705,
+        "quote_hash": "0dcaf6ddef89d7479d4554d70016a349e907f4fea18be4f68c6e86fef9779a55"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:5865:6911",
+      "quote": "The supplied announcement information does not establish an expiration date for the introductory pricing. Do not assume those rates are permanent or attach an unconfirmed deadline.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 5865,
+        "end": 6911,
+        "quote_hash": "63ac618b24cd8c262f5d6b99e0a6b673906ecb9839073f555009282eaea2a5bb"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "第三方指南指出，截至 2026 年 9 月 30 日，所获谷歌公告摘录未确认 Gemini 4 Argon 的访问资格，也未确认国家限制、订阅要求、候补流程或预览条件；Google AI Studio、Gemini API、Vertex AI、Gemini 应用及第三方网关的可用状态均标注为“未确立”。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E1",
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {
+        "time": "2026-09-30"
+      },
+      "scope_qualifiers": {
+        "scope": "访问资格与分发渠道（Google AI Studio、Gemini API、Vertex AI、Gemini 应用、第三方网关）",
+        "provenance": "第三方指南对谷歌公告摘录的核查"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "第三方报道称，Gemini 4 Argon 在 Terminal-Bench 4.0 上以 57.4% 落后于 Claude Opus 5.5 的 66.4%，在 FrontierSWE v2 上以 55.0% 落后于 GPT-6 Astra 的 65.5%；彭博社报道部分谷歌员工认为它在真实编码工作上表现吃力。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E3",
+        "E4"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark": "Terminal-Bench 4.0",
+        "value": 57.4,
+        "unit": "%",
+        "comparison_target": "Claude Opus 5.5",
+        "comparison_value": 66.4
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "Terminal-Bench 4.0 与 FrontierSWE v2 对比",
+        "provenance": "第三方报道转述评测数据；彭博社转述谷歌员工看法"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "同一陈述混合了两个基准的对比数值与彭博社转述的员工看法"
+        ],
+        "proposed_atomic_statements": [
+          "第三方报道称，Gemini 4 Argon 在 Terminal-Bench 4.0 上以 57.4% 落后于 Claude Opus 5.5 的 66.4%。",
+          "第三方报道称，Gemini 4 Argon 在 FrontierSWE v2 上以 55.0% 落后于 GPT-6 Astra 的 65.5%。",
+          "彭博社报道部分谷歌员工认为 Gemini 4 Argon 在真实编码工作上表现吃力。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "第三方指南指出，Fairwind 计划页面报告的 650+ 全球合作伙伴数字覆盖该计划整体，而非特指 Gemini 4 Argon 的访问范围。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E5"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Fairwind Program",
+        "partner_count": 650,
+        "partner_count_unit": "家"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "Fairwind 计划整体，而非 Argon 访问范围",
+        "provenance": "第三方指南对 DeepMind 计划页面的核查"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "第三方指南指出，所获公告信息未确立 Gemini 4 Argon 推介期定价的结束日期，不应假定该费率为永久价格或附加未经确认的截止时间。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E6"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "input_price_value": 2.0,
+        "input_price_unit": "USD per million tokens"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "推介期定价的有效期",
+        "provenance": "第三方指南对谷歌公告信息的核查"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-bcefb164adfcbe089d4d670f",
+      "statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 DeepSWE v1.1（Agentic coding）得分为 77.9%。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "benchmark": "DeepSWE v1.1",
+        "category": "Agentic coding",
+        "entity": "Gemini 4 Argon",
+        "unit": "%",
+        "value": 77.9
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "methodology": "deepmind.google/models/evals-methodology/gemini-4-argon",
+        "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+        "scope": "DeepSWE v1.1"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-76a5733fd18071f5db5ca305",
+      "statement": "第三方报道称，彭博社报道部分谷歌员工认为 Gemini 4 Argon 在真实编码工作上表现吃力，这与官方宣称的软件工程领先定位形成张力。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "attribution": "Bloomberg 转述部分谷歌员工看法",
+        "entity": "Gemini 4 Argon",
+        "speaker": "Bloomberg（转述谷歌员工）"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方报道转述彭博社消息",
+        "scope": "真实编码工作表现"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-ed528a8e6ee9451849a31e7e",
+      "statement": "第三方指南记载，Gemini 4 Argon 的推介期定价为每百万输入 Token 2.00 美元、每百万输出 Token 10.00 美元，缓存输入享 95% 折扣；推介期结束后费率翻倍至每百万输入 4.00 美元、每百万输出 20.00 美元，且这些价格尚未出现在公开定价页面上。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "cached_input_discount_unit": "%",
+        "cached_input_discount_value": 95,
+        "entity": "Gemini 4 Argon",
+        "input_price_unit": "USD per million tokens",
+        "input_price_value": 2.0,
+        "output_price_unit": "USD per million tokens",
+        "output_price_value": 10.0,
+        "post_intro_input_price_value": 4.0,
+        "post_intro_output_price_value": 20.0
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南转述谷歌公布定价；未见于公开定价页面",
+        "scope": "推介期定价与推介期后标准费率"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E6",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-bcefb164adfcbe089d4d670f",
+      "evidence_key": "E4",
+      "stance": "CONTEXT"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-76a5733fd18071f5db5ca305",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-ed528a8e6ee9451849a31e7e",
+      "evidence_key": "E6",
+      "stance": "CONTEXT"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E3",
+      "statement": "官方评测表将 DeepSWE v1.1 列为 Argon 领先（77.9%），而同一第三方报道指出 Argon 在 Terminal-Bench 4.0 与 FrontierSWE v2 上落后于竞品，且彭博社转述部分谷歌员工认为其真实编码工作表现吃力，构成对“软件工程领先”定位的范围性张力。",
+      "conflict_type": "SCOPE",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "编码能力评测范围",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.8,
+      "specificity": 0.7
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E2",
+      "statement": "谷歌公告宣称模型已发布并面向可信网络防御者开放，但第三方核查显示 Google AI Studio、Gemini API、Vertex AI 等渠道的可用状态均为“未确立”，公告层面与可验证分发渠道之间存在缺口。",
+      "conflict_type": "ATTRIBUTION",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "访问资格与分发渠道",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.7,
+      "specificity": 0.8
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E6",
+      "statement": "推介期定价（每百万输入 2 美元、输出 10 美元）被多方转述，但无任何来源确立折扣结束日期，价格持续性存在时间上的未决缺口。",
+      "conflict_type": "TEMPORAL",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "推介期定价有效期",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.6,
+      "specificity": 0.6
+    }
+  ]
+}

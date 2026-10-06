@@ -1,0 +1,39 @@
+执行 v3.2：动效 + 微交互 + 响应式（Awwwards/Webby/FWA 获奖级）。
+依据：D:\deepsearch\docs\ui-refactor-v3-handoff.md 第5节（尤其5.2第2、4点：Choreographed Motion、Micro-Interactions）。
+v3.1 已完成并保留，本轮在其基础上做加法。
+
+【硬约束（不变）】
+- 功能/接口/业务逻辑完全不变：不改 src/api、业务 composables；9 个 tab、props、emit、数据字段不变。
+- 动效只用已装 gsap（含 ScrollTrigger）；所有视觉数值只用 tokens.css 的 token（新增动效 token 也加到 tokens.css）。
+- 必须保留 prefers-reduced-motion 降级（降级时内容完全可见、无位移/无平滑滚动）与卸载清理（onUnmounted kill tween/ScrollTrigger、移除监听）。
+- 完成后 npm run build（退出码0）+ npm test（30/30）+ git diff --check。
+
+【A. 编排动效 Choreographed Motion】
+1) 页面载入（Page-load reveal）：进入详情时，Hero 区域做一次克制的入场编排——标题按词/行 stagger 上浮（y:24→0、opacity 0→1、stagger 0.06、dur 0.7、ease power3.out）；徽章、CTA、元数据条依次淡入（delay 0.2-0.4）。总时长不超过 1s，不使用全屏遮幕（避免遮挡内容、影响可用）。
+2) 滚动叙事（ScrollTrigger）：各 SectionHeading 与卡片进入视口时 reveal（y:16→0、opacity、dur 0.6、once:true）；统计数字 count-up（800ms、tabular-nums）；连接线 draw（600ms 内）。避免滚动劫持，只与滚动协作。
+3) Tab 切换：内容区做 160-240ms 的淡入/轻微位移过渡；2px 下划线指示器在 tab 间滑动（240ms）。
+4) 报告阅读器：保留阅读进度条与 scrollspy；章节进入视口时标题可做极轻微的强调（如 opacity/字重，不动布局）。
+
+【B. 微交互 Micro-Interactions（每个可交互元素补齐状态集 default/hover/focus/active/loading）】
+1) 主 CTA/按钮：hover 时背景轻微提亮 + 1px translateY(-1px)；active 时 translateY(0)、scale(0.98)；:focus-visible 显示 2px accent ring + 2px offset。可选：主 CTA 加轻微磁吸（magnetic，位移≤6px，基于实时 getBoundingClientRect 计算，离开复位；reduced-motion 与触摸设备禁用）。
+2) 卡片：hover 时 border 色加深（border-strong）+ 内容极轻微上浮（translateY(-2px)），不用阴影；可点击卡片 cursor:pointer。
+3) 引用胶囊：hover 时显示来源预览卡（16px 圆形 favicon + 域名 + 原文摘录，bg-elevated、border、radius-md），位置基于胶囊实时 rect 计算（避免溢出视口）；点击仍走现有溯源 dialog。
+4) 列表行/表格行：hover 行背景 subtle（bg-subtle）；可展开行有 chevron 旋转（200ms）。
+5) 对话框：打开/关闭做 180ms 缩放+淡入（scale 0.98→1、opacity），遮罩淡入；关闭按钮 hover 反馈。
+6) 输入框：focus 时 border accent + 同色 1px 外圈（box-shadow 用 token 色，不用 ring 库）；校验错误用 danger 描边+提示。
+7) 图标按钮：hover 背景 subtle、图标色变 primary；:focus-visible ring。
+8) 加载态：保留骨架屏，加 shimmer（背景位置 1.2s 线性循环，reduced-motion 时静止）。
+
+【C. 响应式 Responsive】
+1) 断点统一到 tokens.css（如 sm 640 / md 768 / lg 1024 / xl 1280）。
+2) 桌面（≥1100px）：报告 scrollspy 目录在左侧、720px 阅读列居中；多列网格（卡片 2-3 列）。
+3) 平板（768-1099px）：目录切窄屏形式（顶部下拉/抽屉）；网格降为 2 列。
+4) 手机（<768px）：Sidebar 收为抽屉（汉堡按钮，现有布局若已是则优化）；网格单列；Hero clamp 自动缩小；卡片内边距 16px；Tab 栏可横向滚动且指示器对齐；全宽按钮；隐藏非必要装饰。
+5) 检查 390×844 与 360×640：无横向溢出、文字不截断、触摸目标≥44px、对话框与来源预览不超出视口。
+6) 横屏/矮窗口（如 844×390）：Sidebar/对话框不占满高度、可滚动。
+
+【验收】
+用项目环境 Playwright（无需 MCP）跑：1440×900、1024×768、768×1024、390×844、360×640；双主题；reduced-motion；9 个 tab；报告交互（进度/scrollspy/引用 hover 预览/溯源 dialog/版本切换）；磁吸/卡片 hover（桌面）。截图核对：无横向溢出、动效流畅（无明显掉帧）、降级正确、控制台无非预期异常。
+发现问题直接修复并重跑 build+test。
+
+报告：改动文件清单、动效/微交互/响应式各自的落地项、Playwright 覆盖与截图结论、发现并修复的问题、最终 build/test 结果、任何偏离。暂不做 v3.3（原创性+八维自检）。

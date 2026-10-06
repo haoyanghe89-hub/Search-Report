@@ -66,6 +66,355 @@ INVESTIGATION_ID = "I-phase43-feedback"
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "limits,max_calls",
+    [
+        ({"max_verification_batches": 1}, 1),
+        ({"max_verification_calls": 1, "model_budget_reservations": True}, 1),
+        ({"max_verification_token_fraction": 0.001, "model_budget_reservations": True}, 0),
+    ],
+)
+async def test_verification_limits_persist_existing_results_and_enter_report(
+    investigation_store,
+    tmp_path,
+    limits,
+    max_calls,
+):
+    from marketpulse.investigation.persistence.models import RunBudgetRow
+
+    class CountsVerifier(TwoRoundModel):
+        verifier_calls = 0
+
+        async def generate(self, request):
+            if request.response_model.__name__ == "VerificationProposal":
+                self.verifier_calls += 1
+            return await super().generate(request)
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    sessions = create_session_factory(engine)
+    run_id = "RUN-verification-limit"
+    store = _seed_run(repository, engine, run_id=run_id, mode=RunMode.LIVE)
+    with sessions.begin() as session:
+        session.get(RunBudgetRow, run_id).max_tokens = 200000
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "verifier-limit")
+    model = CountsVerifier()
+    calls = BoundExternalCalls(
+        sessions=sessions,
+        repository=repository,
+        recordings=RepositoryRecordedCallStore(repository, blobs),
+        live_search=TwoRoundSearch(),
+        live_fetch=TwoRoundFetch(),
+        live_model=model,
+    )
+    result = await _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        calls,
+        owner="bounded-verifier",
+        config=FeedbackLoopConfig(**limits),
+    ).run(run_id)
+    state = FeedbackStore(sessions, repository).state(run_id)
+    assert model.verifier_calls == max_calls
+    assert result.termination == "BLOCKED"
+    assert "VERIFICATION_LIMIT_REACHED" in result.reason
+    assert state.run.current_phase is WorkflowPhase.REPORT
+    assert state.sources and state.claims and state.evidence
+    assert bool(state.validations) is bool(max_calls)
+    assert state.budget.tokens_used < state.budget.max_tokens
+    assert not calls._inflight_tokens
+    assert calls.verification_usage(run_id)[0] == max_calls
+
+
+@pytest.mark.asyncio
+async def test_repeated_analysis_is_bounded_without_marking_unsupported_claims_valid(
+    investigation_store,
+    tmp_path,
+):
+    class EmptyAnalysis(TwoRoundModel):
+        async def generate(self, request):
+            if request.response_model.__name__ == "AnalysisProposal":
+                self.analysis_calls += 1
+                return StructuredModelResult(
+                    output=request.response_model(),
+                    provider="fixture",
+                    model="fixture",
+                )
+            return await super().generate(request)
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    sessions = create_session_factory(engine)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "bounded-analysis")
+    store = _seed_run(repository, engine, run_id="RUN-bounded-analysis", mode=RunMode.LIVE)
+    model = EmptyAnalysis()
+    result = await _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        BoundExternalCalls(
+            sessions=sessions,
+            repository=repository,
+            recordings=RepositoryRecordedCallStore(repository, blobs),
+            live_search=TwoRoundSearch(),
+            live_fetch=TwoRoundFetch(),
+            live_model=model,
+        ),
+        owner="bounded-analysis-worker",
+    ).run("RUN-bounded-analysis")
+    assert model.analysis_calls == 2
+    assert result.termination == "BLOCKED"
+    state = FeedbackStore(sessions, repository).state("RUN-bounded-analysis")
+    assert "ANALYSIS_RETRY_LIMIT" in result.reason
+    assert not state.claims
+    assert state.artifacts
+    assert any("ANALYSIS_RETRY_LIMIT" in g.reason for g in state.gaps)
+    assert all(step.status is ExecutionStepStatus.COMPLETED for step in state.steps)
+
+
+@pytest.mark.asyncio
+async def test_collection_reserve_still_runs_validation_policy(investigation_store, tmp_path):
+    from marketpulse.investigation.harness.stage_budget import StageBudgetPolicy
+    from marketpulse.investigation.persistence.models import RunBudgetRow
+
+    class ConsumesCollection(TwoRoundModel):
+        verifier_calls = 0
+
+        async def generate(self, request):
+            result = await super().generate(request)
+            if request.response_model.__name__ == "AnalysisProposal":
+                # Charge enough actual usage to reach the collection ceiling, but not VERIFY.
+                result = result.model_copy(update={"usage": ModelUsage(input_tokens=145940)})
+            if request.response_model.__name__ == "VerificationProposal":
+                self.verifier_calls += 1
+            return result
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    sessions = create_session_factory(engine)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "reserved-blobs")
+    run_id = "RUN-stage-reserve"
+    store = _seed_run(repository, engine, run_id=run_id, mode=RunMode.LIVE)
+    with sessions.begin() as session:
+        session.get(RunBudgetRow, run_id).max_tokens = 200000
+    model = ConsumesCollection()
+    calls = BoundExternalCalls(
+        sessions=sessions,
+        repository=repository,
+        recordings=RepositoryRecordedCallStore(repository, blobs),
+        live_search=TwoRoundSearch(),
+        live_fetch=TwoRoundFetch(),
+        live_model=model,
+        model_budget_policy=StageBudgetPolicy(),
+    )
+    await _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        calls,
+        owner="reserved-worker",
+        config=FeedbackLoopConfig(model_budget_reservations=True),
+    ).run(run_id)
+    state = FeedbackStore(sessions, repository).state(run_id)
+    assert model.verifier_calls == 1
+    assert state.claims and state.evidence and state.sources
+    assert repository.list_validation_results(state.claims[0].claim_id)
+    assert state.run.current_phase is WorkflowPhase.REPORT
+    assert state.run.status is RunStatus.BLOCKED
+    assert state.budget.tokens_used < state.budget.max_tokens
+    assert any("COLLECTION_RESERVE_REACHED" in gap.reason for gap in state.gaps)
+    assert not calls._inflight_tokens
+
+
+@pytest.mark.asyncio
+async def test_repeated_failed_url_does_not_double_reserve_discovered_source_budget(
+    investigation_store, tmp_path
+):
+    from marketpulse.investigation.recording.errors import SecurityBlockedError
+
+    class SameSearch:
+        async def search(self, request):
+            return SearchResult(
+                provider="fixture",
+                retrieved_at=NOW,
+                items=(
+                    SearchResultItem(
+                        title="Record",
+                        url="https://public.test/record",
+                        rank=1,
+                    ),
+                ),
+            )
+
+    class FailedFetch:
+        async def fetch(self, request):
+            raise SecurityBlockedError("public DNS is blocked")
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "failed-source-blobs")
+    sessions = create_session_factory(engine)
+    run_id = "RUN-repeated-failed-source"
+    store = _seed_run(repository, engine, run_id=run_id, mode=RunMode.LIVE)
+    calls = BoundExternalCalls(
+        sessions=sessions,
+        repository=repository,
+        recordings=RepositoryRecordedCallStore(repository, blobs),
+        live_search=SameSearch(),
+        live_fetch=FailedFetch(),
+        live_model=TwoTaskSameRoundModel(),
+    )
+    await _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        calls,
+        owner="failure-counter",
+        config=FeedbackLoopConfig(fetch_concurrency=2),
+    ).run(run_id)
+    budget = repository.get(RunBudget, run_id)
+    state = FeedbackStore(sessions, repository).state(run_id)
+    assert budget.fetch_calls_used >= 2
+    assert budget.sources_used == 1
+    assert not state.snapshots and not state.evidence and not state.claims
+    assert len([gap for gap in state.gaps if gap.source_id]) >= 2
+
+
+@pytest.mark.asyncio
+async def test_semantic_reuse_reruns_full_policy_for_unchanged_pairs(investigation_store, tmp_path):
+    from marketpulse.investigation.persistence.models import InvestigationRunRow
+    from marketpulse.investigation.recovery import WORKFLOW_VERSION
+
+    class RepeatsQuote(TwoRoundModel):
+        verifier_calls = 0
+
+        async def generate(self, request):
+            if request.response_model.__name__ == "AnalysisProposal":
+                self.analysis_calls = 0
+                payload = json.loads(request.messages[1].content)
+                payload["bounded_context"]["artifacts"].sort(key=lambda a: a["is_official"])
+                message = request.messages[1].model_copy(update={"content": json.dumps(payload)})
+                request = request.model_copy(update={"messages": (request.messages[0], message)})
+            if request.response_model.__name__ == "VerificationProposal":
+                self.verifier_calls += 1
+            return await super().generate(request)
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    sessions = create_session_factory(engine)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "reuse-blobs")
+    run_id = "RUN-reuse-semantic"
+    store = _seed_run(repository, engine, run_id=run_id, mode=RunMode.LIVE)
+    with sessions.begin() as session:
+        session.get(InvestigationRunRow, run_id).workflow_version = WORKFLOW_VERSION
+    model = RepeatsQuote()
+    await _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        BoundExternalCalls(
+            sessions=sessions,
+            repository=repository,
+            recordings=RepositoryRecordedCallStore(repository, blobs),
+            live_search=TwoRoundSearch(),
+            live_fetch=TwoRoundFetch(),
+            live_model=model,
+        ),
+        owner="reuse-worker",
+        config=FeedbackLoopConfig(reuse_semantic_judgments=True, workflow_version=WORKFLOW_VERSION),
+    ).run(run_id)
+    state = FeedbackStore(sessions, repository).state(run_id)
+    assert model.verifier_calls == 1
+    assert len(repository.list_validation_results(state.claims[0].claim_id)) == 2
+    assert state.claims[0].validation_status is ValidationStatus.UNVERIFIED
+    assert len(state.sources) == 2  # Acquiring another source alone is not corroboration.
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("failure", ["followup", "empty_queries", "analysis"])
+async def test_exhausted_proposals_block_without_losing_acquired_material(
+    investigation_store: tuple[InvestigationRepository, Engine, str],
+    tmp_path: Path,
+    failure: str,
+) -> None:
+    from marketpulse.investigation.domain.enums import ReportType, RunStatus
+    from marketpulse.investigation.recording.errors import InvalidProviderResponseError
+    from marketpulse.investigation.reporting.pipeline import ReportPipeline
+    from marketpulse.investigation.reporting.writer import DeterministicWriter
+
+    class RejectedModel(TwoRoundModel):
+        rejected_calls = 0
+
+        async def generate(self, request: ModelRequest[Any]) -> StructuredModelResult[Any]:
+            name = request.response_model.__name__
+            if name == "AnalysisProposal" and failure == "analysis":
+                self.rejected_calls += 1
+                raise InvalidProviderResponseError("do not persist arbitrary provider content")
+            result = await super().generate(request)
+            if name == "RouteProposal" and failure == "followup":
+                self.rejected_calls += 1
+                task = result.output.tasks[0].model_copy(
+                    update={"task_key": "initial-event-record"}
+                )
+                return result.model_copy(
+                    update={"output": result.output.model_copy(update={"tasks": (task,)})}
+                )
+            if name == "ResearchProposal" and failure == "empty_queries":
+                return result.model_copy(
+                    update={"output": result.output.model_copy(update={"queries": ()})}
+                )
+            return result
+
+    repository, engine, _ = investigation_store
+    _seed_investigation(repository)
+    sessions = create_session_factory(engine)
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "proposal-blobs")
+    run_id = "RUN-rejected-" + failure
+    store = _seed_run(repository, engine, run_id=run_id, mode=RunMode.LIVE)
+    model = RejectedModel()
+    result = await _orchestrator(
+        repository,
+        engine,
+        blobs,
+        store,
+        BoundExternalCalls(
+            sessions=sessions,
+            repository=repository,
+            recordings=RepositoryRecordedCallStore(repository, blobs),
+            live_search=TwoRoundSearch(),
+            live_fetch=TwoRoundFetch(),
+            live_model=model,
+        ),
+        owner="proposal-worker",
+    ).run(run_id)
+    state = FeedbackStore(sessions, repository).state(run_id)
+    assert result.termination == "BLOCKED"
+    assert state.run.status is RunStatus.BLOCKED
+    assert state.run.current_phase is WorkflowPhase.REPORT
+    assert "未形成可确认结论" in result.reason
+    assert state.gaps and all(step.status is ExecutionStepStatus.COMPLETED for step in state.steps)
+    if failure != "empty_queries":
+        assert state.sources and state.artifacts
+        assert model.rejected_calls == 3
+    if failure == "analysis":
+        assert not state.evidence and not state.claims
+    report = await ReportPipeline(sessions, repository, DeterministicWriter()).generate(
+        run_id=run_id,
+        report_type=ReportType.INVESTIGATION_STATUS,
+        now=NOW,
+    )
+    assert report.snapshot.semantic_payload.terminal_run_status == "BLOCKED"
+    if failure == "analysis":
+        assert not report.snapshot.semantic_payload.claims
+
+
+@pytest.mark.asyncio
 async def test_live_partial_extraction_reaches_verification_and_preserves_rejected_gap(
     investigation_store: tuple[InvestigationRepository, Engine, str],
     tmp_path: Path,
@@ -185,7 +534,10 @@ class TwoRoundFetch:
             final_url=request.url,
             status_code=200,
             content_type="text/html",
-            body=f"<html><body><p>{text}</p></body></html>".encode(),
+            body=(
+                f"<html><body><p>{text} The source documents the record and describes "
+                "the circumstances surrounding the public incident.</p></body></html>"
+            ).encode(),
             fetched_at=NOW,
         )
 
@@ -525,8 +877,14 @@ def _integrity(blobs: LocalContentAddressedBlobStorage) -> EvidenceIntegrityVali
     return EvidenceIntegrityValidator(
         blobs=blobs,
         recognized_versions=RecognizedArtifactVersions(
-            snapshot_parsers=frozenset({("html", "1", "text-normalizer-v1")}),
-            artifact_processors=frozenset({("html", "1")}),
+            snapshot_parsers=frozenset(
+                {
+                    ("html", "1", "text-normalizer-v1"),
+                    ("html", "2", "text-normalizer-v1"),
+                    ("html", "3", "text-normalizer-v1"),
+                }
+            ),
+            artifact_processors=frozenset({("html", "1"), ("html", "2"), ("html", "3")}),
         ),
     )
 
@@ -1022,7 +1380,11 @@ class ConflictFetch:
             final_url=request.url,
             status_code=200,
             content_type="text/html",
-            body=f"<html><body>{text}</body></html>".encode(),
+            body=(
+                f"<html><body><p>{text}</p><p>The original public record provides a dated "
+                "account and describes the methodology used to establish this count."
+                "</p></body></html>"
+            ).encode(),
             fetched_at=NOW,
         )
 

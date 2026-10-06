@@ -1,0 +1,7 @@
+{
+  "requested_url": "https://deepmind.google/models/evals-methodology/gemini-4-argon",
+  "redirects": [{"status": 301, "url": "https://deepmind.google/models/evals-methodology/gemini-4-argon"}],
+  "final_status": 200,
+  "final_url": "https://storage.googleapis.com/deepmind-media/gemini/gemini_4_argon_model_evaluation.pdf",
+  "interpretation": "Official methodology URL redirects to the concrete PDF; this establishes this publishing chain, not authority for arbitrary storage.googleapis.com content."
+}

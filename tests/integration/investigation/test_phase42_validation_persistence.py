@@ -247,6 +247,8 @@ def test_validation_history_families_conflicts_and_latest_projection_are_atomic(
     persistence.assert_latest_projection_consistent(claim.claim_id)
     results = repository.list_validation_results(claim.claim_id)
     assert [item.validation_id for item in results] == ["V-VAL-1", "V-VAL-2"]
+    assert all(item.policy_version == "validation-policy-v2" for item in results)
+    assert all(item.profile_version == "validation-profiles-v2" for item in results)
     assert repository.get(Claim, claim.claim_id).latest_validation_id == "V-VAL-2"
 
     with sessions() as session:
@@ -283,4 +285,6 @@ def test_validation_history_families_conflicts_and_latest_projection_are_atomic(
                 )
             )
     with sessions() as session:
-        assert session.get(ValidationResultRow, "V-VAL-1").policy_version == "validation-policy-v1"
+        assert session.get(ValidationResultRow, "V-VAL-1").policy_version == "validation-policy-v2"
+        assert session.get(ClaimRow, claim.claim_id).latest_validation_id == "V-VAL-2"
+        assert session.scalar(select(func.count()).select_from(ValidationResultRow)) == 2

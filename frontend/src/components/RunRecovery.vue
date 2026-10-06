@@ -1,6 +1,7 @@
 <script setup>
-import { watch, onUnmounted } from 'vue'
+import { onUnmounted, watch } from 'vue'
 import { recoveryBudgetFields, useRunRecovery } from '../composables/useRunRecovery.js'
+
 const props = defineProps({ runId: { type: String, required: true }, busy: Boolean })
 const emit = defineEmits(['resumed', 'busy'])
 const { recovery, loading, submitting, accepted, error, consent, increase, validIncrease, allAcknowledged, canSubmit, load, clear, dispose, resume } = useRunRecovery({ onResumed: result => emit('resumed', result) })
@@ -11,56 +12,56 @@ function amount(value, scale = 1) { return Number.isFinite(value) ? (value / sca
 </script>
 
 <template>
-  <section class="run-recovery" aria-label="继续原调查" :aria-busy="loading || submitting">
-    <h2>继续原调查</h2>
-    <p>从已保存的检查点继续，复用已落盘结果。运行编号和已消耗预算保留。开启自动恢复时，符合条件的中断会自动继续；费用不明或预算不足仍需手动处理。</p>
-    <p v-if="loading" role="status">正在检查恢复条件…</p>
-    <p v-if="error" class="recovery-error" role="alert">{{ error }}</p>
-    <p v-if="recovery?.reason" class="recovery-reason">{{ recovery.reason }}</p>
+  <section class="run-recovery card panel-enter" aria-label="继续原调查" :aria-busy="loading || submitting">
+    <header class="recovery-heading"><div><span class="recovery-kicker">运行恢复</span><h2>继续原调查</h2></div><span class="badge probable">保留检查点</span></header>
+    <p class="recovery-intro">从已保存的检查点继续，复用已落盘结果。运行编号和已消耗预算保留。开启自动恢复时，符合条件的中断会自动继续；费用不明或预算不足仍需手动处理。</p>
+    <div v-if="loading" class="recovery-skeleton" role="status"><span class="skeleton skeleton-shimmer"></span><span class="skeleton skeleton-shimmer"></span></div>
+    <p v-if="error" class="notice error" role="alert">{{ error }}</p>
+    <p v-if="recovery?.reason" class="notice probable">{{ recovery.reason }}</p>
+
     <form v-if="recovery?.can_resume" @submit.prevent="!busy && resume()">
-      <fieldset :disabled="busy || submitting || accepted">
+      <fieldset class="recovery-block" :disabled="busy || submitting || accepted">
         <legend>追加预算（可选）</legend>
         <p class="muted">仅增加上限，不清零用量；填 0 表示不追加。追加额度可能增加实际调用费用。</p>
         <div class="budget-grid">
-          <label v-for="field in recoveryBudgetFields" :key="field.key">
+          <label v-for="field in recoveryBudgetFields" :key="field.key" class="field">
             <span>{{ field.label }}</span>
             <small>已用 {{ amount(recovery.budget?.[field.used], field.scale) }} / 上限 {{ amount(recovery.budget?.['max_' + field.key], field.scale) }}</small>
             <input v-model="increase[field.key]" type="number" min="0" step="1" required :aria-label="'追加' + field.label" />
           </label>
         </div>
       </fieldset>
-      <fieldset v-if="recovery.unknown_calls?.length" :disabled="busy || submitting || accepted" class="unknown-calls">
+
+      <fieldset v-if="recovery.unknown_calls?.length" class="recovery-block unknown-calls" :disabled="busy || submitting || accepted">
         <legend>有 {{ recovery.unknown_calls.length }} 个调用的执行结果不明</legend>
-        <p>供应商可能已经完成并计费，但本地没有响应记录。只有逐项接受可能重复计费，才能重试这些调用。</p>
-        <label v-for="call in recovery.unknown_calls" :key="call.intent_id" class="call-consent">
+        <p class="notice disputed">供应商可能已经完成并计费，但本地没有响应记录。只有逐项接受可能重复计费，才能重试这些调用。</p>
+        <label v-for="call in recovery.unknown_calls" :key="call.intent_id" class="record call-consent">
           <input v-model="consent" type="checkbox" :value="call.intent_id" />
           <span>允许重试并接受可能重复的费用<small>{{ call.logical_step_key }} · {{ call.call_site_key }}</small><small>调用编号：{{ call.intent_id }}</small></span>
         </label>
       </fieldset>
-      <p v-if="!validIncrease" role="alert">追加额度必须为非负整数。</p>
-      <p v-if="!allAcknowledged" class="muted">请逐项确认未知调用；未确认时不会继续运行。</p>
-      <button type="submit" :disabled="busy || !canSubmit">{{ submitting ? '正在提交恢复…' : accepted ? '已提交，等待执行…' : '继续这次调查' }}</button>
+      <p v-if="!validIncrease" class="notice error" role="alert">追加额度必须为非负整数。</p>
+      <p v-if="!allAcknowledged" class="notice probable">请逐项确认未知调用；未确认时不会继续运行。</p>
+      <div class="recovery-actions"><button type="submit" class="btn btn-primary" :disabled="busy || !canSubmit">{{ submitting ? '正在提交恢复…' : accepted ? '已提交，等待执行…' : '继续这次调查' }}</button><button v-if="!accepted" type="button" class="btn btn-ghost" :disabled="busy || loading || submitting" @click="load(runId)">重新检查恢复条件</button></div>
     </form>
-    <button v-if="!accepted" type="button" class="refresh-recovery" :disabled="busy || loading || submitting" @click="load(runId)">重新检查恢复条件</button>
+    <button v-else-if="!accepted && !loading" type="button" class="btn btn-ghost" :disabled="busy || submitting" @click="load(runId)">重新检查恢复条件</button>
   </section>
 </template>
 
 <style scoped>
-.run-recovery { margin: 24px 0 36px; padding: 24px; border: 1px solid var(--accent-line); background: var(--paper-warm); }
-h2 { margin: 0 0 12px; font: 500 24px var(--font-display); }
-p { margin: 12px 0; line-height: 1.7; }
-fieldset { margin: 20px 0; border: 0; padding: 0; min-width: 0; }
-legend { font-weight: 600; }
-.budget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
-.budget-grid label { display: flex; flex-direction: column; gap: 7px; font-size: 14px; }
-.budget-grid input { width: 100%; min-width: 0; padding: 8px; border: 1px solid var(--paper-edge); background: var(--paper-base); color: var(--ink-deep); }
-small { display: block; color: var(--ink-muted); font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
-.call-consent { display: flex; align-items: flex-start; gap: 12px; margin-top: 16px; font-size: 14px; }
-.call-consent input { margin: 5px 0 0; padding: 0; width: auto; flex-shrink: 0; }
-.recovery-error, .recovery-reason { border-left: 2px solid var(--accent); padding-left: 12px; overflow-wrap: anywhere; }
-button { padding: 10px 16px; border: 1px solid var(--accent-line); background: var(--ink-black); color: var(--paper-base); cursor: pointer; }
-.run-recovery button[type="submit"] { background: var(--ink-black); color: var(--paper-base); }
-button:disabled { opacity: .5; cursor: not-allowed; }
-.refresh-recovery { margin-top: 16px; background: transparent; color: var(--ink-muted); }
-.muted { color: var(--ink-muted); font-size: 13px; }
+.run-recovery { margin-block: var(--space-6) var(--space-10); }
+.recovery-heading, .recovery-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+.recovery-kicker { color: var(--accent); font-family: var(--font-mono); font-size: var(--font-size-overline); font-weight: var(--font-weight-overline); letter-spacing: var(--letter-spacing-overline); }
+h2 { margin: var(--space-1) 0 0; font-family: var(--font-display); font-size: var(--font-size-h2); font-weight: var(--font-weight-h2); }
+.recovery-intro { max-width: calc(var(--content-max-width) - var(--space-32) - var(--space-32)); color: var(--text-secondary); font-family: var(--font-serif); font-size: var(--font-size-body-lg); line-height: var(--line-height-body-lg); }
+.recovery-skeleton { display: grid; gap: var(--space-3); margin-block: var(--space-5); }
+.recovery-skeleton span { display: block; height: var(--space-8); }
+.recovery-block { min-width: 0; margin-block: var(--space-6); padding: var(--space-5); border: calc(var(--space-1) / 4) solid var(--border-default); border-radius: var(--radius-lg); background: var(--bg-elevated); }
+legend { padding-inline: var(--space-2); color: var(--text-primary); font-family: var(--font-display); font-size: var(--font-size-h4); font-weight: var(--font-weight-h4); }
+.budget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(calc(var(--space-32) + var(--space-8)), 1fr)); gap: var(--space-4); }
+.field small, .call-consent small { display: block; color: var(--text-muted); font-size: var(--font-size-caption); line-height: var(--line-height-caption); overflow-wrap: anywhere; }
+.call-consent { display: flex; align-items: flex-start; gap: var(--space-3); margin-top: var(--space-3); padding: var(--space-4); }
+.call-consent + .call-consent { margin-top: var(--space-2); }
+.call-consent input { width: auto; margin-top: var(--space-1); flex-shrink: 0; }
+.recovery-actions { justify-content: flex-start; margin-top: var(--space-5); }
 </style>

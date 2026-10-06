@@ -1359,3 +1359,14 @@ class RecordedHumanReviewDecisionRow(Base):
     evaluation_hash: Mapped[str] = mapped_column(HASH, nullable=False)
     semantic_fingerprint: Mapped[str] = mapped_column(HASH, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class DeletionPermitRow(Base):
+    """Ephemeral exact-row permits, inserted/deleted in one archive transaction."""
+    __tablename__ = "inv_deletion_permits"
+    table_name: Mapped[str] = mapped_column(String(100), primary_key=True)
+    row_key: Mapped[str] = mapped_column(String(1000), primary_key=True)
+
+
+# Lightweight metadata only: never imports quant SDKs or scientific dependencies.
+from marketpulse.quant.storage import models as quant_models  # noqa: E402, F401

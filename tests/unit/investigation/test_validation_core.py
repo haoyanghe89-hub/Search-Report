@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+import pytest
+
 from marketpulse.infrastructure.storage.local import LocalContentAddressedBlobStorage
 from marketpulse.infrastructure.storage.models import BlobRef
 from marketpulse.investigation.domain.claims import Claim, ClaimEvidenceRelation
@@ -46,6 +48,201 @@ from marketpulse.investigation.validation import (
 from marketpulse.investigation.validation.profiles import PROFILES
 
 NOW = datetime(2026, 9, 22, tzinfo=UTC)
+
+
+@pytest.mark.parametrize(
+    "claim_type,qualifiers",
+    [
+        (ClaimType.STATEMENT, {"speaker": "Publisher"}),
+        (
+            ClaimType.QUANTITATIVE,
+            {
+                "value": 42,
+                "unit": "%",
+                "time": "2026",
+                "scope": "Test",
+                "definition": "pass@1",
+                "provenance": "record",
+            },
+        ),
+        (
+            ClaimType.ATTRIBUTION,
+            {
+                "attribution_kind": "DOCUMENTED_ACTION",
+                "interested_party_only": False,
+                "direct_finding": True,
+            },
+        ),
+        (
+            ClaimType.ANALYTIC_INFERENCE,
+            {"reasoning_basis": "two reports", "uncertainty": "limited"},
+        ),
+    ],
+)
+def test_main_profiles_probable_does_not_waive_entailment_or_independence(
+    tmp_path, claim_type, qualifiers
+):
+    from marketpulse.investigation.validation.quality import SourceQualityAssessor
+
+    class MarginalQuality(SourceQualityAssessor):
+        def assess(self, **kwargs):
+            return super().assess(**kwargs).model_copy(update={"normalized_score": 0.55})
+
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "grades")
+    claim = _claim(claim_type, qualifiers=qualifiers)
+    bundles = tuple(
+        _bundle(blobs, claim, i, text="A directly stated supported fact.") for i in (1, 2)
+    )
+    policy = ValidationPolicy(integrity=_policy(blobs)._integrity, quality=MarginalQuality())
+    assert policy.validate(_request(claim, bundles)).result.status is ValidationStatus.PROBABLE
+    partial = tuple(
+        b.judgment.model_copy(update={"judgment": SemanticJudgmentStatus.PARTIALLY_SUPPORTS})
+        for b in bundles
+    )
+    assert (
+        policy.validate(_request(claim, bundles, judgments=partial)).result.status
+        is ValidationStatus.UNVERIFIED
+    )
+    assert (
+        policy.validate(_request(claim, bundles[:1])).result.status is ValidationStatus.UNVERIFIED
+    )
+
+    # Real agent persistence keeps qualifiers grouped, rather than flat.
+    grouped = {"entity": {}, "time": {}, "scope": {}}
+    for key, value in qualifiers.items():
+        group = (
+            "entity"
+            if key in {"value", "unit", "speaker"}
+            else "time"
+            if key == "time"
+            else "scope"
+        )
+        grouped[group][key] = value
+    nested = claim.model_copy(update={"qualifiers": grouped})
+    assert policy.validate(_request(nested, bundles)).result.status is ValidationStatus.PROBABLE
+
+
+def test_conflicting_flat_and_grouped_numeric_core_is_not_verified(tmp_path):
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "conflict")
+    claim = _claim(
+        ClaimType.QUANTITATIVE,
+        qualifiers={
+            "entity": {"value": 42, "unit": "%"},
+            "value": 43,
+            "time": {"time": "2026"},
+            "scope": {"scope": "Test", "definition": "pass@1", "provenance": "record"},
+        },
+    )
+    bundles = tuple(
+        _bundle(blobs, claim, i, text="supported fact", first_hand=True) for i in (1, 2)
+    )
+    outcome = _policy(blobs).validate(_request(claim, bundles))
+    assert outcome.result.status is ValidationStatus.UNVERIFIED
+    assert "qualifier:value" in outcome.result.validation_basis
+
+
+def test_issuer_family_is_not_retransmission_and_stays_one_family(tmp_path):
+    from marketpulse.investigation.validation.lineage import SourceLineageResolver
+    from marketpulse.investigation.validation.quality import SourceQualityAssessor
+
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "quality")
+    claim = _claim(ClaimType.QUANTITATIVE)
+    bundles = tuple(
+        _bundle(
+            blobs,
+            claim,
+            i,
+            text="Official original evaluation.",
+            official=True,
+            first_hand=True,
+            source_type=SourceType.OFFICIAL_REPORT,
+            syndication_cluster_id="issuer:Google",
+        )
+        for i in (1, 2)
+    )
+    lineage = SourceLineageResolver().resolve(sources=tuple(b.source for b in bundles))
+    assert len(lineage.families) == 1
+    assessment = SourceQualityAssessor().assess(
+        source=bundles[0].source, snapshot=bundles[0].snapshot, family=lineage.families[0]
+    )
+    assert assessment.normalized_score >= 0.6
+    assert (
+        next(c for c in assessment.components if c.name == "retransmission_depth").normalized_value
+        == 1
+    )
+
+
+@pytest.mark.parametrize("relation", ["redirect", "link"])
+def test_archived_publisher_proof_calibrates_cloud_pdf_without_new_family(tmp_path, relation):
+    from marketpulse.investigation.services.publisher_provenance import publisher_views
+    from marketpulse.investigation.validation.lineage import SourceLineageResolver
+    from marketpulse.investigation.validation.quality import SourceQualityAssessor
+
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "publisher")
+    claim = _claim(ClaimType.QUANTITATIVE)
+    official = _bundle(
+        blobs, claim, 1, text="Immutable original PDF", official=True, first_hand=True
+    )
+    cloud = _bundle(blobs, claim, 2, text="Immutable original PDF")
+    url = "https://storage.googleapis.com/publisher/evaluation.pdf"
+    publisher = official.source.model_copy(
+        update={"canonical_url": "https://publisher.test/evals-methodology"}
+    )
+    source = cloud.source.model_copy(update={"canonical_url": url, "publisher": None})
+    provenance = {"final_url": url}
+    if relation == "redirect":
+        provenance["publisher_redirect_chain"] = {
+            "official_url": str(publisher.canonical_url),
+            "document_url": url,
+            "publisher": publisher.publisher,
+        }
+    else:
+        provenance["publisher_document_links"] = [
+            {
+                "url": url,
+                "anchor": "Our evaluation report",
+                "publication_statement": "Our evaluation report",
+            }
+        ]
+    provenance["methodology"] = str(publisher.canonical_url)
+    record = official.snapshot.model_copy(
+        update={
+            "mime_type": "application/pdf" if relation == "redirect" else "text/html",
+            "provenance": provenance,
+        }
+    )
+    document = cloud.snapshot.model_copy(
+        update={"mime_type": "application/pdf", "provenance": {"final_url": url}}
+    )
+    sources, snapshots = publisher_views((publisher, source), (record, document), blobs)
+    assert sources[1].is_official and sources[1].is_first_hand
+    assert snapshots[1].provenance["publisher_proof"]["raw_sha256"] == record.raw_sha256
+    assert not source.is_official  # Archived Source objects remain immutable.
+    lineage = SourceLineageResolver().resolve(sources=sources, snapshots=snapshots)
+    assert len(lineage.families) == 1
+    quality = SourceQualityAssessor().assess(
+        source=sources[1], snapshot=snapshots[1], family=lineage.families[0]
+    )
+    assert quality.normalized_score >= 0.6
+    assert "publisher publication proof" in " ".join(quality.basis).lower()
+    # A bare bucket, a second-hand publishing page, a different run, and
+    # mismatched redirect bytes cannot establish first-hand publisher identity.
+    assert not publisher_views((source,), (document,), blobs)[0][0].is_official
+    secondary = publisher.model_copy(update={"is_first_hand": False})
+    assert not publisher_views((secondary, source), (record, document), blobs)[0][1].is_official
+    old = record.model_copy(update={"run_id": "old-run"})
+    assert not publisher_views((publisher, source), (old, document), blobs)[0][1].is_official
+    if relation == "redirect":
+        changed = blobs.put_bytes(b"Different PDF edition").ref
+        old_edition = record.model_copy(
+            update={"raw_blob_ref": changed, "raw_sha256": changed.sha256}
+        )
+        assert not publisher_views((publisher, source), (old_edition, document), blobs)[0][
+            1
+        ].is_official
+    else:
+        later = record.model_copy(update={"retrieved_at": record.retrieved_at + timedelta(days=1)})
+        assert not publisher_views((publisher, source), (later, document), blobs)[0][1].is_official
 
 
 @dataclass(frozen=True)
@@ -247,6 +444,57 @@ def _official_bundle(
         first_hand=True,
         source_type=SourceType.OFFICIAL_REPORT,
     )
+
+
+def test_traceable_official_record_passes_quality_but_anonymous_record_does_not(tmp_path):
+    from marketpulse.investigation.validation.lineage import SourceLineageResolver
+    from marketpulse.investigation.validation.quality import SourceQualityAssessor
+
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "quality")
+    claim = _claim(ClaimType.STATEMENT)
+    official = _official_bundle(blobs, claim)
+    anonymous = _bundle(blobs, claim, 2, text="unsupported web page")
+    for bundle, expected in ((official, True), (anonymous, False)):
+        source = (
+            bundle.source
+            if expected
+            else bundle.source.model_copy(
+                update={"author": None, "publisher": None, "organization": None}
+            )
+        )
+        provenance = {
+            "requested_url": str(source.canonical_url),
+            "final_url": str(source.canonical_url),
+        }
+        snapshot = bundle.snapshot.model_copy(update={"provenance": provenance})
+        family = SourceLineageResolver().resolve(sources=(source,)).families[0]
+        assessment = SourceQualityAssessor().assess(source=source, snapshot=snapshot, family=family)
+        assert (assessment.normalized_score >= 0.6) is expected
+        assert assessment.component("methodology_transparency").level.value == "UNKNOWN"
+        assert assessment.component("data_provenance").level.value == "STRONG"
+
+
+def test_probable_keeps_full_integrity_and_missing_requirements(tmp_path):
+    blobs = LocalContentAddressedBlobStorage(tmp_path / "probable")
+    claim = _claim(
+        ClaimType.QUANTITATIVE,
+        qualifiers={
+            "value": 42,
+            "unit": "%",
+            "time": "2026",
+            "scope": "Test A",
+            "definition": "pass@1",
+        },
+    )
+    bundles = tuple(_official_bundle(blobs, claim, i, "42% on Test A") for i in (1, 2))
+    outcome = _policy(blobs).validate(_request(claim, bundles))
+    assert outcome.result.status is ValidationStatus.PROBABLE
+    assert not outcome.result.validation_basis_payload["profile_sufficient"]
+    assert "methodology_or_provenance" in outcome.result.validation_basis
+    assert outcome.result.citation_valid
+    bad = bundles[0].evidence.model_copy(update={"content": "invented quote"})
+    broken = _request(claim, bundles).model_copy(update={"evidence": (bad, bundles[1].evidence)})
+    assert _policy(blobs).validate(broken).result.status is ValidationStatus.UNVERIFIED
 
 
 def test_statement_verifies_attribution_but_not_objective_event(tmp_path: Path) -> None:

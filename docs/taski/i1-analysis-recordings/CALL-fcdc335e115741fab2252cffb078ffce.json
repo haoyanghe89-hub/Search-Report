@@ -1,0 +1,326 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+      "quote": "All are vendor-reported with no independent replication.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 24680,
+        "end": 24736,
+        "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:19165:20233",
+      "quote": "Everything measured here is vendor-reported.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 19900,
+        "end": 19944,
+        "quote_hash": "4f4ee4e2c12a9fcb9e6c4b743f9bffc2ffe7f53c6734ce3b31316ac31f931551"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:6687:7719",
+      "quote": "CWE-bench v1 is not a clean win: the published chart shows a three-way tie at 68% involving Argon, Grok 4.7, and GPT-6 Astra.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 7000,
+        "end": 7135,
+        "quote_hash": "0cb83a29406c6e3ce71f34789174fab7dac78f903c030af1ee2ca9f7394de6e3"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:8545:9736",
+      "quote": "Real-world vulnerability discovery and a partner-run penetration-testing benchmark, Argon against the previous cyber-focused model. Vendor-reported; Wiz is the partner named on the chart.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 8900,
+        "end": 9090,
+        "quote_hash": "f716ca97a4365088f4ac8190af47b63c2043b84afa389663d9f9af97e0267b7b"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+      "quote": "All are vendor-reported with no independent replication.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 24680,
+        "end": 24736,
+        "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:6687:7719",
+      "quote": "If a decision depends on that specific benchmark, the honest conclusion is a draw, not a lead.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 7136,
+        "end": 7228,
+        "quote_hash": "0cb83a29406c6e3ce71f34789174fab7dac78f903c030af1ee2ca9f7394de6e3"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "截至该第三方指南发布时，谷歌公布的 Gemini 4 Argon 各项基准成绩均为厂商自报，尚无独立复现。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E1",
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attribution": "vendor-reported"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布基准数据的说明",
+        "scope": "DeepSWE v1.1、AutomationBench、LVBench、Vals Index、CWE-bench v1、Gray Swan IPI"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "第三方指南指出 CWE-bench v1 并非 Argon 的干净胜出：公布图表显示 Argon、Grok 4.7 与 GPT-6 Astra 三方以 68% 并列，因此该基准不能把 Argon 与同场模型区分开。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E3",
+        "E6"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark": "CWE-bench v1",
+        "value": 68.0,
+        "unit": "%",
+        "comparison": "Argon、Grok 4.7、GPT-6 Astra 三方并列 68%"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布图表的解读",
+        "scope": "CWE-bench v1"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "第三方指南称，Argon 在真实漏洞发现与 Wiz 渗透测试基准上的对比数据由厂商自报，其中 Wiz 为图表所列合作方。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E4"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attribution": "vendor-reported",
+        "partner": "Wiz"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布图表的说明",
+        "scope": "真实漏洞发现基准与 Wiz 渗透测试基准"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "在已获取的材料中，未发现任何第三方独立实测复现谷歌公布的 Gemini 4 Argon 基准成绩，因此无法判断独立结论是否与官方一致。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E5"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "基于已获取材料范围的检索结论",
+        "scope": "谷歌公布的 Gemini 4 Argon 基准成绩"
+      },
+      "importance": "CRITICAL",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-4458e34e255f713066ae147a",
+      "statement": "上述 DeepSWE v1.1、CWE-bench v1 等基准成绩均为厂商自报，尚无独立复现。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "attribution": "vendor-reported",
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布数据的说明"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-5867d282f459e9028674da52",
+      "statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 CWE-bench v1（Cybersecurity）得分为 68.0%，与并列第一的其他模型同分。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "benchmark": "CWE-bench v1",
+        "category": "Cybersecurity",
+        "entity": "Gemini 4 Argon",
+        "unit": "%",
+        "value": 68.0
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "comparison": "与 Grok 4.7、GPT-6 Astra 三方并列 68%",
+        "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+        "scope": "CWE-bench v1"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E6",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-4458e34e255f713066ae147a",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-5867d282f459e9028674da52",
+      "evidence_key": "E3",
+      "stance": "CONTEXT"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-5867d282f459e9028674da52",
+      "evidence_key": "E3",
+      "statement": "官方评测表将 CWE-bench v1 的 68% 列为并列第一，第三方指南确认该 68% 为 Argon、Grok 4.7、GPT-6 Astra 三方并列，故该成绩不构成对同场模型的领先。",
+      "conflict_type": "SCOPE",
+      "numeric_value": 68.0,
+      "unit": "%",
+      "report_time": null,
+      "scope": "CWE-bench v1",
+      "definition": "并列第一（three-way tie）",
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.8,
+      "specificity": 0.9
+    }
+  ]
+}

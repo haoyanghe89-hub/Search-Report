@@ -4,6 +4,17 @@ from __future__ import annotations
 class ExternalCallError(RuntimeError):
     code = "EXTERNAL_CALL_ERROR"
 
+    def __init__(
+        self,
+        message: str = "",
+        *,
+        reason_code: str | None = None,
+        diagnostics: dict[str, str | int | None] | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.reason_code = reason_code
+        self.diagnostics = diagnostics or {}
+
 
 class ProviderCallError(ExternalCallError):
     code = "PROVIDER_ERROR"

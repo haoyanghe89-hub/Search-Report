@@ -23,6 +23,8 @@ from tests.integration.investigation.test_live_runtime import (
     _settings,
 )
 
+pytestmark = pytest.mark.usefixtures("unfinished_legacy_runs")
+
 
 def settings(tmp_path: Path) -> Any:
     return _settings(tmp_path).model_copy(
@@ -134,7 +136,11 @@ def test_cancelled_and_budget_blocked_runs_are_not_auto_resumed(
         tick(client)
         result = client.get(f"/api/runs/{budget_id}").json()
         assert result["run"]["status"] == "BLOCKED"
-        assert result["budget"]["max_model_calls"] == result["budget"]["model_calls_used"] == 1
+        assert result["budget"]["max_model_calls"] == 1
+        # One call cannot cover both collection and protected later stages:
+        # fail admission before paying the provider, rather than charge a fake call.
+        assert result["budget"]["model_calls_used"] == 0
+        assert "BUDGET_EXHAUSTED" in result["run"]["interruption_reason"]
         assert client.get("/api/ops/status").json()["alerts"][0]["code"] == "RUN_BLOCKED"
 
 

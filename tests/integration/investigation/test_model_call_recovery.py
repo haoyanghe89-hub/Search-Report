@@ -65,6 +65,53 @@ class Model:
         )
 
 
+async def test_auto_retry_unknown_twice_then_success(recovery):
+    from marketpulse.investigation.persistence.models import RunBudgetRow
+
+    calls, site, request, model = recovery
+    calls.model_retry_attempts = 3
+    calls.model_retry_backoff_seconds = 0
+    calls.pause_on_unknown_outcome = True
+    with calls.sessions.begin() as session:
+        session.get(RunBudgetRow, site.run_id).max_tokens = 100000
+    original = model.generate
+    attempts = 0
+
+    async def generate(req):
+        nonlocal attempts
+        attempts += 1
+        if attempts <= 2:
+            raise TimeoutError("unknown outcome")
+        return await original(req)
+
+    model.generate = generate
+    result = await calls.model(site, request)
+    assert attempts == 3 and result.output.text == "archived answer"
+    events = calls.repository.list_audit_events("I-recovery")
+    assert [e.metadata["sequence"] for e in events] == [1, 2, 3]
+    assert all(e.metadata["retry_policy"] == "ALLOW_POSSIBLE_DUPLICATE_CHARGE" for e in events[1:])
+    assert calls.repository.get(RunBudget, site.run_id).tokens_used > 5
+    await calls.model(site, request)
+    assert attempts == 3  # Success binding reused, never billed twice.
+
+
+async def test_auto_retry_exhaustion_is_durable_across_restart(recovery):
+    from marketpulse.investigation.harness.model_retry import ModelRetryExhaustedError
+    from marketpulse.investigation.persistence.models import RunBudgetRow
+
+    calls, site, request, model = recovery
+    calls.model_retry_attempts = 2
+    calls.model_retry_backoff_seconds = 0
+    calls.pause_on_unknown_outcome = True
+    model.error = TimeoutError("unknown outcome")
+    with calls.sessions.begin() as session:
+        session.get(RunBudgetRow, site.run_id).max_tokens = 100000
+    for _ in range(2):
+        with pytest.raises(ModelRetryExhaustedError):
+            await calls.model(site, request)
+        assert model.calls == 3
+
+
 @pytest.fixture
 def recovery(
     investigation_store: tuple[InvestigationRepository, Engine, str], tmp_path: Path
@@ -136,6 +183,57 @@ def recovery(
         prompt_version="prompt-v1",
     )
     return calls, StepCallSite("R-recovery", "S-recovery", "plan", "model", 0), request, model
+
+
+async def test_stage_admission_denies_before_provider_and_cleans_inflight(recovery):
+    from marketpulse.investigation.harness.stage_budget import StageBudgetPolicy
+
+    calls, site, request, model = recovery
+    calls.model_budget_policy = StageBudgetPolicy()
+    with pytest.raises(RunBudgetExceededError, match="stage model reservation"):
+        await calls.model(site, request)
+    assert model.calls == 0
+    assert calls.repository.get(RunBudget, site.run_id).model_calls_used == 0
+    assert not calls._inflight_tokens
+
+
+async def test_inflight_blocks_second_call_and_cancellation_releases_estimate(recovery):
+    import asyncio
+
+    from marketpulse.investigation.harness.stage_budget import (
+        StageBudgetPolicy,
+        conservative_request_tokens,
+    )
+    from marketpulse.investigation.persistence.models import RunBudgetRow
+
+    calls, site, request, _ = recovery
+    entered = asyncio.Event()
+
+    class WaitingModel:
+        calls = 0
+
+        async def generate(self, request):
+            self.calls += 1
+            entered.set()
+            await asyncio.Event().wait()
+
+    waiting = WaitingModel()
+    calls.live_model = waiting
+    calls.model_budget_policy = StageBudgetPolicy()
+    estimate = conservative_request_tokens(request)
+    with calls.sessions.begin() as session:
+        session.get(RunBudgetRow, site.run_id).max_tokens = estimate * 2
+        session.get(RunBudgetRow, site.run_id).max_model_calls = 20
+    task = asyncio.create_task(calls.model(site, request))
+    await asyncio.wait_for(entered.wait(), timeout=3)
+    second = StepCallSite(site.run_id, site.step_id, site.logical_step_key, "second-model", 0)
+    with pytest.raises(RunBudgetExceededError, match="stage model reservation"):
+        await calls.model(second, request)
+    assert waiting.calls == 1
+    task.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await task
+    assert not calls._inflight_tokens
 
 
 async def test_provider_completed_but_record_save_crashed_blocks_automatic_retry(

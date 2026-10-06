@@ -1,0 +1,31 @@
+执行任务：为「真实调查进行中」的实时流程增强动画与新颖交互（数字卷宗风格，Awwwards 级）。
+依据：D:\deepsearch\docs\ui-refactor-v3-handoff.md 第5节；v3 已完成并保留，本轮做调查实时态的动效加法。
+主要对象：src/components/RunProgress.vue（必要时少量配合 InvestigationView.vue 的实时流转场，不改其业务逻辑）。
+
+【硬约束（不变）】
+- 功能/接口/业务逻辑完全不变：不改 src/api、业务 composables；props（replaying/starting/running/phase/workers/budget/steps）、数据字段、轮询机制不变。
+- 动效只用 gsap；新增数值/动效参数只用 tokens.css token（新增 token 加到 tokens.css）。
+- 必须保留 prefers-reduced-motion 降级（降级时内容完全可见、无位移/无循环动画）与卸载清理（kill tween、移除监听/观察器）。
+- 触摸/低性能设备不做指针类与高耗能动画；避免布局抖动（优先 opacity/transform）。
+- 完成后 npm run build（退出码0）+ npm test（30/30）+ git diff --check。
+
+【动画与新颖交互设计（围绕“调查即建档、证据在归档”的卷宗叙事，逐项落地，克制精致）】
+1) 步骤“归档入卷”：steps 数组新增条目时，新步骤卡以索引卡方式入场（opacity 0→1、y:18→0、可选 rotate 0.5deg→0、dur .5 power3.out、stagger），像一张证据卡归入档案盒；已存在步骤不重播。当前正在执行（RUNNING/VERIFYING）的步骤卡有克制的呼吸/扫描（一条细线在卡内横向扫过，1.6s 循环，透明度低）；状态变为完成时扫描停止并落定。
+2) 状态“戳记盖下”：步骤/研究员状态从进行中变为完成（COMPLETED/SUCCEEDED）时，状态戳记做一次“盖章”动画（scale 1.4→1、rotate -6deg→0、opacity，dur .35 back.out），呼应 v3 的 stamp 语言；失败态用中性/语义色轻提示，不闪烁。
+3) 研究员工作态：worker-grid 中当前活跃研究员卡片有轻微描边强调与一次入场；状态切换时徽章平滑过渡（不跳变）。
+4) 预算数字翻跳：budget 的搜索/抓取/模型调用数字随增长做数字滚动/翻牌（duration .4、tabular-nums），上限值静态显示。
+5) 阶段“打字机/逐行揭示”：当前阶段（phase）变化时，阶段名或一句进度描述做克制的逐字/淡入（typewriter 或 mask reveal，dur .4，循环不超过两次，避免噪声）；不确定进度条改为分段细线随阶段推进填充（或保留 sweep 但更精致），不再用大面积扫块。
+6) 完成“合卷/开卷”转场：running 由 true 变 false（本次运行结束）时，进度区做一次 ≤500ms 的合卷淡出/收拢，随后结果区按 v3 已有的“开卷”入场，形成“建档完成→翻开卷宗”的连贯呼应；不遮屏、不锁滚动。
+7) 空/等待态：启动（starting）与等待首个步骤时，用简洁的档案式等待视觉（orbit 保留但更精致），避免空白。
+
+【实时性要求】
+- 所有动画由数据变化驱动（watch steps/workers/budget/phase/running），不写死时序；组件卸载或切换运行时正确复位，旧轮询回写不触发错误动画。
+- 步骤很多时只对可视/新增项做动画，避免一次性大量 tween；及时 kill 无用 tween。
+
+【验收】
+1) 用项目环境 Playwright 模拟一次实时流程（可用离线回放或 mock 轮询数据驱动 steps 逐步增长，若能真实联网则跑真实调查），核对：步骤归档、戳记盖下、数字翻跳、阶段揭示、完成转场依次发生且连贯；reduced-motion 下全部静止且内容完整。
+2) 1440×900 与 390×844 双主题：无横向溢出、无明显掉帧、控制台无非预期异常。
+3) 全仓 grep：tokens.css 外无硬编码颜色、无未定义 token。
+发现问题直接修复并重跑 build+test。
+
+报告：改动文件、各动画项落地方式、实时驱动与清理策略、Playwright 覆盖结论、发现并修复的问题、最终 build/test 结果、任何偏离。

@@ -31,6 +31,13 @@ class SourceQualityAssessor:
         consistent_with_stronger_evidence: bool | None = None,
     ) -> SourceQualityAssessment:
         provenance = snapshot.provenance
+        retransmitted = bool(
+            source.origin_source_id
+            or (
+                source.syndication_cluster_id
+                and not source.syndication_cluster_id.startswith("issuer:")
+            )
+        )
         components = (
             self._component(
                 "first_hand",
@@ -69,7 +76,16 @@ class SourceQualityAssessor:
             ),
             self._metadata_component(
                 "data_provenance",
-                provenance.get("data_provenance"),
+                provenance.get("data_provenance")
+                or (
+                    "retrievable immutable original document"
+                    if snapshot.evidence_eligible
+                    and snapshot.cleaned_sha256
+                    and snapshot.http_status == 200
+                    and provenance.get("requested_url")
+                    and provenance.get("final_url")
+                    else None
+                ),
                 "data provenance",
             ),
             self._metadata_component(
@@ -92,12 +108,12 @@ class SourceQualityAssessor:
             self._component(
                 "retransmission_depth",
                 QualityLevel.WEAK
-                if source.origin_source_id or source.syndication_cluster_id
+                if retransmitted
                 else QualityLevel.STRONG
                 if source.is_first_hand
                 else QualityLevel.UNKNOWN,
                 "Source is a retransmission or syndicated member"
-                if source.origin_source_id or source.syndication_cluster_id
+                if retransmitted
                 else "No retransmission link is recorded",
             ),
             self._inverse_metadata_component(
@@ -133,7 +149,12 @@ class SourceQualityAssessor:
             source_id=source.source_id,
             family_id=family.family_id,
             components=components,
-            basis=tuple(item.basis for item in components),
+            basis=tuple(item.basis for item in components)
+            + (
+                f"Publisher publication proof: {provenance.get('publisher_proof', 'not recorded')}",
+                "Archived original-document provenance establishes traceability only; "
+                "it does not establish first-hand authority, methodology or independence.",
+            ),
             normalized_score=normalized,
         )
 

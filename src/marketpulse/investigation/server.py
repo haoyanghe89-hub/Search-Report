@@ -60,6 +60,7 @@ def create_app(
     live_ports: LivePorts | None = None,
 ) -> FastAPI:
     runtime_settings = settings or Settings.from_env(require_api_key=False)
+    quant_source_root = Path(__file__).resolve().parents[3]
     database_url = runtime_settings.database_url.get_secret_value()
 
     @asynccontextmanager
@@ -86,6 +87,23 @@ def create_app(
                 blob_root=Path(os.getenv("INVESTIGATION_BLOB_ROOT", "data/investigation-blobs")),
                 ports=live_ports,
             )
+            from marketpulse.quant.api import PublicQuantRuntime, missing_dependencies
+
+            app.state.quant_runtime = None
+            app.state.quant_missing_dependencies = missing_dependencies()
+            if not app.state.quant_missing_dependencies:
+                from marketpulse.quant.execution.service import QuantService
+                from marketpulse.quant.storage.snapshots import SnapshotStore
+
+                quant_service = QuantService(
+                    SnapshotStore(sessions, live_runner.blobs), root=quant_source_root
+                )
+                live_runner.quant_service = quant_service
+                app.state.quant_runtime = PublicQuantRuntime(
+                    quant_service,
+                    live_runner,
+                    Path(os.getenv("QUANT_CALL_JOURNAL_ROOT", "data/quant-call-journal")),
+                )
             live_runner.recover_interrupted()
             app.state.live_investigation = live_runner
             replay_runner = east_palestine_replay
@@ -122,10 +140,13 @@ def create_app(
             CORSMiddleware,
             allow_origins=list(runtime_settings.review_allowed_origins),
             allow_credentials=True,
-            allow_methods=["GET", "POST"],
+            allow_methods=["GET", "POST", "DELETE"],
             allow_headers=["Content-Type", "Idempotency-Key", "X-Requested-With"],
         )
     app.include_router(investigation_router)
+    from marketpulse.quant.api import router as quant_router
+
+    app.include_router(quant_router)
     app.include_router(review_router)
 
     @app.get("/api/health")

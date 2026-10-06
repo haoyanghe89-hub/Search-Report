@@ -1,6 +1,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import request from '../api/request.js'
 export const runningStatuses = new Set(['CREATED', 'PENDING', 'WAITING_FOR_EXECUTION', 'RUNNING', 'VERIFYING'])
+const activeRun = run => runningStatuses.has(run?.status) || (run?.workflow_version === 'quant-v1' && ['READY_FOR_REPORT', 'BLOCKED'].includes(run?.status))
 const collections = ['steps', 'sources', 'evidence', 'claims', 'conflicts', 'gaps', 'timeline', 'reports']
 const emptyData = () => Object.fromEntries(collections.map(key => [key, []]))
 export function useInvestigation(id, { api = request, mount = onMounted, unmount = onUnmounted, schedule = setTimeout, unschedule = clearTimeout } = {}) {
@@ -10,11 +11,12 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
   const run = ref(null)
   const budget = ref(null)
   const workers = ref({})
+  const quant = ref(null)
   const data = ref(emptyData())
   const loading = ref(false)
   const starting = ref(false)
   const error = ref('')
-  const running = computed(() => runningStatuses.has(run.value?.status))
+  const running = computed(() => activeRun(run.value))
   let timer
   let generation = 0
   let disposed = false
@@ -41,7 +43,7 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
     if (!selectedId) return
     const changed = runId.value !== selectedId
     runId.value = selectedId
-    if (changed) { data.value = emptyData(); run.value = null; budget.value = null; workers.value = {} }
+    if (changed) { data.value = emptyData(); run.value = null; budget.value = null; workers.value = {}; quant.value = null }
     loading.value = true
     error.value = ''
     try {
@@ -53,9 +55,17 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
       runs.value = runs.value.map(item => item.run_id === info.run.run_id ? { ...item, ...info.run } : item)
       budget.value = info.budget
       workers.value = info.workers || {}
+      quant.value = info.run.workflow_version === 'quant-v1' ? await api('/quant/runs/' + selectedId) : null
+      if (disposed || ticket !== generation) return
+      // Parallel collections may predate report persistence. Quant is only final
+      // once its durable report exists; READY_FOR_REPORT is not its terminal state.
+      if (info.run.workflow_version === 'quant-v1' && info.run.status === 'COMPLETED' && quant.value?.report_id && !results.at(-1).some(r => r.report_id === quant.value.report_id)) {
+        results[collections.indexOf('reports')] = await api('/runs/' + selectedId + '/reports')
+        if (disposed || ticket !== generation) return
+      }
       data.value = Object.fromEntries(collections.map((key, index) => [key, results[index]]))
       pollFailures = 0
-      if (runningStatuses.has(info.run.status)) timer = schedule(() => loadRun(selectedId), 2000)
+      if (activeRun(info.run)) timer = schedule(() => loadRun(selectedId), 2000)
       else if (info.run.mode === 'LIVE' && ['FAILED', 'INTERRUPTED'].includes(info.run.status)) {
         // Observe server-side recovery without flashing old reports or clearing consent inputs.
         timer = schedule(() => checkRecovery(selectedId, ticket), 15000)
@@ -115,5 +125,5 @@ export function useInvestigation(id, { api = request, mount = onMounted, unmount
   }
   mount(load)
   unmount(() => { disposed = true; generation++; unschedule(timer) })
-  return { detail, runs, runId, run, budget, workers, data, loading, starting, error, running, load, loadRun, refreshReports, start, cancel }
+  return { detail, runs, runId, run, budget, workers, quant, data, loading, starting, error, running, load, loadRun, refreshReports, start, cancel }
 }

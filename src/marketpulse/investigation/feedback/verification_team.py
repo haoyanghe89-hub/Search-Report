@@ -13,13 +13,22 @@ from marketpulse.investigation.ports.external import ModelPort
 
 
 async def verification_team(
-    request: VerificationInput, port: Callable[[str], ModelPort], *, workers: int
+    request: VerificationInput,
+    port: Callable[[str], ModelPort],
+    *,
+    workers: int,
+    evidence_sources: dict[str, str] | None = None,
 ) -> VerificationProposal:
     original = request
     claim_keys = {c.claim_key: f"C{i + 1}" for i, c in enumerate(request.claims)}
     evidence_keys = {e.evidence_key: f"E{i + 1}" for i, e in enumerate(request.evidence)}
     request = request.model_copy(
         update={
+            "evidence_provenance": {
+                evidence_keys[k]: v
+                for k, v in request.evidence_provenance.items()
+                if k in evidence_keys
+            },
             "claims": tuple(
                 c.model_copy(
                     update={
@@ -55,8 +64,26 @@ async def verification_team(
             update={
                 "claims": claims,
                 "evidence": tuple(e for e in request.evidence if e.evidence_key in keys),
+                "evidence_provenance": {
+                    k: v for k, v in request.evidence_provenance.items() if k in keys
+                },
             }
         )
+        if evidence_sources is not None:
+            source_ids = {
+                evidence_sources[key]
+                for key, alias in evidence_keys.items()
+                if alias in keys and key in evidence_sources
+            }
+            families = tuple(
+                f for f in request.source_families if source_ids.intersection(f.source_keys)
+            )
+            subset = subset.model_copy(
+                update={
+                    "source_families": families,
+                    "source_independence_keys": tuple(f.family_key for f in families),
+                }
+            )
         return await ModelVerifierAgent(port(f"verifier.batch-{index}")).verify(subset)
 
     proposals = await bounded_map(list(range(count)), verify, count)
@@ -70,11 +97,21 @@ async def verification_team(
         suggested_research_directions=tuple(
             dict.fromkeys(item for p in proposals for item in p.suggested_research_directions)
         ),
+        qualifier_supplements=tuple(item for p in proposals for item in p.qualifier_supplements),
     )
     claims = {v: k for k, v in claim_keys.items()}
     evidence = {v: k for k, v in evidence_keys.items()}
     restored = merged.model_copy(
         update={
+            "qualifier_supplements": tuple(
+                s.model_copy(
+                    update={
+                        "claim_key": claims[s.claim_key],
+                        "evidence_key": evidence[s.evidence_key],
+                    }
+                )
+                for s in merged.qualifier_supplements
+            ),
             "judgments": tuple(
                 j.model_copy(
                     update={

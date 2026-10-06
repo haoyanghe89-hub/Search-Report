@@ -1,0 +1,24 @@
+name: quant data and optional-dependency isolation
+on: [push, pull_request]
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - if: matrix.python == '3.13'
+        run: uv sync --locked --extra dev --extra server --extra web --extra quant
+      - if: matrix.python == '3.11'
+        run: uv sync --locked --extra dev --extra server --extra web
+      - if: matrix.python == '3.11'
+        run: uv run --no-sync python -c "import importlib.util; assert importlib.util.find_spec('numpy') is None; import marketpulse.investigation.server; import marketpulse.quant.domain"
+      - if: matrix.python == '3.13'
+        run: uv run --no-sync pytest tests -m 'not live and not infrastructure' --basetemp=/tmp/quant-tests -p no:cacheprovider
+      - if: matrix.python == '3.11'
+        run: uv run --no-sync pytest tests --ignore=tests/integration/quant -m 'not live and not infrastructure' --basetemp=/tmp/base-tests -p no:cacheprovider

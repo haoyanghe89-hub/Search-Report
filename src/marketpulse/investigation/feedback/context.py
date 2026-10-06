@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any, cast
 
 from marketpulse.infrastructure.storage.ports import BlobStoragePort
@@ -40,7 +40,13 @@ from marketpulse.investigation.feedback.models import FeedbackLoopConfig
 from marketpulse.investigation.feedback.retrieval import BM25ArtifactSelector
 from marketpulse.investigation.feedback.selection import ArtifactCandidate, ArtifactSelector
 from marketpulse.investigation.feedback.store import FeedbackState, FeedbackStore
+from marketpulse.investigation.services.publisher_provenance import publisher_views
 from marketpulse.investigation.validation.lineage import SourceLineageResolver
+
+
+def publisher_state(state: FeedbackState, blobs: BlobStoragePort) -> FeedbackState:
+    sources, snapshots = publisher_views(state.sources, state.snapshots, blobs)
+    return replace(state, sources=sources, snapshots=snapshots)
 
 
 def semantic_key(prefix: str, value: object) -> str:
@@ -185,6 +191,7 @@ class AgentContextBuilder:
         *,
         current_artifact_ids: frozenset[str] = frozenset(),
     ) -> AnalysisContextBundle:
+        state = publisher_state(state, self.blobs)
         snapshots = {item.snapshot_id: item for item in state.snapshots}
         sources = {item.source_id: item for item in state.sources}
         candidates: list[ArtifactCandidate] = []
@@ -211,6 +218,7 @@ class AgentContextBuilder:
             max_artifacts=self.config.max_artifacts,
             max_excerpts=self.config.max_excerpts,
             max_chars=self.config.max_context_chars,
+            deduplicate=self.config.deduplicate_material,
         )
         if isinstance(selector, BM25ArtifactSelector):
             query = " ".join(
@@ -290,6 +298,7 @@ class AgentContextBuilder:
         *,
         exclude_claim_ids: frozenset[str] = frozenset(),
     ) -> VerificationContextBundle:
+        state = publisher_state(state, self.blobs)
         artifacts = {item.artifact_id: item for item in state.artifacts}
         claim_ids: dict[str, str] = {}
         evidence_ids: dict[str, str] = {}
@@ -361,23 +370,65 @@ class AgentContextBuilder:
                             and relation.evidence_id in reverse_evidence
                         )
                     ),
-                    entity_qualifiers=claim_item.qualifiers,
+                    entity_qualifiers=claim_item.qualifiers.get("entity", {}),
+                    time_qualifiers=claim_item.qualifiers.get("time", {}),
+                    scope_qualifiers=claim_item.qualifiers.get("scope", {}),
                     importance=claim_item.importance,
                     critical=claim_item.is_critical,
                 )
             )
         claims.sort(key=lambda item: item.claim_key)
         evidence.sort(key=lambda item: item.evidence_key)
+        verifier_families = self.source_families(
+            state,
+            source_ids=frozenset(
+                snapshot.source_id
+                for snapshot in state.snapshots
+                if snapshot.snapshot_id in {e.snapshot_id for e in selected_evidence}
+            )
+            if self.config.metadata_chars
+            else None,
+        )
         return VerificationContextBundle(
             request=VerificationInput(
                 claims=tuple(claims),
                 evidence=tuple(evidence),
-                source_independence_keys=tuple(
+                evidence_provenance={
+                    key: {
+                        "url": str(source.canonical_url),
+                        "title": source.title,
+                        "publisher": source.publisher,
+                        "is_official": source.is_official,
+                        "is_first_hand": source.is_first_hand,
+                        # Model context identities must survive offline replay;
+                        # database snapshot IDs are run-local, archive hashes aren't.
+                        "snapshot_key": f"SNAP-{snapshot.raw_sha256[:24]}",
+                        "raw_sha256": snapshot.raw_sha256,
+                        "methodology": snapshot.provenance.get("methodology"),
+                        "publisher_proof": {
+                            k: v
+                            for k, v in snapshot.provenance.get("publisher_proof", {}).items()
+                            if k not in {"source_id", "snapshot_id"}
+                        }
+                        if isinstance(snapshot.provenance.get("publisher_proof"), dict)
+                        else None,
+                    }
+                    for key, eid in evidence_ids.items()
+                    for e in selected_evidence
+                    if e.evidence_id == eid
+                    for snapshot in state.snapshots
+                    if snapshot.snapshot_id == e.snapshot_id
+                    for source in state.sources
+                    if source.source_id == snapshot.source_id
+                },
+                source_independence_keys=tuple(item.family_key for item in verifier_families)
+                if self.config.metadata_chars
+                else tuple(
                     sorted(
                         set(self.lineage.resolve(sources=state.sources).source_to_family.values())
                     )[: self.config.max_context_items]
                 ),
-                source_families=self.source_families(state),
+                source_families=verifier_families,
                 existing_conflict_summaries=tuple(
                     f"{item.conflict_type.value}:{item.status.value}:{item.resolution_status.value}"
                     for item in state.conflicts[: self.config.max_context_items]
@@ -412,6 +463,11 @@ class AgentContextBuilder:
             for item in valid
             if not item.is_official and not item.is_first_hand
         }
+        failed_reasons = tuple(
+            self._description(item.reason)
+            for item in state.gaps
+            if item.status is GapStatus.OPEN and item.source_id is not None
+        )
         return CoverageView(
             valid_source_count=len(valid),
             primary_official_count=sum(item.is_official or item.is_first_hand for item in valid),
@@ -420,11 +476,16 @@ class AgentContextBuilder:
             family_summaries=tuple(
                 f"{item.family_id}: {len(item.member_source_ids)} source(s)"
                 for item in families.families
+            )[: self.config.max_context_items]
+            if self.config.metadata_chars
+            else tuple(
+                f"{item.family_id}: {len(item.member_source_ids)} source(s)"
+                for item in families.families
             ),
-            failed_or_unreadable_sources=tuple(
-                item.reason
-                for item in state.gaps
-                if item.status is GapStatus.OPEN and item.source_id is not None
+            failed_or_unreadable_sources=(
+                tuple(dict.fromkeys(failed_reasons))[: self.config.max_context_items]
+                if self.config.metadata_chars
+                else failed_reasons
             ),
         )
 
@@ -446,20 +507,31 @@ class AgentContextBuilder:
             gap_type=gap.gap_type,
             target_question_key=gap.target_question_id,
             target_claim_key=target,
-            reason=gap.reason,
-            missing_requirement=gap.missing_requirement,
-            suggested_action=gap.suggested_action,
+            reason=self._description(gap.reason),
+            missing_requirement=self._description(gap.missing_requirement)
+            if gap.missing_requirement
+            else None,
+            suggested_action=self._description(gap.suggested_action)
+            if gap.suggested_action
+            else None,
         )
 
-    def source_families(self, state: FeedbackState) -> tuple[SourceFamilyView, ...]:
+    def _description(self, text: str) -> str:
+        return text[: self.config.metadata_chars] if self.config.metadata_chars else text
+
+    def source_families(
+        self, state: FeedbackState, *, source_ids: frozenset[str] | None = None
+    ) -> tuple[SourceFamilyView, ...]:
+        state = publisher_state(state, self.blobs)
         result = self.lineage.resolve(sources=state.sources, snapshots=state.snapshots)
         return tuple(
             SourceFamilyView(
                 family_key=item.family_id,
                 source_keys=item.member_source_ids,
-                summary="; ".join(item.independence_basis),
+                summary=self._description("; ".join(item.independence_basis)),
             )
             for item in result.families
+            if source_ids is None or source_ids.intersection(item.member_source_ids)
         )[: self.config.max_context_items]
 
     def task_summaries(self, state: FeedbackState) -> tuple[TaskSummaryView, ...]:
@@ -520,7 +592,9 @@ class AgentContextBuilder:
             source_statistics=SourceStatistics(
                 valid_sources=coverage.valid_source_count,
                 primary_official_sources=coverage.primary_official_count,
-                independent_families=len(self.source_families(state)),
+                independent_families=len(
+                    self.lineage.resolve(sources=state.sources, snapshots=state.snapshots).families
+                ),
                 source_types=coverage.source_types,
             ),
             limitations=tuple(item.reason for item in self.store.open_gaps(state)),

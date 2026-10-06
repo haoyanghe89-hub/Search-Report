@@ -22,3 +22,8 @@ logs/
 
 /backups/
 /restore-drills/
+
+# Local duplicate checkout and runtime artifacts.
+/Search-Report/
+/frontend/data/
+/frontend/test-results/task-k/blobs/

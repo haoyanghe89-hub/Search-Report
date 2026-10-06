@@ -1,0 +1,366 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+      "quote": "All are vendor-reported with no independent replication.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 24680,
+        "end": 24734,
+        "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+      "quote": "DeepSWE v1.1 at 77.9% (claimed state of the art), AutomationBench at 51.3% (claimed first), LVBench at 91.7%, a leading position on the Vals Index, CWE-bench v1 at 68% tied for first, and a leading robustness profile on Gray Swan indirect prompt injection.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 24100,
+        "end": 24380,
+        "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:8791:9981",
+      "quote": "Unverified:\nAny assertion that Gemini 4 Argon outperforms every competing model would require comparative evidence not supplied here.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 9500,
+        "end": 9640,
+        "quote_hash": "0043d9f2c24b63fd635e8a22fefaf2bf4277dcabb88e17ed7c2c2a0fe2306aec"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:25679:26825",
+      "quote": "For a September 2026 procurement review, request\ntask-specific evaluations and deployment controls\n, rather than treating “frontier performance” as a safety certification.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 26200,
+        "end": 26400,
+        "quote_hash": "b741a1ff01a5e24e1d26e1bb550b74cd1d2fc5d3addc8039d53f904d205767f6"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:20847:22035",
+      "quote": "For Argon, developers should request three things before accepting a benchmark comparison:\n\nExact evaluation identity:\nbenchmark name, version, scoring method, and model identifier.\nComparable execution conditions:\ntools, retry limits, reasoning budget, and token allowances.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 21200,
+        "end": 21480,
+        "quote_hash": "88013935a57782de41d3f5dcdbb5140eb923e327179028b18ac64060135ab18c"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:37816:38999",
+      "quote": "No—not from the evidence provided.\nAn unsupported date should remain an unresolved reference rather than become a second launch date through repetition.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 38400,
+        "end": 38560,
+        "quote_hash": "d0040b42bbb53e9f7d590bc4266eb8e703405066a6e31aadc5f46b0353173e14"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "第三方指南明确记载，谷歌公布的 Gemini 4 Argon 全部基准成绩（DeepSWE v1.1 77.9%、AutomationBench 51.3%、LVBench 91.7%、Vals Index 领先、CWE-bench v1 68% 并列第一、Gray Swan 间接提示注入稳健性领先）均为厂商自报，且没有任何独立复现。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E1",
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attribution": "vendor-reported",
+        "benchmarks": [
+          "DeepSWE v1.1",
+          "AutomationBench",
+          "LVBench",
+          "Vals Index",
+          "CWE-bench v1",
+          "Gray Swan indirect prompt injection"
+        ]
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "谷歌公布的 Gemini 4 Argon 基准成绩集合",
+        "provenance": "第三方指南对谷歌公布基准数据的核查"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "第三方指南指出，任何关于 Gemini 4 Argon 超越所有竞争模型的断言，都需要本次材料未提供的对比证据，因此在该材料范围内属于未验证命题。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E3"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "与竞争模型的全面超越性对比",
+        "provenance": "第三方指南对已获材料证据充分性的评估"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "第三方指南建议，在 2026 年 9 月的采购评审中应要求针对具体任务的评测与部署控制，而不能把“前沿性能”当作安全认证。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E4"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {
+        "time": "2026-09"
+      },
+      "scope_qualifiers": {
+        "scope": "企业采购评审对基准与安全宣称的采信标准",
+        "provenance": "第三方指南的采购建议"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "第三方指南指出，在采信任何基准对比之前，开发者应要求提供确切的评测身份（基准名称、版本、评分方法与模型标识）以及可比的执行条件（工具、重试上限、推理预算与 Token 额度）。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E5"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "基准对比的可复现性要求",
+        "provenance": "第三方指南对基准比较方法学的要求"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "statement": "在已获取的材料中，未发现任何第三方独立实测复现谷歌公布的 Gemini 4 Argon 基准成绩，因此无法判断独立结论是否与官方一致。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "基于已获取材料范围的检索结论",
+        "scope": "谷歌公布的 Gemini 4 Argon 基准成绩"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-28d1600b7d5cd7bd41751907",
+      "statement": "截至该第三方指南发布时，谷歌公布的 Gemini 4 Argon 各项基准成绩均为厂商自报，尚无独立复现。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "attribution": "vendor-reported",
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布基准数据的说明",
+        "scope": "DeepSWE v1.1、AutomationBench、LVBench、Vals Index、CWE-bench v1、Gray Swan IPI"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-7565af9eb18736cba686478c",
+      "statement": "第三方指南指出，谷歌 2026 年 9 月 30 日公告中“复杂工作流前沿性能”的表述仅构成能力宣称，并不构成法律建议、财务决策或自主安全运营可靠性的证据。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {
+        "time": "2026-09-30"
+      },
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公告措辞的核查",
+        "scope": "法律、金融与网络安全工作流"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-2f06361d1eb4abda356a4482",
+      "statement": "第三方指南指出，其他 Gemini 模型已记录的能力不能作为 Gemini 4 Argon 支持相同接口、运行限制或部署选项的证据。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对第一方来源的核查",
+        "scope": "接口、运行限制与部署选项的可迁移性"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-28d1600b7d5cd7bd41751907",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-7565af9eb18736cba686478c",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-2f06361d1eb4abda356a4482",
+      "evidence_key": "E6",
+      "stance": "CONTEXT"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": []
+}

@@ -1,0 +1,38 @@
+你现在在 deepsearch 项目下，执行前端 UI 重构 v3（Awwwards/Webby/FWA 获奖级品质标准）。
+
+【第一步：先读文档】完整读取以下三份文件，作为唯一设计依据：
+1) D:\deepsearch\docs\ui-refactor-v3-handoff.md（交接文档，含项目状态、硬约束、CodeX 通道、获奖级设计标准、执行方式）
+2) D:\deepsearch\docs\ui-refactor-v2-spec.md（v2 规范，当前已落地的基础）
+3) D:\deepsearch\docs\ui-refactor-spec.md（v1 规范，背景参考）
+
+【硬约束（不可违反）】
+- 功能/接口/业务逻辑完全不变：不改 src/api、业务 composables；9 个 tab（overview/agents/sources/evidence/claims/conflicts/timeline/report/review）、props、emit、数据字段不变。
+- 不引入重型 UI 框架；动效基于已装 gsap（含 ScrollTrigger）；所有视觉数值只用 tokens.css 的 token。
+- 必须保留 prefers-reduced-motion 降级与卸载清理。
+- 每轮完成后必须 npm run build（退出码 0）+ npm test（30/30）验证。
+
+【本轮 v3.1：排版 + 留白 + 视觉层级 + 色彩硬核打磨】
+目标：让界面达到 Awwwards 获奖级的排版即架构水准（参考交接文档第5.2节第3点：monumental display + intimate body 的强烈尺度对比；负空间作为构图工具；Dieter Rams 克制原则）。
+
+具体执行：
+1) 排版（Typography）：
+   - 详情页 Hero 标题用 clamp() 流体排版（桌面至少 48-64px，字重 600，字距 -0.02em），与正文形成 monument-to-intimate 的尺度对比。
+   - 章节标题（SectionHeading）层级更鲜明：overline 序号 11px 字距 0.15em + 标题 28-32px 字重 600。
+   - 报告正文 17px/1.8 衬线（已有），段落间距 padding-block 0.75em；引用文字与正文有明确层级区分。
+   - 元数据/时间戳/标签统一用 caption（11-12px）+ text-muted，不再与正文混排。
+2) 留白（Whitespace）：
+   - 详情页首屏：标题行与元数据条之间、元数据条与摘要卡之间、摘要卡与 Tab 栏之间，建立 32-48px 的垂直节奏（space-8/space-12），消除拥挤感。
+   - 卡片内 padding 统一 24px（space-6），卡片之间 gap 16-24px。
+   - 报告阅读列 720px 居中，左右留白对称。
+   - 全局最大内容宽度 1100px（container-max），超出留白。
+3) 视觉层级（Hierarchy）：
+   - 首屏严格四层：标题行（display 标题+状态徽章+单一主 CTA）到 元数据条（一行 muted 小字）到 执行摘要卡 到 Tab 栏+内容。确保没有第五个模块竞争首屏注意力。
+   - 主 CTA 是首屏唯一 accent 实底按钮；次按钮 ghost、文字按钮 quiet，层级分明。
+   - 状态徽章（调查完成/进行中）用细描边+文字色，不抢标题。
+4) 色彩（Color）：
+   - 保持 v2 的三层背景（base/surface/elevated）+ 单一靛蓝 accent（每屏至多一处 accent 实底）。
+   - 语义色（success/warning/danger）只用于验证状态徽章，且用 8% 淡底+文字色，不铺大面积。
+   - 检查并消除任何视觉噪音：多余的边框、底色块、装饰线、渐变。
+   - 深色主题下检查对比度（正文 text-primary 与 bg-base 对比度 >=7:1）。
+
+完成后：npm run build 退出码 0、npm test 30/30、git diff --check 通过；报告改动文件清单、每个维度的具体优化点、构建结果与任何偏离。暂不做 v3.2（动效/微交互/响应式）。

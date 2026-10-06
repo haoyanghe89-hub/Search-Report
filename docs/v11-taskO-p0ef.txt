@@ -1,0 +1,32 @@
+任务 O（P0 第三批：P0-E + P0-F）：对外量化 API、前端图表与最终收尾。请先读 docs/v8-taskL-quant-evolution-plan.md 第 12、14.1、15 章、docs/v10-taskN-p0cd-delivery.md 与 docs/quant-dev-journal.md，在已完成的 P0-A/B/C/D（数据底座、确定性计算、计算证据、内部报告集成）上继续。本批把已具备的量化能力通过 HTTP API 与前端界面暴露出来，并完成 P0 收尾。
+铁律不变：所有量化数值来自冻结快照上的确定性计算，模型不生成数值；大计算在子进程；不放松防编造/引用/独立性/PIT；不做自动交易/选股/目标价/预测/实时。
+
+==== P0-E1：对外量化 API（严格增量、复用现有约定）====
+1. 新增路由（建议 src/marketpulse/api/quant.py 或现有 routers 下，挂到现有 FastAPI app）：
+   - GET  /api/quant/instruments?q=&limit=：证券搜索（内部 ins_ ID + 代码/名称/市场/状态），只返回已主数据化标的。
+   - POST /api/quant/runs：发起量化投研，body 含 instrument（代码或 ins_ ID）、date_start/date_end（或窗口预设）、adjustment（raw/qfq/hfq，默认raw）、depth（quick/standard/deep，复用现有三档时长与预算）、可选 benchmark/rf（缺省不写零，按“缺失即说明”）。
+   - GET  /api/quant/runs：列表（分页/状态，复用现有 run 响应风格）。
+   - GET  /api/quant/runs/{id}：详情（阶段状态、报告、数值、图表数据引用、引用/证据计数、缺口）。
+   - 取消/删除沿用现有 run 的取消与归档语义（量化删除走现有归档，不直接删共享快照）。
+2. 复用现有认证/会话、错误结构、枚举与分页约定；默认网页调查 HTTP 行为不变；服务器启动时才装配 quant_service（科学库仍延迟导入，缺依赖时 quant 路由返回明确 503/可解释错误，不影响网页调查）。
+3. API 只返回已通过门禁的只读结果与可定位引用；UNVERIFIED 数值明确标注，不包装成确定结论；大计算仍走子进程与现有租约/恢复。
+
+==== P0-E2：前端（Vue，frontend；高级简约、与 v3 获奖级设计统一）====
+1. 量化入口：在“新工作任务/新调查”流程中增加模式选择（网页调查 / 量化投研），默认网页；切换到量化后展示 QuantResearchForm：标的搜索（带联想/代码/名称/市场）、窗口区间、复权方式、时长三档说明（越长越完整，短档优先重要内容）。视觉沿用现有排版即建筑、单一 accent、留白与微交互，不引重型 UI 框架。
+2. 进行中：复用现有调查阶段动画并加入量化支路阶段（取数→冻结快照→确定性计算→证据核验→成稿），阶段与后端状态一致；中断/取消也优雅收尾并产出已有内容的报告（沿用任务 J 逻辑），不允许点击后一中断就整体失败。
+3. 报告与图表（图表是“证据展品”，嵌入报告流而非堆在顶部）：
+   - 延续 answer-first、720px 阅读、SECTION/EXHIBIT 编号与 choreographed motion；每个图表带编号（如 EXHIBIT-Q·N）、标题、口径/单位/时点注与可定位引用。
+   - 按需引入 ECharts（npm install echarts 按需、bundle 可控），默认最多 3 图：①价格与回撤（可切 raw/qfq/hfq，标注峰谷/未恢复）；②估值对比（独立计算 PE/PB vs 供应商披露，分列不混淆）；③财务趋势（归母净利/营收同比或 ROE，同口径）。数值只读、来自后端，前端不重算核心指标。
+   - 组件建议 QuantResearchForm、QuantChart（通用图表壳）、QuantReportSection；与现有卷宗列表/历史/删除融合，历史量化卷宗可删除（复用任务 J 删除）。
+   - 空章节不渲染、局限聚合、技术附录折叠、事实只出现一次；UNVERIFIED 状态清晰。
+4. 响应式：桌面/窄屏均可用，图表在窄屏自适应；做 reduced-motion 降级。
+
+==== P0-F：最终回归、运维与收尾 ====
+1. 用 .phase3-quant-m/venv313 跑全量后端（含新 API 测试，独立 --basetemp、-p no:cacheprovider）、前端 npm run build（0 error）与前端测试；Ruff、导入检查、git diff --check 通过。
+2. 新增测试：API（发起/查询/取消/删除、缺依赖 503、UNVERIFIED 标注、大计算不阻塞）、前端关键组件/图表渲染与响应式（可用现有前端测试栈）；端到端：对 ≥1 真实标的完整跑通 quick（必要时 standard），报告与图表数值可定位、≤3 图。
+3. 运维：确认服务启动自动升级迁移到 09（在可控的开发库上验证；说明如何启动后端+前端）；更新 docs/quant-dev-journal.md（记录 API 装配、ECharts 按需、进行中阶段对接、响应式/reduced-motion、端到端等坑）。
+4. 交付 P0 收尾报告（如 docs/v11-taskO-p0ef-delivery.md）：列出 API 清单、前端组件与入口、图表口径、测试结果（命令/数量）、端到端演示步骤与证据路径、已知限制（UNVERIFIED、免费源/PARTIAL PIT、跨OS复算未做、3.11 旧 cancel 挂起等），并对照 Awwwards/Webby/FWA 维度（排版、留白、视觉层级、色彩、动效、微交互、响应式、原创性）做一次前端自检，列出已做与仍可提升点。
+
+==== 约束 ====
+- 仅增量、向后兼容：旧网页调查 HTTP 默认响应/枚举/错误、v1 fixture/hash 不变；不新增付费调用；不提交 Git（除非用户明确要求）。
+- 完成后停下等我检查，给出 P0 整体收尾结论与是否进入 P1 的建议（P1 因子/回测、Tushare 升级等不在本批实施）。

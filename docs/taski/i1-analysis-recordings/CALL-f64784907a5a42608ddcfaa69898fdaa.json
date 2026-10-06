@@ -1,0 +1,338 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:9821:11005",
+      "quote": "A capability documented for another Gemini model is not evidence that Gemini 4 Argon supports the same interface, operating limits, or deployment options.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 9821,
+        "end": 11005,
+        "quote_hash": "1d55108c88e190b7eb9026f2c48b8d00448f34ff96439603a9cf378eb78809ff"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:19855:21007",
+      "quote": "No—performance claims belong to the model and evaluation configuration tested.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 19855,
+        "end": 21007,
+        "quote_hash": "7223dcb211661758c04a4e241a58b3671d3171cff7a9c660acb3439366277722"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:22851:23896",
+      "quote": "Google’s September 30, 2026 announcement claims “frontier performance in complex workflows”; that wording establishes a capability claim, not evidence of reliable legal advice, financial decisions, or autonomous security operations.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 22851,
+        "end": 23896,
+        "quote_hash": "ab5b6271ef3466bb23d6c54c158363eb23b8a61e567d52c76cbe96fc0e7fe633"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+      "quote": "All are vendor-reported with no independent replication.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 23926,
+        "end": 24974,
+        "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+      "quote": "No — it is a three-way tie at 68% between Argon, Grok 4.7, and GPT-6 Astra.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 23926,
+        "end": 24974,
+        "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:21108:22121",
+      "quote": "Opus 5.5 is ahead on Terminal-Bench 4.0, FrontierSWE v2 and the Artificial Analysis Intelligence Index, where it scores 58 against Argon's 53.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 21108,
+        "end": 22121,
+        "quote_hash": "cebc3ed8eaa429d935b431e62f2e6a50573e0f671dee195020d4bcac8c208fdb"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "第三方指南指出，谷歌 2026 年 9 月 30 日公告中“复杂工作流前沿性能”的表述仅构成能力宣称，并不构成法律建议、财务决策或自主安全运营可靠性的证据。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E3"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {
+        "time": "2026-09-30"
+      },
+      "scope_qualifiers": {
+        "scope": "法律、金融与网络安全工作流",
+        "provenance": "第三方指南对谷歌公告措辞的核查"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "第三方指南指出，其他 Gemini 模型已记录的能力不能作为 Gemini 4 Argon 支持相同接口、运行限制或部署选项的证据。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E1",
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "接口、运行限制与部署选项的可迁移性",
+        "provenance": "第三方指南对第一方来源的核查"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "第三方指南指出，CWE-bench v1 并非 Argon 的干净胜出：Argon、Grok 4.7 与 GPT-6 Astra 三方以 68% 并列，该基准无法把 Argon 与同场模型区分开。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E5"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark": "CWE-bench v1",
+        "value": 68.0,
+        "unit": "%",
+        "comparison": "Argon、Grok 4.7、GPT-6 Astra 三方并列"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "CWE-bench v1",
+        "provenance": "第三方指南对谷歌公布图表的解读"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "第三方报道称，Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 以及 Artificial Analysis Intelligence Index 上领先 Gemini 4 Argon，其中该指数得分为 58 对 53。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E6"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "comparison_target": "Claude Opus 5.5",
+        "benchmark": "Artificial Analysis Intelligence Index",
+        "value": 53.0,
+        "comparison_value": 58.0
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "Terminal-Bench 4.0、FrontierSWE v2、Artificial Analysis Intelligence Index",
+        "provenance": "第三方报道转述评测数据"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-28d1600b7d5cd7bd41751907",
+      "statement": "截至该第三方指南发布时，谷歌公布的 Gemini 4 Argon 各项基准成绩均为厂商自报，尚无独立复现。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "attribution": "vendor-reported",
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布基准数据的说明",
+        "scope": "DeepSWE v1.1、AutomationBench、LVBench、Vals Index、CWE-bench v1、Gray Swan IPI"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-2e22cfcc11c6ecd530f156e4",
+      "statement": "第三方指南指出 CWE-bench v1 并非 Argon 的干净胜出：公布图表显示 Argon、Grok 4.7 与 GPT-6 Astra 三方以 68% 并列，因此该基准不能把 Argon 与同场模型区分开。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "benchmark": "CWE-bench v1",
+        "comparison": "Argon、Grok 4.7、GPT-6 Astra 三方并列 68%",
+        "entity": "Gemini 4 Argon",
+        "unit": "%",
+        "value": 68.0
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布图表的解读",
+        "scope": "CWE-bench v1"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E6",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-28d1600b7d5cd7bd41751907",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-2e22cfcc11c6ecd530f156e4",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E5",
+      "statement": "同一来源内部存在口径张力：谷歌将 Argon 列为 CWE-bench v1 并列第一，但该基准为三方 68% 并列，无法区分 Argon 与同场模型。",
+      "conflict_type": "SCOPE",
+      "numeric_value": 68.0,
+      "unit": "%",
+      "report_time": null,
+      "scope": "CWE-bench v1",
+      "definition": "并列第一 vs 三方同分",
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.9,
+      "specificity": 0.9
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E6",
+      "statement": "与“综合性能超越主流旗舰模型”的宣称相对，第三方报道显示 Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 与 Artificial Analysis Intelligence Index 上领先 Argon。",
+      "conflict_type": "QUANTITATIVE",
+      "numeric_value": 53.0,
+      "unit": "points",
+      "report_time": null,
+      "scope": "Artificial Analysis Intelligence Index（Argon 53 对 Opus 5.5 58）",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.8,
+      "specificity": 0.8
+    }
+  ]
+}

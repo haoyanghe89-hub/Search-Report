@@ -1,0 +1,23 @@
+执行任务 E（后端，聚焦修复，改动尽量小）：单个来源被限流(429)时不应终止整个调查。
+最新运行 RUN-LIVE-42f0c4b9624c4b9c：采集阶段抓取 https://www.morphllm.com/llm-cost-calculator 返回 429，fetch_result reason=HTTP_RATE_LIMITED，随后 Live run failed (RateLimitedError)，watchdog RUN_NOT_RESUMABLE。但同一轮已成功跳过 brave 429 并成功抓取 baeseokjae.github.io（正文19654字符 ACCEPTED）。问题：来源采集层没有把“单个来源 429/不可抓取”当作可跳过项，错误冒泡到 live_runtime 判死。
+
+【硬约束（不变）】
+- 对外 HTTP 接口契约不变；不放宽证据/防编造质量门。
+- 改动小而稳，聚焦“来源级错误容错”，不要重构无关代码。
+- 补测试，跑后端测试（独立 --basetemp、-p no:cacheprovider）、Ruff、导入检查、git diff --check。
+
+【E1. 定位并确认】
+1) 读 investigation/services/source_acquisition.py 与 investigation/adapters/fetch.py，确认单个候选 URL 抛出 RateLimitedError / ProviderCallError(429、403) / TimeoutError 时，上层是否 catch、是否继续处理候选列表中的下一个来源。
+2) 明确错误从单个来源冒泡到 live_runtime 判 FAILED 的路径。
+
+【E2. 来源级容错（核心）】
+1) 采集一批候选时：单个来源 429/403/超时/不可抓取，应记录该来源不可用（含域名、原因、HTTP状态）并跳过，继续抓取与处理候选列表中的其他来源，不得因一个来源失败终止整个 run。
+2) 复用 fetch 适配器已有的坏 URL 短期熔断与退避，不要在同一坏来源上反复耗预算；被跳过来源计入“尝试但不可用”，不污染证据。
+3) 仅当可获得的合格来源确实不足、无法满足最低证据门槛时，才走受控终态 BLOCKED 并给出可操作原因（如“多数来源不可访问/被限流，请检查网络或稍后重试”），而不是以未受控 FAILED/RUN_NOT_RESUMABLE 结束。
+4) 保持任务D的材料规模与阶段预算预留逻辑：跳过坏来源后，用已成功采集的合格来源继续验证与报告，为 VERIFY/REPORT 保留预算。
+
+【E3. 验证】
+1) 用测试模拟“一批候选中部分来源 429/超时、部分成功”，断言：成功来源被采集、坏来源被记录并跳过、run 继续运行而非 FAILED；再模拟“全部来源 429”，断言得到受控 BLOCKED 与明确原因。
+2) 跑后端全量测试、Ruff、导入检查、git diff --check，确认无回归、接口契约与前端无需改动。
+
+报告：错误冒泡的真实路径、E2 改动与理由、测试结果、仍存在的限制。完成后等待，我会重启后端并用同一话题重跑真实调查做端到端验证。

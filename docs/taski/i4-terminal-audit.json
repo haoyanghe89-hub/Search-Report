@@ -1,0 +1,72 @@
+{
+  "audited_at": "2026-10-02T13:08:35.748237+00:00",
+  "run": {
+    "run_id": "RUN-LIVE-b178a218f9e84f09",
+    "investigation_id": "INV-71d191bd78584fccb1777e6b2675dee6",
+    "mode": "LIVE",
+    "status": "BLOCKED",
+    "current_phase": "PLAN",
+    "checkpoint_version": 4,
+    "state_version": 5,
+    "workflow_version": "resumable-retrieval-v4",
+    "created_at": "2026-10-02 13:08:16.880598",
+    "started_at": "2026-10-02 13:08:16.880598",
+    "updated_at": "2026-10-02 13:08:18.281593",
+    "completed_at": "2026-10-02 13:08:18.281593",
+    "interruption_reason": "MODEL_INSUFFICIENT_BALANCE：模型服务余额不足，请充值后重试。",
+    "current_step_key": "planning:initial",
+    "last_completed_step_key": "workflow:enter-plan",
+    "owner_instance_id": null,
+    "owner_heartbeat_at": null,
+    "origin_run_id": null,
+    "origin_review_request_id": null
+  },
+  "budget": {
+    "run_id": "RUN-LIVE-b178a218f9e84f09",
+    "max_research_rounds": 6,
+    "max_search_calls": 240,
+    "max_fetch_calls": 600,
+    "max_model_calls": 480,
+    "max_tokens": 2000000,
+    "max_wall_time_ms": 3600000,
+    "max_sources": 600,
+    "research_rounds_used": 0,
+    "search_calls_used": 0,
+    "fetch_calls_used": 0,
+    "model_calls_used": 1,
+    "tokens_used": 0,
+    "consumed_wall_time_ms": 1195,
+    "sources_used": 0,
+    "updated_at": "2026-10-02 13:08:18.274955"
+  },
+  "counts": {
+    "sources": 0,
+    "eligible_sources": 0,
+    "evidence": 0,
+    "claims": 0
+  },
+  "statuses": {},
+  "by_type": {},
+  "missing_by_type": {},
+  "quality_scores": {},
+  "source_quality": [],
+  "model_routes": [
+    {
+      "role": "investigation-prompts-zh-v8:planner.plan",
+      "model": "deepseek-flash",
+      "status": "PROVIDER_ERROR",
+      "count": 1
+    }
+  ],
+  "semantic_statuses": {},
+  "retry_intents": [],
+  "qualifier_supplements": [],
+  "pdf_documents": [],
+  "reports": [
+    {
+      "report_id": "RPT-3e63ed7f3794",
+      "report_type": "INVESTIGATION_STATUS",
+      "release_status": "RESTRICTED"
+    }
+  ]
+}

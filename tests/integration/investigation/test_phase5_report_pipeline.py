@@ -57,7 +57,11 @@ CONTENT_HASH = hashlib.sha256(CONTENT.encode()).hexdigest()
 
 
 def _seed(
-    repository: InvestigationRepository, *, judgment: str = "ENTAILS", offset: int = 0
+    repository: InvestigationRepository,
+    *,
+    judgment: str = "ENTAILS",
+    offset: int = 0,
+    claim_status: ValidationStatus = ValidationStatus.VERIFIED,
 ) -> None:
     repository.add(
         Investigation(
@@ -160,7 +164,7 @@ def _seed(
             claim_type=ClaimType.INSTITUTIONAL_ACTION,
             importance=ClaimImportance.CRITICAL,
             is_critical=True,
-            validation_status=ValidationStatus.VERIFIED,
+            validation_status=claim_status,
             confidence=0.97,
             latest_validation_id="V-001",
             created_at=NOW,
@@ -191,7 +195,7 @@ def _seed(
             independent_source_count=1,
             strong_contradiction=False,
             sufficiency_result="sufficient",
-            status=ValidationStatus.VERIFIED,
+            status=claim_status,
             confidence=0.97,
             validation_basis="Direct institutional record.",
             validation_basis_payload={
@@ -233,6 +237,52 @@ def _pipeline(engine: Engine) -> ReportPipeline:
     return ReportPipeline(sessions, InvestigationRepository(sessions), DeterministicWriter())
 
 
+@pytest.mark.parametrize("claim_status", [ValidationStatus.VERIFIED, ValidationStatus.PROBABLE])
+async def test_live_bounded_report_retains_findings_without_bypassing_citation_gate(
+    investigation_store, tmp_path, claim_status
+):
+    from sqlalchemy import select
+
+    from marketpulse.config import Settings
+    from marketpulse.investigation.domain.runtime import RunBudget
+    from marketpulse.investigation.live_runtime import LiveInvestigationService
+    from marketpulse.investigation.persistence.models import ReportProjectionRow, ReportRow
+
+    repository, engine, _ = investigation_store
+    # Intentionally inconsistent latest semantic input: a stored supported label
+    # alone must not be enough to publish a cited conclusion.
+    _seed(repository, judgment="PENDING", claim_status=claim_status)
+    repository.add(
+        RunBudget(
+            run_id="RUN-001",
+            max_research_rounds=1,
+            max_search_calls=1,
+            max_fetch_calls=1,
+            max_model_calls=1,
+            max_tokens=1000,
+            max_wall_time_ms=1000,
+            updated_at=NOW,
+        )
+    )
+    sessions = create_session_factory(engine)
+    with sessions.begin() as session:
+        from marketpulse.investigation.persistence.models import InvestigationRunRow
+
+        session.get(InvestigationRunRow, "RUN-001").status = RunStatus.BLOCKED
+    service = LiveInvestigationService(
+        sessions=sessions,
+        repository=repository,
+        settings=Settings(),
+        blob_root=tmp_path / "blobs",
+    )
+    await service._report("RUN-001", ReportType.INVESTIGATION_STATUS)
+    with sessions() as session:
+        report = session.scalar(select(ReportRow))
+        assert report.report_type is ReportType.FULL_INVESTIGATION
+        projection = session.get(ReportProjectionRow, report.report_id)
+        assert projection.release_status.value == "DRAFT"
+
+
 async def test_pipeline_generates_cited_report(
     investigation_store: tuple[InvestigationRepository, Engine, str],
 ) -> None:
@@ -246,7 +296,7 @@ async def test_pipeline_generates_cited_report(
     assert result.hard_finding_count == 0
     assert result.report.version == 1
     assert result.report.report_input_snapshot_hash == result.snapshot.snapshot_hash
-    assert len(result.citations) == 3  # Summary, findings and timeline each retain a citation.
+    assert len(result.citations) == 1  # The same fact is cited once, in the answer-first summary.
     citation = result.citations[0]
     assert citation.claim_id == "C-001"
     assert citation.evidence_id == "E-001"
@@ -266,14 +316,14 @@ async def test_pipeline_generates_cited_report(
                 text("SELECT count(*) FROM inv_report_sections WHERE report_id=:r"),
                 {"r": result.report.report_id},
             )
-            == 17
+            == 4
         )
         assert (
             connection.scalar(
                 text("SELECT count(*) FROM inv_citations WHERE report_id=:r"),
                 {"r": result.report.report_id},
             )
-            == 3
+            == 1
         )
         assert (
             connection.scalar(

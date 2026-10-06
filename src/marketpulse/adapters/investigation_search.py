@@ -13,13 +13,30 @@ from marketpulse.investigation.ports.external import (
     SearchResultItem,
 )
 
+# Exact issuer-owned publication hosts, not authority scores or a query substring
+# heuristic. Shared hosting (e.g. storage.googleapis.com) is deliberately excluded.
+_DIRECT_PUBLISHERS = {
+    "deepmind.google": "Google",
+    "blog.google": "Google",
+    "developers.googleblog.com": "Google",
+}
+
 
 class PublicSearchPortAdapter:
     """Legacy provider bridge kept outside the Investigation package boundary."""
 
-    def __init__(self, client: SearchClient, *, provider: str = "public-search") -> None:
+    def __init__(
+        self,
+        client: SearchClient,
+        *,
+        provider: str = "public-search",
+        direct_publishers: dict[str, str] | None = None,
+    ) -> None:
         self._client = client
         self._provider = provider
+        self._direct_publishers = dict(
+            _DIRECT_PUBLISHERS if direct_publishers is None else direct_publishers
+        )
 
     async def search(self, request: SearchRequest) -> SearchResult:
         query_id = f"Q-{hashlib.sha256(request.query.encode()).hexdigest()[:16]}"
@@ -38,12 +55,23 @@ class PublicSearchPortAdapter:
                         "source_type_hint": (
                             "official"
                             if _government_host(str(candidate.url))
+                            or self._publisher(str(candidate.url))
                             else "web"
                             if candidate.source_hint == "official"
                             else candidate.source_hint
                         ),
-                        "is_official": _government_host(str(candidate.url)),
-                        "is_first_hand": False,
+                        "is_official": _government_host(str(candidate.url))
+                        or bool(self._publisher(str(candidate.url))),
+                        # An issuer's own publication is first-hand for what it reports,
+                        # not independent proof of its performance claims.
+                        "is_first_hand": bool(self._publisher(str(candidate.url))),
+                        "publisher": self._publisher(str(candidate.url)),
+                        "organization": self._publisher(str(candidate.url)),
+                        "quality_metadata": {
+                            "publisher_family": "issuer:" + self._publisher(str(candidate.url))
+                        }
+                        if self._publisher(str(candidate.url))
+                        else {},
                     }
                 )
                 for candidate in candidates
@@ -51,6 +79,12 @@ class PublicSearchPortAdapter:
             provider=self._provider,
             retrieved_at=datetime.now(UTC),
         )
+
+    def _publisher(self, url: str) -> str | None:
+        parsed = urlparse(url)
+        if parsed.scheme != "https" or parsed.username or parsed.password:
+            return None
+        return self._direct_publishers.get((parsed.hostname or "").lower().rstrip("."))
 
 
 def _government_host(url: str) -> bool:

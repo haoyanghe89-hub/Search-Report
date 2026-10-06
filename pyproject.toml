@@ -24,6 +24,15 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+quant = [
+  "pandas==3.0.6; python_version >= '3.12'",
+  "numpy==2.5.3; python_version >= '3.12'",
+  "pyarrow==25.0.1; python_version >= '3.12'",
+  "duckdb==1.5.6; python_version >= '3.12'",
+  "akshare==1.19.1; python_version >= '3.12'",
+  "baostock==0.9.4; python_version >= '3.12'",
+  "exchange-calendars==4.13.2; python_version >= '3.12'",
+]
 dev = [
   "build>=1.2,<2",
   "mypy>=1.15,<2",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
@@ -20,8 +21,130 @@ from marketpulse.investigation.recording.errors import ModelOutputTruncatedError
 
 
 @pytest.mark.asyncio
+async def test_bounded_schema_repairs_back_off_and_recover_without_accepting_invalid_output():
+    from marketpulse.investigation.recording.errors import InvalidProviderResponseError
+
+    generate = AsyncMock(
+        side_effect=[
+            InvalidProviderResponseError("invalid"),
+            InvalidProviderResponseError("invalid again"),
+            SimpleNamespace(output=AnalysisProposal()),
+        ]
+    )
+    sleep = AsyncMock()
+    result = await ModelAnalystAgent(SimpleNamespace(generate=generate), sleep=sleep).analyze(
+        AnalysisInput(artifacts=())
+    )
+    assert result == AnalysisProposal()
+    assert generate.await_count == 3
+    assert [call.args[0] for call in sleep.call_args_list] == [0.25, 0.5]
+    assert "only one JSON" in generate.call_args.args[0].messages[-1].content
+
+
+@pytest.mark.asyncio
+async def test_duplicate_followup_task_is_repaired_before_materialization():
+    from marketpulse.investigation.agents.contracts import (
+        QuestionView,
+        RouteInput,
+        RouteProposal,
+        TaskProposal,
+        TaskSummaryView,
+    )
+    from marketpulse.investigation.agents.model_agents import ModelPlannerAgent
+
+    task = TaskProposal(
+        task_key="prior", target_question_key="Q", objective="find records", priority=50
+    )
+    bad = RouteProposal(route="COLLECT", tasks=(task,))
+    good = bad.model_copy(update={"tasks": (task.model_copy(update={"task_key": "new"}),)})
+    generate = AsyncMock(side_effect=[SimpleNamespace(output=bad), SimpleNamespace(output=good)])
+    result = await ModelPlannerAgent(SimpleNamespace(generate=generate)).route(
+        RouteInput(
+            case_key="I",
+            gaps=(),
+            questions=(QuestionView(question_key="Q", text="event?"),),
+            prior_task_summaries=(
+                TaskSummaryView(
+                    task_key="prior",
+                    target_question_key="Q",
+                    purpose="records",
+                    round=1,
+                    summary="completed",
+                ),
+            ),
+        )
+    )
+    assert result.tasks[0].task_key == "new"
+    assert generate.await_count == 2
+    assert "duplicates prior workflow work" in generate.call_args.args[0].messages[-1].content
+
+
+@pytest.mark.asyncio
+async def test_unrecoverable_provider_error_is_not_schema_retried():
+    from marketpulse.investigation.recording.errors import ProviderCallError
+
+    generate = AsyncMock(side_effect=ProviderCallError("provider unavailable"))
+    sleep = AsyncMock()
+    with pytest.raises(ProviderCallError):
+        await ModelAnalystAgent(SimpleNamespace(generate=generate), sleep=sleep).analyze(
+            AnalysisInput(artifacts=())
+        )
+    assert generate.await_count == 1
+    sleep.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_invalid_schema_retry_count_is_bounded():
+    from marketpulse.investigation.recording.errors import InvalidProviderResponseError
+
+    generate = AsyncMock(side_effect=InvalidProviderResponseError("still invalid"))
+    sleep = AsyncMock()
+    with pytest.raises(InvalidProviderResponseError):
+        await ModelAnalystAgent(SimpleNamespace(generate=generate), sleep=sleep).analyze(
+            AnalysisInput(artifacts=())
+        )
+    assert generate.await_count == 3
+    assert sleep.await_count == 2
+
+
+@pytest.mark.asyncio
+async def test_all_duplicate_queries_repair_uses_exact_executed_context():
+    from marketpulse.investigation.agents.contracts import (
+        QueryIntent,
+        QuerySummaryView,
+        ResearchInput,
+        ResearchProposal,
+        TaskProposal,
+    )
+    from marketpulse.investigation.agents.model_agents import ModelResearcherAgent
+
+    query = QueryIntent(
+        query_key="q", query="  OFFICIAL   EVENT  ", target_question_key="Q", purpose="public event"
+    )
+    bad = ResearchProposal(queries=(query,))
+    good = ResearchProposal(queries=(query.model_copy(update={"query": "new event record"}),))
+    generate = AsyncMock(side_effect=[SimpleNamespace(output=bad), SimpleNamespace(output=good)])
+    result = await ModelResearcherAgent(
+        SimpleNamespace(generate=generate), sleep=AsyncMock()
+    ).research(
+        ResearchInput(
+            task=TaskProposal(
+                task_key="T", target_question_key="Q", objective="event", priority=50
+            ),
+            remaining_search_calls=1,
+            executed_queries=(
+                QuerySummaryView(
+                    normalized_query="official event", purpose="event", result_summary="searched"
+                ),
+            ),
+        )
+    )
+    assert result.queries[0].query == "new event record"
+    assert generate.await_count == 2
+
+
+@pytest.mark.asyncio
 async def test_schema_repair_receives_safe_field_errors():
-    import json
 
     from marketpulse.investigation.agents.contracts import VerificationInput
     from marketpulse.investigation.agents.model_agents import ModelVerifierAgent
@@ -95,7 +218,6 @@ async def test_verifier_repair_identifies_wrong_reference_and_never_accepts_it()
 
 @pytest.mark.asyncio
 async def test_compact_verifier_ids_restore_exact_original_reference():
-    import json
 
     from marketpulse.investigation.agents.contracts import ClaimCandidate, VerificationInput
     from marketpulse.investigation.feedback.verification_team import verification_team

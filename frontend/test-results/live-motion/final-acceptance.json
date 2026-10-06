@@ -1,0 +1,2697 @@
+{
+  "checks": [
+    {
+      "name": "1440x900-dark-motion: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: new step entry captured",
+      "passed": true,
+      "details": {
+        "frames": 828,
+        "longFrames": 1,
+        "maxFrame": 60.600000000000136,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-motion: step and worker stamp captured",
+      "passed": true,
+      "details": {
+        "frames": 828,
+        "longFrames": 1,
+        "maxFrame": 60.600000000000136,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-motion: budget and phase animation captured",
+      "passed": true,
+      "details": {
+        "frames": 828,
+        "longFrames": 1,
+        "maxFrame": 60.600000000000136,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-motion: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 299,
+        "longFrames": 1,
+        "maxFrame": 72.69999999999982,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-motion: dossier closes then opens",
+      "passed": true,
+      "details": {
+        "frames": 299,
+        "longFrames": 1,
+        "maxFrame": 72.69999999999982,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-motion: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-motion: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "1440x900-dark-reduced: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: reduced data updates static",
+      "passed": true,
+      "details": {
+        "frames": 811,
+        "longFrames": 0,
+        "maxFrame": 12.099999999999454,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-reduced: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 312,
+        "longFrames": 0,
+        "maxFrame": 12.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-reduced: reduced flow static",
+      "passed": true,
+      "details": {
+        "frames": 312,
+        "longFrames": 0,
+        "maxFrame": 12.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-dark-reduced: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-dark-reduced: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "1440x900-light-motion: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: new step entry captured",
+      "passed": true,
+      "details": {
+        "frames": 836,
+        "longFrames": 0,
+        "maxFrame": 12,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-motion: step and worker stamp captured",
+      "passed": true,
+      "details": {
+        "frames": 836,
+        "longFrames": 0,
+        "maxFrame": 12,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-motion: budget and phase animation captured",
+      "passed": true,
+      "details": {
+        "frames": 836,
+        "longFrames": 0,
+        "maxFrame": 12,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-motion: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 314,
+        "longFrames": 0,
+        "maxFrame": 12.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-motion: dossier closes then opens",
+      "passed": true,
+      "details": {
+        "frames": 314,
+        "longFrames": 0,
+        "maxFrame": 12.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-motion: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-motion: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "1440x900-light-reduced: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: reduced data updates static",
+      "passed": true,
+      "details": {
+        "frames": 804,
+        "longFrames": 0,
+        "maxFrame": 12.100000000000364,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-reduced: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 312,
+        "longFrames": 0,
+        "maxFrame": 12.100000000000364,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-reduced: reduced flow static",
+      "passed": true,
+      "details": {
+        "frames": 312,
+        "longFrames": 0,
+        "maxFrame": 12.100000000000364,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "1440x900-light-reduced: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "1440x900-light-reduced: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "390x844-dark-motion: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: touch scan static",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: new step entry captured",
+      "passed": true,
+      "details": {
+        "frames": 856,
+        "longFrames": 0,
+        "maxFrame": 6.300000000000182,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-motion: step and worker stamp captured",
+      "passed": true,
+      "details": {
+        "frames": 856,
+        "longFrames": 0,
+        "maxFrame": 6.300000000000182,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-motion: budget and phase animation captured",
+      "passed": true,
+      "details": {
+        "frames": 856,
+        "longFrames": 0,
+        "maxFrame": 6.300000000000182,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-motion: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 308,
+        "longFrames": 0,
+        "maxFrame": 30.399999999999636,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-motion: dossier closes then opens",
+      "passed": true,
+      "details": {
+        "frames": 308,
+        "longFrames": 0,
+        "maxFrame": 30.399999999999636,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-motion: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-motion: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "390x844-dark-reduced: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: touch scan static",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: reduced data updates static",
+      "passed": true,
+      "details": {
+        "frames": 823,
+        "longFrames": 0,
+        "maxFrame": 6.300000000000182,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-reduced: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 309,
+        "longFrames": 0,
+        "maxFrame": 24.399999999999636,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-reduced: reduced flow static",
+      "passed": true,
+      "details": {
+        "frames": 309,
+        "longFrames": 0,
+        "maxFrame": 24.399999999999636,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-dark-reduced: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-dark-reduced: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "390x844-light-motion: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: touch scan static",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: new step entry captured",
+      "passed": true,
+      "details": {
+        "frames": 851,
+        "longFrames": 0,
+        "maxFrame": 6.400000000000091,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-motion: step and worker stamp captured",
+      "passed": true,
+      "details": {
+        "frames": 851,
+        "longFrames": 0,
+        "maxFrame": 6.400000000000091,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-motion: budget and phase animation captured",
+      "passed": true,
+      "details": {
+        "frames": 851,
+        "longFrames": 0,
+        "maxFrame": 6.400000000000091,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-motion: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 311,
+        "longFrames": 0,
+        "maxFrame": 18.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-motion: dossier closes then opens",
+      "passed": true,
+      "details": {
+        "frames": 311,
+        "longFrames": 0,
+        "maxFrame": 18.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-motion: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-motion: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "390x844-light-reduced: CASE INTAKE waiting visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: pending process auto expands",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: AGENT/EXHIBIT indexed content",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: completion stamp text",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: completed scan stops",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: persisted budget reached",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: existing step stays settled",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: touch scan static",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: no horizontal overflow during run",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: reduced data updates static",
+      "passed": true,
+      "details": {
+        "frames": 824,
+        "longFrames": 0,
+        "maxFrame": 6.400000000000091,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-reduced: terminal results visible",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: results follow close",
+      "passed": true,
+      "details": {
+        "frames": 316,
+        "longFrames": 0,
+        "maxFrame": 12.299999999999272,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-reduced: reduced flow static",
+      "passed": true,
+      "details": {
+        "frames": 316,
+        "longFrames": 0,
+        "maxFrame": 12.299999999999272,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "name": "390x844-light-reduced: nine tabs preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: tab indicator initialized",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: no overflow after terminal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "390x844-light-reduced: actual LIVE polling progressed",
+      "passed": true,
+      "details": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "title-lg-1440x900-dark: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-dark: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-dark: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-dark: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-dark: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-dark: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-dark: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-dark: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-dark: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-dark: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-dark: correct tier",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-dark: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-dark: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-dark: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-dark: token size range",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-light: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-light: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-light: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-light: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-1440x900-light: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 60,
+        "lineHeight": 63.6,
+        "titleHeight": 63.59375,
+        "titleBottom": 175.59375,
+        "statusBottom": 144,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-light: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-light: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-light: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-light: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-1440x900-light: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 42,
+        "lineHeight": 44.52,
+        "titleHeight": 89.03125,
+        "titleBottom": 201.03125,
+        "statusBottom": 245.03125,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-light: correct tier",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-light: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-light: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-light: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-1440x900-light: token size range",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 32,
+        "lineHeight": 36.8,
+        "titleHeight": 110.390625,
+        "titleBottom": 222.390625,
+        "statusBottom": 266.390625,
+        "ctaBottom": 152,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-dark: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-dark: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-dark: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-dark: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-dark: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-dark: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-dark: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-dark: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-dark: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-dark: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-dark: correct tier",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-dark: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-dark: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-dark: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-dark: token size range",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-light: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-light: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-light: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-light: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-lg-390x844-light: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故",
+        "class": "hero-title hero-title--lg",
+        "fontSize": 40,
+        "lineHeight": 42.4,
+        "titleHeight": 84.78125,
+        "titleBottom": 224.78125,
+        "statusBottom": 268.78125,
+        "ctaBottom": 375.375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-light: correct tier",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-light: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-light: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-light: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-md-390x844-light: token size range",
+      "passed": true,
+      "details": {
+        "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+        "class": "hero-title hero-title--md",
+        "fontSize": 30,
+        "lineHeight": 31.8,
+        "titleHeight": 95.390625,
+        "titleBottom": 235.390625,
+        "statusBottom": 279.390625,
+        "ctaBottom": 385.984375,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-light: correct tier",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-light: complete title retained",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-light: no truncation or overflow",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-light: stamp and CTA fit first screen",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "title-sm-390x844-light: token size range",
+      "passed": true,
+      "details": {
+        "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+        "class": "hero-title hero-title--sm",
+        "fontSize": 24,
+        "lineHeight": 27.6,
+        "titleHeight": 137.96875,
+        "titleBottom": 277.96875,
+        "statusBottom": 321.96875,
+        "ctaBottom": 428.5625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "nodeOverflow": false
+      }
+    },
+    {
+      "name": "no unexpected console errors",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "no page exceptions",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "mock API and app resources healthy",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "console_errors": [],
+  "page_errors": [],
+  "http_errors": [],
+  "screenshots": [
+    "frontend\\test-results\\live-motion\\flow-1440x900-dark-motion.png",
+    "frontend\\test-results\\live-motion\\results-1440x900-dark-motion.png",
+    "frontend\\test-results\\live-motion\\flow-1440x900-dark-reduced.png",
+    "frontend\\test-results\\live-motion\\results-1440x900-dark-reduced.png",
+    "frontend\\test-results\\live-motion\\flow-1440x900-light-motion.png",
+    "frontend\\test-results\\live-motion\\results-1440x900-light-motion.png",
+    "frontend\\test-results\\live-motion\\flow-1440x900-light-reduced.png",
+    "frontend\\test-results\\live-motion\\results-1440x900-light-reduced.png",
+    "frontend\\test-results\\live-motion\\flow-390x844-dark-motion.png",
+    "frontend\\test-results\\live-motion\\results-390x844-dark-motion.png",
+    "frontend\\test-results\\live-motion\\flow-390x844-dark-reduced.png",
+    "frontend\\test-results\\live-motion\\results-390x844-dark-reduced.png",
+    "frontend\\test-results\\live-motion\\flow-390x844-light-motion.png",
+    "frontend\\test-results\\live-motion\\results-390x844-light-motion.png",
+    "frontend\\test-results\\live-motion\\flow-390x844-light-reduced.png",
+    "frontend\\test-results\\live-motion\\results-390x844-light-reduced.png",
+    "frontend\\test-results\\live-motion\\title-lg-1440x900-dark.png",
+    "frontend\\test-results\\live-motion\\title-md-1440x900-dark.png",
+    "frontend\\test-results\\live-motion\\title-sm-1440x900-dark.png",
+    "frontend\\test-results\\live-motion\\title-lg-1440x900-light.png",
+    "frontend\\test-results\\live-motion\\title-md-1440x900-light.png",
+    "frontend\\test-results\\live-motion\\title-sm-1440x900-light.png",
+    "frontend\\test-results\\live-motion\\title-lg-390x844-dark.png",
+    "frontend\\test-results\\live-motion\\title-md-390x844-dark.png",
+    "frontend\\test-results\\live-motion\\title-sm-390x844-dark.png",
+    "frontend\\test-results\\live-motion\\title-lg-390x844-light.png",
+    "frontend\\test-results\\live-motion\\title-md-390x844-light.png",
+    "frontend\\test-results\\live-motion\\title-sm-390x844-light.png"
+  ],
+  "frames": [
+    {
+      "case": "1440x900-dark-motion",
+      "during": {
+        "frames": 828,
+        "longFrames": 1,
+        "maxFrame": 60.600000000000136,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 299,
+        "longFrames": 1,
+        "maxFrame": 72.69999999999982,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "case": "1440x900-dark-reduced",
+      "during": {
+        "frames": 811,
+        "longFrames": 0,
+        "maxFrame": 12.099999999999454,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 312,
+        "longFrames": 0,
+        "maxFrame": 12.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "case": "1440x900-light-motion",
+      "during": {
+        "frames": 836,
+        "longFrames": 0,
+        "maxFrame": 12,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 314,
+        "longFrames": 0,
+        "maxFrame": 12.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "case": "1440x900-light-reduced",
+      "during": {
+        "frames": 804,
+        "longFrames": 0,
+        "maxFrame": 12.100000000000364,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 312,
+        "longFrames": 0,
+        "maxFrame": 12.100000000000364,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "case": "390x844-dark-motion",
+      "during": {
+        "frames": 856,
+        "longFrames": 0,
+        "maxFrame": 6.300000000000182,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 308,
+        "longFrames": 0,
+        "maxFrame": 30.399999999999636,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "case": "390x844-dark-reduced",
+      "during": {
+        "frames": 823,
+        "longFrames": 0,
+        "maxFrame": 6.300000000000182,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 309,
+        "longFrames": 0,
+        "maxFrame": 24.399999999999636,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "case": "390x844-light-motion",
+      "during": {
+        "frames": 851,
+        "longFrames": 0,
+        "maxFrame": 6.400000000000091,
+        "entry": true,
+        "stamp": true,
+        "workerStamp": true,
+        "phase": true,
+        "budget": true,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 311,
+        "longFrames": 0,
+        "maxFrame": 18.199999999999818,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": true,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": true,
+        "reducedDisplacement": false
+      }
+    },
+    {
+      "case": "390x844-light-reduced",
+      "during": {
+        "frames": 824,
+        "longFrames": 0,
+        "maxFrame": 6.400000000000091,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": false,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      },
+      "terminal": {
+        "frames": 316,
+        "longFrames": 0,
+        "maxFrame": 12.299999999999272,
+        "entry": false,
+        "stamp": false,
+        "workerStamp": false,
+        "phase": false,
+        "budget": false,
+        "leave": false,
+        "resultDuringLeave": false,
+        "resultAfter": true,
+        "resultOpen": false,
+        "reducedDisplacement": false
+      }
+    }
+  ],
+  "title_metrics": [
+    {
+      "case": "title-lg-1440x900-dark",
+      "text": "东巴勒斯坦列车脱轨事故",
+      "class": "hero-title hero-title--lg",
+      "fontSize": 60,
+      "lineHeight": 63.6,
+      "titleHeight": 63.59375,
+      "titleBottom": 175.59375,
+      "statusBottom": 144,
+      "ctaBottom": 152,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-md-1440x900-dark",
+      "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+      "class": "hero-title hero-title--md",
+      "fontSize": 42,
+      "lineHeight": 44.52,
+      "titleHeight": 89.03125,
+      "titleBottom": 201.03125,
+      "statusBottom": 245.03125,
+      "ctaBottom": 152,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-sm-1440x900-dark",
+      "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+      "class": "hero-title hero-title--sm",
+      "fontSize": 32,
+      "lineHeight": 36.8,
+      "titleHeight": 110.390625,
+      "titleBottom": 222.390625,
+      "statusBottom": 266.390625,
+      "ctaBottom": 152,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-lg-1440x900-light",
+      "text": "东巴勒斯坦列车脱轨事故",
+      "class": "hero-title hero-title--lg",
+      "fontSize": 60,
+      "lineHeight": 63.6,
+      "titleHeight": 63.59375,
+      "titleBottom": 175.59375,
+      "statusBottom": 144,
+      "ctaBottom": 152,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-md-1440x900-light",
+      "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+      "class": "hero-title hero-title--md",
+      "fontSize": 42,
+      "lineHeight": 44.52,
+      "titleHeight": 89.03125,
+      "titleBottom": 201.03125,
+      "statusBottom": 245.03125,
+      "ctaBottom": 152,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-sm-1440x900-light",
+      "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+      "class": "hero-title hero-title--sm",
+      "fontSize": 32,
+      "lineHeight": 36.8,
+      "titleHeight": 110.390625,
+      "titleBottom": 222.390625,
+      "statusBottom": 266.390625,
+      "ctaBottom": 152,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-lg-390x844-dark",
+      "text": "东巴勒斯坦列车脱轨事故",
+      "class": "hero-title hero-title--lg",
+      "fontSize": 40,
+      "lineHeight": 42.4,
+      "titleHeight": 84.78125,
+      "titleBottom": 224.78125,
+      "statusBottom": 268.78125,
+      "ctaBottom": 375.375,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-md-390x844-dark",
+      "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+      "class": "hero-title hero-title--md",
+      "fontSize": 30,
+      "lineHeight": 31.8,
+      "titleHeight": 95.390625,
+      "titleBottom": 235.390625,
+      "statusBottom": 279.390625,
+      "ctaBottom": 385.984375,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-sm-390x844-dark",
+      "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+      "class": "hero-title hero-title--sm",
+      "fontSize": 24,
+      "lineHeight": 27.6,
+      "titleHeight": 137.96875,
+      "titleBottom": 277.96875,
+      "statusBottom": 321.96875,
+      "ctaBottom": 428.5625,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-lg-390x844-light",
+      "text": "东巴勒斯坦列车脱轨事故",
+      "class": "hero-title hero-title--lg",
+      "fontSize": 40,
+      "lineHeight": 42.4,
+      "titleHeight": 84.78125,
+      "titleBottom": 224.78125,
+      "statusBottom": 268.78125,
+      "ctaBottom": 375.375,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-md-390x844-light",
+      "text": "东巴勒斯坦列车脱轨事故后污染物扩散与公开监测信息核验",
+      "class": "hero-title hero-title--md",
+      "fontSize": 30,
+      "lineHeight": 31.8,
+      "titleHeight": 95.390625,
+      "titleBottom": 235.390625,
+      "statusBottom": 279.390625,
+      "ctaBottom": 385.984375,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "nodeOverflow": false
+    },
+    {
+      "case": "title-sm-390x844-light",
+      "text": "关于东巴勒斯坦列车脱轨事故后空气与水体污染物扩散监测数据公开信息及长期居民健康风险评估结论的证据核验调查报告",
+      "class": "hero-title hero-title--sm",
+      "fontSize": 24,
+      "lineHeight": 27.6,
+      "titleHeight": 137.96875,
+      "titleBottom": 277.96875,
+      "statusBottom": 321.96875,
+      "ctaBottom": 428.5625,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "nodeOverflow": false
+    }
+  ],
+  "passed": true
+}

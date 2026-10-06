@@ -1,0 +1,29 @@
+{
+  "verified_artifacts": 12,
+  "cases": [
+    "ak_em_qfq",
+    "ak_em_hfq",
+    "ak_tx_raw",
+    "ak_tx_qfq",
+    "ak_tx_hfq",
+    "ak_valuation",
+    "bao_raw",
+    "bao_hfq",
+    "bao_profit",
+    "bao_factors",
+    "bao_qfq",
+    "ak_financial_sina"
+  ],
+  "rows_compared": 19,
+  "max_raw_close_error": 0.0,
+  "median_bao_vs_tx_volume_ratio": 99.99999490318602,
+  "median_bao_turn_percent_vs_tx_turnover_fraction": 100.03225806451613,
+  "max_em_vs_tx_qfq_close_difference": 0.0,
+  "profit_pubDate": "2024-04-20",
+  "profit_statDate": "2024-03-31",
+  "missing_bank_fields": [
+    "gpMargin",
+    "MBRevenue"
+  ],
+  "note": "19 historical days, one stock; not SLA, PIT completeness, independence or backtest proof"
+}

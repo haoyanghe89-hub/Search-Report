@@ -1,0 +1,37 @@
+任务 M（P0 第一批：P0-A + P0-B）：搭建量化投研 Agent 的可复现数据底座。请先读 docs/v8-taskL-quant-evolution-plan.md 的第 7、8、14.1、16、17 章作为规格依据，严格按方案实施；本批只做 P0-A 与 P0-B，完成后停下等我检查，不要提前做指标/回测/图表。
+
+【总目标（P0，供方向参考，本批不全部实现）】沪深普通股票单标的、日频、≤3年，冻结数据快照 + 确定性计算 + 可复现卷宗；数据源可插拔，BaoStock 为主、AkShare 交叉核对，Tushare 适配器接口预留（P1 升级，本批不接 Tushare 账号）。
+
+==== P0-A：契约 / 许可 / 证券主数据（对应方案 14.1，3–4 人日）====
+1. 新建量化包 src/marketpulse/quant/（与现有 investigation 解耦），先落 domain.py / contracts.py：
+   - 用 Pydantic frozen + extra=forbid 定义：DataRequest、DatasetSnapshot、Instrument、DataRights、MetricSpec（本批可先占位）等；asof 必须为时区感知 datetime；end>=start；instruments 用内部稳定 ID（不能只用六位代码）。
+   - 定义 DataRightsPolicy / rights scope（internal_research / licensed_service）：未知授权默认禁止 raw 导出与对外分享；provider/upstream/entitlement/attribution/到期等字段齐备。
+2. 证券主数据 data/instruments.py、calendar.py：
+   - instrument_id 稳定 ID + 别名（exchange+code+valid_from/to），覆盖上市/退市生命周期、停牌/ST 状态；A股 T+1、板块、交易状态等规则版本化（effective_from/to + exchange + board + status）。
+   - 交易日历用 exchange_calendars（候选，见方案17），但需显式核对、不盲信库覆盖未来节假日。
+3. 数据端口契约：在量化侧定义 QuantDataPort（取数端口）与录制/回放接口草图，沿用现有 harness 的 logical_key/ordinal/attempt/预算/回放思想；禁止裸调 SDK 绕过记录。本批先契约 + 内存/录制适配器骨架。
+
+==== P0-B：数据接入 + 冻结存储（对应方案 14.1，5–7 人日）====
+1. 适配器（可插拔，统一 DataRequest/Result；SDK 在隔离进程调用）：
+   - data/baostock_adapter.py：沪深日线 raw/qfq/hfq、tradestatus/isST、PE/PB、季度财务（含 pubDate/statDate）、复权因子。
+   - data/akshare_adapter.py：腾讯日线交叉核对、新浪财务摘要/东财估值作补充；按方案第 6 章处理单位（手/股、%/比例）、空串→null（不是0）、日期 dtype 统一、金融股空指标不置零。
+   - data/base.py 统一接口 + data/normalize.py、quality.py、pit.py：标准化、字段/单位、质量标志、PIT 级别（STRICT/PARTIAL/UNAVAILABLE）判定。
+   - 设计降级链：冻结快照优先 → BaoStock → AkShare 腾讯 → AkShare 东财；切源记录 provider/upstream/asof/口径并重做重叠核对，冲突不平均、暂停相关声明。
+2. 冻结存储 storage/（SQLite 元数据 + Parquet 内容寻址 + DuckDB 只读）：
+   - 元数据表 inv_quant_instrument / inv_quant_dataset_snapshot / inv_quant_snapshot_ownership（按方案 7.3 字段）；新建 Alembic 迁移（<next_revision> 由实际 head 决定，不许虚构 down_revision），旧表向后兼容。
+   - raw/normalized 行情与财务按 market/dataset/year 分区写 Parquet（不要每个 bar 一个 blob），经现有内容寻址 blob 存 SHA256；DuckDB 每 worker 独立只读连接、参数化、memory/threads 限额，不做共享写库。
+   - 快照冻结语义：缓存键按方案 7.2；快照不可被运行时 latest 替代；provisional/未收盘 bar 标记，P0 默认只用完整 session。
+3. 依赖：以可选 quant extra 管理（pandas/numpy/pyarrow/duckdb/akshare/baostock/exchange_calendars，版本参考方案17并实际锁定），保证旧业务在不装量化库时仍能启动（CI 两条：3.13 quant 全依赖 / 3.11 旧业务不装 quant）。
+
+==== 开发日志（硬性要求，每一步都要做）====
+- 创建并持续维护 docs/quant-dev-journal.md（多 Agent 系统开发踩坑记录）。
+- 每完成一个子项、每遇到并解决一个问题，立即追加，按“工作包 → 日期”组织，每条包含：①现象/困难或坑；②根因定位；③如何解决（关键代码/命令/配置）；④可复用经验教训。
+- 必须真实、即时记录（如 BaoStock 空串/长连接串行、AkShare 上游超时、日期 dtype 不一致、复权锚点、Parquet 分区、依赖在 3.11/3.13 差异等），不要事后写套话；本批结束时该日志应已有实质条目。
+
+==== 约束与验证 ====
+- 向后兼容：仅增量，不改旧 HTTP 默认响应/枚举/错误结构；不放松防编造、引用、来源独立性与 PIT 底线；大计算在子进程，不阻塞 FastAPI event loop；不做自动交易/选股/目标价/预测/实时。
+- 本批完成标准：
+  1) 能对 ≥3 个普通沪深标的（建议平安银行000001、贵州茅台600519、一家制造企业）取 ≤3 年日线并冻结快照，含一个分红/送转窗口；字段/单位/质量/PIT 标志正确；断网可命中已校验快照并标 stale。
+  2) 后端：新增 quant 单测/集成测试（契约校验、normalize、PIT、适配器、快照冻结、降级、存储 manifest），用独立 --basetemp、-p no:cacheprovider 跑通；Ruff、导入检查（含 3.13 quant / 3.11 旧业务两条）、git diff --check 通过。
+  3) docs/quant-dev-journal.md 已按要求记录。
+- 交付：在最终消息列出本批新增/改动文件、迁移、数据契约与快照结构、测试结果（数量/命令）、可插拔与降级如何实现，并摘要 dev journal 中记录的主要坑；附相关证据路径。完成后等待我检查，再进入 P0-C。

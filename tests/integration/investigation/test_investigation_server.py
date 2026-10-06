@@ -138,11 +138,13 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         report_id = replay["report_id"]
         report = client.get(f"/api/reports/{report_id}").json()
         assert report["report"]["report_type"] == "FULL_INVESTIGATION"
-        assert len(report["sections"]) == 17
+        assert len(report["sections"]) < 17
+        assert all(section["content"]["units"] for section in report["sections"])
         sections = {section["section_type"]: section["content"] for section in report["sections"]}
-        assert sections["REMEDIATION_AND_FOLLOW_UP"]["units"]
-        assert sections["LIMITATIONS_AND_RESEARCH_GAPS"]["units"]
-        assert "人工整理" in sections["METHODOLOGY"]["units"][0]["text"]
+        assert sections["CORE_FINDINGS"]["units"]
+        assert "CONCLUSIONS_AND_NEXT_STEPS" not in sections
+        assert "NEXT_STEPS" not in sections
+        assert "人工整理" in str(sections["RESEARCH_APPENDIX"]["units"])
         detail = client.get(f"/api/investigations/{replay['investigation_id']}").json()
         assert len(detail["questions"]) == 8
 
@@ -166,7 +168,7 @@ def test_bundled_case_runs_end_to_end_from_replay_to_governed_report(
         assert citation["source"]["canonical_url"] in exported.text
         assert citation["evidence"]["exact_quote"].splitlines()[0] in exported.text
         assert "待人工审核" in exported.text
-        assert "## 执行摘要" in exported.text
+        assert "## 结论速览" in exported.text
         assert "原文" in exported.text
 
         review = client.get(f"/api/reports/{report_id}/review").json()

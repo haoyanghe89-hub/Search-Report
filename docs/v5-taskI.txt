@@ -1,0 +1,28 @@
+执行任务 I（后端，打通“验证确认”这最后一环；必须基于真实运行数据做诊断，不要泛泛改）。
+背景：任务B~H后，采集/抓取/预算/容错/网络韧性/收敛上限全部生效（后端487测试全绿）。最新运行 RUN-LIVE-434153bec43c405f：49来源、145次模型调用、token78万，韧性扛过了网络抖动，但67声明=55 UNVERIFIED/12 PENDING/0 VERIFIED/0 PROBABLE。
+关键事实：config.py:103 默认 model = MARKETPULSE_MODEL or “deepseek-flash”（最轻量模型）；factory.py:91 全系统单一 OpenAIChatCompletionsModel，未按阶段区分模型。
+示例声明“谷歌官方评测表中 Gemini 4 Argon 在 DeepSWE v1.1 得分为77.9%”（QUANTITATIVE/HIGH，3个支撑证据），validation_basis 明确 missing：qualifier:time、qualifier:definition、2 adequate-quality supporting Sources、an exact ENTAILS judgment for the full claim。
+
+【第一步：基于真实数据诊断（必须先做，给出证据再改）】
+1) 网络恢复后先 GET https://api.deepseek.com/models（用 .env 的 key），确认 deepseek-flash / deepseek-chat / deepseek-reasoner 三个ID是否有效、各自是什么；把结果写进报告。
+2) 针对 RUN-LIVE-434153bec43c405f，从数据库/记录中查明并量化：
+   a. 声明生成（分析/采集阶段）的原始模型输出：这些声明显式带了哪些 qualifiers（value/unit/time/scope/definition/methodology/provenance）？time/definition 是“证据里根本没有」，还是“证据里有但生成时没提取/没填进声明对象”？
+   b. 来源质量分：官方一手来源（如 storage.googleapis 的官方评测PDF、deepmind.google）实际 normalized_score 是多少？为何被判为“不足2个 adequate-quality 来源”？是评分逻辑把官方一手算低了（bug），还是证据实际只来自转载/聚合站？
+   c. 语义蕴含判断记录：验证时模型对“全声明”实际返回了什么判断？是判了 PARTIAL/NEUTRAL、还是没产出可解析的 ENTAILS、或字段缺失被当作无判断？
+   按 claim_type 分别统计上述缺口的分布。
+
+【第二步：按诊断结果精准修复】
+1) 分阶段/分角色模型（核心）：支持按环境变量配置不同阶段模型——
+   - 主模型（规划/采集/常规分析）默认 deepseek-chat；
+   - 关键推理角色（语义蕴含判断、来源质量与独立性判定、声明综合）使用 deepseek-reasoner（设独立环境变量开关，允许强制全部用同一模型）；
+   - 正确处理 reasoner 调用差异（如不支持 temperature、输出含 reasoning_content、对 response_format/JSON 的支持情况；若不支持强制JSON，用提示约束+健壮解析兜底，保证结构化）。
+2) 声明 qualifiers：确保声明生成阶段（用足够强的模型）从证据中完整提取 time/definition 等；并允许验证环节在“该限定可由所引用证据直接、明确读出”时补全后再判定，而不是仅凭声明对象漏字段就机械否决（补全必须有证据依据并记录，不得臆造）。
+3) 来源质量评分校准：官方/一手/权威来源 normalized_score 必须≥0.6；修正把官方PDF或权威转载误判为低质量的逻辑；但不得为凑确认而放宽到无依据来源。
+4) 语义蕴含：让强模型对“全声明（含数值/单位/时间/范围）”给出明确 ENTAILS/PARTIAL/CONTRADICTS 判断并可解析；PROBABLE 分级在各主 claim_type（QUANTITATIVE/EVENT_FACT/STATEMENT 等）一致落地：核心证据成立、仅缺个别次要限定且可由证据补全时给 PROBABLE，而不是一律 UNVERIFIED。
+   注意：不得为追求确认数而降低防编造/引用/独立性底线；VERIFIED 仍需满足独立来源与精确蕴含，PROBABLE 用于“高可信但个别次要条件欠缺”。
+
+【第三步：验证】
+1) 补针对性单元/集成测试：分阶段模型选择、reasoner 输出解析、qualifiers 从证据补全、官方来源质量≥0.6、各类型 PROBABLE 判定；跑全量后端测试（独立 --basetemp、-p no:cacheprovider）、Ruff、导入检查、git diff --check。
+2) 端到端重跑同一真实话题，确认最终报告含若干 VERIFIED 与一批 PROBABLE 的结论主体（Answer-first 结论 + 真实引用 + 明确缺口），report_type 为结论性调查报告、release_status 可发布或仅少量保留项。网络仍可能偶发超时，依赖任务H的自动重试；若某模型ID无效要明确报错。
+
+报告：第一步的真实数据诊断证据（模型清单、qualifiers/质量分/蕴含判断的实际值与分布）、第二步逐项修复与理由、端到端重跑结果（来源/证据/声明及 VERIFIED/PROBABLE 数、报告类型与发布状态）、测试结果、仍存在的限制。完成后等待，我会重启后端做最终确认。

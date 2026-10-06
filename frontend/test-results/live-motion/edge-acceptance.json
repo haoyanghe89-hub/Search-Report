@@ -1,0 +1,370 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "changing reduced-motion mid-counter immediately reaches persisted value",
+      "passed": true,
+      "details": {
+        "value": "4",
+        "transforms": [
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none"
+        ],
+        "hidden": 0,
+        "opacityDetails": [
+          {
+            "classes": "record worker-record active",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge worker-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record worker-record active",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge worker-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge probable phase-value",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record progress-step current",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge step-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record progress-step current",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge step-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          }
+        ],
+        "loops": 0
+      }
+    },
+    {
+      "name": "dynamic reduced-motion resets all displacement and visibility",
+      "passed": true,
+      "details": {
+        "value": "4",
+        "transforms": [
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none"
+        ],
+        "hidden": 0,
+        "opacityDetails": [
+          {
+            "classes": "record worker-record active",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge worker-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record worker-record active",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge worker-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge probable phase-value",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record progress-step current",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge step-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record progress-step current",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge step-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          }
+        ],
+        "loops": 0
+      }
+    },
+    {
+      "name": "dynamic reduced-motion kills looping tweens",
+      "passed": true,
+      "details": {
+        "value": "4",
+        "transforms": [
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none",
+          "none"
+        ],
+        "hidden": 0,
+        "opacityDetails": [
+          {
+            "classes": "record worker-record active",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge worker-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record worker-record active",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge worker-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge probable phase-value",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record progress-step current",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge step-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "record progress-step current",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          },
+          {
+            "classes": "badge step-status probable",
+            "opacity": "1",
+            "inline": "1",
+            "transition": "none"
+          }
+        ],
+        "loops": 0
+      }
+    },
+    {
+      "name": "100-step snapshot renders complete content",
+      "passed": true,
+      "details": {
+        "count": 100,
+        "visible": 4,
+        "scans": 4,
+        "hidden": 0,
+        "overflow": false
+      }
+    },
+    {
+      "name": "scan tween count bounded by visible cards",
+      "passed": true,
+      "details": {
+        "count": 100,
+        "visible": 4,
+        "scans": 4,
+        "hidden": 0,
+        "overflow": false
+      }
+    },
+    {
+      "name": "100-step snapshot has no horizontal overflow",
+      "passed": true,
+      "details": {
+        "count": 100,
+        "visible": 4,
+        "scans": 4,
+        "hidden": 0,
+        "overflow": false
+      }
+    },
+    {
+      "name": "new offscreen steps reveal when scrolled into view",
+      "passed": true,
+      "details": {
+        "opacity": "1",
+        "transform": "none",
+        "firstScan": 0
+      }
+    },
+    {
+      "name": "scans are killed when cards leave viewport",
+      "passed": true,
+      "details": {
+        "opacity": "1",
+        "transform": "none",
+        "firstScan": 0
+      }
+    },
+    {
+      "name": "unmount kills DOM tweens and loops",
+      "passed": true,
+      "details": {
+        "dom": 0,
+        "tweens": 0,
+        "loops": 0
+      }
+    },
+    {
+      "name": "low-power devices disable loops but retain content",
+      "passed": true,
+      "details": {
+        "loops": 0,
+        "opacity": "1"
+      }
+    },
+    {
+      "name": "edge cases have no browser errors",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "errors": []
+}

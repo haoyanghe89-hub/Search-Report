@@ -1,0 +1,1545 @@
+{
+  "run_id": "RUN-LIVE-434153bec43c405f",
+  "captured_at": "2026-10-02T11:13:44.558822+00:00",
+  "database_read_only": true,
+  "run": {
+    "run_id": "RUN-LIVE-434153bec43c405f",
+    "status": "BLOCKED",
+    "current_phase": "REPORT",
+    "interruption_reason": "VERIFICATION_LIMIT_REACHED；验证已达批次/调用/token 上限，停止重复验证并基于已有结果生成报告。未完成的声明仍保持原验证状态及缺口；补充直接证据后可发起新的调查。"
+  },
+  "budget": {
+    "run_id": "RUN-LIVE-434153bec43c405f",
+    "max_research_rounds": 6,
+    "max_search_calls": 240,
+    "max_fetch_calls": 600,
+    "max_model_calls": 480,
+    "max_tokens": 2000000,
+    "max_wall_time_ms": 3600000,
+    "research_rounds_used": 4,
+    "search_calls_used": 169,
+    "fetch_calls_used": 55,
+    "model_calls_used": 145,
+    "tokens_used": 777058,
+    "consumed_wall_time_ms": 478135,
+    "updated_at": "2026-10-02 10:59:17.408875",
+    "max_sources": 600,
+    "sources_used": 49
+  },
+  "unique_sources_with_snapshot": 43,
+  "evidence_count": 68,
+  "latest_claim_types": {
+    "QUANTITATIVE": {
+      "claims": 26,
+      "validated": 20,
+      "missing": {
+        "qualifier:time": 20,
+        "qualifier:definition": 15,
+        "2 adequate-quality supporting Sources": 16,
+        "an exact ENTAILS judgment for the full claim": 9,
+        "qualifier:value": 7,
+        "qualifier:unit": 9,
+        "2 independent provenance families": 13,
+        "1 independent provenance families": 1,
+        "1 adequate-quality supporting Sources": 4,
+        "qualifier:scope": 3
+      },
+      "latest_judgments": {
+        "PARTIALLY_SUPPORTS": 12,
+        "ENTAILS": 11,
+        "CONTRADICTS": 1
+      },
+      "with_entails": 11,
+      "independent_family_counts": {
+        "0": 2,
+        "1": 15,
+        "2": 1,
+        "3": 2
+      },
+      "qualifier_presence": {
+        "value": 17,
+        "unit": 15,
+        "scope": 23,
+        "methodology": 1,
+        "provenance": 26,
+        "definition": 5
+      }
+    },
+    "STATEMENT": {
+      "claims": 4,
+      "validated": 4,
+      "missing": {
+        "an exact ENTAILS judgment for the attributed statement": 2,
+        "authoritative original statement record": 4
+      },
+      "latest_judgments": {
+        "PARTIALLY_SUPPORTS": 2,
+        "ENTAILS": 2
+      },
+      "with_entails": 2,
+      "independent_family_counts": {
+        "1": 4
+      },
+      "qualifier_presence": {
+        "provenance": 4,
+        "scope": 2,
+        "time": 1,
+        "definition": 1
+      }
+    },
+    "ATTRIBUTION": {
+      "claims": 18,
+      "validated": 12,
+      "missing": {
+        "recognized attribution_kind": 12,
+        "support beyond interested-party assertion": 12,
+        "independent attribution support": 12,
+        "two adequate-quality attribution Sources": 12,
+        "direct investigative/regulatory/legal finding": 12,
+        "an exact ENTAILS judgment for the full claim": 3
+      },
+      "latest_judgments": {
+        "ENTAILS": 10,
+        "PARTIALLY_SUPPORTS": 6
+      },
+      "with_entails": 9,
+      "independent_family_counts": {
+        "1": 12
+      },
+      "qualifier_presence": {
+        "provenance": 16,
+        "scope": 17
+      }
+    },
+    "ANALYTIC_INFERENCE": {
+      "claims": 19,
+      "validated": 19,
+      "missing": {
+        "multi-family support": 17,
+        "explicit reasoning_basis": 19,
+        "explicit uncertainty": 19,
+        "two adequate-quality supporting Sources": 19,
+        "an exact ENTAILS judgment for the full claim": 5,
+        "multiple supporting Evidence items": 13
+      },
+      "latest_judgments": {
+        "ENTAILS": 16,
+        "PARTIALLY_SUPPORTS": 13
+      },
+      "with_entails": 14,
+      "independent_family_counts": {
+        "1": 17,
+        "2": 2
+      },
+      "qualifier_presence": {
+        "value": 4,
+        "unit": 4,
+        "scope": 19,
+        "provenance": 19,
+        "time": 4
+      }
+    }
+  },
+  "analysis_candidate_counts": {
+    "QUANTITATIVE": 14,
+    "STATEMENT": 3,
+    "ATTRIBUTION": 11,
+    "ANALYTIC_INFERENCE": 20
+  },
+  "analysis_candidate_qualifier_presence": {
+    "QUANTITATIVE": {
+      "value": 8,
+      "unit": 6,
+      "scope": 14,
+      "methodology": 1,
+      "provenance": 14,
+      "definition": 3
+    },
+    "STATEMENT": {
+      "provenance": 3,
+      "scope": 2
+    },
+    "ATTRIBUTION": {
+      "provenance": 9,
+      "scope": 10
+    },
+    "ANALYTIC_INFERENCE": {
+      "value": 4,
+      "unit": 4,
+      "scope": 20,
+      "provenance": 20,
+      "time": 4
+    }
+  },
+  "analysis_recordings": [
+    {
+      "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+      "typed_claim_candidates": 4,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 0
+    },
+    {
+      "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+      "typed_claim_candidates": 6,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 2
+    },
+    {
+      "call_id": "CALL-191af5fe2ce74a6b9a4a912054464efd",
+      "typed_claim_candidates": 5,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 1
+    },
+    {
+      "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+      "typed_claim_candidates": 8,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 4
+    },
+    {
+      "call_id": "CALL-a4bfb8fee2a64f7d8d3c087af546807e",
+      "typed_claim_candidates": 7,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 3
+    },
+    {
+      "call_id": "CALL-f64784907a5a42608ddcfaa69898fdaa",
+      "typed_claim_candidates": 6,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 2
+    },
+    {
+      "call_id": "CALL-e0b68810d3ee4024a13e31bc6e9e99f1",
+      "typed_claim_candidates": 8,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 4
+    },
+    {
+      "call_id": "CALL-4aeac8f38cdc47aa89d74d39048b7ec3",
+      "typed_claim_candidates": 4,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 0
+    },
+    {
+      "call_id": "CALL-e244e5b06ed54367afc88731a3a0e271",
+      "typed_claim_candidates": 6,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 2
+    },
+    {
+      "call_id": "CALL-72ba5e2d05404054b4794adb357dd869",
+      "typed_claim_candidates": 6,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 2
+    },
+    {
+      "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+      "typed_claim_candidates": 4,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 0
+    },
+    {
+      "call_id": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7",
+      "typed_claim_candidates": 4,
+      "new_candidates": 4,
+      "existing_claim_definitions_copied": 0
+    }
+  ],
+  "verifier_typed_output_judgments": {
+    "ENTAILS": 47,
+    "PARTIALLY_SUPPORTS": 43,
+    "CONTRADICTS": 1
+  },
+  "verifier_typed_output_by_claim_type": {
+    "ATTRIBUTION": {
+      "ENTAILS": 12,
+      "PARTIALLY_SUPPORTS": 7
+    },
+    "QUANTITATIVE": {
+      "PARTIALLY_SUPPORTS": 12,
+      "ENTAILS": 11,
+      "CONTRADICTS": 1
+    },
+    "STATEMENT": {
+      "PARTIALLY_SUPPORTS": 2,
+      "ENTAILS": 2
+    },
+    "ANALYTIC_INFERENCE": {
+      "ENTAILS": 22,
+      "PARTIALLY_SUPPORTS": 22
+    }
+  },
+  "verifier_successes_empty_judgments": 0,
+  "verifier_missing_required_judgment_fields": 0,
+  "verifier_context_key_occurrences": {
+    "claims": 58,
+    "contract_version": 58,
+    "evidence": 58,
+    "existing_conflict_summaries": 58,
+    "profile_expectations": 58,
+    "source_families": 58,
+    "source_independence_keys": 58,
+    "target_claim_type": 58
+  },
+  "time_missing_quote_date_regex_clues": {
+    "no_explicit_date_regex_in_integrity_quotes": 20
+  },
+  "sources": [
+    {
+      "source_id": "S-2e352fffc5d3d7f78fad77648327f133",
+      "url": "https://agentpedia.codes/blog/gemini-4-argon-complete-guide",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 19,
+      "evidence_count": 21
+    },
+    {
+      "source_id": "S-05bd50c1db77db86b92a748a8007aedd",
+      "url": "https://aistudio.google.com/models/gemini-3",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-258fe3d8a325e8479f4c6cb1193249e6",
+      "url": "https://betanews.com/article/gemini-4-argon-cyber-defenders-fairwind",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-c13cdb92c37177d7ca3932396aa3d2ef",
+      "url": "https://blog.4sapi.com/blog/gemini-4-google-ai-restructuring-developer-outlook",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-fbc991d62fc57303255bd9bdb5309fba",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": "Google",
+      "syndication_cluster_id": "issuer:Google",
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-40abe7ec41d29402b0fbc6b2631e9731",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/google-io-2026-all-our-announcements",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": "Google",
+      "syndication_cluster_id": "issuer:Google",
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-84b6c9b34da18df8e659aabcef77ab79",
+      "url": "https://blog.google/intl/en-mena/company-news/technology/gemini-4-argon-our-next-era-of-frontier-intelligence",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": "Google",
+      "syndication_cluster_id": "issuer:Google",
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-f1543b35755d046a49a75c152c69871b",
+      "url": "https://blog.google/products-and-platforms/products/gemini",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": "Google",
+      "syndication_cluster_id": "issuer:Google",
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-3fa9c0bac3a39d4df3362a9fec0d76ac",
+      "url": "https://commission.europa.eu/index_en",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-5006bc8ef41aa791fae06d7330c494cf",
+      "url": "https://dataprivacy.foxrothschild.com/2026/04/articles/general-privacy-data-security-news-developments/when-ai-meets-the-fcra-what-the-eightfold-class-action-means-for-employers-and-hr-technology-providers",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-69fdb8a51941342a27db61ba76d5afc9",
+      "url": "https://deepmind.google/models/gemini",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": "Google",
+      "syndication_cluster_id": "issuer:Google",
+      "latest_basis_scores": [
+        0.64
+      ],
+      "latest_claims_evaluating_source": 5,
+      "evidence_count": 4
+    },
+    {
+      "source_id": "S-f0ae2337a716afee62d00feba2134b61",
+      "url": "https://deepmind.google/models/gemini/pro",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": "Google",
+      "syndication_cluster_id": "issuer:Google",
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-5b4ce41b531a51f57bad44a5e9331a86",
+      "url": "https://digital-markets-act.ec.europa.eu/commission-fines-google-eur890-million-breaches-digital-markets-act-2026-07-23_en",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-9ef5dafa4623dcf078421d6a96bb0f99",
+      "url": "https://digital-markets-act.ec.europa.eu/commission-opens-proceedings-assist-google-complying-interoperability-and-online-search-data-sharing-2026-01-27_en",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-7563b16673ecf08456c60e57f3edbe58",
+      "url": "https://economictimes.indiatimes.com/ai/ai-insights/googles-new-gemini-4-argon-targets-complex-coding-finance-and-legal-work/articleshow/134609067.cms",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-3c85dde6b031aff0a54ebd0a5b43d46e",
+      "url": "https://essamamdani.com/blog/gemini-4-argon-benchmarks-safety-pricing-2026",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-832053137316c9b8bb15f02f3cc1629a",
+      "url": "https://felloai.com/gemini-4-argon",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 8,
+      "evidence_count": 7
+    },
+    {
+      "source_id": "S-d5acb9d771dde083f2f1342d98f53ab8",
+      "url": "https://gemini.google.com/",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-c1a51aaeb46760d009c89af0ea11d5d3",
+      "url": "https://gemini.google.com/?hl=en-IN",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-e821ede7afc918042936483d187025f2",
+      "url": "https://github.com/google-gemini/gemini-cli/issues/28514",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-cb5795c1b38a6a5aa52168a4396f5436",
+      "url": "https://juejin.cn/post/7691166815720177705",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 9,
+      "evidence_count": 12
+    },
+    {
+      "source_id": "S-342f9714f7700dbad099cac716e2c0ba",
+      "url": "https://mixed-news.com/en/gemini-4-argon-harveys-legal-agent-benchmark-fifth-of-73",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 1,
+      "evidence_count": 1
+    },
+    {
+      "source_id": "S-8a933d9178a8afc8637f3e4260b2eb95",
+      "url": "https://neuraltrust.ai/blog/gemini-4-argon",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 4,
+      "evidence_count": 1
+    },
+    {
+      "source_id": "S-190cc0525865d02dc604503b31642436",
+      "url": "https://play.google.com/store/apps/details?id=com.google.android.apps.bard&hl=en-US",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+      "url": "https://segmentfault.com/a/1190000048328357",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 7,
+      "evidence_count": 3
+    },
+    {
+      "source_id": "S-90c3694275b14139589fa098e51981bd",
+      "url": "https://static.bfalaw.com/docs/ConsolidatedClassActionComplaint.pdf",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-98ddc109242d59a94633e12f27aa4379",
+      "url": "https://static.cdsb.com/micropub/Articles/202606/4d00c30de1beffb27ac69000c77c53fc.html",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-ecb4c55bf181277ed4ce17799031be36",
+      "url": "https://storage.googleapis.com/deepmind-media/gemini/gemini_4_argon_model_evaluation.pdf",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-5679383dcd75213228a9bfd1f0793d7e",
+      "url": "https://www.51cto.com/aigc/12077.html",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-8dd59bad26492aa15ade31c461ab58f1",
+      "url": "https://www.aipolicydesk.com/blog/ftc-ai-enforcement-actions-2026",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-3923e525799c789ddb675909a1161126",
+      "url": "https://www.androidheadlines.com/2026/10/google-gemini-4-argon-launch-benchmark-performance-debate.html",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 2,
+      "evidence_count": 2
+    },
+    {
+      "source_id": "S-a8de72e856240e3ffa7683893542f23d",
+      "url": "https://www.businesstoday.in/technology/artificial-intelligence/story/gemini-4-argon-explained-googles-frontier-ai-model-build-for-coding-finance-legal-and-more-558984-2026-10-01",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-e7b07ca57300d79226879581023cdaf2",
+      "url": "https://www.callmissed.com/blog/gemini-argon-google-announced-september-30-2026",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 11,
+      "evidence_count": 16
+    },
+    {
+      "source_id": "S-15554288bd019df848518bb2c2fdf794",
+      "url": "https://www.cnbc.com/2026/09/30/google-gemini-4-argon-ai.html",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [
+        0.52
+      ],
+      "latest_claims_evaluating_source": 1,
+      "evidence_count": 1
+    },
+    {
+      "source_id": "S-a4e2665dbae4838c0f18729dbf67af71",
+      "url": "https://www.datacamp.com/blog/gemini-4-argon",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-9df15b400d10754cfcce1bab5f4f73ae",
+      "url": "https://www.engadget.com/2274263/google-gemini-4-model-argon",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-5acf7151dd57b0a4746519f32795c1bb",
+      "url": "https://www.ftc.gov/",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-2a176f1d541dfa3567392dc3ff88b119",
+      "url": "https://www.hklaw.com/en/insights/publications/2026/05/recent-genai-class-actions-build-on-early-successes",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-cf3d7ac7194c39b09c0f3bc5371f8495",
+      "url": "https://www.justice.gov/atr",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-3edcda7fef4a5aee6306874b7c96c95b",
+      "url": "https://www.sec.gov/about/sec-docket.shtml",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-e2f9a67fb48ae1f5ee3107897c1e2155",
+      "url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26282",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-26d60728abe1fdf3441a9d75357d28bb",
+      "url": "https://www.sec.gov/newsroom/press-releases/2024-36",
+      "official": true,
+      "first_hand": false,
+      "source_type": "OFFICIAL_REPORT",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    },
+    {
+      "source_id": "S-fc1e2b8a55a094ec5c480a10c5fe6acc",
+      "url": "https://www.unite.ai/google-announces-gemini-4-argon-frontier-model-for-coding-cyber-defense",
+      "official": false,
+      "first_hand": false,
+      "source_type": "WEB_PAGE",
+      "publisher": null,
+      "syndication_cluster_id": null,
+      "latest_basis_scores": [],
+      "latest_claims_evaluating_source": 0,
+      "evidence_count": 0
+    }
+  ],
+  "official_material_windows": [
+    {
+      "snapshot_id": "SS-aa9aa5fe354676f2595833b8b6c7f578",
+      "source_id": "S-fbc991d62fc57303255bd9bdb5309fba",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon",
+      "cleaned_sha256": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+      "chars": 9753,
+      "windows": [
+        {
+          "pattern": "77.9",
+          "count": 1,
+          "examples": [
+            {
+              "start": 3937,
+              "end": 4261,
+              "text": "day debugging to large-scale codebase migrations and algorithm designs. It sets a new state of the art on DeepSWE v1.1 (77.9%), which measures a model’s performance in real-world long-horizon software engineering tasks.\nBeyond coding, Argon is the leading model on the\nVals Index\n, which measures economic impact across fina"
+            }
+          ]
+        },
+        {
+          "pattern": "DeepSWE",
+          "count": 1,
+          "examples": [
+            {
+              "start": 3923,
+              "end": 4250,
+              "text": "ks, from everyday debugging to large-scale codebase migrations and algorithm designs. It sets a new state of the art on DeepSWE v1.1 (77.9%), which measures a model’s performance in real-world long-horizon software engineering tasks.\nBeyond coding, Argon is the leading model on the\nVals Index\n, which measures economic impact "
+            }
+          ]
+        },
+        {
+          "pattern": "pass",
+          "count": 0,
+          "examples": []
+        },
+        {
+          "pattern": "2026",
+          "count": 1,
+          "examples": [
+            {
+              "start": 0,
+              "end": 267,
+              "text": "Gemini 4 Argon: our next era of frontier intelligence\n\nSep 30, 2026\n\n|\n\nGemini 4 Argon delivers frontier performance in complex workflows across real-world software engineering, enterprise knowledge work like legal and finance, and cybersecurity defense.\n\nKoray Kavuk"
+            }
+          ]
+        },
+        {
+          "pattern": "Sep",
+          "count": 1,
+          "examples": [
+            {
+              "start": 0,
+              "end": 258,
+              "text": "Gemini 4 Argon: our next era of frontier intelligence\n\nSep 30, 2026\n\n|\n\nGemini 4 Argon delivers frontier performance in complex workflows across real-world software engineering, enterprise knowledge work like legal and finance, and cybersecurity defense.\n\nKo"
+            }
+          ]
+        },
+        {
+          "pattern": "October",
+          "count": 0,
+          "examples": []
+        },
+        {
+          "pattern": "Methodology",
+          "count": 0,
+          "examples": []
+        }
+      ]
+    },
+    {
+      "snapshot_id": "SS-d2adf71a421818a99feeae39051667df",
+      "source_id": "S-ecb4c55bf181277ed4ce17799031be36",
+      "url": "https://storage.googleapis.com/deepmind-media/gemini/gemini_4_argon_model_evaluation.pdf",
+      "cleaned_sha256": "c94c1d017e8ec67de4dfd22f21677349f8b5bb9c37c9b9a39e16f00eb4b82ede",
+      "chars": 6617,
+      "windows": [
+        {
+          "pattern": "77.9",
+          "count": 0,
+          "examples": []
+        },
+        {
+          "pattern": "DeepSWE",
+          "count": 1,
+          "examples": [
+            {
+              "start": 1442,
+              "end": 1769,
+              "text": "\n\nsourced\n\nfrom\n\nVals\n\nAI.\n\n○\n\nHarvey’s\n\nLegal\n\nAgent\n\nBenchmark\n\nresults\n\nare\n\nsourced\n\nfrom\n\nVals\n\nAI.\n\n●\n\nCoding\n\n○\n\nDeepSWE\n\nv1.1\n\nresults\n\nfor\n\nGemini\n\n4\n\nArgon\n\nare\n\nself\n\ncomputed,\n\nusing\n\na\n\nmini-swe\n\nagent\n\nharness.\n\nGPT-6\n\nAstra\n\nresults\n\nare\n\nreported\n\nfrom\n\nthe\n\nofficial\n\npublic\n\nleaderboard\n,\n\nFable\n\n5.1\n\nand\n\nOp"
+            }
+          ]
+        },
+        {
+          "pattern": "pass",
+          "count": 4,
+          "examples": [
+            {
+              "start": 262,
+              "end": 586,
+              "text": "\n\nmath,\n\nmultimodal\n\ncapabilities,\n\nlong-context\n\nand\n\ncybersecurity.\n\nMethodology\n\nAll\n\nGemini\n\n4\n\nArgon\n\nscores\n\nare\n\npass\n\n@1\n\nexcept\n\nwhere\n\notherwise\n\nnoted.\n\n\"Single\n\nattempt\"\n\nsettings\n\nallow\n\nno\n\nmajority\n\nvoting\n\nor\n\nparallel\n\ntest-time\n\ncompute.\n\nAll\n\nof\n\nthe\n\nresults\n\nare\n\nrun\n\nwith\n\nthe\n\nGemini\n\nAPI\n\nwith\n\nthe\n"
+            },
+            {
+              "start": 4034,
+              "end": 4358,
+              "text": ".\n\nFable\n\n5.1\n\nresults\n\nare\n\nmissing\n\nfrom\n\nthe\n\npublic\n\nleaderboard\n\nso\n\nare\n\nnot\n\nincluded.\n\nWe\n\nreport\n\nthe\n\nbinary\n\npass\n\nrate.\n\n○\n\nOSWorld\n\n2.0\n\nscore\n\nfor\n\nGemini\n\n4\n\nArgon\n\nis\n\nself\n\ncomputed,\n\nmaxed\n\nover\n\n3\n\nruns\n\nwith\n\na\n\nsingle\n\nattempt\n\nper\n\nrun.\n\nResponses\n\nflagged\n\nby\n\nsafety\n\nfilters\n\nare\n\nreturned\n\nas\n\nempt"
+            }
+          ]
+        },
+        {
+          "pattern": "2026",
+          "count": 2,
+          "examples": [
+            {
+              "start": 1073,
+              "end": 1397,
+              "text": "\navailable\n\nreasoning\n\nresults.\n\nAdditional\n\nDetails\n\nOur\n\nbenchmarks\n\nspan\n\nseveral\n\ncapabilities\n\nas\n\nof\n\nSeptember,\n\n2026:\n\n●\n\nKnowledge\n\nwork:\n\n○\n\nVals\n\nIndex\n\nresults\n\nare\n\nsourced\n\nfrom\n\nVals\n\nAI.\n\n○\n\nAutomationBench\n\nresults\n\nuse\n\nthe\n\nprivate\n\nset\n\nand\n\nare\n\nsourced\n\nfrom\n\nthe\n\nofficial\n\nZapier\n\npublic\n\nleaderboard"
+            },
+            {
+              "start": 6480,
+              "end": 6617,
+              "text": "\n\nBenchmark\n\nresults\n\nwere\n\nsourced\n\nfrom\n\nGray\n\nSwan\n.\n\n[Page 5]\nResults\n\nGemini\n\n4\n\nArgon\n\nresults\n\nas\n\nof\n\nOctober,\n\n2026\n\nare\n\nbelow:"
+            }
+          ]
+        },
+        {
+          "pattern": "Sep",
+          "count": 1,
+          "examples": [
+            {
+              "start": 1061,
+              "end": 1384,
+              "text": "\n\nuse\n\nbest\n\navailable\n\nreasoning\n\nresults.\n\nAdditional\n\nDetails\n\nOur\n\nbenchmarks\n\nspan\n\nseveral\n\ncapabilities\n\nas\n\nof\n\nSeptember,\n\n2026:\n\n●\n\nKnowledge\n\nwork:\n\n○\n\nVals\n\nIndex\n\nresults\n\nare\n\nsourced\n\nfrom\n\nVals\n\nAI.\n\n○\n\nAutomationBench\n\nresults\n\nuse\n\nthe\n\nprivate\n\nset\n\nand\n\nare\n\nsourced\n\nfrom\n\nthe\n\nofficial\n\nZapier\n\npublic"
+            }
+          ]
+        },
+        {
+          "pattern": "October",
+          "count": 1,
+          "examples": [
+            {
+              "start": 6470,
+              "end": 6617,
+              "text": "\nSwan\n\nIPI\n\nBenchmark\n\nresults\n\nwere\n\nsourced\n\nfrom\n\nGray\n\nSwan\n.\n\n[Page 5]\nResults\n\nGemini\n\n4\n\nArgon\n\nresults\n\nas\n\nof\n\nOctober,\n\n2026\n\nare\n\nbelow:"
+            }
+          ]
+        },
+        {
+          "pattern": "Methodology",
+          "count": 2,
+          "examples": [
+            {
+              "start": 0,
+              "end": 268,
+              "text": "[Page 1]\nGemini\n\n4\n\nArgon\n\nModel\n\nevaluation\n\nApproach,\n\nmethodology\n\n&\n\nresults\n\n[Page 2]\nApproach\n\nWe\n\nevaluated\n\nGemini\n\n4\n\nArgon\n\nacross\n\na\n\nrange\n\nof\n\nbenchmarks,\n\nincluding\n\nagentic\n\ncoding,\n\nML\n\nengineering,\n\ncomputer\n\nuse,\n\nknowledge\n\nwork,\n\nscience\n\nand\n\nmath"
+            },
+            {
+              "start": 213,
+              "end": 544,
+              "text": ",\n\ncomputer\n\nuse,\n\nknowledge\n\nwork,\n\nscience\n\nand\n\nmath,\n\nmultimodal\n\ncapabilities,\n\nlong-context\n\nand\n\ncybersecurity.\n\nMethodology\n\nAll\n\nGemini\n\n4\n\nArgon\n\nscores\n\nare\n\npass\n\n@1\n\nexcept\n\nwhere\n\notherwise\n\nnoted.\n\n\"Single\n\nattempt\"\n\nsettings\n\nallow\n\nno\n\nmajority\n\nvoting\n\nor\n\nparallel\n\ntest-time\n\ncompute.\n\nAll\n\nof\n\nthe\n\nresults\n\nar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "snapshot_id": "SS-5fd407bc7d651e6ee8e19b7712c6b919",
+      "source_id": "S-69fdb8a51941342a27db61ba76d5afc9",
+      "url": "https://deepmind.google/models/gemini",
+      "cleaned_sha256": "0ed5f166cf606b2f59fa8e4a8c9702bcef40b18574770b8d917b6b1997dc774c",
+      "chars": 4289,
+      "windows": [
+        {
+          "pattern": "77.9",
+          "count": 1,
+          "examples": [
+            {
+              "start": 947,
+              "end": 1271,
+              "text": "\n65.4%\n53.5%\n58.9%\n58.6%\nHarvey's Legal Agent Benchmark\nKnowledge work\n19.6%\n5.4%\n6.7%\n3.8%\nDeepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%\nFrontierSWE v2\nAgentic coding\n55.0%\n65.5%\n56.3%\n62.3%\nVibe Code Bench\nAgentic coding\n91.9%\n89.6%\n90.3%\n90.3%\nTerminal-bench 4.0\nAgentic coding\n57.4%\n58.2%\n57.9%\n66.4%\nPostTrainBenc"
+            }
+          ]
+        },
+        {
+          "pattern": "DeepSWE",
+          "count": 1,
+          "examples": [
+            {
+              "start": 919,
+              "end": 1246,
+              "text": "ance Agent v2\nKnowledge work\n65.4%\n53.5%\n58.9%\n58.6%\nHarvey's Legal Agent Benchmark\nKnowledge work\n19.6%\n5.4%\n6.7%\n3.8%\nDeepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%\nFrontierSWE v2\nAgentic coding\n55.0%\n65.5%\n56.3%\n62.3%\nVibe Code Bench\nAgentic coding\n91.9%\n89.6%\n90.3%\n90.3%\nTerminal-bench 4.0\nAgentic coding\n57.4%\n58.2%\n"
+            }
+          ]
+        },
+        {
+          "pattern": "pass",
+          "count": 1,
+          "examples": [
+            {
+              "start": 1511,
+              "end": 1835,
+              "text": "p to 128k, BFS (F1)\n99.7%\n98.7%\n91.4%\n90.6%\n256k to 1M, BFS (F1)\n84.2%\n71.8%\n65.0%\n66.8%\nAgent's Last Exam\nComputer use\nPass rate\n39.5%\n34.2%\n—\n38.2%\nOSWorld-2.0\nComputer use\nOffline subset\nPartial score\n69.2%\n72.6%\n—\n—\nChartography\nMultimodal understanding\n71.6%\n71.0%\n46.2%\n66.3%\nLVBench\nMultimodal understanding\n91.7%\n87."
+            }
+          ]
+        },
+        {
+          "pattern": "2026",
+          "count": 0,
+          "examples": []
+        },
+        {
+          "pattern": "Sep",
+          "count": 0,
+          "examples": []
+        },
+        {
+          "pattern": "October",
+          "count": 0,
+          "examples": []
+        },
+        {
+          "pattern": "Methodology",
+          "count": 2,
+          "examples": [
+            {
+              "start": 1781,
+              "end": 2112,
+              "text": "46.2%\n66.3%\nLVBench\nMultimodal understanding\n91.7%\n87.5%\n79.7%\n83.7%\nCWE-bench v1\nCybersecurity\n68.0%\n68.0%\n58.0%\n67.0%\nMethodology:\ndeepmind.google/models/evals-methodology/gemini-4-argon\n\nSafety\nStrengthening frontier safeguards before broad availability\n\nSlide 1 of 4\nDefending against misuse\nArgon is designed to refuse harmful"
+            },
+            {
+              "start": 1823,
+              "end": 2154,
+              "text": "ng\n91.7%\n87.5%\n79.7%\n83.7%\nCWE-bench v1\nCybersecurity\n68.0%\n68.0%\n58.0%\n67.0%\nMethodology:\ndeepmind.google/models/evals-methodology/gemini-4-argon\n\nSafety\nStrengthening frontier safeguards before broad availability\n\nSlide 1 of 4\nDefending against misuse\nArgon is designed to refuse harmful requests while preserving legitimate, dua"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "example_claim": {
+    "claim_id": "C-1be3b1dca342dcdbfbccf40a",
+    "statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 DeepSWE v1.1（Agentic coding）得分为 77.9%。",
+    "claim_type": "QUANTITATIVE",
+    "qualifiers": {
+      "entity": {
+        "entity": "Gemini 4 Argon",
+        "value": 77.9,
+        "unit": "%",
+        "benchmark": "DeepSWE v1.1",
+        "category": "Agentic coding"
+      },
+      "value": 77.9,
+      "unit": "%",
+      "benchmark": "DeepSWE v1.1",
+      "category": "Agentic coding",
+      "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+      "methodology": "deepmind.google/models/evals-methodology/gemini-4-argon",
+      "scope": {
+        "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+        "methodology": "deepmind.google/models/evals-methodology/gemini-4-argon",
+        "scope": "DeepSWE v1.1"
+      },
+      "time": {}
+    },
+    "persisted_status": "UNVERIFIED",
+    "profile": {
+      "profile": "QUANTITATIVE",
+      "profile_version": "validation-profiles-v2",
+      "sufficient": false,
+      "recommended_status": "UNVERIFIED",
+      "missing_requirements": [
+        "qualifier:time",
+        "qualifier:definition",
+        "2 adequate-quality supporting Sources",
+        "an exact ENTAILS judgment for the full claim"
+      ],
+      "gap_codes": [
+        "EVIDENCE_GAP",
+        "INSUFFICIENT_ENTAILMENT"
+      ],
+      "basis": [
+        "value, unit, time, scope, definition, and provenance are evaluated separately",
+        "grade=UNVERIFIED; full profile sufficient=False",
+        "PROBABLE requires exact ENTAILS, credible independent support, no unresolved conflict or strong counter-evidence; only enumerated secondary deficits allowed"
+      ],
+      "special_semantic_checks": [
+        "competing values are never averaged"
+      ]
+    },
+    "candidate_policy_grade": "UNVERIFIED",
+    "field_alignment": {
+      "qualifier:time": "MATERIAL_NOT_DETERMINED_FROM_CAPTURED_QUOTES",
+      "qualifier:definition": "MATERIAL_NOT_DETERMINED_FROM_CAPTURED_QUOTES",
+      "2 adequate-quality supporting Sources": "MATERIAL_NOT_DETERMINED_FROM_CAPTURED_QUOTES",
+      "an exact ENTAILS judgment for the full claim": "MATERIAL_NOT_DETERMINED_FROM_CAPTURED_QUOTES"
+    },
+    "shared_literal_numbers": [
+      "1.1",
+      "77.9"
+    ],
+    "reassessed_source_scores": {},
+    "basis": {
+      "profile": "QUANTITATIVE",
+      "profile_sufficient": false,
+      "integrity_valid_evidence_ids": [
+        "E-2e81e565252ab9cddfa1d054",
+        "E-3d952c43666601a168f9b03e",
+        "E-482603a72bfcd2f8fedb348c",
+        "E-5e2daf8aedc839da11ff5d73",
+        "E-cde1b605eafada87b0d7875e"
+      ],
+      "integrity_failures": {},
+      "semantic_judgments": {
+        "E-2e81e565252ab9cddfa1d054": "PARTIALLY_SUPPORTS",
+        "E-3d952c43666601a168f9b03e": "PARTIALLY_SUPPORTS",
+        "E-482603a72bfcd2f8fedb348c": "PARTIALLY_SUPPORTS"
+      },
+      "independent_family_count": 3,
+      "primary_family_count": 1,
+      "strong_contradiction": false,
+      "unresolved_conflict_ids": [],
+      "quality_scores": {
+        "S-2e352fffc5d3d7f78fad77648327f133": 0.52,
+        "S-69fdb8a51941342a27db61ba76d5afc9": 0.64,
+        "S-cb5795c1b38a6a5aa52168a4396f5436": 0.52
+      },
+      "impact_subtype": null,
+      "special_checks": [
+        "competing values are never averaged"
+      ]
+    },
+    "evidence": [
+      {
+        "evidence_id": "E-2e81e565252ab9cddfa1d054",
+        "judgment": "PARTIALLY_SUPPORTS",
+        "quote": "在专业代码评测基准 DeepSWE v1.1 中得分77.9%,创下行业最新纪录。"
+      },
+      {
+        "evidence_id": "E-3d952c43666601a168f9b03e",
+        "judgment": "PARTIALLY_SUPPORTS",
+        "quote": "eepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%"
+      },
+      {
+        "evidence_id": "E-482603a72bfcd2f8fedb348c",
+        "judgment": "PARTIALLY_SUPPORTS",
+        "quote": "DeepSWE v1.1 at 77.9% (claimed state of the art), AutomationBench at 51.3% (claimed first), LVBench at 91.7%, a leading position on the Vals Index, CWE-bench v1 at 68% tied for first, and a leading robustness profile on Gray Swan indirect prompt injection. All are vendor-reported with no independent replication."
+      }
+    ]
+  },
+  "example_analysis": {
+    "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+    "claim": {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 DeepSWE v1.1（Agentic coding）得分为 77.9%。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E1",
+        "E3",
+        "E5"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "value": 77.9,
+        "unit": "%",
+        "benchmark": "DeepSWE v1.1",
+        "category": "Agentic coding"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+        "methodology": "deepmind.google/models/evals-methodology/gemini-4-argon",
+        "scope": "DeepSWE v1.1"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    "evidence": [
+      {
+        "contract_version": "2",
+        "evidence_key": "E1",
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2219",
+        "quote": "eepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%",
+        "locator": {
+          "locator_type": "TEXT_RANGE",
+          "start": 1040,
+          "end": 1093,
+          "quote_hash": "632d5398fd91d8e25e5c9208ccfe419b8342be6a6c46bddb53804871547208b9"
+        },
+        "quote_hash": null
+      },
+      {
+        "contract_version": "2",
+        "evidence_key": "E3",
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "quote": "在专业代码评测基准 DeepSWE v1.1 中得分77.9%,创下行业最新纪录。",
+        "locator": {
+          "locator_type": "TEXT_RANGE",
+          "start": 979,
+          "end": 2115,
+          "quote_hash": "311a0d9a9f2f80ca2ab6a010b187e6ccb81bed560abc49504151ff384e68365d"
+        },
+        "quote_hash": null
+      },
+      {
+        "contract_version": "2",
+        "evidence_key": "E5",
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+        "quote": "DeepSWE v1.1 at 77.9% (claimed state of the art), AutomationBench at 51.3% (claimed first), LVBench at 91.7%, a leading position on the Vals Index, CWE-bench v1 at 68% tied for first, and a leading robustness profile on Gray Swan indirect prompt injection. All are vendor-reported with no independent replication.",
+        "locator": {
+          "locator_type": "TEXT_RANGE",
+          "start": 23926,
+          "end": 24974,
+          "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2"
+        },
+        "quote_hash": null
+      }
+    ],
+    "supplied_artifacts": [
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2219",
+        "content_hash": "0ed5f166cf606b2f59fa8e4a8c9702bcef40b18574770b8d917b6b1997dc774c",
+        "contract_version": "2",
+        "excerpt": "eepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%\nFrontierSWE v2\nAgentic coding\n55.0%\n65.5%\n56.3%\n62.3%\nVibe Code Bench\nAgentic coding\n91.9%\n89.6%\n90.3%\n90.3%\nTerminal-bench 4.0\nAgentic coding\n57.4%\n58.2%\n57.9%\n66.4%\nPostTrainBench\nML engineering\n45.3%\n44.3%\n40.2%\n49.3%\nTerminal-Bench Science 0.1\nScience and math\n57.6%\n68.1%\n52.6%\n63.3%\nLABBench 2\nScience and math\n88.8%\n85.4%\n68.6%\n73.1%\nRiemannBench\nScience and math\n76.0%\n72.0%\n65.6%\n69.6%\nGraphWalks\nLong context\nUp to 128k, BFS (F1)\n99.7%\n98.7%\n91.4%\n90.6%\n256k to 1M, BFS (F1)\n84.2%\n71.8%\n65.0%\n66.8%\nAgent's Last Exam\nComputer use\nPass rate\n39.5%\n34.2%\n—\n38.2%\nOSWorld-2.0\nComputer use\nOffline subset\nPartial score\n69.2%\n72.6%\n—\n—\nChartography\nMultimodal understanding\n71.6%\n71.0%\n46.2%\n66.3%\nLVBench\nMultimodal understanding\n91.7%\n87.5%\n79.7%\n83.7%\nCWE-bench v1\nCybersecurity\n68.0%\n68.0%\n58.0%\n67.0%\nMethodology:\ndeepmind.google/models/evals-methodology/gemini-4-argon\n\nSafety\nStrengthening frontier safeguards before broad availability\n\nSlide 1 of 4\nDefending against misuse\nArgon is designed to refuse harmful requests while preserving legitimate, dual-use scientific research, as per our Frontier Safety Framework.\n",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 2219,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "632d5398fd91d8e25e5c9208ccfe419b8342be6a6c46bddb53804871547208b9",
+          "start": 1040
+        },
+        "snapshot_key": "SNAP-0b7c1286fbbcf4cd21907bd7",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "content_hash": "97834b9b57e0506a6a221fc0fbe78f77afab63f76e8922458a860a5aaa5ffd4a",
+        "contract_version": "2",
+        "excerpt": "层的痛点。\n\n2. 全维度原生多模态能力\n\n延续Gemini系列原生多模态优势,Argon全面支持长视频理解、复杂图表解析、多文档交叉推理、图文联动分析。在LVBench长视频理解评测中得分达91.7%,可精准解析长时间视频内容、提取关键信息、梳理视频内逻辑脉络,适配多媒体类复杂分析任务。\n\n3. 全新安全推理机制\n\n模型新增进阶思维链监控机制,可实时识别模型推理过程中的越界、高危操作,自动终止违规任务,大幅提升专业场景、安全场景、企业级场景的使用安全性,尤其适配网络安全、法律合规等高严谨度领域。\n\n4. 企业级工程落地优化\n\n谷歌已将Gemini 4 Argon投入内部工程落地,成功完成80万行内核代码迁移工作,同时优化数据中心内存调度,在不新增硬件设备的前提下,释放数百TB内存资源,工程落地稳定性与实用性大幅提升。\n\n三、权威基准评测:多领域拿下SOTA,综合实力领跑行业\n\n谷歌官方公布了Gemini 4 Argon在18项权威行业基准测试中的成绩,模型在12项测试中取得第一、1项并列第一,综合性能超越Claude Opus 5.5、GPT-6 Astra等主流旗舰模型,核心优势集中在四大专业领域:\n\n1. 软件工程领域(核心强项)\n\n在专业代码评测基准 DeepSWE v1.1 中得分77.9%,创下行业最新纪录。擅长大型代码库重构、跨文件代码迁移、批量漏洞修复、完整项目架构设计、单元测试批量生成等复杂工程任务,适配中大型软件开发全流程场景。\n\n2. 网络安全领域\n\n在CWE-bench v1漏洞修复评测中得分68%,与行业顶级模型并列第一。可自主挖掘软件高危漏洞、验证漏洞有效性、生成合规修复补丁,支持批量代码安全检测,是目前网络安全防御场景性能最优的大模型之一。\n\n3. 法律与专业文本领域\n\n在Harvey法律Agent评测、Vals Index综合评测中表现优异,擅长超长合同审查、法律案例检索、法条比对、合规风险标注、专业文书起草,适配法律行业标准化、高严谨度文本工作。\n\n4. 自动化业务领域\n\nAutomationBench评测得分51.3%,多步骤复杂业务自动化能力领先,可自主拆解复杂工作流、分步执行任务、闭环输出结果,适配企业级自动化Agent开发场景。\n\n短板说明\n:Gemini 4 Argon 的优势集中在工程、文本、安全等落地场景,在纯基础数学、前沿物理推演、基础科学研究等理论领域的性能提升相对有限,并非全场景全能碾压模型。\n\n四、核心适用场景:聚焦高复杂度专业工作流\n\n结合模型的性能特性,Gemini 4 Argon 精准定位\n专业级、高复杂度、长流程\nAI任务,核心适用场景如下:\n\n大型软件工程开发与重构\n",
+        "is_first_hand": false,
+        "is_official": false,
+        "locator": {
+          "end": 2115,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "311a0d9a9f2f80ca2ab6a010b187e6ccb81bed560abc49504151ff384e68365d",
+          "start": 979
+        },
+        "snapshot_key": "SNAP-2f6d3fbf315f12d5e37d07eb",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI...",
+        "source_type": "WEB_PAGE",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+        "content_hash": "25d1281a649edd93345bdf75fdeff50476c728d72d39f1b77ece5b9bb4509f5e",
+        "contract_version": "2",
+        "excerpt": "uctory period those rates double to $4.00 and $20.00 per million tokens. None of it appears on the public pricing page yet.\nWhat benchmarks did Google publish?\nDeepSWE v1.1 at 77.9% (claimed state of the art), AutomationBench at 51.3% (claimed first), LVBench at 91.7%, a leading position on the Vals Index, CWE-bench v1 at 68% tied for first, and a leading robustness profile on Gray Swan indirect prompt injection. All are vendor-reported with no independent replication.\nIs the CWE-bench result a win?\nNo — it is a three-way tie at 68% between Argon, Grok 4.7, and GPT-6 Astra. Google lists Argon as tied for first, which is accurate, but the benchmark does not separate Argon from the field.\nWhat is the Fairwind Program?\nGoogle’s defender-focused program, introduced September 2, 2026, that is the access path for Argon’s first cohort. The DeepMind program page reports 650+ partners worldwide and names earlier DeepMind security work including Gemini 3.8 Flash Cyber and the CodeMender patching agent.\nWhen will Argon be generally available?\n",
+        "is_first_hand": false,
+        "is_official": false,
+        "locator": {
+          "end": 24974,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "829ca26475c9a6e4dd6b10692ed583f95340a8d336631872600a268812a5a6b2",
+          "start": 23926
+        },
+        "snapshot_key": "SNAP-551ed49b972ef4ee85366d97",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ...",
+        "source_type": "WEB_PAGE",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    ]
+  },
+  "example_verifier_recording": {
+    "call_id": "CALL-330d01d3ec29414c8fb56eb0862e340a",
+    "request_blob_ref": "blob://sha256/1d25b33053605fc346e7c7fd7c064134b2c0c70094fc8d4a7001a24e9c3fedec",
+    "response_blob_ref": "blob://sha256/3adc6c00336889ab670848dec4a32b1696f96d803b76e52b8de9e95ab5b51652",
+    "bounded_context": {
+      "claims": [
+        {
+          "atomicity": {
+            "contract_version": "2",
+            "is_atomic": true,
+            "issues": [],
+            "proposed_atomic_statements": []
+          },
+          "canonical_statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 DeepSWE v1.1（Agentic coding）得分为 77.9%。",
+          "claim_key": "C4",
+          "claim_type": "QUANTITATIVE",
+          "contract_version": "2",
+          "contradicting_evidence_keys": [],
+          "critical": true,
+          "entity_qualifiers": {
+            "benchmark": "DeepSWE v1.1",
+            "category": "Agentic coding",
+            "entity": "Gemini 4 Argon",
+            "unit": "%",
+            "value": 77.9
+          },
+          "importance": "HIGH",
+          "scope_qualifiers": {
+            "methodology": "deepmind.google/models/evals-methodology/gemini-4-argon",
+            "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+            "scope": "DeepSWE v1.1"
+          },
+          "statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 DeepSWE v1.1（Agentic coding）得分为 77.9%。",
+          "supporting_evidence_keys": [
+            "E3",
+            "E4",
+            "E5"
+          ],
+          "time_qualifiers": {}
+        }
+      ],
+      "contract_version": "2",
+      "evidence": [
+        {
+          "artifact_key": "ART-97834b9b57e0506a6a221fc0",
+          "contract_version": "2",
+          "evidence_key": "E3",
+          "locator": {
+            "end": 1548,
+            "locator_type": "TEXT_RANGE",
+            "quote_hash": "fe9e1e48e756e77f9df3166ea69933ae15d4e019aade6e627cbdef6cd954c0e5",
+            "start": 1507
+          },
+          "quote": "在专业代码评测基准 DeepSWE v1.1 中得分77.9%,创下行业最新纪录。",
+          "quote_hash": "fe9e1e48e756e77f9df3166ea69933ae15d4e019aade6e627cbdef6cd954c0e5"
+        },
+        {
+          "artifact_key": "ART-0ed5f166cf606b2f59fa8e4a",
+          "contract_version": "2",
+          "evidence_key": "E4",
+          "locator": {
+            "end": 1090,
+            "locator_type": "TEXT_RANGE",
+            "quote_hash": "4e6a2246642727d418c753b872e5de33aff191cd14db8934a3ad146358da325f",
+            "start": 1040
+          },
+          "quote": "eepSWE v1.1\nAgentic coding\n77.9%\n74.1%\n67.4%\n74.2%",
+          "quote_hash": "4e6a2246642727d418c753b872e5de33aff191cd14db8934a3ad146358da325f"
+        },
+        {
+          "artifact_key": "ART-25d1281a649edd93345bdf75",
+          "contract_version": "2",
+          "evidence_key": "E5",
+          "locator": {
+            "end": 24399,
+            "locator_type": "TEXT_RANGE",
+            "quote_hash": "d92a424c2a6fd58892a822df7e30c199d3aabd1ed8a2d821b7257c4873102dc5",
+            "start": 24086
+          },
+          "quote": "DeepSWE v1.1 at 77.9% (claimed state of the art), AutomationBench at 51.3% (claimed first), LVBench at 91.7%, a leading position on the Vals Index, CWE-bench v1 at 68% tied for first, and a leading robustness profile on Gray Swan indirect prompt injection. All are vendor-reported with no independent replication.",
+          "quote_hash": "d92a424c2a6fd58892a822df7e30c199d3aabd1ed8a2d821b7257c4873102dc5"
+        }
+      ],
+      "existing_conflict_summaries": [],
+      "profile_expectations": [
+        "Evidence locators must resolve to immutable artifacts.",
+        "Semantic judgments are advisory inputs to ValidationPolicy."
+      ],
+      "source_families": [
+        {
+          "contract_version": "2",
+          "family_key": "FAM-729b9c29c846fd4a1d78",
+          "source_keys": [
+            "S-2e352fffc5d3d7f78fad77648327f133"
+          ],
+          "summary": "no explicit lineage metadata; family remains independent UNKNOWN"
+        },
+        {
+          "contract_version": "2",
+          "family_key": "FAM-1686c8fc7e39152317f6",
+          "source_keys": [
+            "S-69fdb8a51941342a27db61ba76d5afc9",
+            "S-fbc991d62fc57303255bd9bdb5309fba"
+          ],
+          "summary": "shared syndication cluster issuer:Google; publishers: Google; organizations: Google"
+        },
+        {
+          "contract_version": "2",
+          "family_key": "FAM-5af372f76f680277aba6",
+          "source_keys": [
+            "S-cb5795c1b38a6a5aa52168a4396f5436"
+          ],
+          "summary": "no explicit lineage metadata; family remains independent UNKNOWN"
+        }
+      ],
+      "source_independence_keys": [
+        "FAM-729b9c29c846fd4a1d78",
+        "FAM-1686c8fc7e39152317f6",
+        "FAM-5af372f76f680277aba6"
+      ],
+      "target_claim_type": null
+    },
+    "complete_typed_output": {
+      "contract_version": "2",
+      "judgments": [
+        {
+          "contract_version": "2",
+          "claim_key": "C4",
+          "evidence_key": "E3",
+          "entailment": "PARTIALLY_SUPPORTS",
+          "rationale": "该引文称在 DeepSWE v1.1 中得分 77.9%，与主张的数值和基准一致，但未指明实体为 Gemini 4 Argon，也未说明来源为谷歌官方评测表，实体与出处归属缺失。",
+          "semantic_confidence": 0.6
+        },
+        {
+          "contract_version": "2",
+          "claim_key": "C4",
+          "evidence_key": "E4",
+          "entailment": "PARTIALLY_SUPPORTS",
+          "rationale": "该引文为评测表片段，列出 DeepSWE v1.1、Agentic coding 与 77.9% 等数值，与主张的基准、类别和数值吻合，但片段中未出现 Gemini 4 Argon 名称，无法确认 77.9% 对应该实体，也未标明发布方为谷歌官方。",
+          "semantic_confidence": 0.55
+        },
+        {
+          "contract_version": "2",
+          "claim_key": "C4",
+          "evidence_key": "E5",
+          "entailment": "PARTIALLY_SUPPORTS",
+          "rationale": "该引文确认 DeepSWE v1.1 为 77.9% 并称其为宣称的最优水平，且明确标注为厂商自报、无独立复现，与主张的数值及 vendor-reported 出处一致；但同样未点名 Gemini 4 Argon，实体归属仍依赖上下文。",
+          "semantic_confidence": 0.6
+        }
+      ],
+      "gaps": [
+        {
+          "contract_version": "2",
+          "gap_key": "G1",
+          "gap_type": "ATTRIBUTION_UNDER_SUPPORTED",
+          "target_claim_key": "C4",
+          "reason": "三条证据均给出 DeepSWE v1.1 的 77.9% 数值，但没有任何一条在引文范围内明确将该分数归属于 Gemini 4 Argon，实体归属仅靠外部上下文推定。",
+          "target_question_key": null,
+          "preferred_source_type": "OFFICIAL_REPORT",
+          "missing_requirement": "需要能直接显示“Gemini 4 Argon”与 DeepSWE v1.1 77.9% 对应关系的原文片段或表格行。",
+          "suggested_action": "检索并引用谷歌 DeepMind 官方评测页面或评测表中同时包含模型名称与 DeepSWE v1.1 分数的行，确认 77.9% 对应 Gemini 4 Argon。"
+        },
+        {
+          "contract_version": "2",
+          "gap_key": "G2",
+          "gap_type": "MISSING_PRIMARY_SOURCE",
+          "target_claim_key": "C4",
+          "reason": "主张的出处限定为 deepmind.google/models/evals-methodology/gemini-4-argon 的谷歌官方评测表，但现有证据中未见该官方页面本身作为一手来源被直接引用。",
+          "target_question_key": null,
+          "preferred_source_type": "OFFICIAL_REPORT",
+          "missing_requirement": "谷歌 DeepMind 官方评测方法论/评测表页面的一手引用。",
+          "suggested_action": "获取并引用 deepmind.google/models/evals-methodology/gemini-4-argon 页面原文，核对其中 DeepSWE v1.1（Agentic coding）的数值与模型对应关系。"
+        },
+        {
+          "contract_version": "2",
+          "gap_key": "G3",
+          "gap_type": "INSUFFICIENT_INDEPENDENCE",
+          "target_claim_key": "C4",
+          "reason": "证据 E5 明确说明该系列成绩均为厂商自报且无独立复现；来源家族中 FAM-1686c8fc7e39152317f6 为 Google 关联的联合发布集群，其余家族血缘未知，独立第三方验证缺失。",
+          "target_question_key": null,
+          "preferred_source_type": "TECHNICAL_ANALYSIS",
+          "missing_requirement": "独立第三方对 DeepSWE v1.1 上 Gemini 4 Argon 得分的复现或评测。",
+          "suggested_action": "查找独立评测机构或第三方对 DeepSWE v1.1 的复现结果，评估 77.9% 是否可被外部验证。"
+        },
+        {
+          "contract_version": "2",
+          "gap_key": "G4",
+          "gap_type": "EVIDENCE_GAP",
+          "target_claim_key": "C4",
+          "reason": "证据 E4 的表格片段中除 77.9% 外还出现 74.1%、67.4%、74.2% 等数值，但未标明各列对应的模型或配置，无法确认 77.9% 所在列即为 Gemini 4 Argon。",
+          "target_question_key": null,
+          "preferred_source_type": "OFFICIAL_REPORT",
+          "missing_requirement": "评测表列头或模型名称标注，以确定各数值对应的实体。",
+          "suggested_action": "获取该评测表的完整表头与行标签，明确 77.9% 所属的模型列。"
+        }
+      ],
+      "contradiction_interpretations": [],
+      "conflict_explanations": [],
+      "suggested_research_directions": [
+        "定位并引用谷歌 DeepMind 官方评测页面（deepmind.google/models/evals-methodology/gemini-4-argon）中 DeepSWE v1.1 Agentic coding 一行，确认模型名称与 77.9% 的对应关系。",
+        "获取 E4 所引评测表的完整表头与列标签，排除 74.1%、67.4%、74.2% 等相邻数值造成的归属歧义。",
+        "检索独立第三方对 DeepSWE v1.1 的复现评测，以补充对厂商自报成绩的独立验证。",
+        "核实 DeepSWE v1.1 的基准定义与 Agentic coding 子项口径，确认 77.9% 的统计范围与主张一致。"
+      ]
+    }
+  },
+  "example_latest_judgments": [
+    {
+      "evidence_id": "E-482603a72bfcd2f8fedb348c",
+      "judgment": "PARTIALLY_SUPPORTS",
+      "reason": "该引文确认 DeepSWE v1.1 为 77.9% 并称其为宣称的最优水平，且明确标注为厂商自报、无独立复现，与主张的数值及 vendor-reported 出处一致；但同样未点名 Gemini 4 Argon，实体归属仍依赖上下文。",
+      "semantic_confidence": 0.6,
+      "created_at": "2026-10-02 10:57:57.920359"
+    },
+    {
+      "evidence_id": "E-3d952c43666601a168f9b03e",
+      "judgment": "PARTIALLY_SUPPORTS",
+      "reason": "该引文为评测表片段，列出 DeepSWE v1.1、Agentic coding 与 77.9% 等数值，与主张的基准、类别和数值吻合，但片段中未出现 Gemini 4 Argon 名称，无法确认 77.9% 对应该实体，也未标明发布方为谷歌官方。",
+      "semantic_confidence": 0.55,
+      "created_at": "2026-10-02 10:57:57.920349"
+    },
+    {
+      "evidence_id": "E-2e81e565252ab9cddfa1d054",
+      "judgment": "PARTIALLY_SUPPORTS",
+      "reason": "该引文称在 DeepSWE v1.1 中得分 77.9%，与主张的数值和基准一致，但未指明实体为 Gemini 4 Argon，也未说明来源为谷歌官方评测表，实体与出处归属缺失。",
+      "semantic_confidence": 0.6,
+      "created_at": "2026-10-02 10:57:57.920333"
+    }
+  ],
+  "example_historical_judgment_count": 33,
+  "limits": [
+    "Model wire HTTP content was not retained: canonical typed outputs only, possibly normalized.",
+    "Date presence alone does not establish evaluation time or applicable measurement definition.",
+    "All-material provenance/counterfactual flags have not been modified."
+  ]
+}

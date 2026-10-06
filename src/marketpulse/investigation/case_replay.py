@@ -681,12 +681,22 @@ class EastPalestineReplayService:
                 snapshot_parsers=frozenset(
                     {
                         ("html", "1", "text-normalizer-v1"),
+                        ("html", "2", "text-normalizer-v1"),
+                        ("html", "3", "text-normalizer-v1"),
                         ("plain-text", "1", "text-normalizer-v1"),
                         ("pypdf-text-layer", "1", "text-normalizer-v1"),
+                        ("pypdf-text-layer", "2", "text-normalizer-v1"),
                     }
                 ),
                 artifact_processors=frozenset(
-                    {("html", "1"), ("plain-text", "1"), ("pypdf-text-layer", "1")}
+                    {
+                        ("html", "1"),
+                        ("html", "2"),
+                        ("html", "3"),
+                        ("plain-text", "1"),
+                        ("pypdf-text-layer", "1"),
+                        ("pypdf-text-layer", "2"),
+                    }
                 ),
             ),
         )

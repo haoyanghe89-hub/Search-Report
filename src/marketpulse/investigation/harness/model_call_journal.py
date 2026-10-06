@@ -83,11 +83,13 @@ def prepare_model_intent(
             )
             # A timeout, cancellation or transport/provider error does not establish
             # whether the provider completed and billed the request.
-            if terminal is None or terminal.status in {
+            deterministic_failure = terminal is not None and terminal.metadata_payload.get(
+                "provider_diagnostics", {}).get("http_status") in {400, 401, 402, 403, 404, 422}
+            if terminal is None or (not deterministic_failure and terminal.status in {
                 ExternalCallStatus.TIMEOUT,
                 ExternalCallStatus.CANCELLED,
                 ExternalCallStatus.PROVIDER_ERROR,
-            }:
+            }):
                 unknown_intent = previous.audit_event_id
                 if (
                     not retry_unknown_outcome

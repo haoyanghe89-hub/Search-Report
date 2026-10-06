@@ -1,0 +1,24 @@
+任务 I 实施确认（你的《v5-taskI-diagnosis.md》诊断已审阅，批准按其第7节边界实施；以下是确认的模型路线与实施优先级）。
+
+【模型路线确认（基于你查到的真实清单，旧ID已退役）】
+- 常规角色（规划/采集/常规分析）：deepseek-flash，非思考模式（thinking.type=disabled 或不传思考），用于降本。
+- 关键推理角色（语义蕴含判断、来源质量与独立性判定、声明综合/分析）：deepseek-v4-pro，思考模式（thinking.type=enabled，reasoning_effort 默认 high、可经环境变量调）。
+- 严格按官方现行参数实现：思考模式下 temperature 无效则不传；最终结构化答案只取 content，不得把 reasoning_content 当结构化答案解析；正确处理思考模式的响应格式与 JSON 输出（若不支持强制JSON则提示约束+健壮解析兜底）。
+- 用环境变量控制：主模型、关键推理模型、是否强制单模型、reasoning_effort；默认值即上述。不得再请求已退役的 deepseek-chat/deepseek-reasoner。
+
+【实施优先级（请按此顺序，每步落盘）】
+1) 多页/表格材料完整入库（最高优先，对应诊断第4、5节）：
+   - 先用真实归档（官方PDF SHA ff1df6bd...）在当前 checkout 做采集 UnitOfWork 回归，定位“为何历史run只把PDF第1页71字变成可引用artifact”：是 source_acquisition 循环/artifact 工厂在真实运行路径下的缺陷，还是多页产物未被持久化/未暴露给分析。精准修复，使PDF每一页（及表格的表头、列名、相邻单元格语境）都成为可定位、可引用、带页码/定位符的 artifact。
+   - 修复引文/证据提取的上下文截断：表格类内容必须保留表头、所属实体名（Gemini 4 Argon）、相邻行列语境，不得出现从“eepSWE”起、丢失归属的引文；locator 要能定位到完整语境。
+2) 模型角色路由：按上面路线为不同角色选模型与思考模式（factory/harness 层），并确保结构化输出可解析。
+3) qualifiers 与元数据（诊断第3、6节）：
+   - 声明生成（用 v4-pro 思考）从完整材料中提取 time/definition 等；验证环节对“可由所引用证据明确定位读出”的限定，允许带证据依据补全后再判定（记录补全来源，禁止臆造；日期要区分基准测量时间与结果截至时间，不能猜）。
+   - 修正官方评测PDF的来源元数据：依据真实发布链/方法学出处（如 deepmind 方法学页到该PDF的链）认定 official/first_hand/publisher/methodology，使其质量分合理≥0.6；不得仅凭 host=storage.googleapis 就判官方，也不得给二手站统一保底。修正 syndication_cluster 转载深度评分问题，同时保持同发行方来源合并的独立性底线。
+4) PROBABLE 分级在 QUANTITATIVE/STATEMENT/ATTRIBUTION/ANALYTIC_INFERENCE 各类型一致落地：核心证据精确蕴含、仅缺个别可补次要条件时给 PROBABLE；VERIFIED 仍需精确蕴含+独立来源。不得为凑数放松防编造/引用/独立性。
+5) 网络韧性核对：你诊断指出当前 checkout 的 calls.py 未见任务H的自动指数重试循环、pause_on_unknown_outcome 仍开启。请核对并确保最终代码在所有模型/搜索/抓取路径上，对超时/连接重置/结果未知/429/5xx 有有界指数退避自动重试（只读推理默认允许未知结果重试），耗尽才受控BLOCKED且原因明确；402明确报余额不足。
+
+【验证与交付】
+- 补针对性测试：多页/表格完整入库与定位、模型角色路由（flash/v4-pro/思考参数）、思考模式 content 解析、qualifiers 证据补全、官方PDF元数据≥0.6、各类型 PROBABLE、网络重试（前2次未知第3次成功 / 持续失败受控BLOCKED）。
+- 独立 --basetemp、-p no:cacheprovider 跑全量后端测试、Ruff、导入检查、git diff --check。
+- 用同一话题（Gemini 4 Argon）做一次真实 E2E：确认多页材料进入引用、最终报告含若干 VERIFIED 与一批 PROBABLE 的结论主体（Answer-first + 真实引用 + 明确缺口），report_type 为结论性调查报告、release_status 可发布或仅少量保留项。
+- 最终报告：每项改动与证据、E2E 来源/证据/声明及 VERIFIED/PROBABLE 数、报告类型与发布状态、测试结果、仍存限制。完成后等待，我会重启后端做最终确认。

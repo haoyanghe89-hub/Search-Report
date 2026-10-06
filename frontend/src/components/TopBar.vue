@@ -1,5 +1,6 @@
 <script setup>
-
+import { onMounted, onUnmounted, ref } from 'vue'
+import { useTheme } from '../composables/useTheme.js'
 
 defineProps({
   exportUrl: String,
@@ -15,180 +16,270 @@ defineProps({
 })
 
 const emit = defineEmits(['open-search'])
+const { theme, toggleTheme } = useTheme()
+const isScrolled = ref(false)
+let scrollFrame = null
 
+function updateScrollState() {
+  scrollFrame = null
+  isScrolled.value = window.scrollY > 8
+}
 
+function handleScroll() {
+  if (scrollFrame !== null) return
+  scrollFrame = window.requestAnimationFrame(updateScrollState)
+}
+
+onMounted(() => {
+  updateScrollState()
+  window.addEventListener('scroll', handleScroll, { passive: true })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+  if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame)
+})
 </script>
 
 <template>
-  <header class="topbar">
-    <div class="breadcrumb">
-      <span class="breadcrumb-item">调查档案</span>
-      <span class="breadcrumb-sep">/</span>
-      <span class="breadcrumb-item">{{ category }}</span>
-      <span class="breadcrumb-sep">/</span>
-      <span class="breadcrumb-item current">{{ caseName }}</span>
+  <header class="topbar" :class="{ scrolled: isScrolled }">
+    <div class="case-heading">
+      <h4>{{ caseName }}</h4>
+      <span class="category-badge">{{ category }}</span>
     </div>
+
     <div class="topbar-actions">
       <button class="search-btn" :disabled="searchDisabled" @click="emit('open-search')">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
         </svg>
         <span class="search-text">搜索</span>
-        <kbd class="search-kbd">Ctrl K</kbd>
+        <kbd class="search-kbd">⌘ K</kbd>
       </button>
-      <div class="topbar-divider"></div>
-      <span class="reading-label">阅读</span>
-      <a v-if="exportUrl" class="export-btn" :href="exportUrl" download>导出报告 <span class="export-arrow">↗</span></a>
-      <span v-else class="reading-label">尚无报告</span>
+
+      <a v-if="exportUrl" class="export-btn" :href="exportUrl" download>
+        导出报告
+        <span class="export-arrow" aria-hidden="true">↗</span>
+      </a>
+      <span v-else class="report-status">尚无报告</span>
+
+      <button
+        class="theme-toggle"
+        type="button"
+        :aria-label="theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'"
+        :title="theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'"
+        @click="toggleTheme"
+      >
+        <span class="theme-icons" aria-hidden="true">
+          <svg class="theme-icon sun-icon" :class="{ active: theme === 'dark' }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3.5" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" />
+          </svg>
+          <svg class="theme-icon moon-icon" :class="{ active: theme === 'light' }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z" />
+          </svg>
+        </span>
+      </button>
     </div>
   </header>
 </template>
 
 <style scoped>
 .topbar {
-  height: var(--topbar-height);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 48px;
   position: sticky;
   top: 0;
   z-index: 15;
-  background: rgba(247, 243, 236, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--paper-edge);
-}
-
-.breadcrumb {
   display: flex;
-  align-items: baseline;
-  gap: 14px;
-  font-family: var(--font-serif);
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+  padding: 0 var(--space-12);
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  transition: background-color var(--dur-md) var(--ease-standard),
+    border-color var(--dur-md) var(--ease-standard);
 }
 
-.breadcrumb-item {
-  font-size: 13px;
-  color: var(--ink-faint);
-  font-style: italic;
+.topbar.scrolled {
+  border-bottom-color: var(--border-default);
+  background: color-mix(in srgb, var(--bg-base) 80%, transparent);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
 }
 
-.breadcrumb-item.current {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--ink-deep);
-  font-style: normal;
+.case-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
 }
 
-.breadcrumb-sep {
-  color: var(--paper-edge);
-  font-size: 14px;
+.case-heading h4 {
+  max-width: min(42vw, 36rem);
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-h4);
+  letter-spacing: var(--letter-spacing-h4);
+  line-height: var(--line-height-h4);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-badge {
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-default);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  line-height: var(--line-height-caption);
 }
 
 .topbar-actions {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
-  gap: 20px;
+  gap: var(--space-3);
+  flex-wrap: nowrap;
 }
 
-.search-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  background: var(--paper-warm);
-  border: 1px solid var(--paper-edge);
-  cursor: pointer;
-  transition: all 0.3s var(--ease-out);
-  font-family: var(--font-serif);
-  font-size: 13px;
-  color: var(--ink-soft);
+.search-btn,
+.export-btn,
+.theme-toggle {
+  min-height: var(--space-10);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  transition: color var(--dur-sm) var(--ease-standard),
+    border-color var(--dur-sm) var(--ease-standard),
+    background-color var(--dur-sm) var(--ease-standard);
 }
 
-.search-btn:hover {
-  background: var(--accent-pale);
-  border-color: var(--accent-line);
-  color: var(--accent);
-}
-
-.search-btn .search-icon {
-  width: 15px;
-  height: 15px;
-  color: var(--ink-faint);
-  transition: color 0.3s var(--ease-out);
-}
-
-.search-btn:hover .search-icon {
-  color: var(--accent);
-}
-
-.search-btn .search-kbd {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  padding: 2px 6px;
-  background: white;
-  border: 1px solid var(--paper-edge);
-  color: var(--ink-muted);
-  margin-left: 4px;
-}
-
-.topbar-divider {
-  width: 1px;
-  height: 24px;
-  background: var(--paper-edge);
-}
-
-.mode-toggle {
-  display: flex;
-  gap: 2px;
-  padding: 3px;
-  background: var(--paper-warm);
-  border-radius: 4px;
-  border: 1px solid var(--paper-edge);
-}
-
-.mode-btn {
-  padding: 4px 10px;
-  border: none;
-  background: transparent;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-muted);
-  cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.3s var(--ease-out);
-  letter-spacing: 0.05em;
-}
-
-.mode-btn.active {
-  background: var(--paper-base);
-  color: var(--ink-deep);
-  box-shadow: 0 1px 3px var(--paper-shadow);
-}
-
+.search-btn,
 .export-btn {
-  padding: 8px 16px;
-  border: 1px solid var(--paper-edge);
-  background: transparent;
-  font-family: var(--font-serif);
-  font-size: 13px;
-  color: var(--ink-soft);
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.35s var(--ease-out);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-caption);
+  line-height: var(--line-height-small);
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-.export-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-pale);
+.search-btn:hover:not(:disabled),
+.export-btn:hover,
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.search-icon {
+  width: var(--space-4);
+  height: var(--space-4);
+  flex-shrink: 0;
+}
+
+.search-kbd {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-overline);
+  line-height: var(--line-height-overline);
+}
+
+.report-status {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  white-space: nowrap;
 }
 
 .export-arrow {
-  font-style: normal;
+  transition: transform var(--dur-sm) var(--ease-standard);
+}
+
+.export-btn:hover .export-arrow {
+  transform: translate(var(--space-1), calc(var(--space-1) * -1));
+}
+
+.theme-toggle {
+  display: grid;
+  width: var(--space-10);
+  padding: 0;
+  place-items: center;
+}
+
+.theme-icons {
+  position: relative;
+  display: block;
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  width: var(--space-5);
+  height: var(--space-5);
+  opacity: 0;
+  transform: scale(0.72) rotate(-24deg);
+  transition: opacity var(--dur-md) var(--ease-standard),
+    transform var(--dur-md) var(--ease-standard);
+}
+
+.theme-icon.active {
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+
+@media (width < 48rem) {
+  .topbar {
+    position: sticky !important;
+    top: var(--touch-target) !important;
+    height: var(--topbar-height) !important;
+    padding: 0 var(--space-5) !important;
+    flex-wrap: nowrap !important;
+    gap: var(--space-3);
+  }
+
+  .case-heading h4 {
+    max-width: 32vw;
+  }
+
+  .category-badge,
+  .search-text,
+  .search-kbd,
+  .report-status {
+    display: none;
+  }
+
+  .search-btn {
+    width: var(--touch-target);
+    padding: 0;
+    justify-content: center;
+  }
+
+  .search-btn,
+  .export-btn,
+  .theme-toggle {
+    min-height: var(--touch-target);
+  }
+
+  .export-btn {
+    padding-inline: var(--space-2);
+  }
 }
 </style>

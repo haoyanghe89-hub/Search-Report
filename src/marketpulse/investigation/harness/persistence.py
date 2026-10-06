@@ -52,6 +52,13 @@ class ResumeVersionMismatchError(RuntimeError):
 class RunBudgetExceededError(RuntimeError):
     code = "RUN_BUDGET_EXCEEDED"
 
+    def __init__(
+        self, message: str, *, required_tokens: int | None = None, role: str | None = None
+    ) -> None:
+        super().__init__(message)
+        self.required_tokens = required_tokens
+        self.role = role
+
 
 class HarnessStore:
     """Short transactions for Step ownership, completion, and budget accounting."""

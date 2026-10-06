@@ -53,8 +53,9 @@ ENTAILMENT_VERSION = "semantic-entailment-v1"
 
 
 class CitationFactory:
-    def __init__(self, repository: InvestigationRepository) -> None:
+    def __init__(self, repository: InvestigationRepository, quant_service=None) -> None:
         self._repository = repository
+        self._quant_service = quant_service
 
     def build(
         self,
@@ -132,6 +133,27 @@ class CitationFactory:
         report: Report,
         ordinal: int,
     ) -> tuple[Citation | None, tuple[str, str] | None]:
+        if snapshot.semantic_payload.quantitative_material is not None and claim_key.startswith(
+            "qclaim_"
+        ):
+            from marketpulse.quant.citations import computation_citation
+
+            try:
+                return computation_citation(
+                    session,
+                    self._quant_service,
+                    snapshot=snapshot,
+                    claim_key=claim_key,
+                    section_key=section_key,
+                    unit_key=unit_key,
+                    report=report,
+                    ordinal=ordinal,
+                ), None
+            except (ValueError, PermissionError, KeyError):
+                return None, (
+                    "COMPUTATION_CITATION_INTEGRITY",
+                    "frozen computation chain is missing or drifted",
+                )
         try:
             claim = self._repository.get_in_session(session, Claim, claim_id)
         except KeyError:

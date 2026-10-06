@@ -31,6 +31,7 @@ from marketpulse.investigation.domain.enums import (
     GapStatus,
     ReportType,
     RunStatus,
+    ValidationStatus,
 )
 from marketpulse.investigation.domain.runtime import Investigation, InvestigationRun
 from marketpulse.investigation.domain.sources import (
@@ -134,6 +135,20 @@ class ReportInputAssembler:
             allowed.update(
                 {RunStatus.BLOCKED, RunStatus.FAILED, RunStatus.CANCELLED, RunStatus.INTERRUPTED}
             )
+        elif run.status is RunStatus.BLOCKED and session.scalar(
+            select(ClaimRow.claim_id)
+            .where(
+                ClaimRow.run_id == run_id,
+                ClaimRow.validation_status.in_(
+                    (ValidationStatus.VERIFIED, ValidationStatus.PROBABLE)
+                ),
+                ClaimRow.latest_validation_id.is_not(None),
+            )
+            .limit(1)
+        ):
+            # A bounded stop is not a publication approval. Existing validation,
+            # citation, critical-gap and release gates still all apply below.
+            allowed.add(RunStatus.BLOCKED)
         if run.status not in allowed:
             raise AssemblyError(f"run {run_id} is {run.status}, not READY_FOR_REPORT")
         investigation = self._get(session, Investigation, run.investigation_id)
@@ -142,6 +157,9 @@ class ReportInputAssembler:
             select(ClaimRow).where(ClaimRow.run_id == run_id).order_by(ClaimRow.claim_id)
         ).all()
         claims = [self._get(session, Claim, row.claim_id) for row in claim_rows]
+        # Computation claims have a separate locator/validation materialization
+        # branch, never masquerade as text Evidence in the legacy assembler.
+        claims = [c for c in claims if c.qualifiers.get("evidence_kind") != "COMPUTATION"]
         status_only = report_type is ReportType.INVESTIGATION_STATUS
         omitted_claims = [claim.claim_id for claim in claims if claim.latest_validation_id is None]
         if status_only:
@@ -276,7 +294,7 @@ class ReportInputAssembler:
             timeline=timeline,
             session=session,
         )
-        if status_only:
+        if status_only or run.status is RunStatus.BLOCKED:
             extra = [f"Run ended with status {run.status}. " + (run.interruption_reason or "")]
             if omitted_claims:
                 extra.append(
@@ -291,6 +309,31 @@ class ReportInputAssembler:
                 for item in evidence_by_id.values()
             },
         )
+        from marketpulse.quant.contracts import canonical, digest
+        from marketpulse.quant.reporting import load_material, snapshot_claims
+
+        material = load_material(session, run_id)
+        if material is not None:
+            payload = payload.model_copy(
+                update={
+                    "schema_version": "quant-report-input-v2",
+                    "claims": payload.claims + snapshot_claims(material),
+                    "quantitative_material": canonical(
+                        material.model_dump(mode="json", exclude={"job_id"})
+                    ),
+                }
+            )
+            runtime = runtime.model_copy(
+                update={
+                    "claim_ids": {
+                        **runtime.claim_ids,
+                        **{
+                            c.claim_id: c.claim_id + "-" + digest(run_id)[:8]
+                            for c in material.claims
+                        },
+                    }
+                }
+            )
         return ReportInputSnapshot.build(
             snapshot_id=snapshot_id,
             investigation_id=investigation.investigation_id,
@@ -448,6 +491,15 @@ class ReportInputAssembler:
                 severity=gap.severity,
                 status=gap.status,
                 reason=gap.reason,
+                target_claim_stable_key=claim_keys.get(gap.target_claim_id or ""),
+                target_question_stable_key=question_key_by_id.get(gap.target_question_id or ""),
+                suggested_actions=tuple(
+                    dict.fromkeys(
+                        action
+                        for action in (gap.suggested_action, *gap.suggested_actions)
+                        if action
+                    )
+                ),
             )
             for gap in sorted(gaps, key=lambda item: (str(item.gap_type), item.reason))
         )

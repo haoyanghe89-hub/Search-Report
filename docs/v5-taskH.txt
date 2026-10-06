@@ -1,0 +1,33 @@
+执行任务 H（后端，收尾，统一外部调用韧性）：让系统自动从“模型调用瞬时网络抖动/结果未知”中恢复，而不是一次抖动就 FAILED。
+最新运行 RUN-LIVE-92486800c0f24da8：26来源、token仅30万，在 VERIFY 阶段 FAILED，reason=ModelCallOutcomeUnknownError。压测 DeepSeek 也复现：多数请求0.5s成功，偶发请求挂起到21s超时(WinError10060)。
+已读代码确认：
+- harness/model_call_journal.py 定义 ModelCallOutcomeUnknownError，结果未知时默认阻断，除非 retry_unknown_outcome=True 或 intent 在 authorized_unknown_intent_ids；
+- harness/calls.py 的 model/_model 有 retry_unknown_outcome 与 pause_on_unknown_outcome，但 adapter.generate 抛瞬时异常后（calls.py 557-571）没有自动重试循环，直接 raise，导致一次超时即终止。
+
+【硬约束（不变）】
+- 对外 HTTP 接口契约不变；不降低证据/引用/防编造质量门。
+- 聚焦“瞬时/未知结果的自动重试韧性”，不做无关重构。
+- 补测试，跑后端测试（独立 --basetemp、-p no:cacheprovider）、Ruff、导入检查、git diff --check。
+
+【H1. 统一瞬时错误自动重试（核心）】
+1) 在模型调用层（harness/calls.py 的 model 路径）实现有界的指数退避自动重试循环，覆盖：传输超时、连接重置/中断、结果未知(ModelCallOutcomeUnknownError)、429、5xx；明确不重试的错误（400参数错误、402余额不足等确定性失败）继续走明确终态。
+2) 重试前正确处理 durable intent：以 retry_unknown_outcome=True（标记 ALLOW_POSSIBLE_DUPLICATE_CHARGE）重新准备并重新 dispatch，退避后再试；重试次数有上限（建议3-4次，阈值用配置）。
+3) 本项目所有模型调用（规划/分析/验证/报告）均为“LLM读取材料产出结构化文本”的只读推理，无外部写入/下单/发消息副作用，可安全重试，唯一代价是可能重复计一次token费——据此对这些调用默认启用未知结果自动重试；在代码与报告中明确这一判定。
+
+【H2. 传输层稳健性】
+1) 设置合理的连接/读取超时（避免过短把正常长响应误判为未知；也不能无限挂起），启用连接复用/keep-alive；对已挂起请求先取消再重试，避免泄漏。
+2) 若已有统一的退避/重试工具则复用，不要重复造轮子；搜索/抓取侧确认已具备同等韧性（任务B/C/E已做），不足则补齐，使三类外部调用行为一致。
+
+【H3. 耗尽后的终态】
+1) 自动重试全部耗尽时，给受控 BLOCKED 终态并明确可操作原因（如“网络不稳定，无法稳定连接模型服务，请检查网络/代理后重试”），保留已采集材料与执行记录，而不是未受控 FAILED/RUN_NOT_RESUMABLE。
+2) 402 余额不足必须明确提示“余额不足”，不得再误报为限流/结果未知。
+
+【H4. 端到端验证】
+1) 用同一话题（Gemini 4 Argon）重跑真实调查，确认：即使中途出现偶发超时/未知结果也能自动重试跑过，最终产出含若干 VERIFIED 与一批 PROBABLE 的结论性报告（Answer-first 结论 + 真实引用 + 明确缺口），report_type 为结论性调查报告、release_status 可发布或仅少量保留项。
+2) 补/更新测试：
+   - 模拟同一模型调用前2次超时/结果未知、第3次成功，断言自动重试并成功、结果正确；
+   - 模拟持续未知/超时，断言重试有界、终态为受控 BLOCKED 且原因明确、材料保留；
+   - 模拟402，断言明确“余额不足”。
+   跑全量后端测试、Ruff、导入检查、git diff --check。
+
+报告：H1-H3 改动与理由（含重试次数/退避/超时配置依据、为何只读推理可安全重试）、端到端重跑结果（来源/证据/声明及 VERIFIED/PROBABLE 数、报告类型与发布状态、中途是否触发并通过自动重试）、测试结果、仍存在的限制。完成后等待，我会重启后端做最终确认。

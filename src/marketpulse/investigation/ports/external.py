@@ -91,6 +91,8 @@ class ModelRequest(VersionedRequest, Generic[T]):
     response_schema_version: str = Field(min_length=1)
     prompt_version: str = Field(min_length=1)
     model_hint: str | None = None
+    thinking_enabled: bool | None = None
+    reasoning_effort: Literal["low", "high", "max"] | None = None
     temperature: float = Field(default=0.0, ge=0.0, le=2.0)
     max_output_tokens: int | None = Field(default=None, ge=1)
 

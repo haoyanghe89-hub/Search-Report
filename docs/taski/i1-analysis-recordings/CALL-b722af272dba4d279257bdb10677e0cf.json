@@ -1,0 +1,312 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1136",
+      "quote": "DeepSWE v1.1\n真实世界长周期软件工程\n77.9%(刷新纪录)\nAutomationBench(Zapier)\n核心商业流程端到端执行\n51.3%(排名第一)\nLVBench\n长视频理解\n91.7%(最先进水平)\nCWE-bench v1\n安全漏洞修复能力\n68%(并列第一)",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 976,
+        "end": 1136,
+        "quote_hash": "a1f44cd2193b9d6944ae084bd20e47e1c99f18077b5e14c5628c7e21ff166906"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2052",
+      "quote": "此外,谷歌表示 Gemini 4 Argon 在 Vals Index(按美国 GDP 贡献权重衡量金融、编程、法律、税务领域经济影响力的综合基准)上排名领先,在 Vals Finance Agent v2(多步骤金融研究)和 Harvey 的 Legal Agent Benchmark(法律研究与撰写)等垂直基准上同样表现突出。",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 976,
+        "end": 2052,
+        "quote_hash": "343d27bc8268844e7a2f6814e3f1fd11501c001e932f27d448a4b613c00694ac"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-d7958594306b64be52499490:bm25-passages-v1:char-window-1200-overlap-160-v1:4014:5211",
+      "quote": "Google reports Gemini 4 Argon ahead on DeepSWE v1.1 at 77.9%, the Vals Index at 68.9%, AutomationBench at 51.3% and Harvey's Legal Agent benchmark, and behind on FrontierSWE v2 and Terminal-Bench 4.0. These are vendor-reported figures, and\nDataCamp\n(2026) notes that no third party had reproduced them at launch.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 4014,
+        "end": 5211,
+        "quote_hash": "b0b9c705464f36d31eb22da3d8e5978f49b2f4c4814630f0b4cb7a6674f823c0"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-305e6821497067b4c968ae0a:bm25-passages-v1:char-window-1200-overlap-160-v1:1951:3142",
+      "quote": "Vals records Argon’s Harvey run at a reasoning effort of “high”, temperature 1.0 and a 262,144-token output cap. It records Muse Spark 1.1, 1.2 and 1.3 at “xhigh” and Muse Spark 1.3 Max at “max”, so the ranking does not hold that setting constant across the models in it.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1951,
+        "end": 3142,
+        "quote_hash": "95a9d5677b101d192c1acb23a2cd8502f47e9b410fda273ae94b3e7c6379ad42"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+      "quote": "谷歌官方公布了Gemini 4 Argon在18项权威行业基准测试中的成绩,模型在12项测试中取得第一、1项并列第一,综合性能超越Claude Opus 5.5、GPT-6 Astra等主流旗舰模型",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 979,
+        "end": 2115,
+        "quote_hash": "311a0d9a9f2f80ca2ab6a010b187e6ccb81bed560abc49504151ff384e68365d"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:8791:9981",
+      "quote": "According to Google’s\nSeptember 30, 2026\nlaunch excerpt, Gemini 4 Argon delivers “frontier performance in complex workflows.” That quotation establishes\nwhat Google claims\n, but does not establish a numerical advantage over another model.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 8791,
+        "end": 9981,
+        "quote_hash": "0043d9f2c24b63fd635e8a22fefaf2bf4277dcabb88e17ed7c2c2a0fe2306aec"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "第三方指南转述称，谷歌报告 Gemini 4 Argon 在 Vals Index 上得分为 68.9%，并称其在 Harvey 的 Legal Agent benchmark 上领先，同时在 FrontierSWE v2 与 Terminal-Bench 4.0 上落后；该指南强调这些均为厂商自报数据，发布时无第三方复现。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E3"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark": "Vals Index",
+        "value": 68.9,
+        "unit": "%",
+        "comparison": "领先 Harvey Legal Agent benchmark；落后 FrontierSWE v2 与 Terminal-Bench 4.0"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "Vals Index 及法律/软件工程基准对比",
+        "provenance": "第三方指南转述谷歌公布数据（vendor-reported）",
+        "definition": "厂商自报基准成绩，无第三方复现"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "同一陈述混合了 Vals Index 数值、Harvey 领先、两项基准落后与复现状态四类命题"
+        ],
+        "proposed_atomic_statements": [
+          "谷歌报告 Gemini 4 Argon 在 Vals Index 上得分为 68.9%。",
+          "谷歌报告 Gemini 4 Argon 在 Harvey 的 Legal Agent benchmark 上领先。",
+          "谷歌报告 Gemini 4 Argon 在 FrontierSWE v2 与 Terminal-Bench 4.0 上落后。",
+          "发布时无第三方复现上述厂商自报数据。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "中文报道转述谷歌说法称，Gemini 4 Argon 在 Vals Index（按美国 GDP 贡献权重衡量金融、编程、法律、税务领域经济影响力的综合基准）上排名领先，并在 Vals Finance Agent v2（多步骤金融研究）与 Harvey 的 Legal Agent Benchmark（法律研究与撰写）等垂直基准上表现突出。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attributed_source": "谷歌（经中文报道转述）",
+        "benchmarks": [
+          "Vals Index",
+          "Vals Finance Agent v2",
+          "Harvey Legal Agent Benchmark"
+        ]
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "金融、法律、税务等企业知识工作垂直基准",
+        "provenance": "中文二手报道转述谷歌说法"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "同时包含 Vals Index 排名领先与两项垂直基准表现突出两个可分离命题"
+        ],
+        "proposed_atomic_statements": [
+          "谷歌称 Gemini 4 Argon 在 Vals Index 上排名领先。",
+          "谷歌称 Gemini 4 Argon 在 Vals Finance Agent v2 与 Harvey Legal Agent Benchmark 上表现突出。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "中文报道转述谷歌公布数据称，Gemini 4 Argon 在 DeepSWE v1.1（真实世界长周期软件工程）得 77.9%（刷新纪录）、AutomationBench(Zapier)（核心商业流程端到端执行）得 51.3%（排名第一）、LVBench（长视频理解）得 91.7%（最先进水平）、CWE-bench v1（安全漏洞修复能力）得 68%（并列第一）。",
+      "claim_type": "QUANTITATIVE",
+      "supporting_evidence_keys": [
+        "E1"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmarks": {
+          "DeepSWE v1.1": {
+            "value": 77.9,
+            "unit": "%",
+            "note": "刷新纪录"
+          },
+          "AutomationBench(Zapier)": {
+            "value": 51.3,
+            "unit": "%",
+            "note": "排名第一"
+          },
+          "LVBench": {
+            "value": 91.7,
+            "unit": "%",
+            "note": "最先进水平"
+          },
+          "CWE-bench v1": {
+            "value": 68,
+            "unit": "%",
+            "note": "并列第一"
+          }
+        }
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "软件工程、商业流程自动化、长视频理解、安全漏洞修复",
+        "provenance": "中文二手报道转述谷歌公布数据（vendor-reported）"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": false,
+        "issues": [
+          "一条陈述并列四个不同基准的四个数值，应拆分为独立原子命题"
+        ],
+        "proposed_atomic_statements": [
+          "谷歌公布 Gemini 4 Argon 在 DeepSWE v1.1 得 77.9%。",
+          "谷歌公布 Gemini 4 Argon 在 AutomationBench(Zapier) 得 51.3%。",
+          "谷歌公布 Gemini 4 Argon 在 LVBench 得 91.7%。",
+          "谷歌公布 Gemini 4 Argon 在 CWE-bench v1 得 68%。"
+        ]
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "第三方分析指出，Vals 记录的 Argon Harvey 运行使用 reasoning effort “high”、temperature 1.0 与 262,144 token 输出上限，而 Muse Spark 1.1/1.2/1.3 记为 “xhigh”、Muse Spark 1.3 Max 记为 “max”，因此该法律基准排名并未在各模型间固定同一设置，法律基准领先结论的可比性受限。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E4"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark": "Harvey Legal Agent benchmark",
+        "argon_setting": {
+          "reasoning_effort": "high",
+          "temperature": 1.0,
+          "output_cap_tokens": 262144
+        },
+        "comparison_settings": {
+          "Muse Spark 1.1/1.2/1.3": "xhigh",
+          "Muse Spark 1.3 Max": "max"
+        }
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "Harvey 法律基准排名的设置可比性",
+        "provenance": "第三方对 Vals 记录设置的核查"
+      },
+      "importance": "HIGH",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E6",
+      "stance": "CONTEXT"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E5",
+      "stance": "CONTEXT"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E3",
+      "statement": "同一第三方指南对 Vals Index 给出 68.9%，而中文报道仅称 Vals Index“排名领先”未给数值，且对 Harvey 法律基准仅称“表现突出”，与“领先”表述在具体数值与口径上不一致。",
+      "conflict_type": "QUANTITATIVE",
+      "numeric_value": 68.9,
+      "unit": "%",
+      "report_time": null,
+      "scope": "Vals Index 与 Harvey Legal Agent benchmark",
+      "definition": "厂商自报基准成绩",
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.6,
+      "specificity": 0.6
+    }
+  ]
+}

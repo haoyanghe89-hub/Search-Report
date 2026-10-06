@@ -64,7 +64,7 @@ PIPELINE_STAGES = (
 
 
 class ValidationPolicy:
-    VERSION = "validation-policy-v1"
+    VERSION = "validation-policy-v2"
 
     def __init__(
         self,
@@ -194,7 +194,15 @@ class ValidationPolicy:
             conflicts=conflict_updates,
             quality_by_source=quality_by_source,
             profile_sufficient=profile_result.sufficient,
-            special_checks=profile_result.special_semantic_checks,
+            special_checks=(
+                *profile_result.special_semantic_checks,
+                *(
+                    "publisher-proof:"
+                    + json.dumps(snapshot.provenance["publisher_proof"], sort_keys=True)
+                    for snapshot in request.snapshots
+                    if isinstance(snapshot.provenance.get("publisher_proof"), dict)
+                ),
+            ),
         )
         input_fingerprint = self._input_fingerprint(request)
         evidence_set_hash = self._evidence_set_hash(request.evidence, referenced_ids)
@@ -221,7 +229,11 @@ class ValidationPolicy:
             sufficiency_result="SUFFICIENT" if profile_result.sufficient else "INSUFFICIENT",
             status=status,
             confidence=confidence,
-            validation_basis="; ".join(profile_result.basis + strong.basis),
+            validation_basis="; ".join(
+                profile_result.basis
+                + strong.basis
+                + tuple("missing:" + m for m in profile_result.missing_requirements)
+            ),
             validation_basis_payload=basis.model_dump(mode="json"),
             confidence_basis=confidence_basis,
             created_at=request.created_at,
@@ -412,9 +424,7 @@ class ValidationPolicy:
         )
         if strong or unresolved:
             return ValidationStatus.DISPUTED
-        if not profile_sufficient:
-            return ValidationStatus.UNVERIFIED
-        if profile_status == "VERIFIED":
+        if profile_status == "VERIFIED" and profile_sufficient:
             return ValidationStatus.VERIFIED
         if profile_status == "PROBABLE":
             return ValidationStatus.PROBABLE
@@ -684,9 +694,7 @@ class ValidationPolicy:
         content identity).
         """
         evidence_hash_by_id = {item.evidence_id: item.content_hash for item in request.evidence}
-        source_url_by_id = {
-            item.source_id: str(item.canonical_url) for item in request.sources
-        }
+        source_url_by_id = {item.source_id: str(item.canonical_url) for item in request.sources}
         claim_ref = request.claim.statement
         return _canonical_hash(
             {
@@ -793,9 +801,7 @@ class ValidationPolicy:
                 ],
                 "conflict_observations": [
                     {
-                        **item.model_dump(
-                            mode="json", exclude={"claim_id", "evidence_id"}
-                        ),
+                        **item.model_dump(mode="json", exclude={"claim_id", "evidence_id"}),
                         "claim": claim_ref,
                         "evidence": evidence_hash_by_id.get(item.evidence_id),
                     }
@@ -826,11 +832,7 @@ class ValidationPolicy:
     ) -> str:
         referenced = set(referenced_ids)
         return _canonical_hash(
-            sorted(
-                item.content_hash
-                for item in evidence
-                if item.evidence_id in referenced
-            )
+            sorted(item.content_hash for item in evidence if item.evidence_id in referenced)
         )
 
 

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>RunProgress 实时回放验收</title>
+  </head>
+  <body>
+    <main id="app"></main>
+    <script type="module">
+      import { createApp, h, reactive } from 'vue'
+      import RunProgress from '/src/components/RunProgress.vue'
+      import gsap from 'gsap'
+      import '/src/styles/tokens.css'
+      import '/src/styles/base.css'
+      import '/src/styles/folio-ui.css'
+
+      const initial = () => ({
+        replaying: false,
+        starting: false,
+        running: true,
+        phase: 'WAITING_FOR_EXECUTION',
+        workers: {},
+        budget: { search_calls_used: 0, max_search_calls: 12, fetch_calls_used: 0, max_fetch_calls: 8, model_calls_used: 0, max_model_calls: 5 },
+        steps: []
+      })
+      const state = reactive(initial())
+
+      window.liveHarness = {
+        unmount() { app.unmount() },
+        burst(count) {
+          state.steps = Array.from({length: count}, (_, index) => ({step_id: `BURST-${index}`, agent_role: 'official', step_type: 'SEARCH', status: 'RUNNING'}))
+        },
+        reset() { Object.assign(state, initial()) },
+        setTheme(theme) { document.documentElement.dataset.theme = theme },
+        addFirst() {
+          state.phase = 'SEARCHING'
+          state.workers = { official: 'RUNNING' }
+          state.budget = { ...state.budget, search_calls_used: 1 }
+          state.steps.push({ step_id: 'STEP-01', agent_role: 'official', step_type: 'SEARCH', status: 'RUNNING' })
+        },
+        completeFirst() {
+          state.workers.official = 'SUCCEEDED'
+          state.steps[0].status = 'COMPLETED'
+        },
+        addSecond() {
+          state.phase = 'VERIFYING'
+          state.workers = { ...state.workers, technical: 'VERIFYING' }
+          state.budget = { ...state.budget, search_calls_used: 4, fetch_calls_used: 2, model_calls_used: 1 }
+          state.steps.push({ step_id: 'STEP-02', agent_role: 'technical', step_type: 'VERIFY', status: 'VERIFYING' })
+        },
+        completeSecond() {
+          state.workers.technical = 'SUCCEEDED'
+          state.steps[1].status = 'SUCCEEDED'
+        },
+        finish() { state.running = false },
+        snapshot() { return JSON.parse(JSON.stringify(state)) }
+      }
+      window.motionProbe = gsap
+      window.__runProgressModule = { type: typeof RunProgress, keys: Object.keys(RunProgress || {}) }
+
+      const app = createApp({
+        render: () => h('div', { class: 'content-area' }, [h(RunProgress, state)])
+      })
+      app.config.warnHandler = message => console.error(`VUE WARN: ${message}`)
+      app.config.errorHandler = error => console.error(`VUE ERROR: ${error?.stack || error}`)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

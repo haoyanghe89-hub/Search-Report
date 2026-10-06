@@ -13,7 +13,9 @@ CITATION_SET_HASH_DOMAIN = "phase5-citation-set-v1"
 
 def compute_report_hash(draft: ReportDraft) -> str:
     return canonical_hash(
-        REPORT_HASH_DOMAIN,
+        "quant-report-v2"
+        if draft.schema_version == "quant-report-writer-v2"
+        else REPORT_HASH_DOMAIN,
         {
             "report_type": draft.report_type,
             "schema_version": draft.schema_version,
@@ -52,17 +54,23 @@ def render_markdown(draft: ReportDraft, citations: list[Citation]) -> str:
 
     lines: list[str] = []
     for section in draft.sections:
+        if section.status is not SectionStatus.CONTENT or not section.units:
+            continue
+        folded = draft.schema_version == "quant-report-writer-v2" and section.section_key in {
+            "RESEARCH_APPENDIX",
+            "TECHNICAL_APPENDIX",
+        }
+        if folded:
+            lines.extend(["<details>", f"<summary>{label(section.section_key)}</summary>", ""])
         lines.append(f"## {label(section.section_key)}")
         lines.append("")
-        if section.status is not SectionStatus.CONTENT:
-            lines.append(f"_{label(section.status)}_")
-            lines.append("")
-            continue
         for unit in section.units:
             refs = by_unit.get((section.section_key, unit.unit_key), [])
             suffix = "".join(f" [{citation.display_ordinal + 1}]" for citation in refs)
             lines.append(f"{unit.text}{suffix}")
             lines.append("")
+        if folded:
+            lines.extend(["</details>", ""])
     if citations:
         lines.append("## 引用索引")
         lines.append("")
@@ -103,6 +111,7 @@ def render_json(draft: ReportDraft, citations: list[Citation]) -> dict[str, obje
                 ],
             }
             for section in draft.sections
+            if section.status is SectionStatus.CONTENT and section.units
         ],
         "citation_count": len(citations),
     }

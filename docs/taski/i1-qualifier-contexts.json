@@ -1,0 +1,847 @@
+{
+  "official_artifacts": [
+    {
+      "call_id": "CALL-191af5fe2ce74a6b9a4a912054464efd",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:2858:4009",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "ode by running many rounds of profile-guided experiments, studying the compiler's output, producing safe Rust so the compiler would vectorize it automatically. The end result is a memory-safe video decoder that runs 2.7x faster than the Rust port, with identical video output, bringing it closer to the optimized C++.\n\nWorking harder on your most complex problems\nTo support Gemini 4 Argon’s capabilities across longer, more complex use cases, we are significantly expanding the model’s output token limit to an industry-leading 1M tokens, up from the previous 64K tokens. When the model has the headroom to think deeply and generate hundreds of thousands of tokens in a single trajectory, it adds a new level of depth in reasoning to solve tough problems in one go.\n\nEnabling coding and enterprise workflows across domains\nGemini 4 Argon’s capabilities across coding, reasoning, and multimodality and its ability to sustain long, multi-step tasks enable it to excel across a range of enterprise workflows.\nGoogle engineers have been using Argon for their daily tasks, from everyday debugging to large-scale codebase migrations and algorithm designs. ",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 4009,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "1de5cb3846634838a05f716248ea0dbde3cae17d8fe9bbabe3a8510e639a3221",
+          "start": 2858
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-191af5fe2ce74a6b9a4a912054464efd",
+      "artifact": {
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "content_hash": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+        "contract_version": "2",
+        "excerpt": "Gemini\n\n4\n\nArgon\n\nModel\n\nevaluation\n\nApproach,\n\nmethodology\n\n&\n\nresults",
+        "is_first_hand": false,
+        "is_official": false,
+        "locator": {
+          "end": 71,
+          "locator_type": "PDF_TEXT_RANGE",
+          "page": 1,
+          "quote_hash": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+          "start": 0
+        },
+        "snapshot_key": "SNAP-ff1df6bdeddc4c0f48840c09",
+        "source_key": "S-ecb4c55bf181277ed4ce17799031be36",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com",
+        "source_type": "WEB_PAGE",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:3849:5027",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "rise workflows.\nGoogle engineers have been using Argon for their daily tasks, from everyday debugging to large-scale codebase migrations and algorithm designs. It sets a new state of the art on DeepSWE v1.1 (77.9%), which measures a model’s performance in real-world long-horizon software engineering tasks.\nBeyond coding, Argon is the leading model on the\nVals Index\n, which measures economic impact across finance, coding, legal, and tax work, with every sector weighted by its contribution to U.S. GDP. We see similarly leading performance across other domain specific evaluations, like Vals Finance Agent v2 (multi-step financial research) and Harvey’s Legal Agent Benchmark (legal research and drafting). On AutomationBench, Zapier’s benchmark measuring end-to-end execution across core business functions, Argon ranks #1 with a score of 51.3%.\nArgon is also uniquely strong when knowledge work requires visual understanding. It’s able to drive professional chart analysis, identify details from long videos, and take action based on a series of documents. For example, on LVBench, which measures long video understanding, Argon is state of the art with a score of 91.7%.\n\n",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 5027,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "de6b7ea001465eba5334397e088855579593e9ea894ee6207aef2be466367626",
+          "start": 3849
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+      "artifact": {
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "content_hash": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+        "contract_version": "2",
+        "excerpt": "Gemini\n\n4\n\nArgon\n\nModel\n\nevaluation\n\nApproach,\n\nmethodology\n\n&\n\nresults",
+        "is_first_hand": false,
+        "is_official": false,
+        "locator": {
+          "end": 71,
+          "locator_type": "PDF_TEXT_RANGE",
+          "page": 1,
+          "quote_hash": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+          "start": 0
+        },
+        "snapshot_key": "SNAP-ff1df6bdeddc4c0f48840c09",
+        "source_key": "S-ecb4c55bf181277ed4ce17799031be36",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com",
+        "source_type": "WEB_PAGE",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:5795:6931",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "ersonal information across healthcare software used by hospitals worldwide, identifying a severe risk that previous frontier models had missed.\nOn\nCWE-bench v1\n, which evaluates the model’s ability to remediate security vulnerabilities, Argon ties for first place with a top score of 68%, building on 3.8 Flash Cyber’s frontier performance on\nCWE-bench v0\n.\n\nGemini 4 Argon demonstrates impressive leaps in vulnerability discovery over 3.8 Flash Cyber. For example:\nOn Google’s internal comprehensive vulnerability benchmark, Argon uncovered a wide range of exposures across complex codebases spanning 20 programming languages.\nOn Wiz’s internal black-box penetration testing benchmark, which tests a model’s ability to analyze live web systems without source code, Argon outperforms 3.8 Flash Cyber in discovering the attack surface, identifying vulnerabilities, and producing proof-of-concept evidence to validate them.\n\nStrengthening frontier safeguards before broad availability\nBefore rolling out Gemini 4 Argon broadly, we’re continuing to strengthen critical frontier safeguards across four main areas:\nDefending against misuse:\n",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 6931,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "388e1bf092b6789091de8c4194d56f92c606fe20fbee37a27802c0d6e97c27e0",
+          "start": 5795
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:4867:5955",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "take action based on a series of documents. For example, on LVBench, which measures long video understanding, Argon is state of the art with a score of 91.7%.\n\nLeading in defensive cybersecurity\nTo better equip cyber defenders for the new era of cyberattacks, we trained Gemini 4 Argon to be highly capable at cybersecurity defense. Argon can autonomously find, validate, and patch critical software vulnerabilities. For trusted defenders and our own internal teams at Google, we’ll be releasing Argon without cyber guardrails so they can leverage its full frontier-level cybersecurity defense capabilities.\nWiz\nis already using Argon for cybersecurity defense through its\nScan for Good\ninitiative – a program dedicated to protecting critical public infrastructure for free by finding and remediating high-risk exposures. In an early demonstration of its impact, the model uncovered a critical vulnerability exposing sensitive personal information across healthcare software used by hospitals worldwide, identifying a severe risk that previous frontier models had missed.\nOn\nCWE-bench v1\n",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 5955,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "a3721669de3aa73e1f9604118301e6aaf333c18004acb23d3d12f7503d73c3ea",
+          "start": 4867
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "Gemini 4 Argon: our next era of frontier intelligence\n\nSep 30, 2026\n\n|\n\nGemini 4 Argon delivers frontier performance in complex workflows across real-world software engineering, enterprise knowledge work like legal and finance, and cybersecurity defense.\n\nKoray Kavukcuoglu\n\nSVP, Google DeepMind and Chief AI Architect, Google\n\nShare\n\nIn this article\n\nToday, we’re announcing our new frontier model, Gemini 4 Argon, which is rolling out to a set of trusted cyber defenders through our\nFairwind Program\n. Built to sustain deep reasoning across complex, long-horizon workflows, Argon is fundamentally changing the way we work and build at Google. It delivers frontier performance in complex workflows across real-world software engineering, enterprise knowledge work like legal and finance, and cybersecurity defense.\nSafely releasing frontier capabilities at this level requires a phased approach. We are actively engaged in the U.S. government’s voluntary process for pre-release model access while we gradually expand access. We’ll continue to gather feedback from early testers as we iterate on guardrails before making Argon available to developers, enterprises, and consumers as soon as possible.",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 1200,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "b92b04f774fdc7aec24d0b97fd6a852644ac9a0f0a7aa9ddf49e1a4c7d9ba1a1",
+          "start": 0
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+      "artifact": {
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "content_hash": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+        "contract_version": "2",
+        "excerpt": "Gemini\n\n4\n\nArgon\n\nModel\n\nevaluation\n\nApproach,\n\nmethodology\n\n&\n\nresults",
+        "is_first_hand": false,
+        "is_official": false,
+        "locator": {
+          "end": 71,
+          "locator_type": "PDF_TEXT_RANGE",
+          "page": 1,
+          "quote_hash": "279a23af40998078c127b6108841069f3838708143cb096984682afab7b28944",
+          "start": 0
+        },
+        "snapshot_key": "SNAP-ff1df6bdeddc4c0f48840c09",
+        "source_key": "S-ecb4c55bf181277ed4ce17799031be36",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com",
+        "source_type": "WEB_PAGE",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-e0b68810d3ee4024a13e31bc6e9e99f1",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2022",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "e to gather feedback from early testers as we iterate on guardrails before making Argon available to developers, enterprises, and consumers as soon as possible.\nArgon will launch at an introductory price\n\n1\n\nof $2 per million input tokens and $10 per million output tokens, with cached input tokens priced at 95% off input token price.\n\nChanging how we work and build at Google\nGemini 4 Argon is already powering our internal workflows, with thousands of Googlers highlighting the model’s strengths in specialized coding tasks, conducting deeper research, and writing quality. It’s helping teams build faster and push the boundaries of engineering productivity and accelerating breakthroughs:\n\nQuantum algorithmic optimization:\nArgon is helping our quantum computing researchers optimize the spacetime resources (qubits × gates) of subroutines that bottleneck important applications. In one example, it beat the published baseline by 40% in a matter of minutes.\n\nMemory efficiency:\n",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 2022,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "43f31c80657ddde7796503f5852e21ce19d976faafe22a02c0cd43e808203f77",
+          "start": 1040
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-f64784907a5a42608ddcfaa69898fdaa",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:2858:4009",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "ode by running many rounds of profile-guided experiments, studying the compiler's output, producing safe Rust so the compiler would vectorize it automatically. The end result is a memory-safe video decoder that runs 2.7x faster than the Rust port, with identical video output, bringing it closer to the optimized C++.\n\nWorking harder on your most complex problems\nTo support Gemini 4 Argon’s capabilities across longer, more complex use cases, we are significantly expanding the model’s output token limit to an industry-leading 1M tokens, up from the previous 64K tokens. When the model has the headroom to think deeply and generate hundreds of thousands of tokens in a single trajectory, it adds a new level of depth in reasoning to solve tough problems in one go.\n\nEnabling coding and enterprise workflows across domains\nGemini 4 Argon’s capabilities across coding, reasoning, and multimodality and its ability to sustain long, multi-step tasks enable it to excel across a range of enterprise workflows.\nGoogle engineers have been using Argon for their daily tasks, from everyday debugging to large-scale codebase migrations and algorithm designs. ",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 4009,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "1de5cb3846634838a05f716248ea0dbde3cae17d8fe9bbabe3a8510e639a3221",
+          "start": 2858
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    },
+    {
+      "call_id": "CALL-4aeac8f38cdc47aa89d74d39048b7ec3",
+      "artifact": {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2022",
+        "content_hash": "eeaf38553d20797feca060f62fd89595aa9f0f29c769996ca0d8825e42050893",
+        "contract_version": "2",
+        "excerpt": "e to gather feedback from early testers as we iterate on guardrails before making Argon available to developers, enterprises, and consumers as soon as possible.\nArgon will launch at an introductory price\n\n1\n\nof $2 per million input tokens and $10 per million output tokens, with cached input tokens priced at 95% off input token price.\n\nChanging how we work and build at Google\nGemini 4 Argon is already powering our internal workflows, with thousands of Googlers highlighting the model’s strengths in specialized coding tasks, conducting deeper research, and writing quality. It’s helping teams build faster and push the boundaries of engineering productivity and accelerating breakthroughs:\n\nQuantum algorithmic optimization:\nArgon is helping our quantum computing researchers optimize the spacetime resources (qubits × gates) of subroutines that bottleneck important applications. In one example, it beat the published baseline by 40% in a matter of minutes.\n\nMemory efficiency:\n",
+        "is_first_hand": false,
+        "is_official": true,
+        "locator": {
+          "end": 2022,
+          "locator_type": "TEXT_RANGE",
+          "quote_hash": "43f31c80657ddde7796503f5852e21ce19d976faafe22a02c0cd43e808203f77",
+          "start": 1040
+        },
+        "snapshot_key": "SNAP-88b20aacb5e7ec7df773eac5",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword",
+        "source_type": "OFFICIAL_REPORT",
+        "trust_boundary": "UNTRUSTED_SOURCE_DATA"
+      }
+    }
+  ],
+  "new_quantitative_candidates": [
+    {
+      "call_id": "CALL-191af5fe2ce74a6b9a4a912054464efd",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C1",
+        "statement": "第三方指南记载，Gemini 4 Argon 的推介期定价为每百万输入 Token 2.00 美元、每百万输出 Token 10.00 美元，缓存输入享 95% 折扣；推介期结束后费率翻倍至每百万输入 4.00 美元、每百万输出 20.00 美元，且这些价格尚未出现在公开定价页面上。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E1"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "input_price_value": 2,
+          "input_price_unit": "USD per million tokens",
+          "output_price_value": 10,
+          "output_price_unit": "USD per million tokens",
+          "cached_input_discount_value": 95,
+          "cached_input_discount_unit": "%",
+          "post_intro_input_price_value": 4,
+          "post_intro_output_price_value": 20
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "推介期定价与推介期后标准费率",
+          "provenance": "第三方指南转述谷歌公布定价；未见于公开定价页面"
+        },
+        "importance": "HIGH",
+        "critical": true,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-191af5fe2ce74a6b9a4a912054464efd",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C2",
+        "statement": "第三方指南按每百万输出 Token 10 美元推算，单次生成 10 万 Token 的产物在推介期约花费 1 美元、推介期后约 2 美元；一次完整的 100 万 Token 生成在推介价下约 10 美元、标准价下约 20 美元，且不含任何输入成本。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E2"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "output_price_value": 10,
+          "output_price_unit": "USD per million tokens",
+          "cost_100k_intro_value": 1,
+          "cost_100k_post_intro_value": 2,
+          "cost_1m_intro_value": 10,
+          "cost_1m_post_intro_value": 20,
+          "currency": "USD"
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "仅输出 Token 成本，不含输入成本",
+          "definition": "按输出单价线性推算",
+          "provenance": "第三方指南自行推算（非谷歌公布）"
+        },
+        "importance": "HIGH",
+        "critical": true,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-a4bfb8fee2a64f7d8d3c087af546807e",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C2",
+        "statement": "第三方报道称，Gemini 4 Argon 在 Terminal-Bench 4.0 上以 57.4% 落后于 Claude Opus 5.5 的 66.4%，在 FrontierSWE v2 上以 55.0% 落后于 GPT-6 Astra 的 65.5%；彭博社报道部分谷歌员工认为它在真实编码工作上表现吃力。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E3",
+          "E4"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "benchmark": "Terminal-Bench 4.0",
+          "value": 57.4,
+          "unit": "%",
+          "comparison_target": "Claude Opus 5.5",
+          "comparison_value": 66.4
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "Terminal-Bench 4.0 与 FrontierSWE v2 对比",
+          "provenance": "第三方报道转述评测数据；彭博社转述谷歌员工看法"
+        },
+        "importance": "HIGH",
+        "critical": true,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": false,
+          "issues": [
+            "同一陈述混合了两个基准的对比数值与彭博社转述的员工看法"
+          ],
+          "proposed_atomic_statements": [
+            "第三方报道称，Gemini 4 Argon 在 Terminal-Bench 4.0 上以 57.4% 落后于 Claude Opus 5.5 的 66.4%。",
+            "第三方报道称，Gemini 4 Argon 在 FrontierSWE v2 上以 55.0% 落后于 GPT-6 Astra 的 65.5%。",
+            "彭博社报道部分谷歌员工认为 Gemini 4 Argon 在真实编码工作上表现吃力。"
+          ]
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-72ba5e2d05404054b4794adb357dd869",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C2",
+        "statement": "中文第三方文章称，Gemini 4 Argon 在 LVBench 长视频理解评测中得分达 91.7%。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E1"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "benchmark": "LVBench",
+          "value": 91.7,
+          "unit": "%"
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "provenance": "中文第三方文章转述（vendor-reported）",
+          "scope": "LVBench 长视频理解评测"
+        },
+        "importance": "MEDIUM",
+        "critical": false,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C1",
+        "statement": "谷歌官方公布的 Gemini 4 Argon 基准成绩中，编程方向为 DeepSWE v1.1 得分 77.9%（刷新纪录），自动化业务方向为 AutomationBench(Zapier) 得分 51.3%（排名第一），网络安全方向为 CWE-bench v1 得分 68%（并列第一），长视频理解方向为 LVBench 得分 91.7%（最先进水平）。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E1"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "benchmarks": {
+            "DeepSWE v1.1": {
+              "value": 77.9,
+              "unit": "%",
+              "note": "刷新纪录"
+            },
+            "AutomationBench(Zapier)": {
+              "value": 51.3,
+              "unit": "%",
+              "note": "排名第一"
+            },
+            "CWE-bench v1": {
+              "value": 68,
+              "unit": "%",
+              "note": "并列第一"
+            },
+            "LVBench": {
+              "value": 91.7,
+              "unit": "%",
+              "note": "最先进水平"
+            }
+          }
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "provenance": "谷歌官方公布、由第三方文章转述的基准表",
+          "scope": "DeepSWE v1.1（真实世界长周期软件工程）、AutomationBench(Zapier)（核心商业流程端到端执行）、CWE-bench v1（安全漏洞修复能力）、LVBench（长视频理解）"
+        },
+        "importance": "HIGH",
+        "critical": true,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": false,
+          "issues": [
+            "包含四个不同基准的四个数值，属复合陈述"
+          ],
+          "proposed_atomic_statements": [
+            "谷歌官方公布 Gemini 4 Argon 在 DeepSWE v1.1 得分 77.9%。",
+            "谷歌官方公布 Gemini 4 Argon 在 AutomationBench(Zapier) 得分 51.3%。",
+            "谷歌官方公布 Gemini 4 Argon 在 CWE-bench v1 得分 68%。",
+            "谷歌官方公布 Gemini 4 Argon 在 LVBench 得分 91.7%。"
+          ]
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C4",
+        "statement": "第三方文章称，Gemini 4 Argon 在法律、金融、自动化和长视频基准以及 Vals Index 上超过 Claude Opus 5.5，而 Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 和 Artificial Analysis Intelligence Index 上领先（该指数 Opus 5.5 为 58，Argon 为 53）。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E5"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "comparison_target": "Claude Opus 5.5",
+          "artificial_analysis_intelligence_index": {
+            "Argon": 53,
+            "Claude Opus 5.5": 58
+          }
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "provenance": "第三方问答文章转述的基准对比",
+          "scope": "法律、金融、自动化、长视频基准与 Vals Index；Terminal-Bench 4.0、FrontierSWE v2、Artificial Analysis Intelligence Index"
+        },
+        "importance": "HIGH",
+        "critical": false,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": false,
+          "issues": [
+            "同时包含领先与落后两个方向的多个基准对比"
+          ],
+          "proposed_atomic_statements": [
+            "第三方文章称 Gemini 4 Argon 在法律、金融、自动化和长视频基准及 Vals Index 上超过 Claude Opus 5.5。",
+            "第三方文章称 Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 和 Artificial Analysis Intelligence Index 上领先于 Gemini 4 Argon。",
+            "第三方文章称 Artificial Analysis Intelligence Index 上 Claude Opus 5.5 得 58、Gemini 4 Argon 得 53。"
+          ]
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C1",
+        "statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 DeepSWE v1.1（Agentic coding）得分为 77.9%。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E1",
+          "E3",
+          "E5"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "value": 77.9,
+          "unit": "%",
+          "benchmark": "DeepSWE v1.1",
+          "category": "Agentic coding"
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+          "methodology": "deepmind.google/models/evals-methodology/gemini-4-argon",
+          "scope": "DeepSWE v1.1"
+        },
+        "importance": "HIGH",
+        "critical": true,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C2",
+        "statement": "谷歌官方公布的评测表中，Gemini 4 Argon 在 CWE-bench v1（Cybersecurity）得分为 68.0%，与并列第一的其他模型同分。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E2",
+          "E4",
+          "E5"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "value": 68,
+          "unit": "%",
+          "benchmark": "CWE-bench v1",
+          "category": "Cybersecurity"
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "provenance": "Google DeepMind 官方评测表（vendor-reported）",
+          "comparison": "与 Grok 4.7、GPT-6 Astra 三方并列 68%",
+          "scope": "CWE-bench v1"
+        },
+        "importance": "HIGH",
+        "critical": true,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C1",
+        "statement": "第三方指南转述称，谷歌报告 Gemini 4 Argon 在 Vals Index 上得分为 68.9%，并称其在 Harvey 的 Legal Agent benchmark 上领先，同时在 FrontierSWE v2 与 Terminal-Bench 4.0 上落后；该指南强调这些均为厂商自报数据，发布时无第三方复现。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E3"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "benchmark": "Vals Index",
+          "value": 68.9,
+          "unit": "%",
+          "comparison": "领先 Harvey Legal Agent benchmark；落后 FrontierSWE v2 与 Terminal-Bench 4.0"
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "Vals Index 及法律/软件工程基准对比",
+          "provenance": "第三方指南转述谷歌公布数据（vendor-reported）",
+          "definition": "厂商自报基准成绩，无第三方复现"
+        },
+        "importance": "HIGH",
+        "critical": false,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": false,
+          "issues": [
+            "同一陈述混合了 Vals Index 数值、Harvey 领先、两项基准落后与复现状态四类命题"
+          ],
+          "proposed_atomic_statements": [
+            "谷歌报告 Gemini 4 Argon 在 Vals Index 上得分为 68.9%。",
+            "谷歌报告 Gemini 4 Argon 在 Harvey 的 Legal Agent benchmark 上领先。",
+            "谷歌报告 Gemini 4 Argon 在 FrontierSWE v2 与 Terminal-Bench 4.0 上落后。",
+            "发布时无第三方复现上述厂商自报数据。"
+          ]
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C3",
+        "statement": "中文报道转述谷歌公布数据称，Gemini 4 Argon 在 DeepSWE v1.1（真实世界长周期软件工程）得 77.9%（刷新纪录）、AutomationBench(Zapier)（核心商业流程端到端执行）得 51.3%（排名第一）、LVBench（长视频理解）得 91.7%（最先进水平）、CWE-bench v1（安全漏洞修复能力）得 68%（并列第一）。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E1"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "benchmarks": {
+            "DeepSWE v1.1": {
+              "value": 77.9,
+              "unit": "%",
+              "note": "刷新纪录"
+            },
+            "AutomationBench(Zapier)": {
+              "value": 51.3,
+              "unit": "%",
+              "note": "排名第一"
+            },
+            "LVBench": {
+              "value": 91.7,
+              "unit": "%",
+              "note": "最先进水平"
+            },
+            "CWE-bench v1": {
+              "value": 68,
+              "unit": "%",
+              "note": "并列第一"
+            }
+          }
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "软件工程、商业流程自动化、长视频理解、安全漏洞修复",
+          "provenance": "中文二手报道转述谷歌公布数据（vendor-reported）"
+        },
+        "importance": "HIGH",
+        "critical": false,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": false,
+          "issues": [
+            "一条陈述并列四个不同基准的四个数值，应拆分为独立原子命题"
+          ],
+          "proposed_atomic_statements": [
+            "谷歌公布 Gemini 4 Argon 在 DeepSWE v1.1 得 77.9%。",
+            "谷歌公布 Gemini 4 Argon 在 AutomationBench(Zapier) 得 51.3%。",
+            "谷歌公布 Gemini 4 Argon 在 LVBench 得 91.7%。",
+            "谷歌公布 Gemini 4 Argon 在 CWE-bench v1 得 68%。"
+          ]
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C1",
+        "statement": "谷歌官方评测表显示，Gemini 4 Argon 在 FrontierSWE v2（Agentic coding）得分为 55.0%，低于 GPT-6 Astra 的 65.5%，即在该基准上落后于竞品。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E1",
+          "E2"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "benchmark": "FrontierSWE v2",
+          "category": "Agentic coding",
+          "value": 55,
+          "unit": "%",
+          "comparison_target": "GPT-6 Astra",
+          "comparison_value": 65.5
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "FrontierSWE v2",
+          "provenance": "Google DeepMind 官方评测表（vendor-reported）"
+        },
+        "importance": "HIGH",
+        "critical": false,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C2",
+        "statement": "第三方报道称，Artificial Analysis 给 Gemini 4 Argon 的 Intelligence Index 评分为 53，与 GPT-6 Astra、Claude Fable 5.1 持平，落后于 Claude Opus 5.5 与 Sonnet 5.5。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E3"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "benchmark": "Artificial Analysis Intelligence Index",
+          "value": 53,
+          "comparison": "与 GPT-6 Astra、Claude Fable 5.1 持平，落后于 Claude Opus 5.5 与 Sonnet 5.5"
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "Artificial Analysis Intelligence Index",
+          "provenance": "第三方报道转述 Artificial Analysis 评分"
+        },
+        "importance": "HIGH",
+        "critical": false,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-f64784907a5a42608ddcfaa69898fdaa",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C4",
+        "statement": "第三方报道称，Claude Opus 5.5 在 Terminal-Bench 4.0、FrontierSWE v2 以及 Artificial Analysis Intelligence Index 上领先 Gemini 4 Argon，其中该指数得分为 58 对 53。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E6"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "comparison_target": "Claude Opus 5.5",
+          "benchmark": "Artificial Analysis Intelligence Index",
+          "value": 53,
+          "comparison_value": 58
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "Terminal-Bench 4.0、FrontierSWE v2、Artificial Analysis Intelligence Index",
+          "provenance": "第三方报道转述评测数据"
+        },
+        "importance": "MEDIUM",
+        "critical": false,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    },
+    {
+      "call_id": "CALL-4aeac8f38cdc47aa89d74d39048b7ec3",
+      "claim": {
+        "contract_version": "2",
+        "claim_key": "C4",
+        "statement": "第三方指南按输出单价推算，一次完整的 100 万 Token 生成在推介价下约 10 美元、标准价下约 20 美元，且不含任何输入成本。",
+        "claim_type": "QUANTITATIVE",
+        "supporting_evidence_keys": [
+          "E5"
+        ],
+        "contradicting_evidence_keys": [],
+        "canonical_statement": null,
+        "entity_qualifiers": {
+          "entity": "Gemini 4 Argon",
+          "currency": "USD",
+          "cost_1m_intro_value": 10,
+          "cost_1m_post_intro_value": 20,
+          "output_price_unit": "USD per million tokens",
+          "output_price_value": 10
+        },
+        "time_qualifiers": {},
+        "scope_qualifiers": {
+          "scope": "仅输出 Token 成本，不含输入成本",
+          "definition": "按输出单价线性推算",
+          "provenance": "第三方指南自行推算（非谷歌公布）"
+        },
+        "importance": "HIGH",
+        "critical": true,
+        "atomicity": {
+          "contract_version": "2",
+          "is_atomic": true,
+          "issues": [],
+          "proposed_atomic_statements": []
+        }
+      },
+      "date_clue_in_any_supplied_artifact": true,
+      "pass_at_one_in_any_supplied_artifact": false
+    }
+  ],
+  "candidate_context_date_clues": 14,
+  "candidate_context_pass_at_one_clues": 0
+}

@@ -1,0 +1,1142 @@
+[
+  {
+    "call_id": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-01-official-claims-baselines:round-1",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:8545:9736",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2219",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-809a4a15e1c64f8aed2122ca:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1198",
+        "source_key": "S-258fe3d8a325e8479f4c6cb1193249e6",
+        "source_title": "Gemini 4 Argon rolls out to Fairwind cyber defenders first"
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-979c669ecaa8cc47aba7ce1d:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1068",
+        "source_key": "S-15554288bd019df848518bb2c2fdf794",
+        "source_title": "Google rolls out Gemini 4 Argon, its most advanced model - CNBC"
+      },
+      {
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "source_key": "S-ecb4c55bf181277ed4ce17799031be36",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1081",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:25789:26987",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:921:2039",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:12605:13705",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:17373:18377",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-7ef4d9ae6bf44c6abc2bb27544a28efc.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-fcdc335e115741fab2252cffb078ffce",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-02-third-party-replication:round-1",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-979c669ecaa8cc47aba7ce1d:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1068",
+        "source_key": "S-15554288bd019df848518bb2c2fdf794",
+        "source_title": "Google rolls out Gemini 4 Argon, its most advanced model - CNBC"
+      },
+      {
+        "artifact_key": "ART-809a4a15e1c64f8aed2122ca:bm25-passages-v1:char-window-1200-overlap-160-v1:3044:4220",
+        "source_key": "S-258fe3d8a325e8479f4c6cb1193249e6",
+        "source_title": "Gemini 4 Argon rolls out to Fairwind cyber defenders first"
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:3849:5027",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2219",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "source_key": "S-ecb4c55bf181277ed4ce17799031be36",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:5795:6931",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:6687:7719",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:4867:5955",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:8545:9736",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:19165:20233",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-fcdc335e115741fab2252cffb078ffce.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-191af5fe2ce74a6b9a4a912054464efd",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-03-pricing-and-output-limits:round-1",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:15329:16499",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-809a4a15e1c64f8aed2122ca:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1198",
+        "source_key": "S-258fe3d8a325e8479f4c6cb1193249e6",
+        "source_title": "Gemini 4 Argon rolls out to Fairwind cyber defenders first"
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:2858:4009",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-896925a12e7f6162ee898347:bm25-passages-v1:char-window-1200-overlap-160-v1:4079:4621",
+        "source_key": "S-f0ae2337a716afee62d00feba2134b61",
+        "source_title": "Gemini 3.1 Pro - Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-979c669ecaa8cc47aba7ce1d:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1068",
+        "source_key": "S-15554288bd019df848518bb2c2fdf794",
+        "source_title": "Google rolls out Gemini 4 Argon, its most advanced model - CNBC"
+      },
+      {
+        "artifact_key": "ART-7be67c39747e857e41eaa91b:bm25-passages-v1:char-window-1200-overlap-160-v1:0:71",
+        "source_key": "S-ecb4c55bf181277ed4ce17799031be36",
+        "source_title": "Gemini 4 Argon Model evaluation - storage.googleapis.com"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:22915:24086",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:22021:23075",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:4803:5810",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1081",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:921:2039",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-191af5fe2ce74a6b9a4a912054464efd.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-f03d2d30eb364cd29186785d6d96792a",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-04-contradictions-and-gaps:round-1",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:3883:5068",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-896925a12e7f6162ee898347:bm25-passages-v1:char-window-1200-overlap-160-v1:2016:3205",
+        "source_key": "S-f0ae2337a716afee62d00feba2134b61",
+        "source_title": "Gemini 3.1 Pro - Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:1019:2141",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      },
+      {
+        "artifact_key": "ART-7cf60dbafb31fc4385d22e43:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2144",
+        "source_key": "S-a8de72e856240e3ffa7683893542f23d",
+        "source_title": "Gemini 4 Argon explained: Google’s frontier AI model build ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:5053:6213",
+        "source_key": "S-190cc0525865d02dc604503b31642436",
+        "source_title": "Google Gemini - Apps on Google Play"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:46513:47683",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1086",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-896925a12e7f6162ee898347:bm25-passages-v1:char-window-1200-overlap-160-v1:3045:4239",
+        "source_key": "S-f0ae2337a716afee62d00feba2134b61",
+        "source_title": "Gemini 3.1 Pro - Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2219",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:39815:40941",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-f03d2d30eb364cd29186785d6d96792a.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-a4bfb8fee2a64f7d8d3c087af546807e",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-05-release-and-availability-verification:round-1",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:40781:41921",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:1019:2141",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:12605:13705",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-44252d4a36eb6505c302fd35:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1180",
+        "source_key": "S-fc1e2b8a55a094ec5c480a10c5fe6acc",
+        "source_title": "Google Announces Gemini 4 Argon Frontier Model for Coding ..."
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1200",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-979c669ecaa8cc47aba7ce1d:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1068",
+        "source_key": "S-15554288bd019df848518bb2c2fdf794",
+        "source_title": "Google rolls out Gemini 4 Argon, its most advanced model - CNBC"
+      },
+      {
+        "artifact_key": "ART-809a4a15e1c64f8aed2122ca:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1198",
+        "source_key": "S-258fe3d8a325e8479f4c6cb1193249e6",
+        "source_title": "Gemini 4 Argon rolls out to Fairwind cyber defenders first"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:11788:12854",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:46513:47683",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:5865:6911",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1086",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:6065:7265",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-a4bfb8fee2a64f7d8d3c087af546807e.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-f64784907a5a42608ddcfaa69898fdaa",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-06-independent-attribution-findings:round-2",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:9821:11005",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:21108:22121",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      },
+      {
+        "artifact_key": "ART-04869e8d8f509efc09e338bd:bm25-passages-v1:char-window-1200-overlap-160-v1:3050:4228",
+        "source_key": "S-69fdb8a51941342a27db61ba76d5afc9",
+        "source_title": "Gemini — Google DeepMind"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:2858:4009",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:5053:6213",
+        "source_key": "S-190cc0525865d02dc604503b31642436",
+        "source_title": "Google Gemini - Apps on Google Play"
+      },
+      {
+        "artifact_key": "ART-5e89b91783250cc98447c709:bm25-passages-v1:char-window-1200-overlap-160-v1:1911:2965",
+        "source_key": "S-84b6c9b34da18df8e659aabcef77ab79",
+        "source_title": "Gemini 4 Argon: our next era of frontier intelligence"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:21961:22848",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:20847:22035",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:22851:23896",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:6751:7920",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:19855:21007",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-f64784907a5a42608ddcfaa69898fdaa.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-e0b68810d3ee4024a13e31bc6e9e99f1",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-07-third-party-benchmark-replication-details:round-2",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-979c669ecaa8cc47aba7ce1d:bm25-passages-v1:char-window-1200-overlap-160-v1:2816:3626",
+        "source_key": "S-15554288bd019df848518bb2c2fdf794",
+        "source_title": "Google rolls out Gemini 4 Argon, its most advanced model - CNBC"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:25679:26825",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:25789:26987",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-c997419e7b40f8e7fe0f1e2a:bm25-passages-v1:char-window-1200-overlap-160-v1:5830:6356",
+        "source_key": "S-7563b16673ecf08456c60e57f3edbe58",
+        "source_title": "Google’s new Gemini 4 Argon targets complex coding, finance ..."
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2022",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-7cf60dbafb31fc4385d22e43:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1136",
+        "source_key": "S-a8de72e856240e3ffa7683893542f23d",
+        "source_title": "Gemini 4 Argon explained: Google’s frontier AI model build ..."
+      },
+      {
+        "artifact_key": "ART-44252d4a36eb6505c302fd35:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1180",
+        "source_key": "S-fc1e2b8a55a094ec5c480a10c5fe6acc",
+        "source_title": "Google Announces Gemini 4 Argon Frontier Model for Coding ..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:8791:9981",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:37816:38999",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:23926:24974",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:27614:28784",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:20847:22035",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-e0b68810d3ee4024a13e31bc6e9e99f1.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-4aeac8f38cdc47aa89d74d39048b7ec3",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-08-pricing-and-output-limit-verification:round-2",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:4803:5810",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:25679:26825",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-b1e4b9e2deb7ebe312d7f40c:bm25-passages-v1:char-window-1200-overlap-160-v1:1040:2022",
+        "source_key": "S-fbc991d62fc57303255bd9bdb5309fba",
+        "source_title": "Introducing Gemini 4 Argon - The Keyword"
+      },
+      {
+        "artifact_key": "ART-44252d4a36eb6505c302fd35:bm25-passages-v1:char-window-1200-overlap-160-v1:1020:2143",
+        "source_key": "S-fc1e2b8a55a094ec5c480a10c5fe6acc",
+        "source_title": "Google Announces Gemini 4 Argon Frontier Model for Coding ..."
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:7105:8288",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      },
+      {
+        "artifact_key": "ART-5e89b91783250cc98447c709:bm25-passages-v1:char-window-1200-overlap-160-v1:1005:2071",
+        "source_key": "S-84b6c9b34da18df8e659aabcef77ab79",
+        "source_title": "Gemini 4 Argon: our next era of frontier intelligence"
+      },
+      {
+        "artifact_key": "ART-ee005986ec0a5dd640527bc5:bm25-passages-v1:char-window-1200-overlap-160-v1:1000:2138",
+        "source_key": "S-40abe7ec41d29402b0fbc6b2631e9731",
+        "source_title": "100 things we announced at Google I/O 2026 - The Keyword"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:25789:26987",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:921:2039",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:15329:16499",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:21040:22181",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:18820:20015",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-4aeac8f38cdc47aa89d74d39048b7ec3.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-e244e5b06ed54367afc88731a3a0e271",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-09-contradictions-and-counterevidence:round-2",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:8791:9981",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-ee005986ec0a5dd640527bc5:bm25-passages-v1:char-window-1200-overlap-160-v1:8748:9888",
+        "source_key": "S-40abe7ec41d29402b0fbc6b2631e9731",
+        "source_title": "100 things we announced at Google I/O 2026 - The Keyword"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:6687:7719",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:5053:6213",
+        "source_key": "S-190cc0525865d02dc604503b31642436",
+        "source_title": "Google Gemini - Apps on Google Play"
+      },
+      {
+        "artifact_key": "ART-2cbbfea47db2ed756afb02de:bm25-passages-v1:char-window-1200-overlap-160-v1:2045:3242",
+        "source_key": "S-cf3d7ac7194c39b09c0f3bc5371f8495",
+        "source_title": "Antitrust Division - United States Department of Justice"
+      },
+      {
+        "artifact_key": "ART-5e89b91783250cc98447c709:bm25-passages-v1:char-window-1200-overlap-160-v1:1911:2965",
+        "source_key": "S-84b6c9b34da18df8e659aabcef77ab79",
+        "source_title": "Gemini 4 Argon: our next era of frontier intelligence"
+      },
+      {
+        "artifact_key": "ART-3e05808c6aa9fd2053ce93c0:bm25-passages-v1:char-window-1200-overlap-160-v1:1017:2159",
+        "source_key": "S-3923e525799c789ddb675909a1161126",
+        "source_title": "Googlers Question Gemini 4 Argon Real Power - Android Headlines"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:37816:38999",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:25679:26825",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:34719:35910",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:21040:22181",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:6751:7920",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-e244e5b06ed54367afc88731a3a0e271.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-72ba5e2d05404054b4794adb357dd869",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-13-counterevidence-and-unresolved-issues:round-3",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:8791:9981",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-c997419e7b40f8e7fe0f1e2a:bm25-passages-v1:char-window-1200-overlap-160-v1:5830:6356",
+        "source_key": "S-7563b16673ecf08456c60e57f3edbe58",
+        "source_title": "Google’s new Gemini 4 Argon targets complex coding, finance ..."
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:3776:4963",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-ee005986ec0a5dd640527bc5:bm25-passages-v1:char-window-1200-overlap-160-v1:6719:7872",
+        "source_key": "S-40abe7ec41d29402b0fbc6b2631e9731",
+        "source_title": "100 things we announced at Google I/O 2026 - The Keyword"
+      },
+      {
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:4055:5213",
+        "source_key": "S-190cc0525865d02dc604503b31642436",
+        "source_title": "Google Gemini - Apps on Google Play"
+      },
+      {
+        "artifact_key": "ART-c45551d1f406165c762599b8:bm25-passages-v1:char-window-1200-overlap-160-v1:4723:5908",
+        "source_key": "S-e821ede7afc918042936483d187025f2",
+        "source_title": "Service Degradation · Issue #28514 · google-gemini/gemini-cli"
+      },
+      {
+        "artifact_key": "ART-5e89b91783250cc98447c709:bm25-passages-v1:char-window-1200-overlap-160-v1:1911:2965",
+        "source_key": "S-84b6c9b34da18df8e659aabcef77ab79",
+        "source_title": "Gemini 4 Argon: our next era of frontier intelligence"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:37816:38999",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:25679:26825",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:23736:24922",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:17792:18980",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:12694:13835",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-72ba5e2d05404054b4794adb357dd869.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-b722af272dba4d279257bdb10677e0cf",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-14-finance-and-legal-benchmark-verification:round-3",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2052",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:25679:26825",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:15329:16499",
+        "source_key": "S-2e352fffc5d3d7f78fad77648327f133",
+        "source_title": "Gemini 4 Argon: Complete Guide to Benchmarks, Pricing and ..."
+      },
+      {
+        "artifact_key": "ART-305e6821497067b4c968ae0a:bm25-passages-v1:char-window-1200-overlap-160-v1:1951:3142",
+        "source_key": "S-342f9714f7700dbad099cac716e2c0ba",
+        "source_title": "Gemini 4 Argon ranks fifth of 73 on the legal benchmark ..."
+      },
+      {
+        "artifact_key": "ART-7ad2427aa9293df213ee0140:bm25-passages-v1:char-window-1200-overlap-160-v1:17975:19044",
+        "source_key": "S-3c85dde6b031aff0a54ebd0a5b43d46e",
+        "source_title": "Gemini 4 Argon Explained: Benchmarks, Coding, Cybersecurity ..."
+      },
+      {
+        "artifact_key": "ART-7cf60dbafb31fc4385d22e43:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1136",
+        "source_key": "S-a8de72e856240e3ffa7683893542f23d",
+        "source_title": "Gemini 4 Argon explained: Google’s frontier AI model build ..."
+      },
+      {
+        "artifact_key": "ART-d7958594306b64be52499490:bm25-passages-v1:char-window-1200-overlap-160-v1:4014:5211",
+        "source_key": "S-8a933d9178a8afc8637f3e4260b2eb95",
+        "source_title": "Gemini 4 Argon: Benchmarks, Pricing & Security (2026)"
+      },
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1136",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:2926:3874",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:1892:3086",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:6751:7920",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:8791:9981",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-b722af272dba4d279257bdb10677e0cf.json",
+    "structure_and_references": "PASS"
+  },
+  {
+    "call_id": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7",
+    "status": "SUCCESS",
+    "model": "deepseek-flash",
+    "metadata": {
+      "logical_step_key": "analyze:T-15-regulatory-docket-and-enforcement-search:round-4",
+      "call_site_key": "analyst.extract",
+      "call_ordinal": 0
+    },
+    "sources": [
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1136",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-d22e072d4c6884ae31213578:bm25-passages-v1:char-window-1200-overlap-160-v1:0:553",
+        "source_key": "S-98ddc109242d59a94633e12f27aa4379",
+        "source_title": "用AI大模型生成涉股市文章误导公众 一女子被行政处罚"
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:979:2115",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:9821:11005",
+        "source_key": "S-e7b07ca57300d79226879581023cdaf2",
+        "source_title": "Gemini 4 Argon: What Google Announced September 30, 2026"
+      },
+      {
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:3024:4215",
+        "source_key": "S-190cc0525865d02dc604503b31642436",
+        "source_title": "Google Gemini - Apps on Google Play"
+      },
+      {
+        "artifact_key": "ART-c45551d1f406165c762599b8:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1158",
+        "source_key": "S-e821ede7afc918042936483d187025f2",
+        "source_title": "Service Degradation · Issue #28514 · google-gemini/gemini-cli"
+      },
+      {
+        "artifact_key": "ART-d7958594306b64be52499490:bm25-passages-v1:char-window-1200-overlap-160-v1:16020:17215",
+        "source_key": "S-8a933d9178a8afc8637f3e4260b2eb95",
+        "source_title": "Gemini 4 Argon: Benchmarks, Pricing & Security (2026)"
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:21108:22121",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      },
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:976:2052",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:1892:3086",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:0:1139",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-20fcfa8443504516c1236494:bm25-passages-v1:char-window-1200-overlap-160-v1:2926:3874",
+        "source_key": "S-08a4418a2817e2cc0cf76c2cbdc22a30",
+        "source_title": "人工智能 - 刚刚！Gemini 4 Argon 发布：最强模型，DeepSWE 跑分 77.9..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:1955:3118",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-4b4f3da6b9a423a4f70fecd2:bm25-passages-v1:char-window-1200-overlap-160-v1:2958:3443",
+        "source_key": "S-cb5795c1b38a6a5aa52168a4396f5436",
+        "source_title": "谷歌Gemini 4 Argon正式发布：百万Token输出上限，重塑专业复杂任务AI..."
+      },
+      {
+        "artifact_key": "ART-dbaa0648cbf25bf08f72fd3d:bm25-passages-v1:char-window-1200-overlap-160-v1:21961:22848",
+        "source_key": "S-832053137316c9b8bb15f02f3cc1629a",
+        "source_title": "Gemini 4 Argon: Benchmarks, Price and Who Gets It"
+      },
+      {
+        "artifact_key": "ART-e97b01bc6ac7346025e0fd7b:bm25-passages-v1:char-window-1200-overlap-160-v1:4055:5213",
+        "source_key": "S-190cc0525865d02dc604503b31642436",
+        "source_title": "Google Gemini - Apps on Google Play"
+      }
+    ],
+    "raw_provider_text_available": false,
+    "complete_typed_output_file": "CALL-0c5cc2df8ee74ad98fead05ea261d4c7.json",
+    "structure_and_references": "PASS"
+  }
+]

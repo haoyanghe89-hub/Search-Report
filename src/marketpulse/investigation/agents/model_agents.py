@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import json
 import re
+from collections.abc import Awaitable, Callable
 from typing import TypeVar
 
 from pydantic import BaseModel
@@ -54,7 +56,8 @@ class StructuredAgent:
         *,
         config_version: str = "phase43-agent-config-v1",
         max_output_tokens: int = 4000,
-        repair_attempts: int = 1,
+        repair_attempts: int = 2,
+        sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
     ) -> None:
         if repair_attempts < 0 or repair_attempts > 2:
             raise ValueError("repair_attempts must be between zero and two")
@@ -62,6 +65,7 @@ class StructuredAgent:
         self._config_version = config_version
         self._max_output_tokens = max_output_tokens
         self._repair_attempts = repair_attempts
+        self._sleep = sleep
 
     async def _generate(
         self,
@@ -70,6 +74,7 @@ class StructuredAgent:
         system: str,
         request: InputT,
         response_model: type[OutputT],
+        repair_attempts: int | None = None,
     ) -> OutputT:
         fingerprint = context_fingerprint(request)
         user_content = json.dumps(
@@ -83,12 +88,14 @@ class StructuredAgent:
         )
         last_error: Exception | None = None
         repair_hint = ""
-        for attempt in range(self._repair_attempts + 1):
+        attempts = self._repair_attempts if repair_attempts is None else repair_attempts
+        for attempt in range(attempts + 1):
             messages = [
                 ModelMessage(role="system", content=system),
                 ModelMessage(role="user", content=user_content),
             ]
             if attempt:
+                await self._sleep(0.25 * 2 ** (attempt - 1))
                 messages.append(
                     ModelMessage(
                         role="user",
@@ -131,7 +138,9 @@ class StructuredAgent:
                     "Response must be a complete JSON object satisfying every required field."
                 )
         assert last_error is not None
-        raise last_error
+        if isinstance(last_error, InvalidProviderResponseError):
+            raise last_error
+        raise InvalidProviderResponseError("structured response repair exhausted") from last_error
 
 
 class ModelPlannerAgent(StructuredAgent):
@@ -176,12 +185,31 @@ class ModelAnalystAgent(StructuredAgent):
                 }
             )
             system += (
-                "\nReturn at most 6 evidence items and 4 atomic claims focused on the target "
+                "\nReturn at most 6 evidence items and 4 NEW atomic claims focused on the target "
                 "question. Use short verbatim quotes (at most 300 characters each), copied "
                 "from one artifact excerpt. Copy that artifact's supplied locator as a "
-                "placeholder and omit quote_hash; the application computes exact substring "
+                "placeholder INCLUDING locator.quote_hash; omit only the optional top-level "
+                "EvidenceCandidate.quote_hash. The application computes exact substring "
                 "offsets and SHA-256 from the source. Never paraphrase quotes. Omit optional "
                 "fields when unnecessary. Do not repeat existing claims."
+                "\nReference namespaces: artifact_key must be copied exactly from artifacts; "
+                "source_key and snapshot_key are provenance, NOT artifact_key. Each artifact "
+                "includes its actual source_key and source_title. Choose local unique E1/E2 "
+                "evidence_key and C1/C2 claim_key values. supporting_evidence_keys, "
+                "contradicting_evidence_keys, relations and conflict_observations may reference "
+                "ONLY evidence and claims included in this response. To attach new support "
+                "to an existing claim, include that claim in claims using its exact existing "
+                "claim_key, statement and claim_type. Copy qualifiers.entity to entity_qualifiers, "
+                "qualifiers.time to time_qualifiers and qualifiers.scope to scope_qualifiers; "
+                "never emit a dangling reference."
+                "\nDistinguish a company saying a product has a capability (STATEMENT, "
+                "attributed to that speaker) from the capability being independently proven "
+                "(QUANTITATIVE or EVENT_FACT). ATTRIBUTION is investigative responsibility, "
+                "not a synonym for a product announcement. Retain benchmark names, units, "
+                "dates, versions, comparison scope and uncertainty in qualifiers. Never "
+                "reinterpret a claim merely to satisfy a weaker validation profile. Where "
+                "the same exact existing claim has new support, reuse its claim_key and "
+                "attach the new evidence rather than introducing a paraphrased duplicate."
             )
         proposal = await self._generate(
             role="analyst.analyze",
@@ -245,6 +273,8 @@ class ModelAnalystAgent(StructuredAgent):
             system=ANALYST_SYSTEM,
             request=request,
             response_model=ClaimDecompositionProposal,
+            # Decomposition is nested inside extraction; preserve its small call budget.
+            repair_attempts=min(self._repair_attempts, 1),
         )
 
 

@@ -1,0 +1,359 @@
+{
+  "contract_version": "2",
+  "evidence": [
+    {
+      "contract_version": "2",
+      "evidence_key": "E1",
+      "artifact_key": "ART-3e05808c6aa9fd2053ce93c0:bm25-passages-v1:char-window-1200-overlap-160-v1:1017:2159",
+      "quote": "e model found that while\nGemini\n4 Argon crushes standardized benchmarks, it struggles when put to work on real-world coding tasks and front-end website design. Critics point to “benchmaxxing”—an industry trend where models are trained specifically to pass test suites rather than solve messy software problems.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 1017,
+        "end": 1352,
+        "quote_hash": "1aea4d5ac494c873b05b80833e2daf4da15e50296188bb15948f60fa6ee6b10a"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E2",
+      "artifact_key": "ART-3e05808c6aa9fd2053ce93c0:bm25-passages-v1:char-window-1200-overlap-160-v1:1017:2159",
+      "quote": "Despite those shifts, Google strongly denies that Gemini 4 Argon underperforms in coding.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 2119,
+        "end": 2200,
+        "quote_hash": "1aea4d5ac494c873b05b80833e2daf4da15e50296188bb15948f60fa6ee6b10a"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E3",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:6687:7719",
+      "quote": "One row deserves explicit framing. CWE-bench v1 is not a clean win: the published chart shows a three-way tie at 68% involving Argon, Grok 4.7, and GPT-6 Astra. Google lists Argon as tied for first, which is accurate and also means the security-patching result does not separate Argon from the field. If a decision depends on that specific benchmark, the honest conclusion is a draw, not a lead.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 7355,
+        "end": 7680,
+        "quote_hash": "0cb83a29406c6e3ce71f34789174fab7dac78f903c030af1ee2ca9f7394de6e3"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E4",
+      "artifact_key": "ART-a17207ad9c5b8f8a9a603acf:bm25-passages-v1:char-window-1200-overlap-160-v1:21040:22181",
+      "quote": "Internal results are illustrative.\nThe memory, migration, and quantum figures show where Google is applying the model. They are not comparable to external benchmarks and, in the case of the 2.7× Rust comparison, the baseline is another internal artifact.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 21240,
+        "end": 21530,
+        "quote_hash": "47c2d79f005ec88d64728021107ad71d60dd609b441b9eac71cc16c267a96b5e"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E5",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:34719:35910",
+      "quote": "As of\nSeptember 30, 2026\n, the defensible conclusion is narrow:\nGoogle has announced Gemini 4 Argon’s complex-workflow ambitions; the supplied research does not independently validate those ambitions.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 35560,
+        "end": 35780,
+        "quote_hash": "2c7086c63eaccb501ef9c3de2cbc85f467d64279187a5180138ed20e4d0e8541"
+      },
+      "quote_hash": null
+    },
+    {
+      "contract_version": "2",
+      "evidence_key": "E6",
+      "artifact_key": "ART-12e024f683da78a926c6a158:bm25-passages-v1:char-window-1200-overlap-160-v1:37816:38999",
+      "quote": "September 22, 2026\nUnverified reference\nNo supporting announcement or milestone appears in the supplied Google material.\nDo not classify this as an Argon launch, preview, or access date.",
+      "locator": {
+        "locator_type": "TEXT_RANGE",
+        "start": 38060,
+        "end": 38270,
+        "quote_hash": "d0040b42bbb53e9f7d590bc4266eb8e703405066a6e31aadc5f46b0353173e14"
+      },
+      "quote_hash": null
+    }
+  ],
+  "claims": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "statement": "有报道称，评测发现 Gemini 4 Argon 虽在标准化基准上表现突出，但在真实编码任务与前端网站设计上表现吃力，批评者将此归因于“benchmaxxing”（为通过测试套件而非解决真实软件问题而训练模型）的行业趋势。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E1"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attributed_source": "Android Headlines 报道（转述评测与批评者观点）"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "真实编码任务与前端网站设计表现"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "statement": "针对上述质疑，谷歌强烈否认 Gemini 4 Argon 在编码方面表现不佳。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [
+        "E2"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "attributed_source": "Google（经 Android Headlines 转述）"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "编码能力是否低于预期"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "statement": "第三方指南指出，CWE-bench v1 并非干净胜出：公布图表显示 Argon、Grok 4.7 与 GPT-6 Astra 三方以 68% 并列，谷歌将其列为并列第一虽属准确，但该安全补丁结果并未使 Argon 与同场模型拉开差距，若决策依赖该基准，诚实结论是平局而非领先。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E3"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "benchmark": "CWE-bench v1",
+        "value": 68,
+        "unit": "%",
+        "comparison_targets": [
+          "Grok 4.7",
+          "GPT-6 Astra"
+        ]
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "CWE-bench v1 安全补丁评测排名解读",
+        "provenance": "第三方指南对谷歌公布图表的核查"
+      },
+      "importance": "HIGH",
+      "critical": true,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "statement": "第三方指南指出，谷歌内部结果（内存释放、代码迁移及 2.7× Rust 对比等）仅说明模型被用于何处，不可与外部基准比较，其中 2.7× 的基线本身也是另一项内部产物。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [
+        "E4"
+      ],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon",
+        "internal_figures": [
+          "内存释放",
+          "代码迁移",
+          "2.7× Rust 对比"
+        ]
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "scope": "内部工程结果与外部基准的可比性",
+        "provenance": "第三方指南对谷歌内部数据的核查"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-eee9807b37fc95774e935755",
+      "statement": "第三方指南明确记载，谷歌公布的 Gemini 4 Argon 全部基准成绩（DeepSWE v1.1 77.9%、AutomationBench 51.3%、LVBench 91.7%、Vals Index 领先、CWE-bench v1 68% 并列第一、Gray Swan 间接提示注入稳健性领先）均为厂商自报，且没有任何独立复现。",
+      "claim_type": "ATTRIBUTION",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "attribution": "vendor-reported",
+        "benchmarks": [
+          "DeepSWE v1.1",
+          "AutomationBench",
+          "LVBench",
+          "Vals Index",
+          "CWE-bench v1",
+          "Gray Swan indirect prompt injection"
+        ],
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "第三方指南对谷歌公布基准数据的核查",
+        "scope": "谷歌公布的 Gemini 4 Argon 基准成绩集合"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "statement": "在已获取的材料中，未发现任何第三方独立实测复现谷歌公布的 Gemini 4 Argon 基准成绩，因此无法判断独立结论是否与官方一致。",
+      "claim_type": "ANALYTIC_INFERENCE",
+      "supporting_evidence_keys": [],
+      "contradicting_evidence_keys": [],
+      "canonical_statement": null,
+      "entity_qualifiers": {
+        "entity": "Gemini 4 Argon"
+      },
+      "time_qualifiers": {},
+      "scope_qualifiers": {
+        "provenance": "基于已获取材料范围的检索结论",
+        "scope": "谷歌公布的 Gemini 4 Argon 基准成绩"
+      },
+      "importance": "MEDIUM",
+      "critical": false,
+      "atomicity": {
+        "contract_version": "2",
+        "is_atomic": true,
+        "issues": [],
+        "proposed_atomic_statements": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E1",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C2",
+      "evidence_key": "E2",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E3",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E4",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-eee9807b37fc95774e935755",
+      "evidence_key": "E3",
+      "stance": "CONTEXT"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "evidence_key": "E5",
+      "stance": "SUPPORTS"
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "CLAIM-13c0e51a60ce34ca3e7f94b8",
+      "evidence_key": "E6",
+      "stance": "CONTEXT"
+    }
+  ],
+  "timeline_events": [],
+  "conflict_observations": [
+    {
+      "contract_version": "2",
+      "claim_key": "C1",
+      "evidence_key": "E1",
+      "statement": "同一报道中，评测称 Argon 在真实编码任务上表现吃力，而谷歌强烈否认其编码能力不佳，构成对同一能力结论的直接对立。",
+      "conflict_type": "ATTRIBUTION",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "Gemini 4 Argon 真实编码表现",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.9,
+      "specificity": 0.7
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C3",
+      "evidence_key": "E3",
+      "statement": "谷歌将 CWE-bench v1 68% 列为并列第一，而第三方核查指出该成绩为三方并列、不构成领先，属对同一数值的排名解读冲突。",
+      "conflict_type": "SCOPE",
+      "numeric_value": 68.0,
+      "unit": "%",
+      "report_time": null,
+      "scope": "CWE-bench v1",
+      "definition": "并列第一 vs 平局（未拉开差距）",
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.9,
+      "specificity": 0.8
+    },
+    {
+      "contract_version": "2",
+      "claim_key": "C4",
+      "evidence_key": "E4",
+      "statement": "谷歌内部工程数据（含 2.7× Rust 加速）被用于展示模型价值，但第三方指出其不可与外部基准比较且基线为内部产物，属可比性/范围冲突。",
+      "conflict_type": "SCOPE",
+      "numeric_value": null,
+      "unit": null,
+      "report_time": null,
+      "scope": "内部结果与外部基准",
+      "definition": null,
+      "methodology": null,
+      "report_stage": "UNKNOWN",
+      "directness": 0.8,
+      "specificity": 0.7
+    }
+  ]
+}

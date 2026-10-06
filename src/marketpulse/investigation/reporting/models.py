@@ -13,7 +13,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Self
 
-from pydantic import Field, JsonValue
+from pydantic import Field, JsonValue, model_serializer
 
 from marketpulse.investigation.domain.base import (
     Confidence,
@@ -105,6 +105,9 @@ class SnapshotResearchGap(DomainModel):
     severity: GapSeverity
     status: GapStatus
     reason: NonEmptyText
+    target_claim_stable_key: str | None = None
+    target_question_stable_key: str | None = None
+    suggested_actions: tuple[NonEmptyText, ...] = ()
 
 
 class SnapshotTimelineEvent(DomainModel):
@@ -146,6 +149,14 @@ class ReportInputSemanticPayload(DomainModel):
     timeline_events: tuple[SnapshotTimelineEvent, ...] = ()
     sources: tuple[SnapshotSource, ...] = ()
     limitations: tuple[NonEmptyText, ...] = ()
+    quantitative_material: str | None = None
+
+    @model_serializer(mode="wrap")
+    def compatible_serialization(self, handler):
+        value = handler(self)
+        if self.quantitative_material is None:
+            value.pop("quantitative_material", None)
+        return value
 
 
 class SnapshotRuntimeReferences(DomainModel):
@@ -202,12 +213,22 @@ class ReportInputSnapshot(DomainModel):
 
 def compute_snapshot_hash(payload: ReportInputSemanticPayload) -> str:
     """Hash the complete canonical semantic payload."""
-    return canonical_hash(SNAPSHOT_HASH_DOMAIN, payload)
+    domain = (
+        "quant-report-input-snapshot-v2"
+        if payload.quantitative_material is not None
+        else SNAPSHOT_HASH_DOMAIN
+    )
+    return canonical_hash(domain, payload)
 
 
 def compute_claim_set_hash(payload: ReportInputSemanticPayload) -> str:
     """Hash the claim set, including statements and validation semantics."""
-    return canonical_hash(CLAIM_SET_HASH_DOMAIN, list(payload.claims))
+    domain = (
+        "quant-report-claim-set-v2"
+        if payload.quantitative_material is not None
+        else CLAIM_SET_HASH_DOMAIN
+    )
+    return canonical_hash(domain, list(payload.claims))
 
 
 def compute_source_state_fingerprint(payload: ReportInputSemanticPayload) -> str:
@@ -243,6 +264,9 @@ def compute_source_state_fingerprint(payload: ReportInputSemanticPayload) -> str
         ],
         "sources": list(payload.sources),
     }
+    if payload.quantitative_material is not None:
+        material["quantitative_material"] = payload.quantitative_material
+        return canonical_hash("quant-report-source-state-v2", material)
     return canonical_hash(SOURCE_STATE_HASH_DOMAIN, material)
 
 
@@ -433,4 +457,9 @@ class CitationSemanticIdentity(DomainModel):
 
     @property
     def semantic_hash(self) -> str:
-        return canonical_hash(CITATION_HASH_DOMAIN, self.semantic_hash_payload())
+        domain = (
+            "quant-citation-v2"
+            if self.schema_version == "computation-citation-v2"
+            else CITATION_HASH_DOMAIN
+        )
+        return canonical_hash(domain, self.semantic_hash_payload())

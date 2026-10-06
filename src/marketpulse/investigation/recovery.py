@@ -27,7 +27,9 @@ from marketpulse.investigation.domain.enums import (
     WorkflowPhase,
 )
 from marketpulse.investigation.domain.reports import AuditEvent
+from marketpulse.investigation.domain.runtime import RunBudget
 from marketpulse.investigation.feedback.models import FeedbackLoopConfig
+from marketpulse.investigation.harness.stage_budget import StageBudgetPolicy
 from marketpulse.investigation.persistence.models import (
     AuditEventRow,
     ExecutionStepRow,
@@ -45,6 +47,14 @@ WORKFLOW_VERSION = "resumable-retrieval-v4"
 def live_feedback_config(settings: Settings) -> FeedbackLoopConfig:
     return FeedbackLoopConfig(
         ground_model_quotes=True,
+        deduplicate_material=True,
+        reuse_semantic_judgments=True,
+        model_budget_reservations=True,
+        metadata_chars=settings.model_metadata_chars,
+        verify_token_reserve_fraction=settings.verify_token_reserve_fraction,
+        report_token_reserve_fraction=settings.report_token_reserve_fraction,
+        verify_call_reserve_fraction=settings.verify_call_reserve_fraction,
+        report_call_reserve_fraction=settings.report_call_reserve_fraction,
         workflow_version=WORKFLOW_VERSION,
         retrieval_strategy="bm25-passages-v1",
         research_workers=settings.research_workers,
@@ -52,10 +62,17 @@ def live_feedback_config(settings: Settings) -> FeedbackLoopConfig:
         fetch_concurrency=settings.max_fetch_concurrency,
         queries_per_researcher=settings.max_queries_per_researcher,
         step_timeout_seconds=min(600, settings.total_timeout_seconds),
-        max_artifacts=30,
-        max_excerpts=60,
-        max_context_chars=100_000,
+        max_artifacts=settings.analysis_max_sources,
+        max_excerpts=settings.analysis_max_excerpts,
+        max_context_chars=settings.analysis_max_chars,
+        max_context_items=settings.model_context_items,
         max_verification_evidence=200,
+        max_verification_batches={"quick": 1, "standard": 12, "deep": 24}[
+            settings.investigation_depth
+        ],
+        max_verification_calls={"quick": 12, "standard": 32, "deep": 64}[
+            settings.investigation_depth
+        ],
     )
 
 
@@ -65,6 +82,15 @@ def execution_profile(settings: Settings) -> str:
         "model",
         "deepseek_base_url",
         "model_thinking_enabled",
+        "reasoning_model",
+        "model_force_single",
+        "reasoning_effort",
+        "reasoning_output_tokens",
+        "model_auto_retry",
+        "model_retry_attempts",
+        "model_retry_backoff_seconds",
+        "model_connect_timeout_seconds",
+        "model_read_timeout_seconds",
         "page_timeout_seconds",
         "max_page_bytes",
         "allow_proxy_dns",
@@ -178,6 +204,7 @@ class RunRecovery:
         restore_quarantine: bool = False,
     ) -> None:
         self.sessions, self.repository, self.blobs = sessions, repository, blobs
+        self.settings = settings
         self.profile = execution_profile(settings)
         self.restore_quarantine = restore_quarantine
 
@@ -459,6 +486,25 @@ class RunRecovery:
                 if getattr(budget, _BUDGETS[name][0]) >= limits[f"max_{name}"]:
                     raise RecoveryConflict(
                         "BUDGET_INCREASE_REQUIRED", f"{name} 已耗尽，请追加额度。"
+                    )
+            if pause and pause.metadata_payload.get("stage_required_tokens") is not None:
+                config = live_feedback_config(self.settings)
+                policy = StageBudgetPolicy(
+                    config.verify_token_reserve_fraction,
+                    config.report_token_reserve_fraction,
+                    config.verify_call_reserve_fraction,
+                    config.report_call_reserve_fraction,
+                )
+                proposed = self.repository.get_in_session(session, RunBudget, run_id).model_copy(
+                    update=limits
+                )
+                if not policy.admits(
+                    proposed,
+                    pause.metadata_payload["stage_role"],
+                    pause.metadata_payload["stage_required_tokens"],
+                ):
+                    raise RecoveryConflict(
+                        "BUDGET_INCREASE_REQUIRED", "下一次模型调用仍会侵占阶段预留，请追加额度。"
                     )
             result = session.execute(
                 update(InvestigationRunRow)

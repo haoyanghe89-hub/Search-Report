@@ -21,8 +21,10 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
+from marketpulse.investigation.depth import Depth
 from marketpulse.investigation.domain.claims import ClaimEvidenceRelation, ValidationResult
 from marketpulse.investigation.domain.enums import (
+    AuditActorType,
     GapStatus,
     RelationStance,
     ReportType,
@@ -30,6 +32,7 @@ from marketpulse.investigation.domain.enums import (
     StepType,
 )
 from marketpulse.investigation.domain.locators import deserialize_locator
+from marketpulse.investigation.domain.reports import AuditEvent
 from marketpulse.investigation.domain.runtime import (
     Investigation,
     InvestigationQuestion,
@@ -117,6 +120,11 @@ class InvestigationCreateIn(BaseModel):
     event_description: str = Field(min_length=1)
     investigation_goal: str = Field(min_length=1)
     questions: list[str] = Field(default_factory=list)
+    depth: Depth = "standard"
+
+
+class RunDepthIn(BaseModel):
+    depth: Depth | None = None
 
 
 class BuiltInCaseOut(BaseModel):
@@ -762,7 +770,21 @@ def create_investigation(
         created_at=now,
         updated_at=now,
     )
-    repository.add(investigation)
+    with _sessions(request).begin() as session:
+        repository.add_in_session(session, investigation)
+        repository.add_in_session(
+            session,
+            AuditEvent(
+                audit_event_id=f"DEPTH-{investigation.investigation_id}",
+                investigation_id=investigation.investigation_id,
+                actor_type=AuditActorType.HUMAN,
+                event_type="INVESTIGATION_DEPTH_SELECTED",
+                target_type="Investigation",
+                target_id=investigation.investigation_id,
+                metadata={"depth": payload.depth},
+                created_at=now,
+            ),
+        )
     return InvestigationDetailOut(
         investigation_id=investigation.investigation_id,
         title=investigation.title,
@@ -788,7 +810,9 @@ def create_investigation(
     response_model=RunStartOut,
     status_code=202,
 )
-async def start_investigation_run(investigation_id: str, request: Request) -> RunStartOut:
+async def start_investigation_run(
+    investigation_id: str, request: Request, payload: RunDepthIn | None = None
+) -> RunStartOut:
     """Start an owned background LIVE run; explicit case replay has its own route."""
     from marketpulse.investigation.live_runtime import (
         LiveInvestigationService,
@@ -805,10 +829,27 @@ async def start_investigation_run(investigation_id: str, request: Request) -> Ru
     if runner is None:
         raise _error(503, "LIVE_NOT_CONFIGURED", "live runner is not configured")
     try:
-        run_id = runner.start(investigation_id)
+        run_id = (
+            runner.start(investigation_id, depth=payload.depth)
+            if payload and payload.depth
+            else runner.start(investigation_id)
+        )
     except LiveNotConfiguredError as error:
         raise _error(503, "LIVE_NOT_CONFIGURED", str(error)) from error
     return RunStartOut(run_id=run_id, status=RunStatus.CREATED.value)
+
+
+@router.delete("/investigations/{investigation_id}")
+def delete_investigation(investigation_id: str, request: Request) -> dict:
+    from marketpulse.investigation.deletion import ActiveInvestigationError, delete_archive
+
+    runner = getattr(request.app.state, "live_investigation", None)
+    try:
+        return delete_archive(
+            _sessions(request), investigation_id, runner.blobs if runner else None
+        )
+    except ActiveInvestigationError as error:
+        raise _error(409, "INVESTIGATION_ACTIVE", str(error)) from error
 
 
 @router.get("/runs/{run_id}/recovery")
@@ -846,7 +887,9 @@ async def cancel_investigation_run(run_id: str, request: Request) -> RunStartOut
     )
     if runner is None or not await runner.cancel(run_id):
         raise _error(409, "RUN_NOT_ACTIVE", "run is no longer active on this server")
-    return RunStartOut(run_id=run_id, status=RunStatus.CANCELLED.value)
+    with _sessions(request)() as session:
+        status = _get_run_row(session, run_id).status.value
+    return RunStartOut(run_id=run_id, status=status)
 
 
 @router.get("/investigations/{investigation_id}", response_model=InvestigationDetailOut)
@@ -1300,7 +1343,15 @@ def list_report_citations(report_id: str, request: Request) -> list[CitationOut]
             .where(CitationRow.report_id == report_id)
             .order_by(CitationRow.display_ordinal)
         ).all()
-        return [_citation_out(row) for row in rows]
+        values = [_citation_out(row) for row in rows]
+        from marketpulse.investigation.reporting.models import Citation
+        from marketpulse.quant.storage.models import QuantCitationRow
+
+        extra = session.scalars(
+            select(QuantCitationRow).where(QuantCitationRow.report_id == report_id)
+        )
+        values.extend(_citation_out(Citation.model_validate(row.payload)) for row in extra)
+        return sorted(values, key=lambda item: item.display_ordinal)
 
 
 @router.get("/reports/{report_id}/review", response_model=ReviewDetailOut)
@@ -1451,9 +1502,9 @@ def export_report(
         ).all()
         for section in sections:
             content = section.structured_content or {}
-            lines.extend(
-                [f"## {label(section.section_type)}", "", label(content.get("status", "")), ""]
-            )
+            if not content.get("units"):
+                continue
+            lines.extend([f"## {label(section.section_type)}", ""])
             for unit in content.get("units", []):
                 refs = [
                     c
@@ -1503,6 +1554,11 @@ def get_citation(citation_id: str, request: Request) -> CitationDetailOut:
     with sessions() as session:
         citation = session.get(CitationRow, citation_id)
         if citation is None:
+            from marketpulse.quant.citations import public_computation_citation
+
+            quantitative = public_computation_citation(session, request, citation_id)
+            if quantitative is not None:
+                return quantitative
             raise _error(404, "CITATION_NOT_FOUND", f"citation not found: {citation_id}")
         claim_row = session.get(ClaimRow, citation.claim_id)
         evidence_row = session.get(EvidenceRow, citation.evidence_id)

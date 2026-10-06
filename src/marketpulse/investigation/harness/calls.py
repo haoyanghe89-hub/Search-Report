@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import uuid
 from dataclasses import dataclass
@@ -7,16 +8,31 @@ from datetime import UTC, datetime
 from typing import Any, TypeVar
 
 from pydantic import BaseModel
-from sqlalchemy import update
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session, sessionmaker
 
+from marketpulse.infrastructure.storage.models import BlobRef
 from marketpulse.investigation.domain.recordings import RecordedModelCall, RecordedToolCall
 from marketpulse.investigation.domain.reports import AuditEvent
-from marketpulse.investigation.domain.runtime import CallBinding
+from marketpulse.investigation.domain.runtime import CallBinding, RunBudget
 from marketpulse.investigation.harness.model_call_journal import prepare_model_intent
+from marketpulse.investigation.harness.model_retry import (
+    ModelRetryExhaustedError,
+    retryable_model_error,
+)
+from marketpulse.investigation.harness.model_routing import ModelRoutingPolicy
 from marketpulse.investigation.harness.persistence import RunBudgetExceededError
+from marketpulse.investigation.harness.stage_budget import (
+    StageBudgetPolicy,
+    VerificationBudgetPolicy,
+    conservative_request_tokens,
+)
 from marketpulse.investigation.harness.uow import UnitOfWork
-from marketpulse.investigation.persistence.models import RunBudgetRow
+from marketpulse.investigation.persistence.models import (
+    AuditEventRow,
+    RecordedModelCallRow,
+    RunBudgetRow,
+)
 from marketpulse.investigation.persistence.repositories import InvestigationRepository
 from marketpulse.investigation.ports.external import (
     FetchPort,
@@ -37,6 +53,7 @@ from marketpulse.investigation.recording.adapters import (
     RecordingSearchAdapter,
 )
 from marketpulse.investigation.recording.canonical import canonical_request, request_fingerprint
+from marketpulse.investigation.recording.diagnostics import provider_diagnostics
 from marketpulse.investigation.recording.errors import ExternalCallError, ReplayCacheMissError
 from marketpulse.investigation.recording.store import RecordedCallStore
 
@@ -72,8 +89,18 @@ class BoundExternalCalls:
         live_model: ModelPort | None = None,
         authorized_unknown_intent_ids: frozenset[str] = frozenset(),
         pause_on_unknown_outcome: bool = False,
+        model_budget_policy: StageBudgetPolicy | None = None,
+        model_routing: ModelRoutingPolicy | None = None,
+        model_retry_attempts: int = 0,
+        model_retry_backoff_seconds: float = 1,
     ) -> None:
         self.sessions = sessions
+        self.model_budget_policy = model_budget_policy
+        self.model_routing = model_routing
+        self.model_retry_attempts = model_retry_attempts
+        self.model_retry_backoff_seconds = model_retry_backoff_seconds
+        self.verification_budget_policy: VerificationBudgetPolicy | None = None
+        self._inflight_tokens: dict[StepCallSite, int] = {}
         self.repository = repository
         self.recordings = recordings
         self.source_run_id = source_run_id
@@ -82,6 +109,54 @@ class BoundExternalCalls:
         self.live_model = live_model
         self.authorized_unknown_intent_ids = authorized_unknown_intent_ids
         self.pause_on_unknown_outcome = pause_on_unknown_outcome
+
+    def verification_usage(self, run_id: str) -> tuple[int, int]:
+        """Durable usage, including failed repairs; resumes do not reset this limit."""
+        with self.sessions() as session:
+            rows = session.scalars(
+                select(RecordedModelCallRow).where(RecordedModelCallRow.run_id == run_id)
+            ).all()
+            records = [
+                r for r in rows if r.prompt_version.rsplit(":", 1)[-1].startswith("verifier")
+            ]
+            intents = session.scalars(
+                select(AuditEventRow).where(
+                    AuditEventRow.run_id == run_id, AuditEventRow.event_type == "MODEL_CALL_INTENT"
+                )
+            ).all()
+            count = sum(
+                str(r.metadata_payload.get("call_site_key", "")).startswith("verifier")
+                for r in intents
+            )
+            tokens = 0
+            for row in records:
+                raw = (
+                    json.loads(
+                        self.recordings.read_payload(BlobRef.from_uri(row.response_blob_ref))
+                    )
+                    if row.response_blob_ref
+                    else {}
+                )
+                usage = raw.get("usage", {})
+                if usage.get("input_tokens") is not None and usage.get("output_tokens") is not None:
+                    tokens += usage["input_tokens"] + usage["output_tokens"]
+                else:
+                    # No valid output/usage: conservatively count the serialized request
+                    # plus its output ceiling, not zero-cost failed schema attempts.
+                    request_bytes = self.recordings.read_payload(
+                        BlobRef.from_uri(row.request_blob_ref)
+                    )
+                    request = json.loads(request_bytes).get("request", {})
+                    tokens += (
+                        usage.get("input_tokens")
+                        if usage.get("input_tokens") is not None
+                        else len(request_bytes)
+                    ) + (
+                        usage.get("output_tokens")
+                        if usage.get("output_tokens") is not None
+                        else request.get("max_output_tokens") or 0
+                    )
+        return max(count, len(records)), tokens
 
     def _binding(self, site: StepCallSite) -> CallBinding | None:
         with self.sessions() as session:
@@ -401,6 +476,56 @@ class BoundExternalCalls:
         *,
         retry_unknown_outcome: bool = False,
     ) -> StructuredModelResult[T]:
+        if self.model_routing is not None:
+            request = self.model_routing.route(request)
+        try:
+            # All LIVE model roles are structured, read-only reasoning (no tools or
+            # writes). Retrying unknown dispatches can ONLY duplicate model charges.
+            # Each attempt still reserves budget and a new durable intent before I/O.
+            for attempt in range(self.model_retry_attempts + 1):
+                try:
+                    return await self._model(
+                        site,
+                        request,
+                        retry_unknown_outcome=retry_unknown_outcome
+                        or (self.model_retry_attempts > 0 and attempt > 0),
+                    )
+                except Exception as error:
+                    if self.model_retry_attempts == 0 or not retryable_model_error(error):
+                        raise
+                    with self.sessions() as session:
+                        intents = session.scalars(
+                            select(AuditEventRow).where(
+                                AuditEventRow.run_id == site.run_id,
+                                AuditEventRow.event_type == "MODEL_CALL_INTENT",
+                            )
+                        ).all()
+                        dispatched = sum(
+                            i.metadata_payload.get("logical_step_key") == site.logical_step_key
+                            and i.metadata_payload.get("call_site_key") == site.call_site_key
+                            and i.metadata_payload.get("call_ordinal") == site.call_ordinal
+                            for i in intents
+                        )
+                    if (
+                        attempt == self.model_retry_attempts
+                        or dispatched >= self.model_retry_attempts + 1
+                    ):
+                        raise ModelRetryExhaustedError(
+                            "网络不稳定，无法稳定连接模型服务；请检查网络/代理后重试。"
+                        ) from error
+                    self._inflight_tokens.pop(site, None)
+                    await asyncio.sleep(self.model_retry_backoff_seconds * 2**attempt)
+            raise AssertionError("unreachable model retry loop")
+        finally:
+            self._inflight_tokens.pop(site, None)
+
+    async def _model(
+        self,
+        site: StepCallSite,
+        request: ModelRequest[T],
+        *,
+        retry_unknown_outcome: bool = False,
+    ) -> StructuredModelResult[T]:
         operation = "model.generate"
         call, payload, fingerprint = self._resolve(
             site=site,
@@ -414,6 +539,43 @@ class BoundExternalCalls:
         if call is None:
             if self.live_model is None:
                 raise ReplayCacheMissError(operation=operation, request_fingerprint=fingerprint)
+            if self.verification_budget_policy is not None and request.prompt_version.rsplit(
+                ":", 1
+            )[-1].startswith("verifier"):
+                count, tokens = self.verification_usage(site.run_id)
+                inflight = sum(
+                    value
+                    for key, value in self._inflight_tokens.items()
+                    if key.run_id == site.run_id and key.call_site_key.startswith("verifier")
+                )
+                cost = conservative_request_tokens(request)
+                if not self.verification_budget_policy.admits(
+                    calls=count, tokens=tokens, cost=cost, inflight_tokens=inflight
+                ):
+                    raise RunBudgetExceededError(
+                        "VERIFICATION_LIMIT_REACHED: call/token ceiling; finish existing results",
+                        required_tokens=cost,
+                        role="verifier",
+                    )
+                self._inflight_tokens[site] = cost
+            if self.model_budget_policy is not None:
+                budget = self.repository.get(RunBudget, site.run_id)
+                estimate = conservative_request_tokens(request)
+                inflight = sum(
+                    value
+                    for key, value in self._inflight_tokens.items()
+                    if key.run_id == site.run_id and key != site
+                )
+                role = request.prompt_version.rsplit(":", 1)[-1]
+                if not self.model_budget_policy.admits(budget, role, estimate, inflight=inflight):
+                    raise RunBudgetExceededError(
+                        "stage model reservation: call or token headroom insufficient",
+                        required_tokens=estimate,
+                        role=role,
+                    )
+                # No await between this check/reservation and dispatch intent: one
+                # owned event loop shares estimates across concurrent worker calls.
+                self._inflight_tokens[site] = estimate
             intent, attempt = prepare_model_intent(
                 self.sessions,
                 run_id=site.run_id,
@@ -443,8 +605,19 @@ class BoundExternalCalls:
             )
             try:
                 await adapter.generate(request)
-            except Exception:
-                if self.pause_on_unknown_outcome:
+            except Exception as error:
+                status = provider_diagnostics(error).get("http_status")
+                if retryable_model_error(error):
+                    # Unknown output usage is not free. Conservatively account the
+                    # reserved request+output ceiling before considering another dispatch.
+                    with self.sessions.begin() as session:
+                        budget = session.get(RunBudgetRow, site.run_id)
+                        if budget is not None:
+                            budget.tokens_used = min(
+                                budget.max_tokens,
+                                budget.tokens_used + conservative_request_tokens(request),
+                            )
+                if self.pause_on_unknown_outcome and status not in {400, 401, 402, 403, 404, 422}:
                     # Reinspect the durable intent after the adapter records the failure.
                     # Prior consent never authorizes a new, ambiguous dispatch attempt.
                     prepare_model_intent(
